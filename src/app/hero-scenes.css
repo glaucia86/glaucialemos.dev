@@ -1,0 +1,270 @@
+.hero-scene-layer{position:absolute;z-index:-1;inset:0;overflow:hidden;pointer-events:none}.hero-scene-layer>*{position:absolute;display:block;will-change:transform,opacity}
+.hero-scene-layer--tatooine .scene-image-plane {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 640px) {
+  .hero-scene-layer--nevarro :is(.hologram-glow, .hologram-ring) {
+    display: none;
+  }
+
+  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) {
+    --scene-height: clamp(360px, 65vw, 500px);
+    --scene-position: 80%;
+    display: block;
+    min-height: 0;
+    padding-bottom: var(--scene-height);
+  }
+
+  .page-hero:has(.hero-scene-layer--nevarro) { --scene-position: 90%; }
+
+  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__content {
+    padding: 3rem 0 2rem;
+  }
+
+  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__image {
+    top: auto !important;
+    height: var(--scene-height) !important;
+    object-position: var(--scene-position) 50%;
+  }
+
+  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__shade {
+    top: auto;
+    height: var(--scene-height);
+    background: var(--hero-overlay-scene);
+  }
+
+  :is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro) {
+    top: auto;
+    height: var(--scene-height);
+    container-type: size;
+  }
+
+  .hero-scene-layer--tatooine .scene-image-plane {
+    width: max(100cqw, 177.777778cqh);
+    height: max(100cqh, 56.25cqw);
+    left: var(--scene-position);
+    top: 50%;
+    transform: translate(calc(-1 * var(--scene-position)), -50%);
+    will-change: auto;
+  }
+}
+/* These two planes match the 1024 × 576 image's object-cover crop. */
+.hero-scene-layer--dagobah,
+.hero-scene-layer--bespin {
+  container-type: size;
+}
+.hero-scene-layer--dagobah .scene-image-plane,
+.hero-scene-layer--bespin .scene-image-plane {
+  width: max(100cqw, 177.777778cqh);
+  height: max(100cqh, 56.25cqw);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  will-change: auto;
+}
+.scene-image-plane > * {
+  position: absolute;
+  display: block;
+}
+@media (min-width: 901px) {
+  .page-hero:has(.hero-scene-layer--dagobah) .page-hero__shade {
+    background: var(--hero-overlay-dagobah);
+  }
+}
+/* Keep text outside the stones' image-space bounds on wide screens. */
+@media (min-width: 901px) {
+  .page-hero:has(.hero-scene-layer--dagobah) :is(.eyebrow, h1, .page-hero__subtitle, .actions) {
+    max-width: min(40%, calc(45vw - max(1.5rem, (100vw - 1180px) / 2)));
+  }
+  .page-hero:has(.hero-scene-layer--dagobah) h1 {
+    font-size: clamp(3rem, 5vw, 4.5rem);
+  }
+}
+/* Reserve a separate illustration area below the copy on narrow screens.
+   Image and effects use the same crop, including Next Image's inline inset. */
+@media (max-width: 900px) {
+  .page-hero:has(:is(.hero-scene-layer--dagobah, .hero-scene-layer--bespin)) {
+    --scene-height: clamp(360px, 65vw, 500px);
+    --scene-position: 55%;
+    display: block;
+    min-height: 0;
+    padding-bottom: var(--scene-height);
+  }
+  .page-hero:has(.hero-scene-layer--bespin) { --scene-position: 80%; }
+  .page-hero:has(:is(.hero-scene-layer--dagobah, .hero-scene-layer--bespin)) .page-hero__content {
+    padding: 3rem 0 2rem;
+  }
+  .page-hero:has(:is(.hero-scene-layer--dagobah, .hero-scene-layer--bespin)) .page-hero__image {
+    top: auto !important;
+    height: var(--scene-height) !important;
+    object-position: var(--scene-position) 50%;
+  }
+  .hero-scene-layer--dagobah,
+  .hero-scene-layer--bespin {
+    top: auto;
+    height: var(--scene-height);
+  }
+  .hero-scene-layer--dagobah .scene-image-plane,
+  .hero-scene-layer--bespin .scene-image-plane {
+    left: var(--scene-position);
+    transform: translate(calc(-1 * var(--scene-position)), -50%);
+  }
+  .page-hero:has(:is(.hero-scene-layer--dagobah, .hero-scene-layer--bespin)) .page-hero__shade {
+    background: var(--hero-overlay-scene);
+    top: auto;
+    height: var(--scene-height);
+  }
+  .force-rock--desktop { display: none; }
+}
+/* Yoda's open palm is (620, 285) on the 1024 × 576 reference. */
+.force-glow {
+  left: 60.546875%;
+  top: 49.479167%;
+  width: 13.671875%;
+  height: 17.361111%;
+  transform: translate(-100%, -75%);
+  background: radial-gradient(ellipse at 100% 75%, color-mix(in srgb, var(--force-light) 28%, transparent), color-mix(in srgb, var(--force-mid) 16%, transparent) 30%, transparent 70%);
+  transform-origin: 100% 75%;
+  animation: force-breathe 4.8s ease-in-out infinite;
+}
+.force-current {
+  position: absolute;
+  right: 0;
+  top: 67%;
+  width: 90%;
+  height: 16%;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--force-light) 20%, transparent));
+  transform-origin: right center;
+  animation: force-current 4.8s ease-in-out infinite;
+}
+.force-depth {
+  inset: 0;
+  animation: force-parallax 9s ease-in-out infinite alternate;
+}
+.force-depth--back { --drift: .3%; opacity: .7; }
+.force-depth--middle { --drift: .6%; animation-duration: 11s; animation-delay: -3s; }
+.force-depth--front { --drift: .9%; animation-duration: 13s; animation-delay: -6s; }
+.force-rock {
+  position: absolute;
+  aspect-ratio: 1;
+  animation: force-float var(--float-duration) ease-in-out var(--float-delay) infinite;
+}
+.force-rock svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: force-turn var(--float-duration) steps(3, end) var(--float-delay) infinite;
+}
+.force-debris {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  animation: force-dust 5.6s steps(6, end) infinite;
+}
+@keyframes force-breathe {
+  0%, 100% { opacity: .4; transform: translate(-100%, -75%) scale(.96); }
+  50% { opacity: .8; transform: translate(-100%, -75%) scale(1.04); }
+}
+@keyframes force-current {
+  0%, 100% { opacity: .25; transform: rotate(28deg) scaleX(.8); }
+  50% { opacity: .6; transform: rotate(35deg) scaleX(1); }
+}
+@keyframes force-parallax {
+  from { transform: translateX(calc(-1 * var(--drift))); }
+  to { transform: translateX(var(--drift)); }
+}
+@keyframes force-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-28%); }
+}
+@keyframes force-turn {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(5deg); }
+}
+@keyframes force-dust {
+  0%, 100% { transform: translate(0, 0); opacity: .2; }
+  50% { transform: translate(-.5%, -2%); opacity: .65; }
+}
+.snowflake{top:-8%;left:var(--x);width:5px;height:5px;border-radius:50%;background:var(--color-white);opacity:.7;animation:snow-fall 8s linear infinite}.snowflake:nth-of-type(2n){width:3px;height:3px;animation-duration:11s}.snowflake:nth-of-type(3n){width:7px;height:7px;opacity:.48;animation-duration:14s}.snowflake:nth-of-type(1){--x:5%;animation-delay:-2s}.snowflake:nth-of-type(2){--x:12%;animation-delay:-7s}.snowflake:nth-of-type(3){--x:19%;animation-delay:-4s}.snowflake:nth-of-type(4){--x:26%;animation-delay:-10s}.snowflake:nth-of-type(5){--x:33%;animation-delay:-1s}.snowflake:nth-of-type(6){--x:40%;animation-delay:-8s}.snowflake:nth-of-type(7){--x:47%;animation-delay:-3s}.snowflake:nth-of-type(8){--x:54%;animation-delay:-12s}.snowflake:nth-of-type(9){--x:61%;animation-delay:-6s}.snowflake:nth-of-type(10){--x:68%;animation-delay:-9s}.snowflake:nth-of-type(11){--x:75%;animation-delay:-5s}.snowflake:nth-of-type(12){--x:82%;animation-delay:-11s}.snowflake:nth-of-type(13){--x:89%;animation-delay:-3s}.snowflake:nth-of-type(n+14){--x:96%;animation-delay:-8s}
+.twin-sun{border-radius:50%;background:color-mix(in srgb, var(--color-accent-200) 33%, transparent);box-shadow:0 0 18px color-mix(in srgb, var(--color-accent-300) 53%, transparent);animation:scene-pulse 4.5s ease-in-out infinite}.twin-sun--large{left:68.5%;top:14.5%;width:7.5%;aspect-ratio:1}.twin-sun--small{left:76.3%;top:28.8%;width:5.5%;aspect-ratio:1;animation-delay:-2s}.r2-light{left:77.3%;top:68.2%;width:1.4%;aspect-ratio:1;border-radius:50%;background:var(--color-accent-400);box-shadow:0 0 12px var(--color-accent);animation:r2-blink 2.4s steps(1) infinite}.sand-grain{left:-3%;top:calc(56% + var(--y));width:18px;height:3px;border-radius:50%;background:color-mix(in srgb, var(--color-accent-200) 67%, transparent);animation:sand-blow 6s linear infinite}.sand-grain:nth-of-type(2n){width:8px;animation-duration:8s}.sand-grain:nth-of-type(1){--y:3%;animation-delay:-1s}.sand-grain:nth-of-type(2){--y:8%;animation-delay:-4s}.sand-grain:nth-of-type(3){--y:13%;animation-delay:-2s}.sand-grain:nth-of-type(4){--y:18%;animation-delay:-6s}.sand-grain:nth-of-type(5){--y:23%;animation-delay:-3s}.sand-grain:nth-of-type(n+6){--y:28%;animation-delay:-7s}
+.falling-leaf{top:-7%;left:calc(46% + var(--x));width:12px;height:7px;border-radius:90% 0;background:var(--scene-leaf);animation:leaf-fall 9s ease-in-out infinite}.falling-leaf:nth-of-type(2n){background:var(--color-accent-400);animation-duration:12s}.falling-leaf:nth-of-type(1){--x:2%;animation-delay:-2s}.falling-leaf:nth-of-type(2){--x:8%;animation-delay:-8s}.falling-leaf:nth-of-type(3){--x:15%;animation-delay:-4s}.falling-leaf:nth-of-type(4){--x:22%;animation-delay:-10s}.falling-leaf:nth-of-type(5){--x:29%;animation-delay:-5s}.falling-leaf:nth-of-type(n+6){--x:36%;animation-delay:-1s}.firefly{left:calc(52% + var(--x));top:calc(28% + var(--y));width:4px;height:4px;border-radius:50%;background:var(--color-accent-secondary);box-shadow:0 0 8px var(--color-accent-secondary);animation:firefly 4s ease-in-out infinite}.firefly:nth-of-type(1){--x:3%;--y:8%}.firefly:nth-of-type(2){--x:12%;--y:22%;animation-delay:-1s}.firefly:nth-of-type(3){--x:20%;--y:4%;animation-delay:-2s}.firefly:nth-of-type(4){--x:29%;--y:30%;animation-delay:-3s}.firefly:nth-of-type(n+5){--x:38%;--y:16%;animation-delay:-1.5s}
+.hologram-glow{left:61.5%;top:30%;width:17%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb, var(--scene-hologram) 27%, transparent),transparent 70%);animation:scene-pulse 3s ease-in-out infinite}.hologram-ring{left:60.5%;top:44%;width:19%;height:9%;border:3px solid var(--scene-hologram);border-radius:50%;opacity:.7;filter:drop-shadow(0 0 6px var(--color-secondary-300));animation:hologram-spin 5s linear infinite}
+/* Emitter (718, 335), pommel (800, 420): angle atan2(-85, -82).
+   The image already supplies the single hilt; pivot the blade at its emitter. */
+.saber-assembly {
+  left: 70.117188%;
+  top: 58.159722%;
+  width: 19.53125%;
+  aspect-ratio: 200 / 8;
+  transform-origin: left center;
+  transform: translateY(-50%) rotate(-133.9708deg);
+  animation: saber-grip 6s ease-in-out infinite;
+}
+.saber-blade {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transform: scaleX(0);
+  opacity: 0;
+  animation: saber-ignite 6s ease-in-out infinite;
+}
+.saber-core,
+.saber-aura {
+  position: absolute;
+  inset: 0;
+}
+.saber-core {
+  background: var(--scene-saber-core);
+  clip-path: polygon(0 20%, 98% 20%, 98% 35%, 100% 35%, 100% 65%, 98% 65%, 98% 80%, 0 80%);
+}
+.saber-aura {
+  background: var(--scene-saber);
+  /* Hard rectangular halo layers, without a blur filter. */
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--scene-saber) 73%, transparent), 0 0 0 5px color-mix(in srgb, var(--scene-saber) 40%, transparent), 0 0 0 8px color-mix(in srgb, var(--scene-saber) 15%, transparent);
+  animation: saber-pulse 6s ease-in-out infinite;
+}
+/* Clip clouds to the viewport's right half, including on narrow screens. */
+.bespin-clouds {
+  inset: 50% 0 0 50%;
+  overflow: hidden;
+  will-change: auto;
+}
+.moving-cloud {
+  position: absolute;
+  left: -50%;
+  top: 10%;
+  width: 50%;
+  height: 12%;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-secondary-100) 33%, transparent);
+  filter: blur(5px);
+  animation: cloud-drift 18s linear infinite;
+}
+.moving-cloud:nth-child(2) { top: 26%; animation-delay: -4.5s; }
+.moving-cloud:nth-child(3) { top: 46%; animation-delay: -9s; }
+.moving-cloud:nth-child(4) { top: 66%; animation-delay: -13.5s; }
+@keyframes saber-grip {
+  0%, 20%, 40%, 85%, 100% { transform: translateY(-50%) rotate(-133.9708deg); }
+  25% { transform: translateY(-50%) rotate(-134.7708deg); }
+  32% { transform: translateY(-50%) rotate(-133.5708deg); }
+}
+@keyframes saber-ignite {
+  0%, 12%, 82%, 100% { transform: scaleX(0); opacity: 0; }
+  14% { transform: scaleX(.02); opacity: 1; }
+  24%, 70% { transform: scaleX(1); opacity: 1; }
+  80% { transform: scaleX(.02); opacity: 1; }
+}
+@keyframes saber-pulse {
+  0%, 40%, 55%, 70%, 85%, 100% { transform: scaleY(1); opacity: .5; }
+  47%, 62%, 78% { transform: scaleY(1.35); opacity: .85; }
+}
+@keyframes cloud-drift {
+  0% { transform: translate(0, 0); opacity: 0; }
+  15%, 75% { opacity: .65; }
+  100% { transform: translate(300%, -20%); opacity: 0; }
+}
+.alarm-light{top:-38%;width:42%;height:100%;opacity:.5;background:conic-gradient(from 82deg,transparent 0 34%,color-mix(in srgb, var(--scene-saber) 53%, transparent) 39%,transparent 45% 100%);transform-origin:50% 38%;animation:alarm-sweep 3.2s linear infinite}.alarm-light--left{left:32%}.alarm-light--right{left:52%;animation-delay:-1.6s}
+@keyframes scene-pulse{50%{transform:scale(1.12);opacity:.65}}@keyframes snow-fall{0%{transform:translate3d(0,-5vh,0);opacity:0}10%{opacity:.75}100%{transform:translate3d(30px,115vh,0);opacity:.25}}@keyframes r2-blink{0%,38%,48%,100%{opacity:1;transform:scale(1)}40%,46%{opacity:.2;transform:scale(.75)}}@keyframes sand-blow{0%{transform:translate3d(0,0,0);opacity:0}12%{opacity:.7}100%{transform:translate3d(110vw,-35px,0);opacity:0}}@keyframes leaf-fall{0%{transform:translate3d(0,-8vh,0) rotate(0);opacity:0}12%{opacity:.8}50%{transform:translate3d(35px,52vh,0) rotate(190deg)}100%{transform:translate3d(-20px,112vh,0) rotate(390deg);opacity:.2}}@keyframes firefly{0%,100%{transform:translate3d(0,0,0);opacity:.2}45%{transform:translate3d(12px,-10px,0);opacity:1}70%{transform:translate3d(-8px,6px,0);opacity:.45}}@keyframes hologram-spin{to{transform:rotate(360deg)}}@keyframes alarm-sweep{50%{opacity:.8}to{transform:rotate(360deg)}}

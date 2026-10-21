@@ -1,0 +1,44 @@
+[
+  {
+    "empresa": "Microsoft",
+    "cargo": "Cloud Advocate II em JavaScript/Node.js/TypeScript",
+    "periodo": "dez 2019 – mai 2025",
+    "fonte": "https://www.linkedin.com/posts/glaucialemos_como-muitos-j%C3%A1-sabem-essa-semana-estou-encerrando-activity-7328778074047647744-JMQ7"
+  },
+  {
+    "empresa": "Microsoft",
+    "cargo": "Regional Cloud Advocate na América Latina",
+    "periodo": "mar 2019 – dez 2019",
+    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+  },
+  {
+    "empresa": "Zoox Smart Data",
+    "cargo": "Software Developer",
+    "periodo": "set 2018 – dez 2018",
+    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+  },
+  {
+    "empresa": "HackDev",
+    "cargo": "Software Developer | Founder",
+    "periodo": "abr 2014 – mar 2019",
+    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+  },
+  {
+    "empresa": "Resource IT Solutions",
+    "cargo": "Software Developer",
+    "periodo": "abr 2017 – set 2017",
+    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+  },
+  {
+    "empresa": "GlobalLogic LATAM",
+    "cargo": "Software Developer",
+    "periodo": "mai 2015 – dez 2015",
+    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+  },
+  {
+    "empresa": "TopDown Sistemas",
+    "cargo": "Software Developer",
+    "periodo": "dez 2013 – dez 2014",
+    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+  }
+]
