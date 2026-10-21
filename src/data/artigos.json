@@ -1,0 +1,807 @@
+[
+  {
+    "titulo": "OpenAI na Quinzena #08: Presence, Health no ChatGPT, Codex por voz, GPT-5.6 mais barato e mais",
+    "url": "https://www.linkedin.com/posts/glaucialemos_openai-na-quinzena-08-presence-health-activity-7492751698310942720-9tNp",
+    "plataforma": "LinkedIn",
+    "data": "2026-08-11",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Repo Doctor - AI-powered GitHub Repository Health Analyzer",
+    "url": "https://dev.to/glaucia86/repo-doctor-ai-powered-github-repository-health-analyzer-136n",
+    "plataforma": "DEV Community",
+    "data": "2026-01-23",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Construí um Agentic CLI Tool com IA usando o Copilot SDK — Conheça o Repo Doctor!",
+    "url": "https://dev.to/glaucia86/github-copilot-sdk-construindo-aplicacoes-agenticas-com-ia-na-pratica-com-repo-doctor-25a6",
+    "plataforma": "DEV Community",
+    "data": "2026-01-23",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "StackSpot AI: Transforme Seu Fluxo de Desenvolvimento com Agentes Inteligentes",
+    "url": "https://dev.to/glaucia86/stackspot-ai-transforme-seu-fluxo-de-desenvolvimento-com-agentes-inteligentes-56lo",
+    "plataforma": "DEV Community",
+    "data": "2025-11-12",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Close Those 20 Browser Tabs: How MCP Servers Bring Documentation into VS Code",
+    "url": "https://dev.to/glaucia86/close-those-20-browser-tabs-how-mcp-servers-bring-documentation-into-vs-code-435f",
+    "plataforma": "DEV Community",
+    "data": "2025-10-22",
+    "idioma": "en"
+  },
+  {
+    "titulo": "From Zero to MCP: Building a Model Context Protocol Server with TypeScript and the Star Wars API",
+    "url": "https://dev.to/glaucia86/from-zero-to-mcp-building-a-model-context-protocol-server-with-typescript-and-the-star-wars-api-1kdi",
+    "plataforma": "DEV Community",
+    "data": "2025-10-21",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Do Zero ao MCP: Criando um Servidor Model Context Protocol com TypeScript e a API do Star Wars",
+    "url": "https://dev.to/glaucia86/do-zero-ao-mcp-criando-um-servidor-model-context-protocol-com-typescript-e-a-api-do-star-wars-26n0",
+    "plataforma": "DEV Community",
+    "data": "2025-10-21",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Building a Production-Ready RAG System: Zero to Hero with TypeScript, Docker, Google Gemini & LangChain.js",
+    "url": "https://dev.to/glaucia86/building-a-production-ready-rag-system-zero-to-hero-with-typescript-docker-google-gemini--50nh",
+    "plataforma": "DEV Community",
+    "data": "2025-09-23",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Criando MCP Server de Clima Production-Ready com Clean Architecture, Cache Redis e Princípios SOLID | Guia Completo",
+    "url": "https://dev.to/glaucia86/criando-mcp-server-de-clima-production-ready-com-clean-architecture-cache-redis-e-principios-solid-58i3",
+    "plataforma": "DEV Community",
+    "data": "2025-08-13",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Building a Production-Ready Weather MCP Server with Clean Architecture, Redis Cache, and SOLID Principles | Complete Guide",
+    "url": "https://dev.to/glaucia86/building-a-production-ready-weather-mcp-server-with-clean-architecture-redis-cache-and-solid-32cp",
+    "plataforma": "DEV Community",
+    "data": "2025-08-13",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Building a Production-Ready Microblog A.I (Zero to A.I Hero) with Next.js (Complete Workshop)",
+    "url": "https://dev.to/glaucia86/building-a-production-ready-microblog-ai-zero-to-ai-hero-with-nextjs-complete-workshop-29j3",
+    "plataforma": "DEV Community",
+    "data": "2025-07-14",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Create Your First AI Agent with JavaScript and Azure AI Agent Service!",
+    "url": "https://techcommunity.microsoft.com/blog/azuredevcommunityblog/create-your-first-ai-agent-with-javascript-and-azure-ai-agent-service/4411723",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2025-05-13",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Use AI for Free with GitHub Models and TypeScript! 💸💸💸",
+    "url": "https://techcommunity.microsoft.com/blog/azuredevcommunityblog/use-ai-for-free-with-github-models-and-typescript-/4390437",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2025-03-11",
+    "idioma": "en"
+  },
+  {
+    "titulo": "This Month in Azure Static Web Apps | November and December 2024 - Special Edition",
+    "url": "https://techcommunity.microsoft.com/blog/azuredevcommunityblog/this-month-in-azure-static-web-apps--november-and-december-2024---special-editio/4366873",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2025-01-21",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Special Edition - This Month in Azure Static Web Apps | November and December 2024",
+    "url": "https://dev.to/azure/special-edition-this-month-in-azure-static-web-apps-november-and-december-2024-2h41",
+    "plataforma": "DEV Community",
+    "data": "2025-01-17",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Edição Especial - Este Mês no Azure Static Web Apps | Novembro e Dezembro de 2024",
+    "url": "https://techcommunity.microsoft.com/blog/desenvolvedoresbr/edi%C3%A7%C3%A3o-especial---este-m%C3%AAs-no-azure-static-web-apps--novembro-e-dezembro-de-2024/4366863",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2025-01-15",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Curso Grátis de Node.js da Microsoft que TODO Desenvolvedor Precisa Conhecer!",
+    "url": "https://techcommunity.microsoft.com/blog/desenvolvedoresbr/curso-gr%C3%A1tis-de-node-js-da-microsoft-que-todo-desenvolvedor-precisa-conhecer/4330231",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2024-11-22",
+    "idioma": "es"
+  },
+  {
+    "titulo": "This Month in Azure Static Web Apps | 08/2024",
+    "url": "https://dev.to/azure/this-month-in-azure-static-web-apps-082024-39d",
+    "plataforma": "DEV Community",
+    "data": "2024-09-26",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Hack Together: RAG Hack - Building RAG Applications with LangChain.js",
+    "url": "https://techcommunity.microsoft.com/blog/azuredevcommunityblog/hack-together-rag-hack---building-rag-applications-with-langchain-js/4238200",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2024-09-06",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Crie Aplicações Avançadas RAG com LangChain.js: Insights do Hack Together: RAG Hack",
+    "url": "https://techcommunity.microsoft.com/blog/desenvolvedoresbr/hack-together-rag-hack---criando-aplica%C3%A7%C3%B5es-rag-com-langchain-js/4238183",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2024-09-05",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "LangChain.js + Azure: A Generative AI App Journey",
+    "url": "https://techcommunity.microsoft.com/blog/educatordeveloperblog/langchain-js--azure-a-generative-ai-app-journey/4101258",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2024-08-23",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Crafting Future-proof Apps with JavaScript & Azure Cosmos DB | Azure Developers JavaScript Day 2024",
+    "url": "https://techcommunity.microsoft.com/blog/azuredevcommunityblog/crafting-future-proof-apps-with-javascript--azure-cosmos-db--azure-developers-ja/4136431",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2024-05-09",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Extending Copilot for Microsoft 365 using TypeScript | Azure Developers JavaScript Day 2024",
+    "url": "https://techcommunity.microsoft.com/blog/azuredevcommunityblog/extending-copilot-for-microsoft-365-using-typescript--azure-developers-javascrip/4119630",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2024-04-21",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Building a RAG Pattern chat bot with Azure OpenAI and LangChain.js | Azure Developers JavaScript Day",
+    "url": "https://techcommunity.microsoft.com/blog/azuredevcommunityblog/building-a-rag-pattern-chat-bot-with-azure-openai-and-langchain-js--azure-develo/4105727",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2024-04-04",
+    "idioma": "en"
+  },
+  {
+    "titulo": "A Practical Guide for Beginners: Azure OpenAI with JavaScript and TypeScript (Part 02)",
+    "url": "https://techcommunity.microsoft.com/blog/educatordeveloperblog/a-practical-guide-for-beginners-azure-openai-with-javascript-and-typescript-part/3991698",
+    "plataforma": "Microsoft Tech Community",
+    "data": "2023-11-26",
+    "idioma": "en"
+  },
+  {
+    "titulo": "A Practical Guide for Beginners: Azure OpenAI with JavaScript and TypeScript (Part 03)",
+    "url": "https://dev.to/azure/a-practical-guide-for-beginners-azure-openai-with-javascript-and-typescript-part-03-2n68",
+    "plataforma": "DEV Community",
+    "data": "2023-10-28",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Guia Prático para Iniciantes: Azure OpenAI com JavaScript e TypeScript (Parte 3)",
+    "url": "https://dev.to/azure/guia-pratico-para-iniciantes-azure-openai-com-javascript-e-typescript-parte-3-52o4",
+    "plataforma": "DEV Community",
+    "data": "2023-10-27",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Guia Prático para Iniciantes: Azure OpenAI com JavaScript e TypeScript (Parte 2)",
+    "url": "https://dev.to/azure/guia-pratico-para-iniciantes-azure-openai-com-javascript-e-typescript-parte-2-1ij1",
+    "plataforma": "DEV Community",
+    "data": "2023-10-27",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Guia Prático para Iniciantes: Azure OpenAI com JavaScript e TypeScript (Parte 01)",
+    "url": "https://dev.to/azure/guia-pratico-para-iniciantes-azure-openai-com-javascript-e-typescript-parte-1-30f8",
+    "plataforma": "DEV Community",
+    "data": "2023-10-27",
+    "idioma": "es"
+  },
+  {
+    "titulo": "A Practical Guide for Beginners: Azure OpenAI with JavaScript and TypeScript (Part 02)",
+    "url": "https://dev.to/azure/a-practical-guide-for-beginners-azure-openai-with-javascript-and-typescript-part-02-4ngm",
+    "plataforma": "DEV Community",
+    "data": "2023-10-27",
+    "idioma": "en"
+  },
+  {
+    "titulo": "A Practical Guide for Beginners: Azure OpenAI with JavaScript and TypeScript (Part 01)",
+    "url": "https://dev.to/azure/a-practical-guide-for-beginners-azure-openai-with-javascript-and-typescript-part-01-5ajh",
+    "plataforma": "DEV Community",
+    "data": "2023-10-27",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Step by Step Guide: Migrating v3 to v4 programming model for Azure Functions for Node.Js Application",
+    "url": "https://dev.to/azure/step-by-step-guide-migrating-v3-to-v4-programming-model-for-azure-functions-for-nodejs-application-dbn",
+    "plataforma": "DEV Community",
+    "data": "2023-08-14",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Sharing my Story: From Public School to the Largest Technology Company in the World",
+    "url": "https://dev.to/glaucia86/sharing-my-story-from-public-school-to-the-largest-technology-company-in-the-world-1m2g",
+    "plataforma": "DEV Community",
+    "data": "2023-05-27",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Aplicación de Referencia Empresarial en JavaScript - Contoso Real Estate",
+    "url": "https://dev.to/azure/aplicacion-de-referencia-empresarial-en-javascript-contoso-real-estate-63i",
+    "plataforma": "DEV Community",
+    "data": "2023-05-25",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Aplicação de Referência Empresarial em JavaScript - Contoso Real Estate",
+    "url": "https://dev.to/azure/aplicacao-de-referencia-empresarial-em-javascript-contoso-real-estate-23ia",
+    "plataforma": "DEV Community",
+    "data": "2023-05-24",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "LEARN: Take a Break Reminder App with Next.js and Microsoft Graph",
+    "url": "https://dev.to/azure/learn-take-a-break-reminder-app-3gj6",
+    "plataforma": "DEV Community",
+    "data": "2023-01-09",
+    "idioma": "en"
+  },
+  {
+    "titulo": "LEARN: Authentication App with Next.js & Microsoft Graph",
+    "url": "https://dev.to/azure/learn-authentication-app-with-nextjs-microsoft-graph-4i0p",
+    "plataforma": "DEV Community",
+    "data": "2022-12-20",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Módulos 04/05 (Vídeos: 42 à 63) - TypeScript Zero to Hero",
+    "url": "https://dev.to/azure/modulos-0405-videos-42-a-63-typescript-zero-to-hero-4bo4",
+    "plataforma": "DEV Community",
+    "data": "2022-11-23",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Free Course - Learn: A Full Stack Application with Azure SQL and Prisma",
+    "url": "https://dev.to/azure/free-course-learn-a-full-stack-application-with-azure-sql-and-prisma-42kp",
+    "plataforma": "DEV Community",
+    "data": "2022-11-23",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Curso gratuito - Aprenda: Aplicação Full Stack com Azure SQL & Prisma",
+    "url": "https://dev.to/azure/curso-gratuito-aprenda-aplicacao-full-stack-com-azure-sql-prisma-2baj",
+    "plataforma": "DEV Community",
+    "data": "2022-06-24",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Building Applications with Astro Build & Azure Static Web Apps CLI!",
+    "url": "https://dev.to/azure/building-applications-with-astro-build-azure-static-web-apps-cli-a20",
+    "plataforma": "DEV Community",
+    "data": "2022-05-09",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Building Star Wars Crawler with Azure Static Web Apps - Part 3",
+    "url": "https://dev.to/azure/building-star-wars-crawler-with-azure-static-web-apps-part-3-41ip",
+    "plataforma": "DEV Community",
+    "data": "2022-05-02",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Building Star Wars Crawler with Azure Static Web Apps - Part 2",
+    "url": "https://dev.to/azure/building-star-wars-crawler-with-azure-static-web-apps-part-2-3hc0",
+    "plataforma": "DEV Community",
+    "data": "2022-05-02",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Building Star Wars Crawler with Azure Static Web Apps - Part 1",
+    "url": "https://dev.to/azure/building-star-wars-crawler-with-azure-static-web-apps-part-1-3o39",
+    "plataforma": "DEV Community",
+    "data": "2022-05-02",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Módulo 03 (34 à 41) - TypeScript Zero to Hero",
+    "url": "https://dev.to/glaucia86/modulo-03-34-a-41-typescript-zero-to-hero-1gjh",
+    "plataforma": "DEV Community",
+    "data": "2022-04-12",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Tutorial - JWT + NodeJs + MongoDB + Vue (Back-End - Parte II)",
+    "url": "https://dev.to/glaucia86/tutorial-jwt-nodejs-mongodb-vue-back-end-parte-ii-1m4",
+    "plataforma": "DEV Community",
+    "data": "2022-01-21",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Módulo 02 (19 à 33) - TypeScript Zero to Hero",
+    "url": "https://dev.to/glaucia86/modulo-02-19-a-33-typescript-zero-to-hero-305n",
+    "plataforma": "DEV Community",
+    "data": "2021-11-29",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Criando Aplicações com Astro Build & Azure Static Web Apps CLI!",
+    "url": "https://dev.to/glaucia86/criando-aplicacoes-com-astro-build-azure-static-web-cli-39nb",
+    "plataforma": "DEV Community",
+    "data": "2021-08-06",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Publicando Aplicações Estáticas com Static Web Apps & Azure DevOps!",
+    "url": "https://dev.to/glaucia86/publicando-aplicacoes-estaticas-com-static-web-apps-azure-devops-4c1o",
+    "plataforma": "DEV Community",
+    "data": "2021-05-12",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Publicación de Aplicaciones Estáticas con Azure Static Web Apps y Azure DevOps.",
+    "url": "https://dev.to/glaucia86/publicacion-de-aplicaciones-estaticas-con-azure-static-web-apps-y-azure-devops-5c63",
+    "plataforma": "DEV Community",
+    "data": "2021-05-12",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Lançamento: Módulo 01 — TypeScript Zero to Hero",
+    "url": "https://glaucia86.medium.com/lan%C3%A7amento-m%C3%B3dulo-01-typescript-zero-to-hero-3dc04fe0d8f",
+    "plataforma": "Medium",
+    "data": "2021-04-10",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Módulo 02 (Vídeos 13 à 18.1) - TypeScript Zero to Hero",
+    "url": "https://dev.to/glaucia86/modulo-02-videos-13-a-18-1-typescript-zero-to-hero-5565",
+    "plataforma": "DEV Community",
+    "data": "2021-04-07",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Developing a CRUD Node.js Application with PostgreSQL",
+    "url": "https://glaucia86.medium.com/developing-a-crud-node-js-application-with-postgresql-d25febb1cc4",
+    "plataforma": "Medium",
+    "data": "2021-04-03",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Módulo 02 (Vídeos 07 à 12) - TypeScript Zero to Hero",
+    "url": "https://dev.to/glaucia86/modulo-02-videos-07-a-12-typescript-zero-to-hero-44oa",
+    "plataforma": "DEV Community",
+    "data": "2021-03-15",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Tutorial - JWT + NodeJs + MongoDB + Vue (Back-End - Parte I)",
+    "url": "https://dev.to/glaucia86/tutorial-jwt-nodejs-mongodb-vue-back-end-parte-i-12np",
+    "plataforma": "DEV Community",
+    "data": "2021-03-12",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Lançamento: Módulo 01 - TypeScript Zero to Hero",
+    "url": "https://dev.to/glaucia86/lancamento-modulo-01-typescript-zero-to-hero-40n4",
+    "plataforma": "DEV Community",
+    "data": "2021-03-02",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Developing a CRUD Node.js Application with PostgreSQL",
+    "url": "https://dev.to/glaucia86/developing-a-crud-node-js-application-with-postgresql-4c9o",
+    "plataforma": "DEV Community",
+    "data": "2021-02-09",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Vs Code Day - Primeiro evento Oficial do Visual Studio Code!",
+    "url": "https://dev.to/glaucia86/vs-code-day-primeiro-evento-oficial-do-visual-studio-code-8mg",
+    "plataforma": "DEV Community",
+    "data": "2021-01-25",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Guia Para Pessoas Desenvolvedoras Back-End 2021 - O que eu preciso saber?!",
+    "url": "https://dev.to/glaucia86/guia-para-pessoas-desenvolvedoras-back-end-2021-o-que-eu-preciso-saber-10c6",
+    "plataforma": "DEV Community",
+    "data": "2021-01-05",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Aprenda agora a Personalizar o seu Terminal do Windows!",
+    "url": "https://glaucia86.medium.com/aprenda-agora-a-personalizar-o-seu-terminal-do-windows-45aea0de56f3",
+    "plataforma": "Medium",
+    "data": "2020-12-22",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Desenvolvendo uma Aplicação CRUD Node.js com PostgreSQL",
+    "url": "https://glaucia86.medium.com/desenvolvendo-uma-aplica%C3%A7%C3%A3o-crud-node-js-com-postgresql-a275fb5f53d9",
+    "plataforma": "Medium",
+    "data": "2020-12-15",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "¡Cursos gratuitos de ARM Template - Microsoft Learn!",
+    "url": "https://dev.to/glaucia86/cursos-gratuitos-de-arm-template-microsoft-learn-37mp",
+    "plataforma": "DEV Community",
+    "data": "2020-11-16",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Cursos grátis de ARM Template - Microsoft Learn!",
+    "url": "https://dev.to/glaucia86/cursos-gratis-de-arm-template-microsoft-learn-6ib",
+    "plataforma": "DEV Community",
+    "data": "2020-11-16",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Curso Gratuito - Bootcamp Cloud Computing & Serverless!",
+    "url": "https://dev.to/glaucia86/curso-gratuito-bootcamp-cloud-computing-serverless-2ihp",
+    "plataforma": "DEV Community",
+    "data": "2020-11-12",
+    "idioma": "es"
+  },
+  {
+    "titulo": "¡Aprenda .NET y C # con .NET Learn Challenge!",
+    "url": "https://dev.to/glaucia86/aprenda-net-y-c-con-net-learn-challenge-1obk",
+    "plataforma": "DEV Community",
+    "data": "2020-11-03",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Aprenda .NET e C# com .NET Learn Challenge!",
+    "url": "https://dev.to/glaucia86/aprenda-net-e-c-com-net-learn-challenge-22oe",
+    "plataforma": "DEV Community",
+    "data": "2020-11-03",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Cursos Grátis da Microsoft para Iniciantes de JavaScript & Node.Js!",
+    "url": "https://dev.to/glaucia86/cursos-gratis-da-microsoft-para-iniciantes-de-javascript-node-js-3kkb",
+    "plataforma": "DEV Community",
+    "data": "2020-10-22",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Aprenda agora a Personalizar o seu Terminal do Windows!",
+    "url": "https://dev.to/glaucia86/aprenda-agora-a-personalizar-o-seu-terminal-do-windows-mjp",
+    "plataforma": "DEV Community",
+    "data": "2020-10-12",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Examen de certificación gratuito: Microsoft Ignite Cloud Skills Challenge 2020",
+    "url": "https://dev.to/glaucia86/examen-de-certificacion-gratuito-microsoft-ignite-cloud-skills-challenge-2020-3me1",
+    "plataforma": "DEV Community",
+    "data": "2020-09-22",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Exame de Certificação Grátis: Microsoft Ignite Cloud Skills Challenge 2020",
+    "url": "https://dev.to/glaucia86/exame-de-certificacao-gratis-microsoft-ignite-cloud-skills-challenge-2020-31ok",
+    "plataforma": "DEV Community",
+    "data": "2020-09-22",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Qual é o Segredo para Aprender ou ser uma Ótima ou Excelente Pessoa Desenvolvedora?",
+    "url": "https://dev.to/glaucia86/qual-e-o-segredo-para-aprender-ou-ser-uma-otima-ou-excelente-pessoa-desenvolvedora-cfj",
+    "plataforma": "DEV Community",
+    "data": "2020-08-30",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Curso gratuito Node.js en Microsoft Learn!",
+    "url": "https://dev.to/glaucia86/curso-gratuito-node-js-en-microsoft-learn-2cl",
+    "plataforma": "DEV Community",
+    "data": "2020-08-04",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Curso Grátis de Node.js no Microsoft Learn!",
+    "url": "https://dev.to/glaucia86/curso-gratis-de-node-js-no-microsoft-learn-3815",
+    "plataforma": "DEV Community",
+    "data": "2020-08-03",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Create:Frontend - ¡Un evento online y grátis para FrontEnders!",
+    "url": "https://dev.to/glaucia86/create-frontend-un-evento-online-y-gratis-para-frontenders-4a5a",
+    "plataforma": "DEV Community",
+    "data": "2020-07-21",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Create:Frontend - Um evento online e grátis para FrontEnders!",
+    "url": "https://dev.to/glaucia86/create-frontend-um-evento-online-e-gratis-para-frontenders-45ad",
+    "plataforma": "DEV Community",
+    "data": "2020-07-21",
+    "idioma": "es"
+  },
+  {
+    "titulo": "¡Implemente automáticamente proyectos estáticos con Azure Static Web Apps!",
+    "url": "https://dev.to/glaucia86/implemente-automaticamente-proyectos-estaticos-con-azure-static-web-apps-nfp",
+    "plataforma": "DEV Community",
+    "data": "2020-05-19",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Realize Deploy Automático de Projetos Estáticos com Azure Static Web Apps!",
+    "url": "https://dev.to/azure/realize-deploy-automatico-de-projetos-estaticos-com-azure-static-web-apps-2nfj",
+    "plataforma": "DEV Community",
+    "data": "2020-05-19",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Posso criar Diagramas com Visual Studio Code?!",
+    "url": "https://dev.to/azure/posso-criar-diagramas-com-visual-studio-code-7d",
+    "plataforma": "DEV Community",
+    "data": "2020-05-12",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Ganhe Adesivos exclusivos da Microsoft/Azure - Saibam como?!",
+    "url": "https://dev.to/azure/ganhe-adesivos-exclusivos-da-microsoft-azure-saibam-como-3ago",
+    "plataforma": "DEV Community",
+    "data": "2020-04-20",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Women Dev Summit 2020: Dicas e Truques com Visual Studio Code by Loiane Groner",
+    "url": "https://dev.to/glaucia86/women-dev-summit-2020-dicas-e-truques-com-visual-studio-code-by-loiane-groner-57aa",
+    "plataforma": "DEV Community",
+    "data": "2020-04-02",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Lanzamiento: ¡Version Preview del Live Share en el navegador!",
+    "url": "https://dev.to/azure/lanzamiento-version-preview-del-live-share-en-el-navegador-2cca",
+    "plataforma": "DEV Community",
+    "data": "2020-04-02",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Women Dev Summit 2020: Dicas e Truques com Visual Studio Code by Loiane Groner",
+    "url": "https://dev.to/azure/women-dev-summit-2020-dicas-e-truques-com-visual-studio-code-by-loiane-groner-41gc",
+    "plataforma": "DEV Community",
+    "data": "2020-03-31",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Aprenda como VOCÊ pode migrar Base de Dados Local do SQL Server para Azure SQL Database",
+    "url": "https://dev.to/azure/aprenda-como-voce-pode-migrar-base-de-dados-local-do-sql-server-para-azure-sql-database-39n9",
+    "plataforma": "DEV Community",
+    "data": "2020-03-20",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Desenvolvendo uma Aplicação CRUD Node.js com PostgreSQL",
+    "url": "https://dev.to/azure/desenvolvendo-uma-aplicacao-crud-node-js-com-postgresql-3clk",
+    "plataforma": "DEV Community",
+    "data": "2020-03-13",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "15 Dicas de Extensões para Turbinar seu VS Code!",
+    "url": "https://dev.to/azure/15-dicas-de-extensoes-para-turbinar-o-vs-code-56fc",
+    "plataforma": "DEV Community",
+    "data": "2020-03-02",
+    "idioma": "es"
+  },
+  {
+    "titulo": "GitHub CLI - Uma Nova Experiência no GitHub!",
+    "url": "https://dev.to/azure/github-cli-uma-nova-experiencia-no-github-236n",
+    "plataforma": "DEV Community",
+    "data": "2020-02-14",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Migración de la base de datos SQL local a la base de Azure SQL Database",
+    "url": "https://dev.to/azure/migracion-de-la-base-de-datos-sql-local-a-la-base-de-azure-sql-database-4l51",
+    "plataforma": "DEV Community",
+    "data": "2020-02-13",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Top Trends Tecnologias em Desenvolvimento Web para 2020!",
+    "url": "https://dev.to/azure/top-trends-tecnologias-em-desenvolvimento-web-para-2020-33fa",
+    "plataforma": "DEV Community",
+    "data": "2020-01-20",
+    "idioma": "es"
+  },
+  {
+    "titulo": "¡Los 5 Lenguajes de Programación más Importantes para Aprender en 2020!",
+    "url": "https://dev.to/azure/los-5-lenguajes-de-programacion-mas-importantes-para-aprender-en-2020-3op5",
+    "plataforma": "DEV Community",
+    "data": "2020-01-13",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Top 5 Linguagens de Programação para Aprender em 2020!",
+    "url": "https://dev.to/azure/top-5-linguagens-de-programacao-para-aprender-em-2020-52in",
+    "plataforma": "DEV Community",
+    "data": "2020-01-05",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Desenvolvendo a Intro do Star Wars com HTML, CSS, JavaScript & Node.js!",
+    "url": "https://medium.com/womakerscode/desenvolvendo-a-intro-do-star-wars-com-html-css-javascript-node-js-365e1232a169",
+    "plataforma": "Medium",
+    "data": "2019-12-22",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Desenvolvendo a Intro do Star Wars com HTML, CSS, JavaScript & Node.js!",
+    "url": "https://dev.to/azure/desenvolvendo-a-intro-do-star-wars-com-html-css-javascript-node-js-oae",
+    "plataforma": "DEV Community",
+    "data": "2019-12-21",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Implementación de un Traductor en tiempo real con Translator Text & Node.js",
+    "url": "https://dev.to/azure/realizacion-de-traducciones-en-tiempo-real-con-translator-text-node-js-57pg",
+    "plataforma": "DEV Community",
+    "data": "2019-10-29",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Reconhecimento Facial com Face API & Node.js",
+    "url": "https://dev.to/azure/reconhecimento-facial-com-face-api-node-js-1h6p",
+    "plataforma": "DEV Community",
+    "data": "2019-10-17",
+    "idioma": "en"
+  },
+  {
+    "titulo": "Realizando traduções em tempo real com Translator Text & Node.js",
+    "url": "https://dev.to/azure/realizando-traducoes-em-tempo-real-com-translator-text-node-js-1oeb",
+    "plataforma": "DEV Community",
+    "data": "2019-10-07",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Desenvolvendo Calculadora em Vue.Js — Hospedando o Projeto na Nuvem",
+    "url": "https://dev.to/azure/desenvolvendo-calculadora-em-vue-js-hospedando-o-projeto-na-nuvem-2695",
+    "plataforma": "DEV Community",
+    "data": "2019-09-25",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Desenvolvendo Calculadora em Vue.Js — Refatorando o projeto",
+    "url": "https://dev.to/azure/desenvolvendo-calculadora-em-vue-js-refatorando-o-projeto-16e2",
+    "plataforma": "DEV Community",
+    "data": "2019-09-20",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Desarrollo de aplicaciones Node.js y Express.js con Docker",
+    "url": "https://dev.to/azure/desarrollo-de-aplicaciones-node-js-y-express-js-con-docker-4agm",
+    "plataforma": "DEV Community",
+    "data": "2019-09-18",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Migrando uma Aplicação MEAN para Arquitetura Serverless & Azure Functions",
+    "url": "https://dev.to/azure/migrando-uma-aplicacao-mean-para-arquitetura-serverless-azure-functions-1dp7",
+    "plataforma": "DEV Community",
+    "data": "2019-09-12",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Migración de una aplicación MEAN a Arquitectura Serverless y Azure Functions",
+    "url": "https://dev.to/azure/migracion-de-una-aplicacion-mean-a-arquitectura-serverless-y-azure-functions-44no",
+    "plataforma": "DEV Community",
+    "data": "2019-09-12",
+    "idioma": "es"
+  },
+  {
+    "titulo": "10 Dicas para se Tornar Ninja em JavaScript!",
+    "url": "https://dev.to/azure/10-dicas-para-se-tornar-ninja-em-javascript-1775",
+    "plataforma": "DEV Community",
+    "data": "2019-09-04",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Desenvolvendo Aplicação Node.js & Express.js com Docker",
+    "url": "https://dev.to/azure/desenvolvendo-aplicacao-node-js-express-js-com-docker-2e7a",
+    "plataforma": "DEV Community",
+    "data": "2019-08-26",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Introducción a Docker - Conceptos básicos",
+    "url": "https://dev.to/azure/introduccion-a-docker-conceptos-basicos-51id",
+    "plataforma": "DEV Community",
+    "data": "2019-08-10",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Introdução a Docker - Conceitos Básicos",
+    "url": "https://dev.to/azure/introducao-a-docker-conceitos-basicos-4g19",
+    "plataforma": "DEV Community",
+    "data": "2019-08-05",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "¡Aprenda a Desarrollar una Tarjeta Personal en NPX!",
+    "url": "https://dev.to/glaucia86/aprenda-a-desarrollar-una-tarjeta-personal-en-npx-5124",
+    "plataforma": "DEV Community",
+    "data": "2019-07-05",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Webinar - Hospedando projetos Web no Azure: de um site estático a um cluster Kubernetes",
+    "url": "https://dev.to/glaucia86/webinar-hospedando-projetos-web-no-azure-de-um-site-estatico-a-um-cluster-kubernetes-2fm7",
+    "plataforma": "DEV Community",
+    "data": "2019-07-02",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Desenvolvendo Calculadora em Vue.Js — Lógica no JavaScript",
+    "url": "https://dev.to/azure/desenvolvendo-calculadora-em-vue-js-logica-no-javascript-15n6",
+    "plataforma": "DEV Community",
+    "data": "2019-06-19",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Desenvolvendo Calculadora em Vue.Js — Criando o CSS",
+    "url": "https://dev.to/azure/desenvolvendo-calculadora-em-vue-js-parte-i-2dc1",
+    "plataforma": "DEV Community",
+    "data": "2019-06-09",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "¡14 Tips para optimizar su Visual Studio Code!",
+    "url": "https://dev.to/glaucia86/14-tips-para-optimizar-su-visual-studio-code-40ia",
+    "plataforma": "DEV Community",
+    "data": "2019-06-07",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Desenvolvendo Calculadora em Vue.Js — Parte I",
+    "url": "https://medium.com/womakerscode/desenvolvendo-calculadora-em-vue-js-parte-i-e355d3e1f7c9",
+    "plataforma": "Medium",
+    "data": "2019-06-03",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "Desenvolvendo Calculadora em Vue.Js — Parte I",
+    "url": "https://glaucia86.medium.com/desenvolvendo-calculadora-em-vue-js-parte-i-d789a928863f",
+    "plataforma": "Medium",
+    "data": "2019-05-27",
+    "idioma": "pt-BR"
+  },
+  {
+    "titulo": "15 Dicas para Turbinar o seu VS Code!",
+    "url": "https://medium.com/womakerscode/15-dicas-para-turbinar-o-seu-vs-code-e11c75b10dc5",
+    "plataforma": "Medium",
+    "data": "2019-05-03",
+    "idioma": "es"
+  },
+  {
+    "titulo": "14 Dicas para Turbinar o seu VS Code!",
+    "url": "https://glaucia86.medium.com/14-dicas-para-turbinar-o-seu-vs-code-341cf5f8a353",
+    "plataforma": "Medium",
+    "data": "2019-05-03",
+    "idioma": "es"
+  },
+  {
+    "titulo": "¡¿Creando un ChatBot en menos de 5 minutos?! ¡Sí es posible!",
+    "url": "https://dev.to/glaucia86/creando-un-chatbot-en-menos-de-5-minutos-si-es-posible-1gi1",
+    "plataforma": "DEV Community",
+    "data": "2019-04-30",
+    "idioma": "es"
+  },
+  {
+    "titulo": "Criando um ChatBot em menos de 5 minutos?! Sim. É possível!",
+    "url": "https://glaucia86.medium.com/criando-um-chatbot-em-menos-de-5-minutos-sim-%C3%A9-poss%C3%ADvel-82f240ac19ab",
+    "plataforma": "Medium",
+    "data": "2019-04-10",
+    "idioma": "pt-BR"
+  }
+]

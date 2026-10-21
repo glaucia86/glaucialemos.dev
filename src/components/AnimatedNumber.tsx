@@ -1,0 +1,3 @@
+"use client";
+import { useEffect, useState } from "react";
+export function AnimatedNumber({ value }: { value: number }) { const [shown, setShown] = useState(0); useEffect(() => { if (matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.classList.contains("reduce-motion")) { setShown(value); return; } const begun = performance.now(); const tick = (now: number) => { const current = Math.min(value, Math.round(value * (now - begun) / 700)); setShown(current); if (current < value) requestAnimationFrame(tick); }; const id = requestAnimationFrame(tick); return () => cancelAnimationFrame(id); }, [value]); return <>{shown.toLocaleString()}</>; }

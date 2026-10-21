@@ -1,0 +1,73 @@
+[
+  {
+    "nome": "curso-typescript-zero-to-hero",
+    "url": "https://github.com/glaucia86/curso-typescript-zero-to-hero",
+    "estrelas": 3169,
+    "linguagem": "TypeScript",
+    "descricao": "Repositório responsável pelo Curso de TypeScript - Zero to Hero"
+  },
+  {
+    "nome": "js-101-beginners-ms",
+    "url": "https://github.com/glaucia86/js-101-beginners-ms",
+    "estrelas": 657,
+    "linguagem": "JavaScript",
+    "descricao": "Repositório responsável por todos os códigos desenvolvidos durante a Série para Iniciantes em JavaScript"
+  },
+  {
+    "nome": "frontend-bootcamp-online",
+    "url": "https://github.com/glaucia86/frontend-bootcamp-online",
+    "estrelas": 282,
+    "linguagem": null,
+    "descricao": "Repositório responsável pelo Front-End Bootcamp Online"
+  },
+  {
+    "nome": "glaucia_lemos86",
+    "url": "https://github.com/glaucia86/glaucia_lemos86",
+    "estrelas": 156,
+    "linguagem": "JavaScript",
+    "descricao": "Desenvolvimento de um Cartão Pessoal via NPX "
+  },
+  {
+    "nome": "repocheckai",
+    "url": "https://github.com/glaucia86/repocheckai",
+    "estrelas": 121,
+    "linguagem": "TypeScript",
+    "descricao": "Agentic CLI Tool for GitHub Repository Health Analysis"
+  },
+  {
+    "nome": "workshop-mean-serverless",
+    "url": "https://github.com/glaucia86/workshop-mean-serverless",
+    "estrelas": 118,
+    "linguagem": "TypeScript",
+    "descricao": "Repositório responsável pela realização do workshop de MEAN & Serverless"
+  },
+  {
+    "nome": "ai-js-course",
+    "url": "https://github.com/glaucia86/ai-js-course",
+    "estrelas": 115,
+    "linguagem": "TypeScript",
+    "descricao": "A repository for a AI JavaScript/TypeScript free course"
+  },
+  {
+    "nome": "microblog-ai-nextjs",
+    "url": "https://github.com/glaucia86/microblog-ai-nextjs",
+    "estrelas": 112,
+    "linguagem": "TypeScript",
+    "descricao": "An application to create and generate intelligent content"
+  },
+  {
+    "nome": "weather-mcp-server",
+    "url": "https://github.com/glaucia86/weather-mcp-server",
+    "estrelas": 99,
+    "linguagem": "TypeScript",
+    "descricao": "A robust Weather MCP Server in TypeScript"
+  },
+  {
+    "nome": "jwt-node-vue",
+    "url": "https://github.com/glaucia86/jwt-node-vue",
+    "estrelas": 97,
+    "linguagem": "JavaScript",
+    "descricao": "Repositório responsável pelo primeiro projeto da série de vídeos: Coding Stuff."
+  }
+]
+
