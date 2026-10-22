@@ -1,5 +1,47 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { PageHero } from "@/components/PageHero";
 import { socialLinks } from "@/data/social";
-import type { Metadata } from "next"; import { notFound } from "next/navigation"; import { PageHero } from "@/components/PageHero"; import { isLocale } from "@/i18n/config"; import { getDictionary } from "@/i18n/dictionaries"; import { getCargos } from "@/lib/data";
+import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
+import { getCargos } from "@/lib/data";
+
 type Props = { params: Promise<{ lang: string }> };
-export async function generateMetadata({ params }: Props): Promise<Metadata> { const { lang } = await params; return isLocale(lang) ? getDictionary(lang).about.metadata : {}; }
-export default async function About({ params }: Props) { const { lang } = await params; if (!isLocale(lang)) notFound(); const d = getDictionary(lang); return <main id="main" className="inner-page"><PageHero eyebrow={d.about.eyebrow} title={d.about.title} subtitle={d.about.intro} image="/pixel/sobre-leia.jpg" imageAlt={d.about.heroImageAlt} primary={{ href: "#trajetoria", label: d.about.primaryCta }} secondary={{ href: socialLinks.linkedin, label: d.about.secondaryCta }} extra={<p className="page-hero__extra">{d.about.mvp}</p>} /><section id="trajetoria" className="section-heading"><h2>{d.about.timeline}</h2></section><ol className="timeline">{getCargos().map((cargo) => <li key={`${cargo.empresa}-${cargo.periodo}`}><span>{cargo.periodo}</span><div><h3>{cargo.cargo}</h3><p>{cargo.empresa}</p><a href={cargo.fonte}>{d.common.source} ↗</a></div></li>)}</ol></main>; }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params;
+  return isLocale(lang) ? getDictionary(lang).about.metadata : {};
+}
+
+export default async function About({ params }: Props) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+  const d = getDictionary(lang);
+  const paragraphs = d.about.bio.map((paragraph) => paragraph.map((segment, index) => {
+    if (typeof segment === "string") return segment;
+    if ("href" in segment) {
+      return <a key={index} href={segment.href} target="_blank" rel="noopener noreferrer">{segment.text}</a>;
+    }
+    return <em key={index}>{segment.text}</em>;
+  }));
+
+  return <main id="main" className="inner-page">
+    <PageHero
+      eyebrow={d.about.eyebrow}
+      title={d.about.title}
+      subtitle={paragraphs[0]}
+      image="/pixel/sobre-leia.jpg"
+      imageAlt={d.about.heroImageAlt}
+      primary={{ href: "#trajetoria", label: d.about.primaryCta }}
+      secondary={{ href: socialLinks.linkedin, label: d.about.secondaryCta }}
+      extra={paragraphs.slice(1).map((paragraph, index) => <p key={index} className="page-hero__extra">{paragraph}</p>)}
+    />
+    <section id="trajetoria" className="section-heading"><h2>{d.about.timeline}</h2></section>
+    <ol className="timeline">
+      {getCargos().map((cargo) => <li key={`${cargo.empresa}-${cargo.periodo}`}>
+        <span>{cargo.periodo}</span>
+        <div><h3>{cargo.cargo}</h3><p>{cargo.empresa}</p><a href={cargo.fonte}>{d.common.source} ↗</a></div>
+      </li>)}
+    </ol>
+  </main>;
+}

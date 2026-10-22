@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { preferredLocale } from "@/i18n/config";
+import { preferredLocale } from "./i18n/config";
 
 export function middleware(request: NextRequest) {
   if (request.nextUrl.pathname !== "/") return NextResponse.next();

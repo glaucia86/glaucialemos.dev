@@ -5,7 +5,7 @@ import { HeroScene } from "./HeroScene";
 type PageHeroProps = {
   eyebrow: string;
   title: string;
-  subtitle: string;
+  subtitle: React.ReactNode;
   image: string;
   imageAlt: string;
   primary: { href: string; label: string };
