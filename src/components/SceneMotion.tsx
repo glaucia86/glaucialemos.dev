@@ -27,5 +27,30 @@ export function SceneMotion({ className, children }: { className: string; childr
     };
   }, []);
 
+  useEffect(() => {
+    const scene = ref.current;
+    const hero = scene?.closest<HTMLElement>(".page-hero");
+    if (!scene || !hero || !className.includes("--dagobah") || reduced || !visible || !foreground) return;
+    const reset = () => {
+      scene.style.removeProperty("--look-x");
+      scene.style.removeProperty("--look-y");
+      scene.removeAttribute("data-focused");
+    };
+    const move = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      const bounds = hero.getBoundingClientRect();
+      scene.style.setProperty("--look-x", `${((event.clientX - bounds.left) / bounds.width - .5) * 14}px`);
+      scene.style.setProperty("--look-y", `${((event.clientY - bounds.top) / bounds.height - .5) * 10}px`);
+      scene.dataset.focused = "true";
+    };
+    hero.addEventListener("pointermove", move, { passive: true });
+    hero.addEventListener("pointerleave", reset);
+    return () => {
+      hero.removeEventListener("pointermove", move);
+      hero.removeEventListener("pointerleave", reset);
+      reset();
+    };
+  }, [className, reduced, visible, foreground]);
+
   return <div ref={ref} className={className} aria-hidden="true" data-motion={!reduced && visible && foreground ? "running" : "paused"}>{children}</div>;
 }

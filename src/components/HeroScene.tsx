@@ -50,6 +50,15 @@ const rockLayers = [
 
 function Dagobah() {
   return <div className="scene-image-plane">
+    <div className="dagobah-light"><i /><i /><i /></div>
+    <div className="dagobah-mist dagobah-mist--far" />
+    <div className="dagobah-mist dagobah-mist--near" />
+    <div className="dagobah-spores">{Array.from({ length: 24 }, (_, i) => <i key={i} style={{
+      left: `${44 + (i * 17 % 51)}%`, top: `${16 + (i * 23 % 70)}%`,
+      "--delay": `${-i * 1.7}s`, "--duration": `${7 + i % 6}s`,
+    } as CSSProperties} />)}</div>
+    <div className="force-field"><i /><i /><i /></div>
+    <div className="swamp-ripples"><i /><i /><i /></div>
     <span className="force-glow"><span className="force-current" /></span>
     {rockLayers.map(({ depth, rocks }) => <div className={`force-depth force-depth--${depth}`} key={depth}>
       {rocks.map(({ x, y, size, shape, desktop }) => <span

@@ -56,3 +56,19 @@ Os testes verificam CTAs e formulário nos três idiomas, limites 900/901px, ali
 O quadro de olhos fechados solicitado ao gerador foi recusado automaticamente pelo serviço (`moderation_blocked`). Nenhum asset novo de personagem foi gerado ou incorporado. O piscar e a expressão de concentração dependem de um atlas facial aprovado e alinhado à imagem original. A cena está animada; o personagem permanece estático.
 
 As imagens existentes de franquia foram preservadas. Este trabalho não acrescenta uma licença nem estabelece a procedência dessas imagens; isso depende dos arquivos/fontes originais da proprietária.
+
+## Atmospheric depth follow-up
+
+Home now layers moving canopy light, two independently drifting mist banks,
+pixel spores, a synchronized force field and water ripples. Rock lift reaches
+3/5/7 percent by depth. Mouse pointer movement offsets rocks and spores without
+React renders; pointer exit, reduced motion, visibility changes and unmount
+reset the effect. Touch retains the automatic scene. Existing mobile particle
+limits remain in effect. No dependencies or raster assets were added.
+
+This is an environmental animation upgrade. The original character remains
+static; character acting still requires authored animation assets.
+
+Validation: lint, typecheck, production build, hero geometry at five widths,
+scene lifecycle and the new scene-depth browser suite. Desktop/mobile screenshots
+are captured from the local production build, not the Vercel deployment.

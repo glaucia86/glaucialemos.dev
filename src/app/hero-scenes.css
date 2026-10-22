@@ -285,3 +285,43 @@
 }
 .alarm-light{top:-38%;width:42%;height:100%;opacity:.5;background:conic-gradient(from 82deg,transparent 0 34%,color-mix(in srgb, var(--scene-saber) 53%, transparent) 39%,transparent 45% 100%);transform-origin:50% 38%;animation:alarm-sweep 3.2s linear infinite}.alarm-light--left{left:32%}.alarm-light--right{left:52%;animation-delay:-1.6s}
 @keyframes scene-pulse{50%{transform:scale(1.12);opacity:.65}}@keyframes snow-fall{0%{transform:translate3d(0,-5vh,0);opacity:0}10%{opacity:.75}100%{transform:translate3d(30px,115vh,0);opacity:.25}}@keyframes r2-blink{0%,38%,48%,100%{opacity:1;transform:scale(1)}40%,46%{opacity:.2;transform:scale(.75)}}@keyframes sand-blow{0%{transform:translate3d(0,0,0);opacity:0}12%{opacity:.7}100%{transform:translate3d(110vw,-35px,0);opacity:0}}@keyframes leaf-fall{0%{transform:translate3d(0,-8vh,0) rotate(0);opacity:0}12%{opacity:.8}50%{transform:translate3d(35px,52vh,0) rotate(190deg)}100%{transform:translate3d(-20px,112vh,0) rotate(390deg);opacity:.2}}@keyframes firefly{0%,100%{transform:translate3d(0,0,0);opacity:.2}45%{transform:translate3d(12px,-10px,0);opacity:1}70%{transform:translate3d(-8px,6px,0);opacity:.45}}@keyframes hologram-spin{to{transform:rotate(360deg)}}@keyframes alarm-sweep{50%{opacity:.8}to{transform:rotate(360deg)}}
+
+/* Dagobah atmosphere: distant light, middle-distance spores and foreground
+   mist move independently. All clocks inherit SceneMotion's pause contract. */
+.dagobah-light { inset: 0; overflow: hidden; opacity: .55; }
+.dagobah-light i { position: absolute; top: -25%; left: 64%; width: 8%; height: 115%; background: linear-gradient(180deg, #c9efb93d, #a6e3cb12 65%, transparent); transform: rotate(25deg); transform-origin: top; animation: canopy-light 16s ease-in-out infinite alternate; }
+.dagobah-light i:nth-child(2) { left: 79%; width: 3%; animation-delay: -8s; }
+.dagobah-light i:nth-child(3) { left: 91%; width: 12%; animation-delay: -4s; opacity: .5; }
+.dagobah-mist { left: 42%; width: 70%; height: 22%; pointer-events: none; background: radial-gradient(ellipse at 20% 60%, #b6e2cf35, transparent 55%), radial-gradient(ellipse at 65% 45%, #8bc6b62b, transparent 60%); animation: swamp-mist 22s ease-in-out infinite alternate; }
+.dagobah-mist--far { top: 44%; opacity: .65; }
+.dagobah-mist--near { bottom: -5%; height: 30%; left: 32%; animation-duration: 15s; animation-delay: -9s; }
+.dagobah-spores { inset: 0; translate: var(--look-x, 0px) var(--look-y, 0px); transition: translate 800ms ease-out; }
+.dagobah-spores i { position: absolute; width: 3px; height: 3px; background: #d4efaa; box-shadow: 0 0 9px #a8e8a4; animation: swamp-spore var(--duration) ease-in-out var(--delay) infinite; }
+.dagobah-spores i:nth-child(3n) { width: 5px; height: 5px; background: #78bfb1; }
+.force-field { left: 49%; top: 22%; width: 20%; height: 32%; opacity: .65; animation: field-gather var(--force-cycle) ease-in-out infinite; }
+.force-field i { position: absolute; inset: 0; border: 1px solid #c4efad55; border-left-color: transparent; border-bottom-color: transparent; border-radius: 50%; transform: rotate(-32deg); animation: force-orbit 8s linear infinite; }
+.force-field i:nth-child(2) { inset: 13%; animation-direction: reverse; animation-delay: -3s; }
+.force-field i:nth-child(3) { inset: 26%; animation-delay: -5s; opacity: .5; }
+.swamp-ripples { left: 53%; bottom: 2%; width: 37%; height: 12%; }
+.swamp-ripples i { position: absolute; inset: 25%; border: 1px solid #9cd5b74d; border-radius: 50%; animation: swamp-ripple 7s ease-out infinite; }
+.swamp-ripples i:nth-child(2) { animation-delay: -2.3s; }
+.swamp-ripples i:nth-child(3) { animation-delay: -4.6s; }
+.hero-scene-layer--dagobah .force-depth { translate: var(--look-x, 0px) var(--look-y, 0px); transition: translate 650ms ease-out; }
+.hero-scene-layer--dagobah .force-depth--back { --lift: -3%; }
+.hero-scene-layer--dagobah .force-depth--middle { --lift: -5%; }
+.hero-scene-layer--dagobah .force-depth--front { --lift: -7%; }
+.hero-scene-layer--dagobah .force-glow { width: 23%; height: 28%; }
+.hero-scene-layer--dagobah[data-focused="true"] .force-field { filter: drop-shadow(0 0 8px #c0ef9e66); }
+@keyframes canopy-light { from { transform: rotate(22deg); opacity: .4; } to { transform: rotate(29deg); opacity: 1; } }
+@keyframes swamp-mist { from { transform: translate(-7%, 3%); opacity: .35; } to { transform: translate(6%, -5%); opacity: .8; } }
+@keyframes swamp-spore { 0%, 100% { transform: translate(0, 12px); opacity: .12; } 35% { opacity: .9; } 65% { transform: translate(18px, -25px); opacity: .55; } }
+@keyframes force-orbit { to { transform: rotate(328deg); } }
+@keyframes field-gather { 0%, 12%, 84%, 100% { opacity: .08; scale: .7; } 28% { opacity: .35; } 42%, 58% { opacity: .75; scale: 1; } }
+@keyframes swamp-ripple { from { transform: scale(.3); opacity: 0; } 20% { opacity: .6; } to { transform: scale(2); opacity: 0; } }
+@media (max-width: 900px) {
+  .dagobah-spores i:nth-child(n+13) { display: none; }
+  .dagobah-light { opacity: .4; }
+}
+/* Feather atmosphere at its bounds so no rectangular layer edges are visible. */
+.dagobah-mist { mask-image: radial-gradient(ellipse, black 20%, transparent 70%); }
+.dagobah-light { mask-image: linear-gradient(transparent, black 14%, black 75%, transparent); }
