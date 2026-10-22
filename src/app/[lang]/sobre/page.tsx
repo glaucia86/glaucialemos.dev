@@ -27,7 +27,7 @@ export default async function About({ params }: Props) {
   }));
 
   return <main id="main" className="inner-page">
-    <PageHero
+    <PageHero sceneLabels={d.motion}
       eyebrow={d.about.eyebrow}
       title={d.about.title}
       subtitle={paragraphs[0]}

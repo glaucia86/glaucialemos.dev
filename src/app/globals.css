@@ -1154,9 +1154,6 @@ footer small {
   .page-hero__shade,.page-hero--strong .page-hero__shade {
     background: var(--hero-overlay-mobile);
   }
-  .hero-scene-layer i:nth-of-type(n+9) {
-    display: none;
-  }
   .stats {
     padding: 0;
   }
@@ -1227,17 +1224,14 @@ html.reduce-motion .opening-crawl * {
   animation: none !important;
 }
 
-html.reduce-motion .hero-scene-layer,
-html.reduce-motion .hero-scene-layer * {
-  animation: none !important;
-  opacity: 0 !important;
-}
-
-/* Keep the replacement globe visible when its rotation is disabled. */
-html.reduce-motion .hero-scene-layer--nevarro,
-html.reduce-motion .hero-scene-layer--nevarro * {
-  opacity: 1 !important;
-}
+html.reduce-motion .spatial-scene,
+html.reduce-motion .spatial-scene *,
+html.reduce-motion .spatial-scene *::before,
+html.reduce-motion .spatial-scene *::after { animation: none !important; transition: none !important; }
+html.reduce-motion .spatial-scene :is([data-camera], [data-depth], [data-fog]) { transform: none !important; }
+html.reduce-motion .spatial-scene .scene-permission { display: none; }
+html.reduce-motion .spatial-scene .saber-blade { transform: scaleX(1); opacity: .85; }
+html.reduce-motion .spatial-scene :is(.ambient-pixel, .force-sparkle) { opacity: .35; }
 
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -1258,15 +1252,14 @@ html.reduce-motion .hero-scene-layer--nevarro * {
   .opening-crawl * {
     animation: none !important;
   }
-  .hero-scene-layer,
-  .hero-scene-layer * {
-    animation: none !important;
-    opacity: 0 !important;
-  }
-  .hero-scene-layer--nevarro,
-  .hero-scene-layer--nevarro * {
-    opacity: 1 !important;
-  }
+  .spatial-scene,
+  .spatial-scene *,
+  .spatial-scene *::before,
+  .spatial-scene *::after { animation: none !important; transition: none !important; }
+  .spatial-scene :is([data-camera], [data-depth], [data-fog]) { transform: none !important; }
+  .spatial-scene .scene-permission { display: none; }
+  .spatial-scene .saber-blade { transform: scaleX(1); opacity: .85; }
+  .spatial-scene :is(.ambient-pixel, .force-sparkle) { opacity: .35; }
 }
 
 /* Brand interactions use the surface-appropriate focus and text tokens. */

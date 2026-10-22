@@ -1,306 +1,412 @@
-.hero-scene-layer{position:absolute;z-index:-1;inset:0;overflow:hidden;pointer-events:none}.hero-scene-layer>*{position:absolute;display:block;will-change:transform,opacity}
-.hero-scene-layer--tatooine .scene-image-plane {
-  left: 0;
-  top: 0;
+/* Background and cutouts share a cover plane and camera. Only the background
+   is framed; the mid and foreground may cross its edge. Copy stays above them. */
+.page-hero:has(.spatial-scene) { overflow: visible; }
+.spatial-scene {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  overflow-x: clip;
+  container-type: size;
+  --scene-position: 50%;
+  --particle-color: var(--scene-color);
+  --sine-ease: cubic-bezier(.37, 0, .63, 1);
+}
+.scene-frame { position: absolute; z-index: 0; inset: 0; clip-path: inset(12px 12px 16px 0 round 3px); }
+.scene-camera, .scene-mid-camera, .scene-foreground { position: absolute; inset: 0; }
+.scene-camera, .scene-mid-camera { transform: scale(1.025); }
+.scene-background { object-fit: fill; image-rendering: pixelated; }
+/* Mask the lighting and artwork before they reach the text column. On mobile
+   the entire scene lives below the copy, with a small safe gap for the pop-out. */
+.scene-mid-camera { z-index: 1; clip-path: inset(-24px -24px -32px 53%); }
+.spatial-scene--dagobah .scene-mid-camera { clip-path: inset(-24px -24px -32px 43%); }
+.scene-frame .page-hero__shade { z-index: 1; }
+.scene-foreground { z-index: 2; }
+.scene-fog-plane { position: absolute; inset: 0; }
+.scene-lighting { position: absolute; inset: 0; overflow: hidden; }
+.scene-haze {
+  position: absolute; left: 48%; top: 48%; width: 55%; height: 42%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--scene-color) 24%, transparent), transparent 68%);
+  opacity: .5;
+  animation: scene-haze 18s var(--sine-ease) infinite alternate;
+}
+.scene-haze--front { top: 72%; left: 38%; width: 75%; height: 25%; animation-duration: 24s; animation-delay: -8s; }
+.spatial-scene--dagobah .scene-haze { background: radial-gradient(ellipse, #9fdb9b40, #537b6d20 45%, transparent 70%); }
+.spatial-scene--hoth .scene-haze { top: 32%; }
+.spatial-scene--tatooine .scene-haze { top: 65%; }
+.spatial-scene--nevarro .scene-haze { top: 46%; }
+@keyframes scene-haze { from { transform: translate(-3%, 3%) scale(.95); opacity: .35; } to { transform: translate(-5%, -4%) scale(1.08); opacity: .8; } }
+.vader-strip {
+  position: absolute; top: 12%; left: 63%; width: .5%; height: 40%;
+  background: repeating-linear-gradient(to bottom, #ffaf9c 0 18%, transparent 18% 23%);
+  box-shadow: 0 0 8px #ff2e3dcc, 0 0 24px #ff2e3d66;
+  opacity: .45; transform: skewY(-12deg);
+
+}
+[data-story="ignite-point"] :is(.vader-strip, .vader-reflection) { animation: vader-light var(--story-duration) var(--sine-ease) both; }
+.vader-strip--right { left: 96%; top: 8%; height: 60%; }
+.vader-reflection {
+  position: absolute; left: 61%; top: 89%; width: 37%; height: 13%;
+  background: repeating-linear-gradient(0deg, transparent 0 5px, #ff666644 5px 8px), radial-gradient(ellipse at top, #ff243a99, transparent 70%);
+  clip-path: polygon(15% 0, 85% 0, 100% 100%, 0 100%);
+  transform-origin: top center; opacity: .5;
+
+}
+@keyframes vader-light { 0%, 12%, 82%, 100% { opacity: .2; } 24%, 70% { opacity: .8; } }
+.scene-debris { position: absolute; inset: 0; }
+.scene-debris > span {
+  position: absolute; width: 5px; height: 5px;
+  background: var(--scene-color); box-shadow: 3px 3px color-mix(in srgb, var(--scene-color) 25%, transparent);
+  opacity: .5; animation: edge-drift var(--duration) steps(24, end) var(--delay) infinite;
+}
+.scene-debris > span:nth-child(3n) { width: 9px; height: 7px; clip-path: polygon(25% 0, 75% 0, 75% 25%, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+@keyframes edge-drift { 0%, 100% { transform: translate(0, 5px) rotate(-8deg); opacity: .25; } 50% { transform: translate(-9px, -12px) rotate(12deg); opacity: .75; } }
+.scene-permission {
+  position: absolute; z-index: 3; bottom: 20px; right: 20px; display: flex;
+  border: 1px solid #b6cbd866; border-radius: 6px; overflow: hidden; pointer-events: auto;
+  background: #08121feb; color: #e6f2ff; font-size: .75rem;
+}
+.scene-permission button { padding: 8px 12px; min-height: 44px; background: transparent; border: 0; color: inherit; cursor: pointer; }
+.scene-permission button + button { border-left: 1px solid #b6cbd833; min-width: 44px; }
+.scene-permission button:focus-visible { outline-offset: -4px; }
+.scene-character { transform-origin: var(--character-origin); transform: scale(1.025, 1.035); }
+.scene-image-plane {
+  position: absolute;
+  width: max(100cqw, 177.777778cqh);
+  height: max(100cqh, 56.25cqw);
+  left: var(--scene-position);
+  top: 50%;
+  transform: translate(calc(-1 * var(--scene-position)), -50%);
+}
+.scene-art, .scene-mid, .scene-character, .scene-svg, .scene-atmosphere, .force-depth, .force-sparkles {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
 }
-@media (max-width: 640px) {
-  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) {
+.scene-art > span, .scene-art > div, .scene-character > span, .scene-lighting > span, .ambient-pixel, .force-sparkle { position: absolute; }
+.scene-svg { overflow: visible; }
+/* Empty space in the copy wrapper must not intercept character interaction. */
+.page-hero:has(.spatial-scene) .page-hero__content { pointer-events: none; }
+.page-hero:has(.spatial-scene) .page-hero__content > * { pointer-events: auto; }
+.scene-target {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 12%;
+  pointer-events: auto;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.scene-target:focus-visible { outline: 3px dashed #c5f7ff; outline-offset: 8px; }
+.scene-target:disabled { pointer-events: none; }
+
+@media (min-width: 901px) {
+  .page-hero:has(.spatial-scene:not(.spatial-scene--dagobah)) :is(.eyebrow, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: 50%; }
+  .page-hero:has(.spatial-scene--dagobah) .page-hero__shade { background: var(--hero-overlay-dagobah); }
+  .page-hero:has(.spatial-scene--dagobah) :is(.eyebrow, h1, .page-hero__subtitle, .actions) {
+    max-width: min(40%, calc(45vw - max(1.5rem, (100vw - 1180px) / 2)));
+  }
+  .page-hero:has(.spatial-scene--dagobah) h1 { font-size: clamp(3rem, 5vw, 4.5rem); }
+}
+/* A separate illustration area on narrow screens keeps every character's
+   hit target clear of the copy. Image and effects inherit the exact same crop. */
+@media (max-width: 900px) {
+  .page-hero:has(.spatial-scene) {
     --scene-height: clamp(360px, 65vw, 500px);
     --scene-position: 80%;
     display: block;
     min-height: 0;
     padding-bottom: var(--scene-height);
   }
-
-  .page-hero:has(.hero-scene-layer--nevarro) { --scene-position: 90%; }
-
-  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__content {
-    padding: 3rem 0 2rem;
-  }
-
-  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__image {
-    top: auto !important;
-    height: var(--scene-height) !important;
-    object-position: var(--scene-position) 50%;
-  }
-
-  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__shade {
+  .page-hero:has(.spatial-scene--dagobah) { --scene-position: 55%; }
+  .page-hero:has(.spatial-scene--nevarro) { --scene-position: 90%; }
+  .page-hero:has(.spatial-scene) .page-hero__content { padding: 3rem 0 2rem; }
+  .page-hero:has(.spatial-scene) .page-hero__shade {
     top: auto;
     height: var(--scene-height);
     background: var(--hero-overlay-scene);
   }
+  .spatial-scene { top: auto; height: var(--scene-height); --scene-position: inherit; }
+}
+@media (max-width: 640px) {
+  .ambient-pixel:nth-child(n+13) { display: none; }
+}
 
-  :is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro) {
-    top: auto;
-    height: var(--scene-height);
-    container-type: size;
-  }
+/* Masked original pixels expand very slightly from the feet, covering the
+   baked silhouette at every frame. Stepped timing preserves the pixel style. */
+.character-idle, .character-gesture {
+  transform-box: view-box;
+  transform-origin: var(--character-origin);
+}
+.character-idle { animation: character-breathe 3.8s steps(8, end) infinite; }
+.character-blink { opacity: 0; animation: character-blink 6.4s steps(1, end) infinite; }
+.spatial-scene--hoth .character-idle { animation-duration: 4.6s; }
+.spatial-scene--hoth .character-blink { animation-delay: -2.2s; }
+.spatial-scene--kashyyyk .character-idle { animation-duration: 3.2s; }
+.spatial-scene--nevarro .character-idle { animation-duration: 4.2s; }
+.spatial-scene--nevarro .character-blink { animation-delay: -3.5s; }
+.spatial-scene--tatooine .character-idle { animation: droid-idle 3.6s steps(6, end) infinite; }
+.spatial-scene--bespin .character-idle { animation-duration: 5.6s; }
+.spatial-scene--death-star .character-idle { animation: trooper-idle 5s steps(6, end) infinite; }
+[data-story="roar"] .character-gesture { animation: chewie-cheer var(--story-duration) steps(8, end) both; }
+@keyframes character-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.008, 1.018); }
+}
+@keyframes character-blink {
+  0%, 42%, 46%, 49%, 100% { opacity: 0; }
+  43%, 45%, 48% { opacity: 1; }
+}
+@keyframes droid-idle {
+  0%, 100% { transform: scale(1); }
+  25% { transform: skewX(.5deg) scaleY(1.008); }
+  75% { transform: skewX(-.5deg) scaleY(1.008); }
+}
+@keyframes trooper-idle {
+  0%, 100% { transform: scale(1); }
+  35%, 65% { transform: skewX(.4deg) scaleY(1.01); }
+}
+@keyframes chewie-cheer {
+  0%, 100% { transform: scale(1); }
+  20%, 40%, 60% { transform: translateX(-2px) rotate(-.7deg) scale(1.025, 1.035); }
+  30%, 50%, 70% { transform: translateX(2px) rotate(.7deg) scale(1.01, 1.02); }
+}
 
-  .hero-scene-layer--tatooine .scene-image-plane {
-    width: max(100cqw, 177.777778cqh);
-    height: max(100cqh, 56.25cqw);
-    left: var(--scene-position);
-    top: 50%;
-    transform: translate(calc(-1 * var(--scene-position)), -50%);
-    will-change: auto;
-  }
-}
-/* These two planes match the 1024 × 576 image's object-cover crop. */
-.hero-scene-layer--dagobah,
-.hero-scene-layer--bespin {
-  container-type: size;
-}
-.hero-scene-layer--dagobah .scene-image-plane,
-.hero-scene-layer--bespin .scene-image-plane {
-  width: max(100cqw, 177.777778cqh);
-  height: max(100cqh, 56.25cqw);
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  will-change: auto;
-}
-.scene-image-plane > * {
-  position: absolute;
-  display: block;
-}
-@media (min-width: 901px) {
-  .page-hero:has(.hero-scene-layer--dagobah) .page-hero__shade {
-    background: var(--hero-overlay-dagobah);
-  }
-}
-/* Keep text outside the stones' image-space bounds on wide screens. */
-@media (min-width: 901px) {
-  .page-hero:has(.hero-scene-layer--dagobah) :is(.eyebrow, h1, .page-hero__subtitle, .actions) {
-    max-width: min(40%, calc(45vw - max(1.5rem, (100vw - 1180px) / 2)));
-  }
-  .page-hero:has(.hero-scene-layer--dagobah) h1 {
-    font-size: clamp(3rem, 5vw, 4.5rem);
-  }
-}
-/* Reserve a separate illustration area below the copy on narrow screens.
-   Image and effects use the same crop, including Next Image's inline inset. */
-@media (max-width: 900px) {
-  .page-hero:has(:is(.hero-scene-layer--dagobah, .hero-scene-layer--bespin)) {
-    --scene-height: clamp(360px, 65vw, 500px);
-    --scene-position: 55%;
-    display: block;
-    min-height: 0;
-    padding-bottom: var(--scene-height);
-  }
-  .page-hero:has(.hero-scene-layer--bespin) { --scene-position: 80%; }
-  .page-hero:has(:is(.hero-scene-layer--dagobah, .hero-scene-layer--bespin)) .page-hero__content {
-    padding: 3rem 0 2rem;
-  }
-  .page-hero:has(:is(.hero-scene-layer--dagobah, .hero-scene-layer--bespin)) .page-hero__image {
-    top: auto !important;
-    height: var(--scene-height) !important;
-    object-position: var(--scene-position) 50%;
-  }
-  .hero-scene-layer--dagobah,
-  .hero-scene-layer--bespin {
-    top: auto;
-    height: var(--scene-height);
-  }
-  .hero-scene-layer--dagobah .scene-image-plane,
-  .hero-scene-layer--bespin .scene-image-plane {
-    left: var(--scene-position);
-    transform: translate(calc(-1 * var(--scene-position)), -50%);
-  }
-  .page-hero:has(:is(.hero-scene-layer--dagobah, .hero-scene-layer--bespin)) .page-hero__shade {
-    background: var(--hero-overlay-scene);
-    top: auto;
-    height: var(--scene-height);
-  }
-  .force-rock--desktop { display: none; }
-}
-/* Yoda's open palm is (620, 285) on the 1024 × 576 reference. */
+/* Hovering stays continuous; the story lifts the stones and brings one to Yoda. */
 .force-glow {
-  left: 60.546875%;
-  top: 49.479167%;
-  width: 13.671875%;
-  height: 17.361111%;
+  left: 60.546875%; top: 49.479167%; width: 19%; height: 28%;
   transform: translate(-100%, -75%);
-  background: radial-gradient(ellipse at 100% 75%, color-mix(in srgb, var(--force-light) 28%, transparent), color-mix(in srgb, var(--force-mid) 16%, transparent) 30%, transparent 70%);
   transform-origin: 100% 75%;
-  animation: force-breathe 4.8s ease-in-out infinite;
+  background: radial-gradient(ellipse at 100% 75%, #c3f0b366, #83bc9822 35%, transparent 70%);
+  animation: force-breathe 4.8s steps(12, end) infinite;
 }
 .force-current {
-  position: absolute;
-  right: 0;
-  top: 67%;
-  width: 90%;
-  height: 16%;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--force-light) 20%, transparent));
+  position: absolute; right: 0; top: 67%; width: 90%; height: 16%;
+  background: linear-gradient(90deg, transparent, #c3f0b344);
   transform-origin: right center;
-  animation: force-current 4.8s ease-in-out infinite;
+  animation: force-current 4.8s steps(12, end) infinite;
 }
-.force-depth {
-  inset: 0;
-  animation: force-parallax 9s ease-in-out infinite alternate;
+.force-depth--back { opacity: .65; }
+.force-orbit { position: absolute; animation: force-orbit var(--float-duration) var(--sine-ease) var(--float-delay) infinite; }
+.force-rock { position: absolute; inset: 0; }
+.force-rock::before {
+  content: ""; position: absolute; inset: -35%;
+  background: radial-gradient(ellipse, #b4ff9b38, transparent 68%);
+  animation: rock-glow 3.2s steps(8, end) var(--float-delay) infinite;
 }
-.force-depth--back { --drift: .3%; opacity: .7; }
-.force-depth--middle { --drift: .6%; animation-duration: 11s; animation-delay: -3s; }
-.force-depth--front { --drift: .9%; animation-duration: 13s; animation-delay: -6s; }
-.force-rock {
-  position: absolute;
-  aspect-ratio: 1;
-  animation: force-float var(--float-duration) ease-in-out var(--float-delay) infinite;
-}
-.force-rock svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  animation: force-turn var(--float-duration) steps(3, end) var(--float-delay) infinite;
-}
-.force-debris {
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  animation: force-dust 5.6s steps(6, end) infinite;
-}
+.force-rock svg { display: block; width: 100%; height: 100%; animation: force-turn var(--float-duration) steps(6, end) var(--float-delay) infinite; }
+[data-story="force-lift"] .force-rock { animation: force-burst var(--story-duration) var(--sine-ease) both; }
+[data-story="force-lift"] .force-rock--chosen { animation-name: force-to-hand; }
+[data-story="force-lift"] .force-glow { animation: force-surge var(--story-duration) var(--sine-ease) both; }
 @keyframes force-breathe {
-  0%, 100% { opacity: .4; transform: translate(-100%, -75%) scale(.96); }
-  50% { opacity: .8; transform: translate(-100%, -75%) scale(1.04); }
+  0%, 100% { opacity: .45; transform: translate(-100%, -75%) scale(.96); }
+  50% { opacity: .9; transform: translate(-100%, -75%) scale(1.12); }
 }
 @keyframes force-current {
   0%, 100% { opacity: .25; transform: rotate(28deg) scaleX(.8); }
-  50% { opacity: .6; transform: rotate(35deg) scaleX(1); }
+  50% { opacity: .65; transform: rotate(40deg) scaleX(1); }
 }
-@keyframes force-parallax {
-  from { transform: translateX(calc(-1 * var(--drift))); }
-  to { transform: translateX(var(--drift)); }
+@keyframes force-orbit {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(12%, -35%); }
+  50% { transform: translate(0, -60%); }
+  75% { transform: translate(-12%, -25%); }
 }
-@keyframes force-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-28%); }
+@keyframes force-turn { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(9deg); } }
+@keyframes rock-glow { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+@keyframes force-burst {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  25%, 65% { transform: translate(var(--burst-x), var(--burst-y)) rotate(18deg); }
 }
-@keyframes force-turn {
-  0%, 100% { transform: rotate(-3deg); }
-  50% { transform: rotate(5deg); }
+@keyframes force-surge {
+  0%, 100% { opacity: .5; transform: translate(-100%, -75%) scale(1); }
+  25%, 50% { opacity: 1; transform: translate(-100%, -75%) scale(1.5); }
 }
-@keyframes force-dust {
-  0%, 100% { transform: translate(0, 0); opacity: .2; }
-  50% { transform: translate(-.5%, -2%); opacity: .65; }
-}
-.snowflake{top:-8%;left:var(--x);width:5px;height:5px;border-radius:50%;background:var(--color-white);opacity:.7;animation:snow-fall 8s linear infinite}.snowflake:nth-of-type(2n){width:3px;height:3px;animation-duration:11s}.snowflake:nth-of-type(3n){width:7px;height:7px;opacity:.48;animation-duration:14s}.snowflake:nth-of-type(1){--x:5%;animation-delay:-2s}.snowflake:nth-of-type(2){--x:12%;animation-delay:-7s}.snowflake:nth-of-type(3){--x:19%;animation-delay:-4s}.snowflake:nth-of-type(4){--x:26%;animation-delay:-10s}.snowflake:nth-of-type(5){--x:33%;animation-delay:-1s}.snowflake:nth-of-type(6){--x:40%;animation-delay:-8s}.snowflake:nth-of-type(7){--x:47%;animation-delay:-3s}.snowflake:nth-of-type(8){--x:54%;animation-delay:-12s}.snowflake:nth-of-type(9){--x:61%;animation-delay:-6s}.snowflake:nth-of-type(10){--x:68%;animation-delay:-9s}.snowflake:nth-of-type(11){--x:75%;animation-delay:-5s}.snowflake:nth-of-type(12){--x:82%;animation-delay:-11s}.snowflake:nth-of-type(13){--x:89%;animation-delay:-3s}.snowflake:nth-of-type(n+14){--x:96%;animation-delay:-8s}
-.twin-sun{border-radius:50%;background:color-mix(in srgb, var(--color-accent-200) 33%, transparent);box-shadow:0 0 18px color-mix(in srgb, var(--color-accent-300) 53%, transparent);animation:scene-pulse 4.5s ease-in-out infinite}.twin-sun--large{left:68.5%;top:14.5%;width:7.5%;aspect-ratio:1}.twin-sun--small{left:76.3%;top:28.8%;width:5.5%;aspect-ratio:1;animation-delay:-2s}.r2-light{left:77.3%;top:68.2%;width:1.4%;aspect-ratio:1;border-radius:50%;background:var(--color-accent-400);box-shadow:0 0 12px var(--color-accent);animation:r2-blink 2.4s steps(1) infinite}.sand-grain{left:-3%;top:calc(56% + var(--y));width:18px;height:3px;border-radius:50%;background:color-mix(in srgb, var(--color-accent-200) 67%, transparent);animation:sand-blow 6s linear infinite}.sand-grain:nth-of-type(2n){width:8px;animation-duration:8s}.sand-grain:nth-of-type(1){--y:3%;animation-delay:-1s}.sand-grain:nth-of-type(2){--y:8%;animation-delay:-4s}.sand-grain:nth-of-type(3){--y:13%;animation-delay:-2s}.sand-grain:nth-of-type(4){--y:18%;animation-delay:-6s}.sand-grain:nth-of-type(5){--y:23%;animation-delay:-3s}.sand-grain:nth-of-type(n+6){--y:28%;animation-delay:-7s}
-.falling-leaf{top:-7%;left:calc(46% + var(--x));width:12px;height:7px;border-radius:90% 0;background:var(--scene-leaf);animation:leaf-fall 9s ease-in-out infinite}.falling-leaf:nth-of-type(2n){background:var(--color-accent-400);animation-duration:12s}.falling-leaf:nth-of-type(1){--x:2%;animation-delay:-2s}.falling-leaf:nth-of-type(2){--x:8%;animation-delay:-8s}.falling-leaf:nth-of-type(3){--x:15%;animation-delay:-4s}.falling-leaf:nth-of-type(4){--x:22%;animation-delay:-10s}.falling-leaf:nth-of-type(5){--x:29%;animation-delay:-5s}.falling-leaf:nth-of-type(n+6){--x:36%;animation-delay:-1s}.firefly{left:calc(52% + var(--x));top:calc(28% + var(--y));width:4px;height:4px;border-radius:50%;background:var(--color-accent-secondary);box-shadow:0 0 8px var(--color-accent-secondary);animation:firefly 4s ease-in-out infinite}.firefly:nth-of-type(1){--x:3%;--y:8%}.firefly:nth-of-type(2){--x:12%;--y:22%;animation-delay:-1s}.firefly:nth-of-type(3){--x:20%;--y:4%;animation-delay:-2s}.firefly:nth-of-type(4){--x:29%;--y:30%;animation-delay:-3s}.firefly:nth-of-type(n+5){--x:38%;--y:16%;animation-delay:-1.5s}
-/* Match object-cover in image space, including right-aligned tablets and
-   the separate mobile illustration's inherited 90% object-position. */
-.hero-scene-layer--nevarro { container-type: size; }
-.hero-scene-layer--nevarro .scene-image-plane {
-  width: max(100cqw, 177.777778cqh);
-  height: max(100cqh, 56.25cqw);
-  left: var(--scene-position, 50%);
-  top: 50%;
-  transform: translate(calc(-1 * var(--scene-position, 50%)), -50%);
-  will-change: auto;
-}
-@media (min-width: 641px) and (max-width: 900px) {
-  .hero-scene-layer--nevarro { --scene-position: 100%; }
-}
-/* Center (708, 272), radius 80 in the 1024 × 576 reference image. */
+
+/* Dome pixels sit on the amber lens (800,402), photoreceptor (774,388)
+   and small red status display (779,407). The beep is a visual pulse. */
+.twin-sun { border-radius: 50%; background: #ffcc7044; animation: sun-glow 6s steps(12, end) infinite; }
+.twin-sun--large { left: 67.8%; top: 15.5%; width: 7.5%; aspect-ratio: 1; }
+.twin-sun--small { left: 76.5%; top: 30%; width: 5.5%; aspect-ratio: 1; animation-delay: -3s; }
+.r2-light { animation: r2-signal 3.2s steps(1, end) infinite; }
+.r2-light--amber { animation-delay: -.7s; }
+.r2-light--red { animation-delay: -1.6s; }
+.r2-beep { transform-origin: 78% 68%; opacity: 0; }
+[data-story="dome-spin"] .r2-light { animation-duration: .45s; }
+[data-story="dome-spin"] .r2-beep { animation: r2-beep .6s steps(8, end) 4; }
+@keyframes r2-signal { 0%, 18%, 30%, 60%, 100% { opacity: .15; } 10%, 24%, 45%, 52% { opacity: 1; } }
+@keyframes r2-beep { 0%, 20%, 70%, 100% { opacity: 0; transform: scale(.9); } 30% { opacity: 1; } 60% { opacity: 0; transform: scale(1.12); } }
+@keyframes sun-glow { 0%, 100% { opacity: .35; } 50% { opacity: .8; } }
+
+/* The same globe, now with a composited repeating strip instead of painting
+   background-position every frame. Two 2:1 map tiles loop within the circle. */
 .hologram-globe {
-  left: 69.140625%;
-  top: 47.222222%;
-  width: 15.625%;
-  aspect-ratio: 1;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  overflow: hidden;
-  background: #104c80 url("/pixel/globe-map.svg") repeat-x 0 0 / 200% 100%;
-  image-rendering: pixelated;
+  left: 69.140625%; top: 47.222222%; width: 15.625%; aspect-ratio: 1;
+  transform: translate(-50%, -50%); border-radius: 50%; overflow: hidden;
+  background: #104c80;
   box-shadow: 0 0 2px 1px #a0f2ff, 0 0 9px #50cfee80;
+}
+.hologram-map {
+  position: absolute; inset: 0 auto 0 0; width: 400%; height: 100%;
+  background: url("/pixel/globe-map.svg") repeat-x 0 0 / 50% 100%;
+  image-rendering: pixelated;
   animation: hologram-rotate 16s steps(96, end) infinite;
 }
 .hologram-globe::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
   background: radial-gradient(circle at 38% 32%, #b4f6ff30, transparent 40%, #082b6266 72%, #061c4fcc);
   box-shadow: inset 0 0 2px 2px #9defff, inset -5px -2px 12px #06275480;
 }
-/* At 200% background-size, a 200% position shift travels one whole tile. */
-@keyframes hologram-rotate {
-  from { background-position-x: 0%; }
-  to { background-position-x: 200%; }
-}
-/* Emitter (718, 335), pommel (800, 420): angle atan2(-85, -82).
-   The image already supplies the single hilt; pivot the blade at its emitter. */
+.force-sparkle { background: #b3ffff; box-shadow: 0 0 8px #67dbff99; clip-path: polygon(33% 0, 66% 0, 66% 33%, 100% 33%, 100% 66%, 66% 66%, 66% 100%, 33% 100%, 33% 66%, 0 66%, 0 33%, 33% 33%); animation: force-sparkle 4s steps(12, end) var(--delay) infinite; }
+[data-story] .force-sparkle { animation-duration: 1.2s; }
+[data-story="reach"] .force-sparkles { animation: grogu-force var(--story-duration) steps(12, end) both; transform-origin: 84% 74%; }
+@keyframes hologram-rotate { to { transform: translateX(-50%); } }
+@keyframes force-sparkle { 0%, 100% { opacity: 0; transform: translateY(15px) scale(.5); } 35% { opacity: 1; } 80% { opacity: 0; transform: translateY(-25px) scale(1.2); } }
+@keyframes grogu-force { 0%, 100% { transform: scale(1); } 40% { transform: scale(1.25); } }
+
+/* The blade ignites only during Vader's story, then retracts at the same hilt. */
 .saber-assembly {
-  left: 70.117188%;
-  top: 58.159722%;
-  width: 19.53125%;
-  aspect-ratio: 200 / 8;
+  left: 70.117188%; top: 58.159722%; width: 19.53125%; aspect-ratio: 200 / 8;
   transform-origin: left center;
   transform: translateY(-50%) rotate(-133.9708deg);
-  animation: saber-grip 6s ease-in-out infinite;
 }
-.saber-blade {
-  position: absolute;
-  inset: 0;
-  transform-origin: left center;
-  transform: scaleX(0);
-  opacity: 0;
-  animation: saber-ignite 6s ease-in-out infinite;
-}
-.saber-core,
-.saber-aura {
-  position: absolute;
-  inset: 0;
-}
-.saber-core {
-  background: var(--scene-saber-core);
-  clip-path: polygon(0 20%, 98% 20%, 98% 35%, 100% 35%, 100% 65%, 98% 65%, 98% 80%, 0 80%);
-}
-.saber-aura {
-  background: var(--scene-saber);
-  /* Hard rectangular halo layers, without a blur filter. */
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--scene-saber) 73%, transparent), 0 0 0 5px color-mix(in srgb, var(--scene-saber) 40%, transparent), 0 0 0 8px color-mix(in srgb, var(--scene-saber) 15%, transparent);
-  animation: saber-pulse 6s ease-in-out infinite;
-}
-/* Clip clouds to the viewport's right half, including on narrow screens. */
-.bespin-clouds {
-  inset: 50% 0 0 50%;
-  overflow: hidden;
-  will-change: auto;
-}
-.moving-cloud {
-  position: absolute;
-  left: -50%;
-  top: 10%;
-  width: 50%;
-  height: 12%;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--color-secondary-100) 33%, transparent);
-  filter: blur(5px);
-  animation: cloud-drift 18s linear infinite;
-}
-.moving-cloud:nth-child(2) { top: 26%; animation-delay: -4.5s; }
-.moving-cloud:nth-child(3) { top: 46%; animation-delay: -9s; }
-.moving-cloud:nth-child(4) { top: 66%; animation-delay: -13.5s; }
-@keyframes saber-grip {
-  0%, 20%, 40%, 85%, 100% { transform: translateY(-50%) rotate(-133.9708deg); }
-  25% { transform: translateY(-50%) rotate(-134.7708deg); }
-  32% { transform: translateY(-50%) rotate(-133.5708deg); }
-}
+.saber-blade { position: absolute; inset: 0; transform-origin: left center; transform: scaleX(0); opacity: 0; }
+.saber-core, .saber-aura { position: absolute; inset: 0; }
+.saber-core { background: var(--scene-saber-core); clip-path: polygon(0 20%, 98% 20%, 98% 35%, 100% 35%, 100% 65%, 98% 65%, 98% 80%, 0 80%); }
+.saber-aura { background: var(--scene-saber); box-shadow: 0 0 0 2px #fa436cbb, 0 0 0 5px #fa436c66, 0 0 0 8px #fa436c26; animation: saber-pulse 1.4s steps(6, end) infinite; }
+.vader-led { animation: r2-signal 4.8s steps(1, end) infinite; }
+.vader-led--blue { animation-delay: -1.3s; }
+[data-story="ignite-point"] .saber-assembly { animation: saber-strike var(--story-duration) steps(16, end) both; }
+[data-story="ignite-point"] .saber-blade { animation: saber-ignite var(--story-duration) var(--sine-ease) both; }
 @keyframes saber-ignite {
   0%, 12%, 82%, 100% { transform: scaleX(0); opacity: 0; }
   14% { transform: scaleX(.02); opacity: 1; }
   24%, 70% { transform: scaleX(1); opacity: 1; }
   80% { transform: scaleX(.02); opacity: 1; }
 }
-@keyframes saber-pulse {
-  0%, 40%, 55%, 70%, 85%, 100% { transform: scaleY(1); opacity: .5; }
-  47%, 62%, 78% { transform: scaleY(1.35); opacity: .85; }
+@keyframes saber-pulse { 0%, 100% { opacity: .55; transform: scaleY(1); } 50% { opacity: .85; transform: scaleY(1.3); } }
+@keyframes saber-strike {
+  0%, 100% { transform: translateY(-50%) rotate(-133.9708deg); }
+  25% { transform: translateY(-50%) rotate(-150deg); }
+  45%, 60% { transform: translateY(-50%) rotate(-80deg) scaleX(1.2); }
 }
-@keyframes cloud-drift {
-  0% { transform: translate(0, 0); opacity: 0; }
-  15%, 75% { opacity: .65; }
-  100% { transform: translate(300%, -20%); opacity: 0; }
+
+.leia-breath { opacity: 0; animation: leia-breath 4.6s steps(10, end) infinite; transform-origin: 75% 55%; }
+.chewie-roar { opacity: 0; }
+[data-story="roar"] .chewie-roar { animation: chewie-roar var(--story-duration) steps(1, end) both; }
+.trooper-question { opacity: 0; }
+[data-story="look-around"] .trooper-question { animation: trooper-question var(--story-duration) steps(8, end) both; }
+.trooper-scan { opacity: .2; animation: trooper-scan 5s steps(12, end) infinite; }
+[data-story] .trooper-scan { animation-duration: .6s; }
+@keyframes leia-breath { 0%, 45%, 100% { opacity: 0; transform: translate(0, 0) scale(.5); } 55% { opacity: .45; } 85% { opacity: 0; transform: translate(-12px, -8px) scale(1.2); } }
+@keyframes chewie-roar { 0%, 15%, 85%, 100% { opacity: 0; } 20%, 45%, 65% { opacity: 1; } 35%, 55% { opacity: .5; } }
+@keyframes trooper-question { 0%, 100% { opacity: 0; transform: translateY(0); } 50% { opacity: .85; transform: translateY(-8px); } }
+@keyframes trooper-scan { 0%, 25%, 80%, 100% { opacity: 0; transform: translateY(0); } 40% { opacity: .5; } 65% { opacity: 0; transform: translateY(10px); } }
+
+/* Only transform and opacity animate; rim-light filters remain static. */
+.ambient-pixel { background: var(--particle-color); opacity: 0; animation: ambient-rise var(--duration) steps(18, end) var(--delay) infinite; }
+.spatial-scene--hoth { --particle-color: #def5ff; }
+.spatial-scene--hoth .ambient-pixel { animation-name: ambient-snow; }
+.spatial-scene--tatooine { --particle-color: #79dfff; }
+.spatial-scene--tatooine .ambient-pixel { animation-name: ambient-sand; }
+.spatial-scene--kashyyyk { --particle-color: #f0c27a; }
+.spatial-scene--kashyyyk .ambient-pixel:nth-child(2n) { width: .8% !important; background: #91aa59; animation-name: ambient-leaf; }
+.spatial-scene--nevarro { --particle-color: #8adfff; }
+.spatial-scene--bespin { --particle-color: #ffb5ad; }
+.spatial-scene--death-star { --particle-color: #e2f2ff; }
+@keyframes ambient-rise { 0%, 100% { opacity: 0; transform: translate(0, 18px); } 25%, 65% { opacity: .65; } 90% { opacity: 0; transform: translate(12px, -45px); } }
+@keyframes ambient-snow { 0% { opacity: 0; transform: translate(0, -60px); } 20%, 70% { opacity: .65; } 100% { opacity: 0; transform: translate(30px, 90px); } }
+@keyframes ambient-sand { 0% { opacity: 0; transform: translate(-50px, 15px); } 20%, 65% { opacity: .45; } 100% { opacity: 0; transform: translate(90px, -5px); } }
+@keyframes ambient-leaf { 0% { opacity: 0; transform: translate(0, -40px) rotate(0); } 20%, 70% { opacity: .65; } 100% { opacity: 0; transform: translate(25px, 75px) rotate(150deg); } }
+
+
+/* Backlight and rim glows are fixed paint effects, never animated filters. */
+.scene-backlight {
+  position: absolute; left: 64%; top: 18%; width: 34%; height: 70%;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--scene-color) 32%, transparent), transparent 68%);
+  opacity: .65;
 }
-.alarm-light{top:-38%;width:42%;height:100%;opacity:.5;background:conic-gradient(from 82deg,transparent 0 34%,color-mix(in srgb, var(--scene-saber) 53%, transparent) 39%,transparent 45% 100%);transform-origin:50% 38%;animation:alarm-sweep 3.2s linear infinite}.alarm-light--left{left:32%}.alarm-light--right{left:52%;animation-delay:-1.6s}
-@keyframes scene-pulse{50%{transform:scale(1.12);opacity:.65}}@keyframes snow-fall{0%{transform:translate3d(0,-5vh,0);opacity:0}10%{opacity:.75}100%{transform:translate3d(30px,115vh,0);opacity:.25}}@keyframes r2-blink{0%,38%,48%,100%{opacity:1;transform:scale(1)}40%,46%{opacity:.2;transform:scale(.75)}}@keyframes sand-blow{0%{transform:translate3d(0,0,0);opacity:0}12%{opacity:.7}100%{transform:translate3d(110vw,-35px,0);opacity:0}}@keyframes leaf-fall{0%{transform:translate3d(0,-8vh,0) rotate(0);opacity:0}12%{opacity:.8}50%{transform:translate3d(35px,52vh,0) rotate(190deg)}100%{transform:translate3d(-20px,112vh,0) rotate(390deg);opacity:.2}}@keyframes firefly{0%,100%{transform:translate3d(0,0,0);opacity:.2}45%{transform:translate3d(12px,-10px,0);opacity:1}70%{transform:translate3d(-8px,6px,0);opacity:.45}}@keyframes alarm-sweep{50%{opacity:.8}to{transform:rotate(360deg)}}
+.character { filter: drop-shadow(2px -2px 1px var(--scene-color)) drop-shadow(3px -3px 7px color-mix(in srgb, var(--scene-color) 60%, transparent)); }
+.force-rock { filter: drop-shadow(1px -1px 2px #b4ff9b88); }
+.scene-framing-rock {
+  position: absolute; width: clamp(40px, 6vw, 92px); height: auto; bottom: -8px;
+  --rock-mid: color-mix(in srgb, var(--scene-color) 32%, #18252c);
+  --rock-light: color-mix(in srgb, var(--scene-color) 55%, #18252c);
+  --rock-highlight: var(--scene-color);
+  --rock-moss: var(--rock-mid);
+  --rock-moss-light: var(--rock-light);
+  filter: drop-shadow(2px -2px 2px var(--scene-color));
+}
+.scene-framing-rock--0 { left: 51%; transform: rotate(-12deg); }
+.scene-framing-rock--1 { right: 1%; width: clamp(60px, 9vw, 130px); transform: rotate(12deg); }
+.scene-framing-rock--2 { right: -1%; top: 9%; bottom: auto; width: 36px; }
+.character-part { transform-box: view-box; }
+.character-wind { animation: character-wind 4.8s steps(10, end) infinite alternate; }
+.spatial-scene--kashyyyk .character-wind { animation-duration: 3.7s; }
+[data-story="force-lift"] .character-arm { animation: yoda-lift var(--story-duration) steps(12, end) both; }
+[data-story="head-turn"] .character-head { animation: leia-turn var(--story-duration) steps(10, end) both; }
+[data-story="dome-spin"] :is(.character-head, .r2-dome-lights) { animation: dome-spin var(--story-duration) steps(16, end) both; transform-origin: 792px 400px; }
+[data-story="reach"] .character-arm { animation: grogu-reach var(--story-duration) steps(12, end) both; }
+[data-story="ignite-point"] .character-arm { animation: vader-point-arm var(--story-duration) steps(12, end) both; }
+.vader-point { opacity: 0; transform-origin: 817px 423px; }
+[data-story="ignite-point"] .vader-point { animation: vader-point var(--story-duration) steps(12, end) both; }
+[data-story="look-around"] .character-head { animation: trooper-look var(--story-duration) steps(10, end) both; }
+@keyframes character-wind { from { transform: skewX(-.4deg) scaleX(1); } to { transform: skewX(.6deg) scaleX(1.012); } }
+@keyframes yoda-lift { 0%, 100% { transform: rotate(0); } 25%, 75% { transform: rotate(5deg) scaleY(1.035); } }
+@keyframes force-to-hand {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(var(--burst-x), var(--burst-y)) rotate(18deg); }
+  55%, 75% { transform: translate(var(--hand-x), var(--hand-y)) rotate(-10deg) scale(.65); }
+}
+@keyframes leia-turn { 0%, 100% { transform: skewX(0) scaleX(1); } 35%, 65% { transform: skewX(-1deg) scaleX(1.015); } }
+@keyframes dome-spin {
+  0%, 100% { transform: scaleX(1); }
+  20% { transform: skewY(1deg) scaleX(1.015); }
+  40%, 60% { transform: scaleX(-1); }
+  80% { transform: skewY(-1deg) scaleX(1.015); }
+}
+@keyframes grogu-reach {
+  0%, 100% { transform: rotate(0) scale(1); }
+  35%, 70% { transform: translate(-5px, -5px) rotate(22deg) scale(1.1, 1.25); }
+}
+@keyframes vader-point-arm { 0%, 100% { transform: rotate(0); } 40%, 70% { transform: rotate(8deg) scale(1.04); } }
+@keyframes vader-point {
+  0%, 28%, 90%, 100% { opacity: 0; transform: scale(.8); }
+  40%, 75% { opacity: 1; transform: scale(1); }
+}
+@keyframes trooper-look {
+  0%, 100% { transform: skewX(0) scaleX(1); }
+  25%, 40% { transform: skewX(-1.5deg) scaleX(1.02); }
+  65%, 80% { transform: skewX(1.5deg) scaleX(1.02); }
+}
+.shooting-star {
+  position: absolute; left: 83%; top: 12%; width: 42px; height: 2px;
+  background: linear-gradient(90deg, transparent, #def5ff); opacity: 0;
+  transform: rotate(-28deg); animation: shooting-star 19s linear var(--delay, -7s) infinite;
+}
+.spatial-scene--death-star .shooting-star { display: none; }
+@keyframes shooting-star {
+  0%, 88%, 100% { opacity: 0; transform: translate(0, 0) rotate(-28deg) scaleX(.4); }
+  89% { opacity: .9; }
+  93%, 99% { opacity: 0; transform: translate(-220px, 110px) rotate(-28deg) scaleX(1); }
+}
+
+/* A static layered composition, including fog, rocks and the lit saber. The
+   system/manual rules in globals.css apply this before hydration as well. */
+.spatial-scene[data-reduced="true"],
+.spatial-scene[data-reduced="true"] *,
+.spatial-scene[data-reduced="true"] *::before,
+.spatial-scene[data-reduced="true"] *::after { animation: none !important; transition: none !important; }
+.spatial-scene[data-reduced="true"] :is([data-camera], [data-depth], [data-fog]) { transform: none !important; }
+.spatial-scene[data-reduced="true"] .scene-permission { display: none; }
+.spatial-scene[data-reduced="true"] .saber-blade { transform: scaleX(1); opacity: .85; }
+.spatial-scene[data-reduced="true"] :is(.ambient-pixel, .force-sparkle) { opacity: .35; }
+.spatial-scene[data-active="false"] *,
+.spatial-scene[data-active="false"] *::before,
+.spatial-scene[data-active="false"] *::after { animation-play-state: paused; }
+@media (max-width: 900px) {
+  .spatial-scene .scene-mid-camera { clip-path: inset(-12px -20px -32px -20px); }
+  .scene-frame { clip-path: inset(12px 12px 16px round 3px); }
+}
