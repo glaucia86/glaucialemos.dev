@@ -50,9 +50,6 @@ const panelSurfaces = ["--surface-space", "--surface-light", "--surface-soft", "
 const pairs: [string, string, string, number][] = [
   ...panelSurfaces.flatMap((surface) => panelForegrounds.map((foreground): [string, string, string, number] =>
     [`${foreground} / ${surface}`, foreground, surface, 4.5])),
-  ["intro azul / espaço", "--crawl-blue", "--crawl-space", 4.5],
-  ["crawl amarelo / espaço", "--color-accent-secondary", "--crawl-space", 4.5],
-  ["pular intro / espaço", "--text-inverse", "--crawl-space", 4.5],
   ["hero e 404 / escuro", "--text-inverse", "--surface-dark", 4.5],
   ["hero secundário / escuro", "--text-inverse-muted", "--surface-dark", 4.5],
   ["header e footer / marca escura", "--text-inverse-muted", "--color-brand-dark", 4.5],

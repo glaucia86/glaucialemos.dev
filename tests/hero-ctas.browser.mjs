@@ -4,7 +4,6 @@ import { chromium, expect } from "@playwright/test";
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
-await page.addInitScript(() => localStorage.setItem("intro-dismissed", "true"));
 const baseURL = process.env.BASE_URL || "http://127.0.0.1:3100";
 const github = "https://github.com/glaucia86";
 const linkedin = "https://www.linkedin.com/in/glaucialemos";

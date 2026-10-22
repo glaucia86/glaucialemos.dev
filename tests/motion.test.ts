@@ -32,15 +32,4 @@ describe("redução de movimento", () => {
     expect(css).toMatch(/html\.reduce-motion[^{}]*\.hero-scene-layer[^{}]*\{[^}]*animation\s*:\s*none\s*!important[^}]*\}/);
     expect(css).toMatch(/prefers-reduced-motion\s*:\s*reduce[\s\S]*\.hero-scene-layer[^{}]*\{[^}]*animation\s*:\s*none\s*!important[^}]*\}/);
   });
-
-  it("oculta a intro e desliga suas animações nas duas preferências", () => {
-    const css = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf8");
-    const manual = css.slice(css.indexOf("html.reduce-motion .opening-crawl"));
-    const system = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
-
-    for (const rules of [manual, system]) {
-      expect(rules).toMatch(/\.opening-crawl\s*\{[^}]*display\s*:\s*none/);
-      expect(rules).toMatch(/\.opening-crawl\s+\*\s*\{[^}]*animation\s*:\s*none\s*!important/);
-    }
-  });
 });

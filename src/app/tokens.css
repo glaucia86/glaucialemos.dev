@@ -143,10 +143,8 @@
   --space-24: calc(var(--spacing) * 24);
 
   /* Scene pigments preserve the illustrations and pixel-art silhouettes. */
-  --crawl-space: #020308;
-  --crawl-blue: #5dccf5;
   --hologram-blue: #165f92;
-  --hologram-cyan: var(--crawl-blue);
+  --hologram-cyan: #5dccf5;
   --hologram-ink: #103b59;
   --rock-outline: #07120e;
   --rock-dark: #293831;
