@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/PageHero";
+import { ExperienceTimeline } from "@/components/ExperienceTimeline";
 import { socialLinks } from "@/data/social";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -36,12 +37,9 @@ export default async function About({ params }: Props) {
       secondary={{ href: socialLinks.linkedin, label: d.about.secondaryCta }}
       extra={paragraphs.slice(1).map((paragraph, index) => <p key={index} className="page-hero__extra">{paragraph}</p>)}
     />
-    <section id="trajetoria" className="section-heading"><h2>{d.about.timeline}</h2></section>
-    <ol className="timeline">
-      {getCargos().map((cargo) => <li key={`${cargo.empresa}-${cargo.periodo}`}>
-        <span>{cargo.periodo}</span>
-        <div><h3>{cargo.cargo}</h3><p>{cargo.empresa}</p><a href={cargo.fonte}>{d.common.source} ↗</a></div>
-      </li>)}
-    </ol>
+    <section id="trajetoria" className="section-heading" aria-labelledby="timeline-title">
+      <h2 id="timeline-title">{d.about.timeline}</h2>
+      <ExperienceTimeline entries={getCargos()} lang={lang} labels={d.about.timelineLabels} sourceLabel={d.common.source} />
+    </section>
   </main>;
 }

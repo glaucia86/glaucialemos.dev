@@ -1,44 +1,406 @@
 [
   {
+    "id": "itau",
+    "empresa": "Itaú Unibanco",
+    "cargo": {
+      "pt": "Principal Software Engineer / AI Transformation Lead",
+      "en": "Principal Software Engineer / AI Transformation Lead",
+      "es": "Principal Software Engineer / AI Transformation Lead"
+    },
+    "periodo": {
+      "pt": "mai 2026 – atual",
+      "en": "May 2026 – present",
+      "es": "may 2026 – actualidad"
+    },
+    "conquistas": {
+      "pt": [],
+      "en": [],
+      "es": []
+    },
+    "tecnologias": [],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/",
+    "descricao": {
+      "pt": "Atuação em engenharia de software e transformação com inteligência artificial.",
+      "en": "Working in software engineering and AI transformation.",
+      "es": "Trabajo en ingeniería de software y transformación con inteligencia artificial."
+    }
+  },
+  {
+    "id": "packt",
+    "empresa": "Packt",
+    "cargo": {
+      "pt": "Coautora e revisora técnica",
+      "en": "Co-author and Technical Reviewer",
+      "es": "Coautora y revisora técnica"
+    },
+    "periodo": {
+      "pt": "set 2025 – atual",
+      "en": "Sep 2025 – present",
+      "es": "sep 2025 – actualidad"
+    },
+    "conquistas": {
+      "pt": [
+        "Coautoria de Building Agentic AI Apps with Next.js, TypeScript and MCP, com contribuições sobre arquiteturas agênticas, RAG, orquestração multiagente e MCP.",
+        "Revisão técnica e validação de exemplos de código, práticas de segurança e estratégias de escalabilidade com autores e editores."
+      ],
+      "en": [
+        "Co-authored Building Agentic AI Apps with Next.js, TypeScript and MCP, contributing to agentic architectures, RAG, multi-agent orchestration, and MCP.",
+        "Technical review and validation of code examples, security practices, and scalability strategies with authors and editors."
+      ],
+      "es": [
+        "Coautoría de Building Agentic AI Apps with Next.js, TypeScript and MCP, con contribuciones sobre arquitecturas agénticas, RAG, orquestación multiagente y MCP.",
+        "Revisión técnica y validación de ejemplos de código, prácticas de seguridad y estrategias de escalabilidad con autores y editores."
+      ]
+    },
+    "tecnologias": [
+      "Next.js",
+      "TypeScript",
+      "MCP",
+      "RAG"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
+  },
+  {
+    "id": "zup",
+    "empresa": "Zup Innovation",
+    "cargo": {
+      "pt": "Especialista em desenvolvimento de IA / IA generativa",
+      "en": "A.I Developer Specialist / GenAI",
+      "es": "Especialista en desarrollo de IA / IA generativa"
+    },
+    "periodo": {
+      "pt": "set 2025 – abr 2026",
+      "en": "Sep 2025 – Apr 2026",
+      "es": "sep 2025 – abr 2026"
+    },
+    "conquistas": {
+      "pt": [
+        "Avaliação e implementação de ferramentas de IA generativa e agentes para apoiar fluxos de desenvolvimento de software.",
+        "Condução de provas de conceito, experimentos técnicos e avaliações de arquitetura com foco em segurança, escalabilidade e observabilidade."
+      ],
+      "en": [
+        "Evaluated and implemented generative AI and agent tools to support software development workflows.",
+        "Led proofs of concept, technical experiments, and architectural assessments focused on security, scalability, and observability."
+      ],
+      "es": [
+        "Evaluación e implementación de herramientas de IA generativa y agentes para apoyar flujos de desarrollo de software.",
+        "Realización de pruebas de concepto, experimentos técnicos y evaluaciones de arquitectura centradas en seguridad, escalabilidad y observabilidad."
+      ]
+    },
+    "tecnologias": [
+      "StackSpot A.I",
+      "Digibee",
+      "Copilot Studio",
+      "GitHub Copilot",
+      "MCP"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
+  },
+  {
+    "id": "microsoft-ai",
     "empresa": "Microsoft",
-    "cargo": "Cloud Advocate II em JavaScript/Node.js/TypeScript",
-    "periodo": "dez 2019 – mai 2025",
-    "fonte": "https://www.linkedin.com/posts/glaucialemos_como-muitos-j%C3%A1-sabem-essa-semana-estou-encerrando-activity-7328778074047647744-JMQ7"
+    "cargo": {
+      "pt": "Developer Advocate II — IA, JavaScript/TypeScript e OSS",
+      "en": "Developer Advocate II — AI, JavaScript/TypeScript and OSS",
+      "es": "Developer Advocate II — IA, JavaScript/TypeScript y OSS"
+    },
+    "periodo": {
+      "pt": "mar 2021 – jun 2025",
+      "en": "Mar 2021 – Jun 2025",
+      "es": "mar 2021 – jun 2025"
+    },
+    "conquistas": {
+      "pt": [
+        "Criação e liderança do Microblog AI, aplicação open source de IA fullstack e serverless.",
+        "Contribuições para Generative AI for Beginners e projetos do Azure-Samples; liderança da modernização do Contoso Real Estate.",
+        "Conteúdo técnico, palestras e workshops em português, inglês e espanhol, além de mentoria para mulheres em tecnologia."
+      ],
+      "en": [
+        "Created and led Microblog AI, an open-source fullstack, serverless AI application.",
+        "Contributed to Generative AI for Beginners and Azure-Samples projects; led the modernization of Contoso Real Estate.",
+        "Technical content, talks, and workshops in Portuguese, English, and Spanish, alongside mentoring women in tech."
+      ],
+      "es": [
+        "Creación y liderazgo de Microblog AI, una aplicación de IA open source, fullstack y serverless.",
+        "Contribuciones a Generative AI for Beginners y proyectos de Azure-Samples; liderazgo de la modernización de Contoso Real Estate.",
+        "Contenido técnico, charlas y talleres en portugués, inglés y español, además de mentoría para mujeres en tecnología."
+      ]
+    },
+    "tecnologias": [
+      "JavaScript",
+      "TypeScript",
+      "Remix",
+      "LangChain.js",
+      "Azure OpenAI",
+      "Azure Static Web Apps",
+      "Azure Container Apps"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
   },
   {
+    "id": "watchtower",
+    "empresa": "Watchtower",
+    "cargo": {
+      "pt": "Engenheira de software voluntária",
+      "en": "Volunteer Software Engineer",
+      "es": "Ingeniera de software voluntaria"
+    },
+    "periodo": {
+      "pt": "jan 2022 – fev 2025",
+      "en": "Jan 2022 – Feb 2025",
+      "es": "ene 2022 – feb 2025"
+    },
+    "conquistas": {
+      "pt": [
+        "Desenvolvimento e manutenção voluntários de aplicações web e microsserviços para uma organização sem fins lucrativos."
+      ],
+      "en": [
+        "Volunteered to build and maintain web applications and microservices for a nonprofit organization."
+      ],
+      "es": [
+        "Desarrollo y mantenimiento voluntarios de aplicaciones web y microservicios para una organización sin fines de lucro."
+      ]
+    },
+    "tecnologias": [
+      "JavaScript"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
+  },
+  {
+    "id": "microsoft-js",
     "empresa": "Microsoft",
-    "cargo": "Regional Cloud Advocate na América Latina",
-    "periodo": "mar 2019 – dez 2019",
-    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+    "cargo": {
+      "pt": "Developer Advocate — JavaScript/Node.js e TypeScript",
+      "en": "Developer Advocate — JavaScript/Node.js and TypeScript",
+      "es": "Developer Advocate — JavaScript/Node.js y TypeScript"
+    },
+    "periodo": {
+      "pt": "dez 2019 – fev 2021",
+      "en": "Dec 2019 – Feb 2021",
+      "es": "dic 2019 – feb 2021"
+    },
+    "conquistas": {
+      "pt": [
+        "Criação de conteúdo, vídeos e exemplos para desenvolver, publicar, gerenciar e escalar aplicações no Azure.",
+        "Contribuições open source, relacionamento com comunidades e coleta de feedback para equipes de produto."
+      ],
+      "en": [
+        "Created content, videos, and samples for developing, deploying, managing, and scaling Azure applications.",
+        "Open-source contributions, community engagement, and collection of feedback for product teams."
+      ],
+      "es": [
+        "Creación de contenido, vídeos y ejemplos para desarrollar, desplegar, gestionar y escalar aplicaciones en Azure.",
+        "Contribuciones open source, colaboración con comunidades y recopilación de comentarios para los equipos de producto."
+      ]
+    },
+    "tecnologias": [
+      "JavaScript",
+      "Node.js",
+      "TypeScript",
+      "Azure"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
   },
   {
-    "empresa": "Zoox Smart Data",
-    "cargo": "Software Developer",
-    "periodo": "set 2018 – dez 2018",
-    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+    "id": "microsoft-latam",
+    "empresa": "Microsoft",
+    "cargo": {
+      "pt": "Regional Cloud Advocate — América Latina",
+      "en": "Regional Cloud Advocate — Latin America",
+      "es": "Regional Cloud Advocate — América Latina"
+    },
+    "periodo": {
+      "pt": "mar 2019 – dez 2019",
+      "en": "Mar 2019 – Dec 2019",
+      "es": "mar 2019 – dic 2019"
+    },
+    "conquistas": {
+      "pt": [
+        "Produção de conteúdo técnico e exemplos de aplicações Azure para comunidades de desenvolvimento.",
+        "Participação em conferências e comunidades, contribuições open source e colaboração com programas de comunidade."
+      ],
+      "en": [
+        "Produced technical content and Azure application samples for developer communities.",
+        "Engaged in conferences and communities, contributed to open source, and collaborated with community programs."
+      ],
+      "es": [
+        "Producción de contenido técnico y ejemplos de aplicaciones Azure para comunidades de desarrollo.",
+        "Participación en conferencias y comunidades, contribuciones open source y colaboración con programas comunitarios."
+      ]
+    },
+    "tecnologias": [
+      "Azure",
+      "JavaScript"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
   },
   {
+    "id": "nodejs",
+    "empresa": "Node.js Foundation",
+    "cargo": {
+      "pt": "Colaboradora e membro",
+      "en": "Contributor and Member",
+      "es": "Colaboradora y miembro"
+    },
+    "periodo": {
+      "pt": "dez 2018 – dez 2019",
+      "en": "Dec 2018 – Dec 2019",
+      "es": "dic 2018 – dic 2019"
+    },
+    "conquistas": {
+      "pt": [
+        "Contribuições ao grupo de internacionalização do Node.js, com manutenção e atualização da tradução do Nodejs.org para português."
+      ],
+      "en": [
+        "Contributed to the Node.js Internationalization Working Group, maintaining and updating the Portuguese translation of Nodejs.org."
+      ],
+      "es": [
+        "Contribuciones al grupo de internacionalización de Node.js, con mantenimiento y actualización de la traducción de Nodejs.org al portugués."
+      ]
+    },
+    "tecnologias": [
+      "Node.js"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
+  },
+  {
+    "id": "hackdev",
     "empresa": "HackDev",
-    "cargo": "Software Developer | Founder",
-    "periodo": "abr 2014 – mar 2019",
-    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+    "cargo": {
+      "pt": "Engenheira de software / Especialista em consultoria de software Microsoft",
+      "en": "Software Engineer / Microsoft Software Consultant Specialist",
+      "es": "Ingeniera de software / Especialista en consultoría de software Microsoft"
+    },
+    "periodo": {
+      "pt": "abr 2016 – mar 2019",
+      "en": "Apr 2016 – Mar 2019",
+      "es": "abr 2016 – mar 2019"
+    },
+    "conquistas": {
+      "pt": [
+        "Consultoria, treinamento e desenvolvimento de projetos e aplicações web com boas práticas de desenvolvimento."
+      ],
+      "en": [
+        "Consulting, training, and development of projects and web applications using good development practices."
+      ],
+      "es": [
+        "Consultoría, formación y desarrollo de proyectos y aplicaciones web con buenas prácticas de desarrollo."
+      ]
+    },
+    "tecnologias": [
+      "MongoDB",
+      "Express.js",
+      "AngularJS",
+      "Node.js",
+      "ASP.NET",
+      "ASP.NET Core",
+      "C#",
+      "TypeScript"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
   },
   {
-    "empresa": "Resource IT Solutions",
-    "cargo": "Software Developer",
-    "periodo": "abr 2017 – set 2017",
-    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+    "id": "zoox",
+    "empresa": "Zoox Smart Data",
+    "cargo": {
+      "pt": "Desenvolvedora de software",
+      "en": "Software Developer",
+      "es": "Desarrolladora de software"
+    },
+    "periodo": {
+      "pt": "set 2018 – dez 2018",
+      "en": "Sep 2018 – Dec 2018",
+      "es": "sep 2018 – dic 2018"
+    },
+    "conquistas": {
+      "pt": [
+        "Desenvolvimento de produtos para hotelaria com o Zoox Labs, incluindo o Zoox Smart Pass para check-in com reconhecimento facial."
+      ],
+      "en": [
+        "Developed hospitality products with Zoox Labs, including Zoox Smart Pass for check-in using facial recognition."
+      ],
+      "es": [
+        "Desarrollo de productos para hotelería con Zoox Labs, incluido Zoox Smart Pass para check-in con reconocimiento facial."
+      ]
+    },
+    "tecnologias": [
+      "Node.js",
+      "Koa.js",
+      "Angular",
+      "TypeScript",
+      "Vue.js",
+      "AWS",
+      "REST",
+      "TDD"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
   },
   {
-    "empresa": "GlobalLogic LATAM",
-    "cargo": "Software Developer",
-    "periodo": "mai 2015 – dez 2015",
-    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+    "id": "udemy",
+    "empresa": "Udemy",
+    "cargo": {
+      "pt": "Instrutora técnica",
+      "en": "Technical Instructor",
+      "es": "Instructora técnica"
+    },
+    "periodo": {
+      "pt": "nov 2017 – dez 2018",
+      "en": "Nov 2017 – Dec 2018",
+      "es": "nov 2017 – dic 2018"
+    },
+    "conquistas": {
+      "pt": [
+        "Cursos online sobre linguagens open source e desenvolvimento web, incluindo APIs RESTful com Node.js e TypeScript para desenvolvedores C#."
+      ],
+      "en": [
+        "Online courses on open-source languages and web development, including RESTful APIs with Node.js and TypeScript for C# developers."
+      ],
+      "es": [
+        "Cursos online sobre lenguajes open source y desarrollo web, incluidas APIs RESTful con Node.js y TypeScript para desarrolladores C#."
+      ]
+    },
+    "tecnologias": [
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "TypeScript"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
   },
   {
-    "empresa": "TopDown Sistemas",
-    "cargo": "Software Developer",
-    "periodo": "dez 2013 – dez 2014",
-    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+    "id": "esx",
+    "empresa": "ESX",
+    "cargo": {
+      "pt": "Engenheira de desenvolvimento de software",
+      "en": "Software Development Engineer",
+      "es": "Ingeniera de desarrollo de software"
+    },
+    "periodo": {
+      "pt": "mai 2018 – jul 2018",
+      "en": "May 2018 – Jul 2018",
+      "es": "may 2018 – jul 2018"
+    },
+    "conquistas": {
+      "pt": [
+        "Manutenção e desenvolvimento de aplicações web e mobile em projetos da empresa, com arquitetura de microsserviços e práticas de TDD e DDD."
+      ],
+      "en": [
+        "Maintained and developed web and mobile applications for company projects, using microservice architecture and TDD and DDD practices."
+      ],
+      "es": [
+        "Mantenimiento y desarrollo de aplicaciones web y móviles para proyectos de la empresa, con arquitectura de microservicios y prácticas de TDD y DDD."
+      ]
+    },
+    "tecnologias": [
+      "C#",
+      ".NET Core",
+      "Angular",
+      "TypeScript",
+      "Node.js",
+      "Azure",
+      "TDD",
+      "DDD"
+    ],
+    "fonte": "https://www.linkedin.com/in/glaucialemos/"
   }
 ]

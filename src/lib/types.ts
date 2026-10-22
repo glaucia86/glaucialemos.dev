@@ -13,10 +13,24 @@ export const eventoSchema = z.object({
   fonte: z.url(),
 });
 
+const textoLocalizadoSchema = z.object({
+  pt: z.string(),
+  en: z.string(),
+  es: z.string(),
+});
+
 export const cargoSchema = z.object({
+  id: z.string(),
   empresa: z.string(),
-  cargo: z.string(),
-  periodo: z.string(),
+  cargo: textoLocalizadoSchema,
+  periodo: textoLocalizadoSchema,
+  descricao: textoLocalizadoSchema.optional(),
+  conquistas: z.object({
+    pt: z.array(z.string()),
+    en: z.array(z.string()),
+    es: z.array(z.string()),
+  }),
+  tecnologias: z.array(z.string()),
   fonte: z.url(),
 });
 
@@ -34,12 +48,6 @@ export const artigoSchema = z.object({
   plataforma: z.string(),
   data: z.iso.date(),
   idioma: z.enum(["pt-BR", "en", "es"]),
-});
-
-const textoLocalizadoSchema = z.object({
-  pt: z.string(),
-  en: z.string(),
-  es: z.string(),
 });
 
 export const servicoSchema = z.object({

@@ -1,8 +1,31 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import About from "@/app/[lang]/sobre/page";
+import { getCargos } from "@/lib/data";
+import type { Locale } from "@/i18n/config";
+
+it("preserva o parágrafo aprovado sobre o Itaú na bio em português", async () => {
+  const html = renderToStaticMarkup(await About({ params: Promise.resolve({ lang: "pt" }) }));
+  const paragraphs = html.match(/<p class="page-hero__(?:subtitle|extra)">.*?<\/p>/g);
+
+  expect(paragraphs?.[1]).toBe(
+    '<p class="page-hero__extra">Hoje é Principal Software Engineer e AI Transformation Lead no Itaú Unibanco, onde ajuda times de engenharia a levar IA generativa de experimentos isolados para entregas seguras, governadas e em escala, com arquitetura agêntica, RAG, context engineering e Spec-Driven Development.</p>',
+  );
+});
 
 describe.each(["pt", "en", "es"])("bio em %s", (lang) => {
+  it("renderiza a trajetória traduzida com painéis inicialmente fechados e IDs únicos", async () => {
+    const html = renderToStaticMarkup(await About({ params: Promise.resolve({ lang }) }));
+    const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const entry of getCargos()) {
+      expect(html).toContain(entry.cargo[lang as Locale]);
+      expect(html).toContain(entry.periodo[lang as Locale]);
+      expect(html).toContain(`aria-expanded="false" aria-controls="experience-${entry.id}-panel"`);
+      expect(html).toContain(`id="experience-${entry.id}-panel" class="timeline__panel" role="region" aria-labelledby="experience-${entry.id}" hidden=""`);
+    }
+  });
+
   it("renderiza os três programas como links externos seguros", async () => {
     const html = renderToStaticMarkup(await About({ params: Promise.resolve({ lang }) }));
     const anchors = [...html.matchAll(/<a\b([^>]*)>([^<]*)<\/a>/g)];

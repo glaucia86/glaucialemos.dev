@@ -11,6 +11,20 @@ import {
 import { eventoSchema } from "@/lib/types";
 
 describe("dados", () => {
+  it("limita Itaú ao título público e à descrição genérica, sem detalhes internos", () => {
+    const itau = getCargos().find((entry) => entry.id === "itau")!;
+    expect(itau).toBeDefined();
+    expect(itau.tecnologias).toEqual([]);
+    for (const lang of ["pt", "en", "es"] as const) {
+      expect(itau.cargo[lang]).toBe("Principal Software Engineer / AI Transformation Lead");
+      expect(itau.descricao?.[lang]).toBeTruthy();
+      expect(itau.conquistas[lang]).toEqual([]);
+    }
+    const content = JSON.stringify(getCargos());
+    expect(content).not.toMatch(/squads|6[,.]?300|licen[cs]|ClearSale|Blip\.ai|Agro Varejo/i);
+    expect(getCargos().filter((entry) => entry.empresa === "Microsoft")).toHaveLength(3);
+  });
+
   it("carrega e valida todas as coleções", () => {
     expect(getEventos()).toHaveLength(105);
     expect(getCargos().length).toBeGreaterThan(0);
