@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./tokens.css";
 @import "./hero-scenes.css";
+@import "./events.css";
 * {
   box-sizing: border-box;
 }

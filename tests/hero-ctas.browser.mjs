@@ -111,7 +111,7 @@ try {
       const eventsComposition = await page.locator(".page-hero").evaluate((hero) => {
         const image = hero.querySelector(".page-hero__image");
         const box = image.getBoundingClientRect();
-        const text = hero.querySelector(".page-hero__content").getBoundingClientRect();
+        const text = hero.querySelector(".events-hero-copy").getBoundingClientRect();
         const frame = hero.getBoundingClientRect();
         const scale = Math.max(box.width / image.naturalWidth, box.height / image.naturalHeight);
         const width = image.naturalWidth * scale;
@@ -125,12 +125,12 @@ try {
         return {
           belowText: box.top >= text.bottom,
           sceneVisible,
-          shade: getComputedStyle(hero.querySelector(".page-hero__shade")).backgroundImage,
+          hasDarkOverlay: Boolean(hero.querySelector(".page-hero__shade")),
           noOverflow: document.documentElement.scrollWidth <= window.innerWidth,
         };
       });
       assert.ok(eventsComposition.belowText && eventsComposition.sceneVisible && eventsComposition.noOverflow, `Eventos ${lang}, ${width}px: ${JSON.stringify(eventsComposition)}`);
-      assert.equal(eventsComposition.shade, composition.shade);
+      assert.equal(eventsComposition.hasDarkOverlay, false, "Events artwork is displayed without a dark text overlay");
     }
   }
   console.log("PASS: hero CTAs, social footer and keyboard focus in pt/en/es, external link attributes, localized contact prefill, 404 and Projects/Events mobile scenes at 320/390/640px.");
