@@ -1,48 +1,72 @@
 # Design system
 
-Fonte: cores extraídas do banner da marca (k-means). `src/app/tokens.css`, importado por
-`globals.css`, concentra CSS vars e `@theme` do Tailwind 4. Sem dependências novas.
+Fonte: cores extraídas do banner da marca (k-means). `src/app/tokens.css`, importado
+por `globals.css`, concentra os tokens e o `@theme` do Tailwind 4. Sem dependências
+novas. A identidade padrão é espacial e escura em todas as rotas e idiomas,
+incluindo os dois caminhos de 404.
 
-- **Paleta:** primary roxo `#5a3d7e`, secondary magenta `#893866`, accent laranja
-  `#e07828`, acento secundário amarelo `#f8e838`. Escalas 50–950 para as três
-  paletas e neutros levemente arroxeados. Gradiente: `--gradient-brand`
-  (90° roxo → magenta → vinho `#a73457`).
-- **Semântica:** `--surface-light/soft/dark`, `--text-body/heading/muted`,
-  `--text-inverse/inverse-muted`, `--link`, `--link-hover`, `--border` e `--focus`.
-  Header e overlays usam roxos escuros; o foco em superfícies escuras usa accent
-  claro. Hero limita a coluna de texto à parte opaca do gradiente.
-- **Uso:** `color: var(--text-body)` ou `text-body bg-surface`;
-  `bg-primary`, `text-secondary-700`, `bg-accent text-neutral-950`.
-  CTA: `--text-on-accent` sobre `--color-accent`; título do hero: `--accent-light`.
-  Estados `--color-success/warning/danger/info` têm versões `-text` para fundos
-  claros. Use estas versões para texto; não presuma AA em toda a escala.
-- **Tipografia:** Geist e Geist Mono existentes via `--font-sans/mono`;
-  `--text-xs` a `--text-8xl`. Raios `--radius-sm/md/lg/full`, sombras
-  `--shadow-sm/md`, espaçamento base `--spacing` (4 px) e aliases usuais entre
-  `--space-1` e `--space-24`.
-- **Cenas:** pigmentos `--rock-*`, `--force-*` e `--scene-*` também ficam nos tokens.
-  Dagobah usa coordenadas lógicas 1024×576: mão (620,285), pedras 30% maiores,
-  três planos e as mesmas fases, steps e parallax. Desktop reserva a coluna do
-  texto; mobile reserva uma área de ilustração abaixo do texto e CTA.
-  Reduced-motion e easter eggs foram mantidos.
+- **Paleta:** roxo `#5a3d7e`, magenta `#893866`, vinho `#a73457` e ameixa escura
+  `#3d293b` formam `--gradient-brand`. Laranja `#e07828` continua exclusivo do
+  CTA principal e pequenos acentos; amarelo `#f8e838` destaca estatísticas e foco.
+  Escalas 50–950 e neutros arroxeados continuam disponíveis, mas não são pares
+  de texto/fundo automaticamente acessíveis.
+- **Fundo:** `--surface-space` é a base, com `color-scheme: dark` inclusive nos
+  controles nativos. `body::before` fixa três padrões CSS de estrelas quadradas
+  de 1–2 px e duas nebulosas radiais. `--star-color`, `--nebula-purple` e
+  `--nebula-wine` limitam a intensidade. Sem imagens, canvas, listeners, filtros
+  ou animação para esse fundo; ele é estático também com reduced motion.
+- **Superfícies:** os aliases existentes `--surface-light` e `--surface-soft`
+  agora significam painel escuro e painel roxo, respectivamente; “light” é
+  apenas compatibilidade de nome. `--surface-dark` protege a leitura dos heros,
+  `--surface-raised` representa a ameixa do header/footer, `--surface-active`
+  indica hover/expansão e `--surface-tag` serve para chips.
+- **Profundidade:** `--gradient-card` combina superfícies com 94% de opacidade;
+  `--texture-scanline` adiciona linhas de 1 px com tinta a 2%. Cards de projetos,
+  serviços, artigos, métricas, formulário e botões da timeline compartilham
+  esse tratamento. Cantos em L, bordas roxas e sombras com brilho discreto
+  reforçam a linguagem pixel sem recortar conteúdo ou contornos de foco.
+  Painéis abertos da timeline usam a mesma textura e uma moldura em degraus.
+  Stats e footer usam `--gradient-header`; os heros recebem a régua de marca.
+- **Texto e interação:** use `--text-body/heading/muted`, `--link/link-hover`
+  e `--text-inverse/inverse-muted`. Links na bio e timeline são sublinhados.
+  `--border` é decorativo; `--border-control` identifica campos e controles.
+  O foco usa amarelo ou `--focus-inverse` claro. Campos desabilitados mantêm
+  texto legível e ganham borda tracejada, sem reduzir a opacidade do conteúdo.
+  Estados `--color-success/warning/danger/info` têm versões `-text` claras para
+  estes fundos escuros. O CTA usa `--text-on-accent` sobre `--color-accent`.
+- **Tailwind 4:** `text-body bg-surface`, `text-muted bg-surface-soft`,
+  `text-link hover:text-link-hover`, `bg-surface-active`, `border-border-control`
+  e `bg-accent text-neutral-950` resolvem os mesmos tokens do CSS. Para painéis
+  com profundidade, reutilize `--gradient-card`, `--texture-scanline` e as
+  sombras existentes, sem introduzir cores locais.
+- **Tipografia e medidas:** Geist e Geist Mono via `--font-sans/mono`;
+  `--text-xs` a `--text-8xl`, raios `--radius-sm/md/lg/full`, sombras
+  `--shadow-sm/md`, base `--spacing` de 4 px e aliases `--space-1` a `--space-24`.
+- **Cenas e conteúdo:** composição, ilustrações e bio aprovada foram preservadas.
+  Dagobah mantém coordenadas lógicas 1024×576, mão (620,285), pedras 30% maiores
+  e três planos. Desktop reserva a coluna de texto; mobile reserva a ilustração
+  abaixo do texto e CTA. As regras existentes de reduced motion e easter eggs
+  continuam valendo para as cenas.
 
-| Par | Contraste |
+| Par sólido | Contraste |
 | --- | ---: |
-| Texto / claro | 12,64:1 |
-| Texto secundário / suave | 6,66:1 |
-| Título / claro | 15,31:1 |
-| Texto hero / escuro | 18,04:1 |
-| Texto secundário hero / escuro | 13,01:1 |
-| Texto secundário header / marca escura | 9,59:1 |
-| Título accent / escuro | 12,96:1 |
+| Texto / painel base; painel roxo | 15,62:1; 13,25:1 |
+| Texto secundário / painel base; painel ativo | 10,14:1; 7,41:1 |
+| Título / painel base | 16,47:1 |
+| Texto hero e 404 / escuro | 18,04:1 |
+| Texto secundário header e footer / ameixa | 9,59:1 |
+| Estatísticas amarelas / ameixa | 10,51:1 |
 | Texto CTA / laranja | 6,05:1 |
-| Link primary / claro; suave | 10,97:1; 10,39:1 |
-| Link secondary / claro; suave | 9,66:1; 9,15:1 |
-| Link / tag; seleção / primary | 9,02:1; 8,74:1 |
-| Success; warning; danger; info / superfície clara utilizada | 7,29:1; 6,82:1; 8,57:1; 10,97:1 |
+| Link / painel base; painel ativo | 12,24:1; 8,95:1 |
+| Link hover / painel base; painel ativo | 12,06:1; 8,82:1 |
+| Filtro selecionado / roxo | 8,74:1 |
+| Success; warning; danger; info / painel roxo | 9,79:1; 11,00:1; 8,78:1; 10,39:1 |
+| Foco; borda de controle / painel ativo | 10,42:1; 4,18:1 |
 
-`tests/contrast.test.ts` resolve os aliases diretamente dos tokens e calcula
-luminância sRGB/WCAG: mínimo 4,5:1; 3:1 para título grande. `npm test` imprime
-as razões. Os pares de hero acima usam a superfície sólida; fotos e gradientes
-compostos também exigem revisão visual. Neste ambiente, servidor e Chromium
-foram bloqueados por `EPERM`; não houve validação visual no navegador.
+`tests/contrast.test.ts` resolve aliases diretamente dos tokens e calcula
+luminância sRGB/WCAG: mínimo 4,5:1 para texto e 3:1 para foco/bordas de controles.
+Além dos pares sólidos, verifica as duas pontas dos cards translúcidos com
+scanlines sobre branco (limite conservador) e texto sobre nebulosas com as três
+camadas de estrelas sobrepostas. `npm test` imprime as razões dos pares sólidos.
+Fotos e overlays das cenas ainda precisam de revisão visual: nesta execução,
+a inicialização do Chromium foi bloqueada pelo sandbox (`Operation not permitted`).

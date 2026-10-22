@@ -7,13 +7,24 @@ const css = fs.readFileSync(tokenFile, "utf8");
 const tokens = new Map([...css.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+);/g)]
   .map(([, key, value]) => [key, value.trim()]));
 
-function readColor(name: string): string {
+function readColor(name: string, backdrop?: string): string {
   let value = tokens.get(name);
   const visited = new Set<string>();
   while (value?.startsWith("var(")) {
     if (visited.has(value)) throw new Error(`Referência circular: ${name}`);
     visited.add(value);
     value = tokens.get(value.slice(4, -1));
+  }
+  const mix = value?.match(/^color-mix\(in srgb, var\((--[\w-]+)\) (\d+)%, transparent\)$/);
+  if (mix) {
+    if (!backdrop) throw new Error(`Fundo obrigatório para token translúcido: ${name}`);
+    const foreground = readColor(mix[1]);
+    const alpha = Number(mix[2]) / 100;
+    return "#" + [1, 3, 5].map((offset) => {
+      const front = parseInt(foreground.slice(offset, offset + 2), 16);
+      const back = parseInt(backdrop.slice(offset, offset + 2), 16);
+      return Math.round(front * alpha + back * (1 - alpha)).toString(16).padStart(2, "0");
+    }).join("");
   }
   expect(value ?? "", `Token de cor ausente ou não hexadecimal: ${name}`).toMatch(/^#[\da-f]{6}$/i);
   return value!;
@@ -33,35 +44,55 @@ function contrast(foreground: string, background: string): number {
   return (Math.max(light, dark) + 0.05) / (Math.min(light, dark) + 0.05);
 }
 
-// Changing a semantic token to a low-contrast shade must fail its real usage pair.
-const pairs = [
+// Every foreground used on panels must also work on the brightest solid state.
+const panelForegrounds = ["--text-body", "--text-heading", "--text-muted", "--link", "--link-hover"];
+const panelSurfaces = ["--surface-space", "--surface-light", "--surface-soft", "--surface-raised", "--surface-active", "--surface-tag"];
+const pairs: [string, string, string, number][] = [
+  ...panelSurfaces.flatMap((surface) => panelForegrounds.map((foreground): [string, string, string, number] =>
+    [`${foreground} / ${surface}`, foreground, surface, 4.5])),
   ["intro azul / espaço", "--crawl-blue", "--crawl-space", 4.5],
   ["crawl amarelo / espaço", "--color-accent-secondary", "--crawl-space", 4.5],
   ["pular intro / espaço", "--text-inverse", "--crawl-space", 4.5],
-  ["texto / claro", "--text-body", "--surface-light", 4.5],
-  ["texto secundário / suave", "--text-muted", "--surface-soft", 4.5],
-  ["título / claro", "--text-heading", "--surface-light", 4.5],
-  ["hero / escuro", "--text-inverse", "--surface-dark", 4.5],
+  ["hero e 404 / escuro", "--text-inverse", "--surface-dark", 4.5],
   ["hero secundário / escuro", "--text-inverse-muted", "--surface-dark", 4.5],
-  ["header secundário / marca escura", "--text-inverse-muted", "--color-brand-dark", 4.5],
-  ["título accent grande / escuro", "--accent-light", "--surface-dark", 3],
+  ["header e footer / marca escura", "--text-inverse-muted", "--color-brand-dark", 4.5],
+  ["accent / escuro", "--accent-light", "--surface-dark", 4.5],
+  ["estatísticas / marca escura", "--color-accent-secondary", "--color-brand-dark", 4.5],
   ["CTA / accent", "--text-on-accent", "--color-accent", 4.5],
-  ["link primary / claro", "--link", "--surface-light", 4.5],
-  ["link primary / suave", "--link", "--surface-soft", 4.5],
-  ["link secondary / claro", "--link-hover", "--surface-light", 4.5],
-  ["link secondary / suave", "--link-hover", "--surface-soft", 4.5],
-  ["link / tag", "--link", "--color-primary-100", 4.5],
-  ["seleção / primary", "--text-inverse", "--color-primary", 4.5],
-  ["success / claro", "--color-success-text", "--surface-light", 4.5],
-  ["warning / suave", "--color-warning-text", "--surface-soft", 4.5],
-  ["danger / claro", "--color-danger-text", "--surface-light", 4.5],
-  ["info / claro", "--color-info-text", "--surface-light", 4.5],
-] as const;
+  ["filtro selecionado / primary", "--text-inverse", "--color-primary", 4.5],
+  ["success / painel", "--color-success-text", "--surface-soft", 4.5],
+  ["warning / formulário", "--color-warning-text", "--surface-soft", 4.5],
+  ["danger / painel", "--color-danger-text", "--surface-soft", 4.5],
+  ["info / painel", "--color-info-text", "--surface-soft", 4.5],
+  ["foco / painel ativo", "--focus", "--surface-active", 3],
+  ["foco inverso / header", "--focus-inverse", "--color-brand-dark", 3],
+  ["borda de controle / painel ativo", "--border-control", "--surface-active", 3],
+];
 
 describe("contraste WCAG dos tokens da marca", () => {
   it("calibra o cálculo com os extremos WCAG", () => {
     expect(contrast("#000000", "#ffffff")).toBe(21);
     expect(contrast("#5a3d7e", "#5a3d7e")).toBe(1);
+  });
+
+  // White is a conservative upper bound for anything beneath a translucent
+  // card (including overlapping stars). Check both gradient ends + scanlines.
+  it.each(["--surface-card-start", "--surface-card-end"])("texto sobre %s composto", (surface) => {
+    const panel = readColor(surface, readColor("--color-white"));
+    const texturedPanel = readColor("--texture-ink", panel);
+    for (const foreground of panelForegrounds) {
+      expect(contrast(readColor(foreground), texturedPanel), foreground).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it("texto sobre nebulosa e estrelas sobrepostas", () => {
+    let background = readColor("--surface-space");
+    for (const layer of ["--nebula-wine", "--nebula-purple", "--star-color", "--star-color", "--star-color"]) {
+      background = readColor(layer, background);
+    }
+    for (const foreground of panelForegrounds) {
+      expect(contrast(readColor(foreground), background), foreground).toBeGreaterThanOrEqual(4.5);
+    }
   });
 
   it.each(pairs)("%s", (label, foreground, background, minimum) => {

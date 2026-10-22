@@ -6,17 +6,30 @@
 }
 
 html {
-  background: var(--surface-light);
+  background: var(--surface-space);
   scroll-behavior: smooth;
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   margin: 0;
   min-height: 100vh;
   color: var(--text-body);
-  background: var(--surface-light);
+  background: var(--surface-space);
   font-family: var(--font-sans);
   line-height: 1.6;
+}
+
+/* One static paint layer for every route, including the standalone 404.
+   No canvas, animation, blur filter, or scroll listener is needed. */
+body::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: var(--starfield), var(--gradient-nebula);
 }
 
 a {
@@ -134,7 +147,7 @@ button,select,input,textarea {
   display: block;
   height: 2px;
   margin: 4px 0;
-  background: var(--surface-light);
+  background: var(--text-inverse);
   transition: transform .2s,opacity .2s;
 }
 
@@ -171,8 +184,26 @@ main {
   display: flex;
   align-items: center;
   overflow: hidden;
-  background: var(--surface-dark);
+  background: var(--gradient-nebula), var(--surface-dark);
   color: var(--text-inverse);
+}
+
+.page-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  pointer-events: none;
+  background: var(--starfield);
+}
+
+.page-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 3px;
+  background: var(--gradient-brand);
+  pointer-events: none;
 }
 
 .page-hero__image {
@@ -250,6 +281,8 @@ main {
   padding: .78rem 1.05rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
+  color: var(--text-body);
+  background: var(--surface-soft);
   font-weight: 750;
   cursor: pointer;
   transition: transform .18s,box-shadow .18s;
@@ -282,7 +315,7 @@ main {
   display: grid;
   grid-template-columns: repeat(4,1fr);
   padding: 0 max(1.5rem,calc((100vw - 1180px)/2));
-  background: var(--surface-soft);
+  background: var(--texture-scanline), var(--gradient-header);
   border-block: 1px solid var(--border);
 }
 
@@ -293,7 +326,7 @@ main {
 
 .stats strong,.event-stats strong {
   display: block;
-  color: var(--text-heading);
+  color: var(--color-accent-secondary);
   font-size: clamp(1.8rem,4vw,3rem);
   font-weight: 780;
   letter-spacing: -.05em;
@@ -611,7 +644,6 @@ body:has(.opening-crawl[open]) {
   padding: var(--space-4);
   border: 2px solid var(--border);
   border-radius: 0;
-  background: var(--surface-soft);
   color: var(--text-body);
   text-align: left;
   font-size: var(--text-base);
@@ -621,8 +653,8 @@ body:has(.opening-crawl[open]) {
 
 .timeline__trigger:hover,
 .timeline__trigger[aria-expanded="true"] {
-  border-color: var(--color-primary-500);
-  background: var(--color-primary-50);
+  border-color: var(--border-control);
+  background: var(--surface-active);
 }
 
 .timeline__trigger:focus-visible {
@@ -654,15 +686,12 @@ body:has(.opening-crawl[open]) {
 }
 
 .timeline__panel {
-  --focus: var(--hologram-blue);
   margin: var(--space-3) 4px 0;
   padding: clamp(1rem, 3vw, 1.75rem);
-  color: var(--hologram-ink);
-  background:
-    repeating-linear-gradient(to bottom, transparent 0 3px, color-mix(in srgb, var(--hologram-blue) 5%, transparent) 3px 4px),
-    linear-gradient(120deg, color-mix(in srgb, var(--hologram-cyan) 18%, transparent), color-mix(in srgb, var(--hologram-blue) 9%, transparent));
-  border-block: 2px solid var(--hologram-blue);
-  box-shadow: -4px 0 var(--hologram-blue), 4px 0 var(--hologram-blue), 0 0 14px color-mix(in srgb, var(--hologram-cyan) 15%, transparent);
+  color: var(--text-body);
+  background: var(--texture-scanline), var(--gradient-card);
+  border-block: 2px solid var(--border);
+  box-shadow: -4px 0 var(--border), 4px 0 var(--border), var(--shadow-md);
   animation: hologram-reveal 160ms ease-out;
   transform-origin: top;
   overflow-wrap: anywhere;
@@ -716,14 +745,14 @@ body:has(.opening-crawl[open]) {
 
 .timeline__chips li {
   padding: var(--space-1) var(--space-2);
-  border: 1px solid var(--hologram-blue);
-  background: color-mix(in srgb, var(--hologram-cyan) 12%, transparent);
+  border: 1px solid var(--border);
+  background: var(--surface-tag);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
 }
 
 .timeline__panel a {
-  color: var(--hologram-ink);
+  color: var(--link);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -743,7 +772,6 @@ body:has(.opening-crawl[open]) {
   padding: 1.8rem;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: var(--surface-light);
 }
 
 .project-card>div {
@@ -761,8 +789,9 @@ body:has(.opening-crawl[open]) {
   display: inline-flex;
   padding: .2rem .55rem;
   border-radius: var(--radius-full);
-  background: var(--color-primary-100);
+  background: var(--surface-tag);
   color: var(--link);
+  border: 1px solid var(--border);
 }
 
 .project-card p {
@@ -795,8 +824,9 @@ body:has(.opening-crawl[open]) {
 }
 
 .article-list article {
-  padding: 1.5rem .2rem;
-  border-bottom: 1px solid var(--border);
+  padding: 1.5rem;
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border);
 }
 
 .article-list article>div {
@@ -927,7 +957,6 @@ body:has(.opening-crawl[open]) {
 
 .contact-panel {
   width: min(760px,calc(100% - 3rem))!important;
-  background: var(--surface-soft);
   margin-top: 2rem!important;
 }
 
@@ -945,7 +974,7 @@ body:has(.opening-crawl[open]) {
 
 .contact-panel input,.contact-panel textarea {
   width: 100%;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-control);
   border-radius: var(--radius-sm);
   padding: .75rem;
   background: var(--surface-light);
@@ -953,7 +982,9 @@ body:has(.opening-crawl[open]) {
 }
 
 .contact-panel input:disabled,.contact-panel textarea:disabled {
-  opacity: .45;
+  cursor: not-allowed;
+  color: var(--text-muted);
+  border-style: dashed;
 }
 
 .contact-panel .button.secondary {
@@ -977,7 +1008,7 @@ body:has(.opening-crawl[open]) {
 footer {
   padding: 3rem max(1.5rem,calc((100vw - 1180px)/2));
   border-top: 1px solid var(--border-inverse);
-  background: var(--surface-dark);
+  background: var(--texture-scanline), var(--gradient-header);
   display: grid;
   grid-template-columns: 1fr auto;
   gap: var(--space-4);
@@ -1280,8 +1311,67 @@ html.reduce-motion .spatial-scene :is(.ambient-pixel, .force-sparkle) { opacity:
   background: var(--surface-dark);
 }
 
-.project-card, .service-cards article, .breakdowns > div {
+/* Shared panel treatment keeps lists, controls and cards in the same world. */
+.project-card, .service-cards article, .contact-panel, .breakdowns > div,
+.article-list article, .mini-services, .event-stats > div, .timeline__trigger {
+  position: relative;
+  background: var(--texture-scanline), var(--gradient-card);
   box-shadow: var(--shadow-sm);
+}
+
+/* Small L-shaped corners leave the content and focus outlines unobstructed. */
+:is(.project-card, .service-cards article, .contact-panel, .breakdowns > div,
+.article-list article, .mini-services, .event-stats > div, .timeline__trigger)::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  background:
+    linear-gradient(var(--color-secondary-400) 0 0) top left / 12px 2px no-repeat,
+    linear-gradient(var(--color-secondary-400) 0 0) top left / 2px 12px no-repeat,
+    linear-gradient(var(--color-primary-400) 0 0) bottom right / 12px 2px no-repeat,
+    linear-gradient(var(--color-primary-400) 0 0) bottom right / 2px 12px no-repeat;
+}
+
+.mini-services {
+  padding: var(--space-4) var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.mini-services article:last-child {
+  border-bottom: 0;
+}
+
+.about-preview img {
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.filter button, .timeline__trigger {
+  border-color: var(--border-control);
+}
+
+.filter button:hover {
+  background: var(--surface-active);
+  color: var(--text-heading);
+}
+
+.contact-panel :is(input, textarea)::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.page-hero__extra a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 :is(.timeline, .project-card, .event-history, .contact-panel) a:hover,
