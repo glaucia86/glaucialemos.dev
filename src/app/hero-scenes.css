@@ -175,19 +175,6 @@
 }
 
 /* Hovering stays continuous; the story lifts the stones and brings one to Yoda. */
-.force-glow {
-  left: 60.546875%; top: 49.479167%; width: 19%; height: 28%;
-  transform: translate(-100%, -75%);
-  transform-origin: 100% 75%;
-  background: radial-gradient(ellipse at 100% 75%, #c3f0b366, #83bc9822 35%, transparent 70%);
-  animation: force-breathe 4.8s steps(12, end) infinite;
-}
-.force-current {
-  position: absolute; right: 0; top: 67%; width: 90%; height: 16%;
-  background: linear-gradient(90deg, transparent, #c3f0b344);
-  transform-origin: right center;
-  animation: force-current 4.8s steps(12, end) infinite;
-}
 .force-depth--back { opacity: .65; }
 .force-orbit { position: absolute; animation: force-orbit var(--float-duration) var(--sine-ease) var(--float-delay) infinite; }
 .force-rock { position: absolute; inset: 0; }
@@ -199,15 +186,6 @@
 .force-rock svg { display: block; width: 100%; height: 100%; animation: force-turn var(--float-duration) steps(6, end) var(--float-delay) infinite; }
 [data-story="force-lift"] .force-rock { animation: force-burst var(--story-duration) var(--sine-ease) both; }
 [data-story="force-lift"] .force-rock--chosen { animation-name: force-to-hand; }
-[data-story="force-lift"] .force-glow { animation: force-surge var(--story-duration) var(--sine-ease) both; }
-@keyframes force-breathe {
-  0%, 100% { opacity: .45; transform: translate(-100%, -75%) scale(.96); }
-  50% { opacity: .9; transform: translate(-100%, -75%) scale(1.12); }
-}
-@keyframes force-current {
-  0%, 100% { opacity: .25; transform: rotate(28deg) scaleX(.8); }
-  50% { opacity: .65; transform: rotate(40deg) scaleX(1); }
-}
 @keyframes force-orbit {
   0%, 100% { transform: translate(0, 0); }
   25% { transform: translate(12%, -35%); }
@@ -219,10 +197,6 @@
 @keyframes force-burst {
   0%, 100% { transform: translate(0, 0) rotate(0); }
   25%, 65% { transform: translate(var(--burst-x), var(--burst-y)) rotate(18deg); }
-}
-@keyframes force-surge {
-  0%, 100% { opacity: .5; transform: translate(-100%, -75%) scale(1); }
-  25%, 50% { opacity: 1; transform: translate(-100%, -75%) scale(1.5); }
 }
 
 /* Dome pixels sit on the amber lens (800,402), photoreceptor (774,388)

@@ -35,7 +35,6 @@ const rockLayers = [
 
 function Dagobah() {
   return <>
-    <span className="force-glow"><span className="force-current" /></span>
     {rockLayers.map(({ depth, rocks }, layerIndex) => <div className={`force-depth force-depth--${depth}`} data-depth={[.35, .65, 1][layerIndex]} key={depth}>
       {rocks.map(([x, y, size], index) => <span className="force-orbit" key={index} style={{
         ...position(x, y, size, size),

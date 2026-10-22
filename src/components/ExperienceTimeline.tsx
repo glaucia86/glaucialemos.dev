@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries/pt";
-import { shouldReduceMotion } from "@/lib/motion";
+import { shouldReduceMotion, timelineProgress } from "@/lib/motion";
 import type { Cargo } from "@/lib/types";
 
 type Props = {
@@ -28,8 +28,7 @@ export function ExperienceTimeline({ entries, lang, labels, sourceLabel }: Props
     const update = () => {
       frame = 0;
       const { top, height } = timeline.getBoundingClientRect();
-      // The blade follows a reading point three quarters down the viewport.
-      const progress = Math.max(0, Math.min(1, (window.innerHeight * 0.75 - top - 48) / Math.max(1, height - 48)));
+      const progress = reduced ? 1 : timelineProgress(top, height, window.innerHeight);
       timeline.style.setProperty("--saber-progress", String(progress));
     };
     const schedule = () => {
@@ -48,7 +47,7 @@ export function ExperienceTimeline({ entries, lang, labels, sourceLabel }: Props
       if (visible) schedule();
       else {
         cancelAnimationFrame(frame);
-        frame = 0;
+        update();
       }
     });
     const motionObserver = new MutationObserver(syncMotion);

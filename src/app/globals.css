@@ -472,7 +472,7 @@ body:has(.opening-crawl[open]) {
 
 .opening-crawl__horizon {
   position: absolute;
-  inset: 0;
+  inset: calc(5rem + env(safe-area-inset-top, 0px)) 0 0;
   overflow: hidden;
   mask-image: linear-gradient(to bottom, transparent 8%, #000 50%);
 }
@@ -528,8 +528,8 @@ body:has(.opening-crawl[open]) {
 .opening-crawl__skip {
   position: absolute;
   z-index: 1;
-  right: max(1.5rem, env(safe-area-inset-right));
-  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  right: calc(1rem + env(safe-area-inset-right, 0px));
+  top: calc(1rem + env(safe-area-inset-top, 0px));
   min-height: 44px;
   padding: .65rem 1.1rem;
   border: 1px solid var(--border-inverse);
@@ -571,7 +571,7 @@ body:has(.opening-crawl[open]) {
 .experience-timeline {
   --saber-progress: 0;
   position: relative;
-  margin-top: var(--space-8);
+  margin-top: var(--space-16);
   padding: 0 4px 4px 3.5rem;
 }
 
@@ -587,7 +587,7 @@ body:has(.opening-crawl[open]) {
 .timeline-saber__hilt {
   position: absolute;
   z-index: 1;
-  top: 4px;
+  top: -44px;
   left: -4px;
   width: 16px;
   height: 40px;
@@ -608,10 +608,9 @@ body:has(.opening-crawl[open]) {
 
 .timeline-saber__blade {
   position: absolute;
-  inset: 48px 0 0;
-  border-inline: 2px solid var(--color-primary-500);
-  background: var(--color-primary-100);
-  box-shadow: 0 0 5px var(--color-primary-400), 0 0 12px color-mix(in srgb, var(--color-primary-500) 45%, transparent);
+  inset: 0;
+  background: var(--color-white);
+  box-shadow: 0 0 0 2px var(--color-primary-500), 0 0 8px var(--color-primary-400), 0 0 18px var(--color-primary-500);
   transform: scaleY(var(--saber-progress));
   transform-origin: top;
 }

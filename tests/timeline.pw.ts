@@ -33,13 +33,16 @@ test("saber progresses on scroll and respects live system/manual motion preferen
   const timeline = page.locator(".experience-timeline");
   const blade = page.locator(".timeline-saber__blade");
   const progress = () => timeline.evaluate((el) => Number(getComputedStyle(el).getPropertyValue("--saber-progress")));
-  await timeline.evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - innerHeight * .55, behavior: "instant" }));
-  await expect.poll(progress).toBeGreaterThan(0);
-  const start = await progress();
-  await page.evaluate(() => window.scrollBy({ top: 500, behavior: "instant" }));
-  await expect.poll(progress).toBeGreaterThan(start);
-  await timeline.evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().bottom + window.scrollY - innerHeight * .7, behavior: "instant" }));
-  await expect.poll(progress).toBe(1);
+  await timeline.evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - innerHeight, behavior: "instant" }));
+  await expect.poll(progress).toBeCloseTo(0, 2);
+  await timeline.evaluate((el) => window.scrollBy({ top: el.getBoundingClientRect().height / 2, behavior: "instant" }));
+  await expect.poll(progress).toBeCloseTo(.5, 2);
+  await timeline.evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().bottom + window.scrollY - innerHeight, behavior: "instant" }));
+  await expect.poll(progress).toBeCloseTo(1, 2);
+  const listBox = await page.locator(".timeline").boundingBox();
+  const bladeBox = await blade.boundingBox();
+  expect(bladeBox!.width).toBe(8);
+  expect(Math.abs(bladeBox!.height - listBox!.height)).toBeLessThan(1);
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(blade).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 0)");

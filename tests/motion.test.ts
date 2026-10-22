@@ -1,7 +1,21 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { shouldReduceMotion } from "@/lib/motion";
+import { shouldReduceMotion, timelineProgress } from "@/lib/motion";
+
+describe("timeline ignition", () => {
+  it.each([
+    [900, 1200, 800, 0],
+    [800, 1200, 800, 0],
+    [200, 1200, 800, 0.5],
+    [-400, 1200, 800, 1],
+    [-600, 1200, 800, 1],
+    [600, 400, 800, 0.5],
+    [400, 400, 800, 1],
+  ])("maps section top %s, height %s and viewport %s to %s", (top, height, viewport, expected) => {
+    expect(timelineProgress(top, height, viewport)).toBe(expected);
+  });
+});
 
 describe("redução de movimento", () => {
   it.each([
