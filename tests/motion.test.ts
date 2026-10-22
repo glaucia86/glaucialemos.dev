@@ -19,15 +19,14 @@ describe("redução de movimento", () => {
     expect(css).toMatch(/prefers-reduced-motion\s*:\s*reduce[\s\S]*\.hero-scene-layer[^{}]*\{[^}]*animation\s*:\s*none\s*!important[^}]*\}/);
   });
 
-  it("a regra central para o crawl e mantém o texto visível nas duas preferências", () => {
+  it("oculta a intro e desliga suas animações nas duas preferências", () => {
     const css = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf8");
-    const manual = css.match(/html\.reduce-motion\s+\.crawl\s*>\s*div\s*\{([^}]*)\}/)?.[1];
-    const system = css.match(/@media\s*\(prefers-reduced-motion\s*:\s*reduce\)[\s\S]*?\.crawl\s*>\s*div\s*\{([^}]*)\}/)?.[1];
+    const manual = css.slice(css.indexOf("html.reduce-motion .opening-crawl"));
+    const system = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
 
-    for (const rule of [manual, system]) {
-      expect(rule).toMatch(/animation\s*:\s*none\s*!important/);
-      expect(rule).toMatch(/transform\s*:\s*none\s*!important/);
-      expect(rule).not.toMatch(/opacity\s*:\s*0|display\s*:\s*none/);
+    for (const rules of [manual, system]) {
+      expect(rules).toMatch(/\.opening-crawl\s*\{[^}]*display\s*:\s*none/);
+      expect(rules).toMatch(/\.opening-crawl\s+\*\s*\{[^}]*animation\s*:\s*none\s*!important/);
     }
   });
 });

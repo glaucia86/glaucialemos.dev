@@ -5,7 +5,10 @@ import { chromium } from "@playwright/test";
 const browser = await chromium.launch();
 const page = await browser.newPage();
 const baseURL = process.env.BASE_URL || "http://127.0.0.1:3100";
-await page.addInitScript(() => localStorage.setItem("reduce-motion", "false"));
+await page.addInitScript(() => {
+  localStorage.setItem("reduce-motion", "false");
+  localStorage.setItem("intro-dismissed", "true");
+});
 
 try {
   for (const width of [320, 390, 640, 641, 900, 901, 1280, 1920]) {
@@ -53,7 +56,6 @@ try {
           }, time);
           assert.ok(safe, `${route}, ${width}px: stones overlap text or cross x=430 at ${time}ms`);
         }
-        assert.ok(await page.locator(".crawl > div").evaluate((element) => element.getAnimations().length > 0));
       } else if (route === "/pt/eventos") {
         const globe = page.locator(".hologram-globe");
         const geometry = await globe.evaluate((element) => {
@@ -149,7 +151,7 @@ try {
           assert.equal(await page.locator(".hologram-globe").evaluate((element) => element.getAnimations().length), 0);
         }
         if (route === "/pt") {
-          const crawl = await page.locator(".crawl > div").evaluate((element) => {
+          const crawl = await page.locator(".crawl-story").evaluate((element) => {
             const style = getComputedStyle(element);
             return { animations: element.getAnimations().length, transform: style.transform, opacity: style.opacity, height: element.getBoundingClientRect().height };
           });
@@ -161,7 +163,6 @@ try {
         if (preference === "manual") await page.locator(".motion-toggle").click();
       }
       await page.emulateMedia({ reducedMotion: "no-preference" });
-      if (route === "/pt") assert.ok(await page.locator(".crawl > div").evaluate((element) => element.getAnimations().length > 0));
     }
   }
   console.log("PASS: image alignment, stones, saber, rotating globe, mobile composition and both reduced-motion preferences (including crawl) at 8 viewport widths.");

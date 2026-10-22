@@ -35,6 +35,9 @@ function contrast(foreground: string, background: string): number {
 
 // Changing a semantic token to a low-contrast shade must fail its real usage pair.
 const pairs = [
+  ["intro azul / espaço", "--crawl-blue", "--crawl-space", 4.5],
+  ["crawl amarelo / espaço", "--color-accent-secondary", "--crawl-space", 4.5],
+  ["pular intro / espaço", "--text-inverse", "--crawl-space", 4.5],
   ["texto / claro", "--text-body", "--surface-light", 4.5],
   ["texto secundário / suave", "--text-muted", "--surface-soft", 4.5],
   ["título / claro", "--text-heading", "--surface-light", 4.5],

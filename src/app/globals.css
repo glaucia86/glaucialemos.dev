@@ -320,7 +320,7 @@ main {
   border-radius: var(--radius-md);
 }
 
-.about-preview h2,.service-teaser h2,.crawl-section h2,.inner-page h2 {
+.about-preview h2,.service-teaser h2,.crawl-story h2,.inner-page h2 {
   margin: .3rem 0 1rem;
   color: var(--text-heading);
   font-size: clamp(1.8rem,3.5vw,3rem);
@@ -354,30 +354,181 @@ main {
   color: var(--text-heading);
 }
 
-.crawl-section {
-  min-height: 620px;
-  padding: 5rem 1.5rem;
-  text-align: center;
-  overflow: hidden;
-  perspective: 360px;
+/* The same story stays readable after the opening, including without JS. */
+.crawl-story {
+  padding: clamp(3rem, 7vw, 6rem) max(1.5rem, calc((100% - 720px) / 2));
   background: var(--surface-dark);
+  color: var(--text-inverse-muted);
+  font-size: 1.125rem;
 }
 
-.crawl-section h2 {
-  color: var(--text-inverse);
+.crawl-story h2 {
+  color: var(--color-accent-secondary);
 }
 
-.crawl {
-  width: min(650px,90%);
-  margin: 4rem auto 0;
-  transform: rotateX(25deg);
+.crawl-story p + p {
+  margin-top: 1.5em;
+}
+
+body:has(.opening-crawl[open]) {
+  overflow: hidden;
+}
+
+.opening-crawl {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  color: var(--color-accent-secondary);
+  background: var(--crawl-space);
+}
+
+.opening-crawl::backdrop {
+  background: var(--crawl-space);
+}
+
+/* Different tile sizes keep the CSS stars sparse and irregular. */
+.opening-crawl::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .65;
+  background-image:
+    radial-gradient(1px 1px at 23px 47px, var(--color-white) 90%, transparent),
+    radial-gradient(1px 1px at 113px 137px, var(--color-white) 90%, transparent),
+    radial-gradient(1.5px 1.5px at 61px 83px, var(--color-neutral-300) 90%, transparent),
+    radial-gradient(1px 1px at 173px 29px, var(--crawl-blue) 90%, transparent);
+  background-size: 197px 173px, 307px 251px, 379px 331px, 461px 419px;
+}
+
+.opening-crawl__lead {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  width: min(80%, 24em);
+  margin: auto;
+  color: var(--crawl-blue);
+  font-size: clamp(1.5rem, 3.2vw, 3rem);
+  line-height: 1.5;
+  letter-spacing: .025em;
+  opacity: 0;
+}
+
+.opening-crawl__logo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  font-size: clamp(4rem, 18vw, 16rem);
+  font-weight: 900;
+  line-height: .82;
+  letter-spacing: -.075em;
+  text-align: center;
+  color: var(--crawl-space);
+  -webkit-text-stroke: clamp(1px, .25vw, 3px) var(--color-accent-secondary);
+  opacity: 0;
+}
+
+.opening-crawl__horizon {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(to bottom, transparent 8%, #000 50%);
+}
+
+.opening-crawl__plane {
+  position: absolute;
+  inset: 0;
+  transform: perspective(480px) rotateX(26deg);
   transform-origin: 50% 100%;
 }
 
-.crawl>div {
-  font-size: 1.3rem;
-  color: var(--color-accent-secondary);
-  animation: crawl 18s linear infinite;
+.opening-crawl__text {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: min(86%, 900px);
+  margin: 0 auto;
+  font-size: clamp(1.5rem, 3.8vw, 3rem);
+  font-weight: 700;
+  line-height: 1.65;
+  letter-spacing: .035em;
+  text-align: justify;
+  opacity: 0;
+}
+
+.opening-crawl__text h2 {
+  margin: 0 0 1.5em;
+  font-size: 1.25em;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.opening-crawl__text p {
+  margin: 0 0 1.5em;
+}
+
+/* 5s opening + 7s title + 48s story. Only the story's end dismisses. */
+.opening-crawl[open] .opening-crawl__lead {
+  animation: opening-lead 5s ease-in-out both;
+}
+
+.opening-crawl[open] .opening-crawl__logo {
+  animation: opening-logo 7s cubic-bezier(.15, .5, .35, 1) 5s both;
+}
+
+.opening-crawl[open] .opening-crawl__text {
+  animation: opening-story 48s linear 12s both;
+}
+
+.opening-crawl__skip {
+  position: absolute;
+  z-index: 1;
+  right: max(1.5rem, env(safe-area-inset-right));
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  min-height: 44px;
+  padding: .65rem 1.1rem;
+  border: 1px solid var(--border-inverse);
+  border-radius: var(--radius-full);
+  background: var(--crawl-space);
+  color: var(--text-inverse);
+  font-size: .875rem;
+}
+
+.opening-crawl__skip:hover {
+  border-color: var(--color-accent-secondary);
+}
+
+.opening-crawl__skip:focus-visible {
+  outline-color: var(--focus-inverse);
+}
+
+@keyframes opening-lead {
+  0%, 100% { opacity: 0; }
+  18%, 75% { opacity: 1; }
+}
+
+@keyframes opening-logo {
+  0% { opacity: 0; transform: scale(1.3); }
+  1%, 75% { opacity: 1; }
+  100% { opacity: 0; transform: scale(.02); }
+}
+
+@keyframes opening-story {
+  0% { opacity: 0; transform: translateY(0); }
+  1%, 90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(calc(-100% - 110dvh)); }
 }
 
 .section-heading {
@@ -758,15 +909,6 @@ footer small {
   animation: saber 1s ease-out;
 }
 
-@keyframes crawl {
-  from {
-    transform: translateY(260px);
-  }
-  to {
-    transform: translateY(-520px);
-  }
-}
-
 @keyframes saber {
   from {
     transform: scaleX(0);
@@ -901,9 +1043,12 @@ html.reduce-motion *::after {
   transition: none !important;
 }
 
-html.reduce-motion .crawl > div {
+html.reduce-motion .opening-crawl {
+  display: none;
+}
+
+html.reduce-motion .opening-crawl * {
   animation: none !important;
-  transform: none !important;
 }
 
 html.reduce-motion .hero-scene-layer,
@@ -925,9 +1070,11 @@ html.reduce-motion .hero-scene-layer--nevarro * {
   *, *::before, *::after {
     transition-duration: .01ms !important;
   }
-  .crawl > div {
+  .opening-crawl {
+    display: none;
+  }
+  .opening-crawl * {
     animation: none !important;
-    transform: none !important;
   }
   .hero-scene-layer,
   .hero-scene-layer * {
