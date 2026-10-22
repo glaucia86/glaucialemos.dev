@@ -92,7 +92,9 @@ function Tatooine() {
 }
 
 function Kashyyyk() { return <>{particles("falling-leaf", 10)}{particles("firefly", 8)}</>; }
-function Nevarro() { return <><span className="hologram-glow" /><span className="hologram-ring" /></>; }
+function Nevarro() {
+  return <div className="scene-image-plane"><div className="hologram-globe" /></div>;
+}
 function Bespin() {
   return <>
     <div className="bespin-clouds">{particles("moving-cloud", 4)}</div>

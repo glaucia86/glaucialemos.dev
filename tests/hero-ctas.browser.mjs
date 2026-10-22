@@ -83,8 +83,7 @@ try {
   for (const width of [320, 390, 640]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(`${baseURL}/pt/eventos`);
-    await expect(page.locator(".hologram-ring")).toBeHidden();
-    await expect(page.locator(".hologram-glow")).toBeHidden();
+    await expect(page.locator(".hologram-globe")).toBeVisible();
 
     for (const lang of ["pt", "en", "es"]) {
       await page.goto(`${baseURL}/${lang}/projetos`);

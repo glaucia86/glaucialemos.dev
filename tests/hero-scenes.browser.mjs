@@ -8,9 +8,9 @@ const baseURL = process.env.BASE_URL || "http://127.0.0.1:3100";
 await page.addInitScript(() => localStorage.setItem("reduce-motion", "false"));
 
 try {
-  for (const width of [390, 900, 901, 1280, 1920]) {
+  for (const width of [320, 390, 640, 641, 900, 901, 1280, 1920]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const route of ["/pt", "/pt/servicos"]) {
+    for (const route of ["/pt/eventos", "/pt", "/pt/servicos"]) {
       await page.goto(`${baseURL}${route}`);
       const plane = page.locator(".scene-image-plane");
       await plane.waitFor({ state: "attached", timeout: 10000 });
@@ -54,6 +54,37 @@ try {
           assert.ok(safe, `${route}, ${width}px: stones overlap text or cross x=430 at ${time}ms`);
         }
         assert.ok(await page.locator(".crawl > div").evaluate((element) => element.getAnimations().length > 0));
+      } else if (route === "/pt/eventos") {
+        const globe = page.locator(".hologram-globe");
+        const geometry = await globe.evaluate((element) => {
+          const image = element.closest(".page-hero").querySelector(".page-hero__image");
+          const box = image.getBoundingClientRect();
+          const rect = element.getBoundingClientRect();
+          const scale = Math.max(box.width / 1024, box.height / 576);
+          const [x, y] = getComputedStyle(image).objectPosition.split(" ").map(parseFloat);
+          return {
+            xError: rect.x + rect.width / 2 - (box.x + (box.width - 1024 * scale) * x / 100 + 708 * scale),
+            yError: rect.y + rect.height / 2 - (box.y + (box.height - 576 * scale) * y / 100 + 272 * scale),
+            widthError: rect.width - 160 * scale,
+            heightError: rect.height - 160 * scale,
+          };
+        });
+        for (const error of Object.values(geometry)) assert.ok(Math.abs(error) < .1, `${width}px: ${JSON.stringify(geometry)}`);
+        const rotation = await globe.evaluate((element) => {
+          const animation = element.getAnimations()[0];
+          if (!animation) return null;
+          animation.pause();
+          const duration = animation.effect.getTiming().duration;
+          return [0, duration / 4, duration].map((time) => {
+            animation.currentTime = time;
+            const style = getComputedStyle(element);
+            return { x: parseFloat(style.backgroundPositionX), transform: style.transform };
+          });
+        });
+        assert.ok(rotation, "The globe must rotate");
+        assert.ok(Math.abs(rotation[1].x - rotation[0].x) >= 50, "Continents must visibly travel across the sphere");
+        assert.equal(rotation[0].x, rotation[2].x, "The texture must loop seamlessly");
+        assert.equal(rotation[0].transform, rotation[1].transform, "The sphere stays fixed while continents rotate");
       } else {
         assert.equal(await page.locator(".saber-hilt").count(), 0, "Use the image's single hilt");
         const saber = await plane.evaluate((element) => {
@@ -109,10 +140,14 @@ try {
         const stopped = await page.locator(".hero-scene-layer").evaluate((layer) =>
           [layer, ...layer.querySelectorAll("*")].every((element) => {
             const style = getComputedStyle(element);
-            return style.animationName === "none" && style.opacity === "0";
+            return style.animationName === "none" && style.opacity === (layer.classList.contains("hero-scene-layer--nevarro") ? "1" : "0");
           }),
         );
         assert.ok(stopped, `${route}, ${width}px: ${preference} reduced-motion`);
+        if (route === "/pt/eventos") {
+          assert.ok(await page.locator(".hologram-globe").isVisible());
+          assert.equal(await page.locator(".hologram-globe").evaluate((element) => element.getAnimations().length), 0);
+        }
         if (route === "/pt") {
           const crawl = await page.locator(".crawl > div").evaluate((element) => {
             const style = getComputedStyle(element);
@@ -129,7 +164,7 @@ try {
       if (route === "/pt") assert.ok(await page.locator(".crawl > div").evaluate((element) => element.getAnimations().length > 0));
     }
   }
-  console.log("PASS: image alignment, stones, saber, mobile composition and both reduced-motion preferences (including crawl) at 5 viewport widths.");
+  console.log("PASS: image alignment, stones, saber, rotating globe, mobile composition and both reduced-motion preferences (including crawl) at 8 viewport widths.");
 } finally {
   await browser.close();
 }

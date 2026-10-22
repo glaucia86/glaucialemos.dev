@@ -912,6 +912,12 @@ html.reduce-motion .hero-scene-layer * {
   opacity: 0 !important;
 }
 
+/* Keep the replacement globe visible when its rotation is disabled. */
+html.reduce-motion .hero-scene-layer--nevarro,
+html.reduce-motion .hero-scene-layer--nevarro * {
+  opacity: 1 !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -927,6 +933,10 @@ html.reduce-motion .hero-scene-layer * {
   .hero-scene-layer * {
     animation: none !important;
     opacity: 0 !important;
+  }
+  .hero-scene-layer--nevarro,
+  .hero-scene-layer--nevarro * {
+    opacity: 1 !important;
   }
 }
 
