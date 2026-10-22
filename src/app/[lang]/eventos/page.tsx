@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GlobeLoader } from "@/components/GlobeLoader";
-import { HeroScene } from "@/components/HeroScene";
+import { PageHero } from "@/components/PageHero";
 import { EventHistory } from "@/components/EventHistory";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -24,10 +22,15 @@ export default async function Events({ params }: Props) {
   const types = { palestra: 0, workshop: 0, organizacao: 0 };
   events.forEach(event => types[event.tipo]++);
   return <main id="main" className="events-page">
-    <section className="page-hero events-hero">
-      <div className="events-hero-copy"><p className="eyebrow">{d.events.eyebrow}</p><h1>{d.events.title}</h1><p className="page-hero__subtitle">{d.events.intro}</p><div className="actions"><Link className="button primary" href={`/${lang}/servicos?assunto=palestra#contato`}>{d.events.primaryCta}</Link><a className="hero-link" href="#eventos">{d.events.secondaryCta} <span aria-hidden="true">↗</span></a></div></div>
-      <div className="events-art"><Image className="page-hero__image" src="/pixel/eventos-grogu.jpg" alt={d.events.heroImageAlt} fill priority sizes="(max-width: 900px) 100vw, 60vw" /><HeroScene image="/pixel/eventos-grogu.jpg" /></div>
-    </section>
+    <PageHero
+      eyebrow={d.events.eyebrow}
+      title={d.events.title}
+      subtitle={d.events.intro}
+      image="/pixel/eventos-grogu.jpg"
+      imageAlt={d.events.heroImageAlt}
+      primary={{ href: `/${lang}/servicos?assunto=palestra#contato`, label: d.events.primaryCta }}
+      secondary={{ href: "#eventos", label: d.events.secondaryCta }}
+    />
     <section className="globe-wrap events-atlas" aria-labelledby="atlas-title">
       <GlobeLoader markers={[...locations.values()]} labels={ui.globe} />
       <div className="atlas-copy"><h2 id="atlas-title">{ui.journey}</h2><p>{ui.journeyBody}</p><div className="event-stats">{[stats.eventos,stats.paises,Object.values(stats.idiomas).filter(Boolean).length].map((value,i) => <div key={d.events.labels[i]}><strong>{value.toLocaleString(lang)}</strong><span>{d.events.labels[i]}</span></div>)}</div><div className="event-countries"><h3>{d.events.countriesTitle}</h3><ul>{getEventCountries().map(country => <li key={country}>{country}</li>)}</ul><details><summary>{d.events.mapNote}</summary><p>{d.events.countryNote}</p></details></div></div>
