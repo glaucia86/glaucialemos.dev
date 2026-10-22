@@ -1,39 +1,114 @@
 "use client";
 import createGlobe from "cobe";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "./MotionPreference";
 
-// Cobe expects normalized RGB; resolve the same CSS tokens used by the UI.
-function globeColor(styles: CSSStyleDeclaration, token: string): [number, number, number] {
-  const hex = styles.getPropertyValue(token).trim();
-  return [1, 3, 5].map((start) => parseInt(hex.slice(start, start + 2), 16) / 255) as [number, number, number];
-}
+type Labels = { hint: string; label: string; pause: string; play: string; reset: string; unavailable: string };
+export type EventGlobeProps = { markers: { location: [number, number]; size: number }[]; labels: Labels };
 
-export default function EventGlobe({ markers }: { markers: { location: [number, number]; size: number }[] }) {
+export default function EventGlobe({ markers, labels }: EventGlobeProps) {
   const canvas = useRef<HTMLCanvasElement>(null);
+  const actions = useRef<{ reset: () => void } | null>(null);
+  const reduced = useReducedMotion();
+  const [paused, setPaused] = useState(false);
+  const [unavailable, setUnavailable] = useState(false);
+  const motion = useRef({ reduced, paused });
+  useEffect(() => { motion.current = { reduced, paused }; }, [reduced, paused]);
 
   useEffect(() => {
-    if (!canvas.current) return;
-    let phi = 0;
-    let frame = 0;
-    const styles = getComputedStyle(canvas.current);
-    const globe = createGlobe(canvas.current, {
-      devicePixelRatio: 2, width: 700, height: 700, phi: 0, theta: .25,
-      dark: 1, diffuse: 1.3, mapSamples: 12000, mapBrightness: 5,
-      baseColor: globeColor(styles, "--color-primary-950"),
-      markerColor: globeColor(styles, "--color-accent"),
-      glowColor: globeColor(styles, "--color-primary"),
-      markers,
-    });
-    const rotate = () => {
-      if (!document.documentElement.classList.contains("reduce-motion")) {
-        phi += .0025;
-        globe.update({ phi });
-      }
-      frame = requestAnimationFrame(rotate);
+    const element = canvas.current;
+    if (!element) return;
+    let phi = 5.5, theta = .12, velocity = 0, frame = 0, previous = 0;
+    let drag: { id: number; x: number; y: number } | null = null;
+    let visible = true;
+    let globe: ReturnType<typeof createGlobe>;
+    const width = element.getBoundingClientRect().width;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    try {
+      globe = createGlobe(element, {
+        devicePixelRatio: dpr, width: width * dpr, height: width * dpr, phi, theta,
+        dark: 0, diffuse: 1.5, mapSamples: 20000, mapBrightness: 6,
+        baseColor: [.76, .67, .85], markerColor: [1, .60, .27], glowColor: [.11, .07, .16],
+        markers, markerElevation: .015,
+      });
+    } catch { setUnavailable(true); return; }
+    const draw = () => {
+      globe.update({ phi, theta });
+      // Expose rendered orientation for keyboard/drag regression checks.
+      element.dataset.longitude = phi.toFixed(4);
+      element.dataset.latitude = theta.toFixed(4);
     };
-    frame = requestAnimationFrame(rotate);
-    return () => { cancelAnimationFrame(frame); globe.destroy(); };
+    const finish = (event: PointerEvent) => {
+      if (drag?.id !== event.pointerId) return;
+      drag = null;
+      element.dataset.dragging = "false";
+      if (element.hasPointerCapture(event.pointerId)) element.releasePointerCapture(event.pointerId);
+      if (motion.current.reduced) velocity = 0;
+    };
+    const down = (event: PointerEvent) => {
+      if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) return;
+      drag = { id: event.pointerId, x: event.clientX, y: event.clientY };
+      velocity = 0;
+      element.setPointerCapture(event.pointerId);
+      element.dataset.dragging = "true";
+      element.focus({ preventScroll: true });
+    };
+    const move = (event: PointerEvent) => {
+      if (!drag || drag.id !== event.pointerId) return;
+      const scale = 5 / Math.max(element.clientWidth, 1);
+      const dx = (event.clientX - drag.x) * scale;
+      phi += dx;
+      theta = Math.max(-1.1, Math.min(1.1, theta + (event.clientY - drag.y) * scale));
+      velocity = Math.max(-.04, Math.min(.04, dx));
+      drag.x = event.clientX; drag.y = event.clientY;
+      draw();
+    };
+    const key = (event: KeyboardEvent) => {
+      const deltas: Record<string, [number, number]> = { ArrowLeft: [-.15, 0], ArrowRight: [.15, 0], ArrowUp: [0, -.12], ArrowDown: [0, .12] };
+      if (!deltas[event.key]) return;
+      event.preventDefault();
+      phi += deltas[event.key][0];
+      theta = Math.max(-1.1, Math.min(1.1, theta + deltas[event.key][1]));
+      velocity = 0; setPaused(true); draw();
+    };
+    actions.current = { reset: () => { phi = 5.5; theta = .12; velocity = 0; draw(); } };
+    const tick = (now: number) => {
+      const step = Math.min((now - previous) / 16.67 || 1, 3); previous = now;
+      if (visible && !document.hidden && !drag && !motion.current.reduced && !motion.current.paused) {
+        phi += (.0015 + velocity) * step;
+        velocity *= Math.pow(.94, step);
+        draw();
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    const resize = new ResizeObserver(() => {
+      const size = element.getBoundingClientRect().width * dpr;
+      globe.update({ width: size, height: size }); draw();
+    });
+    resize.observe(element);
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; velocity = 0; });
+    observer.observe(element);
+    element.addEventListener("pointerdown", down);
+    element.addEventListener("pointermove", move);
+    element.addEventListener("pointerup", finish);
+    element.addEventListener("pointercancel", finish);
+    element.addEventListener("lostpointercapture", finish);
+    element.addEventListener("keydown", key);
+    draw(); frame = requestAnimationFrame(tick);
+    return () => {
+      cancelAnimationFrame(frame); resize.disconnect(); observer.disconnect(); actions.current = null;
+      element.removeEventListener("pointerdown", down); element.removeEventListener("pointermove", move);
+      element.removeEventListener("pointerup", finish); element.removeEventListener("pointercancel", finish);
+      element.removeEventListener("lostpointercapture", finish); element.removeEventListener("keydown", key);
+      globe.destroy();
+    };
   }, [markers]);
 
-  return <canvas ref={canvas} className="globe" aria-hidden="true" />;
+  return <div className="globe-experience">
+    {unavailable ? <p className="globe-fallback">{labels.unavailable}</p> : <canvas ref={canvas} className="globe" tabIndex={0} role="group" aria-label={labels.label} aria-describedby="globe-hint" />}
+    <div className="globe-toolbar">
+      <p id="globe-hint">{labels.hint}</p>
+      <div><button type="button" disabled={reduced || unavailable} onClick={() => setPaused(!paused)}>{paused || reduced ? labels.play : labels.pause}</button><button type="button" disabled={unavailable} onClick={() => actions.current?.reset()}>{labels.reset}</button></div>
+    </div>
+  </div>;
 }

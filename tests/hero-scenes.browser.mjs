@@ -1,10 +1,12 @@
 // Run against a running app: node tests/hero-scenes.browser.mjs
 import assert from "node:assert/strict";
-import { chromium } from "@playwright/test";
+import { expect } from "@playwright/test";
 
-const browser = await chromium.launch();
+
+import { baseURL, launchBrowser } from "./browser-utils.mjs";
+
+const browser = await launchBrowser();
 const page = await browser.newPage();
-const baseURL = process.env.BASE_URL || "http://127.0.0.1:3100";
 await page.addInitScript(() => localStorage.setItem("reduce-motion", "false"));
 
 try {
@@ -106,13 +108,13 @@ try {
       for (const preference of ["manual", "system"]) {
         if (preference === "manual") await page.locator(".motion-toggle").click();
         await page.emulateMedia({ reducedMotion: preference === "system" ? "reduce" : "no-preference" });
-        const stopped = await page.locator(".hero-scene-layer").evaluate((layer) =>
+        // Preference changes dispatch asynchronously; assert the settled state.
+        await expect.poll(() => page.locator(".hero-scene-layer").evaluate((layer) =>
           [layer, ...layer.querySelectorAll("*")].every((element) => {
             const style = getComputedStyle(element);
             return style.animationName === "none" && style.opacity === "0";
           }),
-        );
-        assert.ok(stopped, `${route}, ${width}px: ${preference} reduced-motion`);
+        ), { message: `${route}, ${width}px: ${preference} reduced-motion` }).toBe(true);
         if (route === "/pt") {
           const crawl = await page.locator(".crawl > div").evaluate((element) => {
             const style = getComputedStyle(element);
@@ -126,7 +128,7 @@ try {
         if (preference === "manual") await page.locator(".motion-toggle").click();
       }
       await page.emulateMedia({ reducedMotion: "no-preference" });
-      if (route === "/pt") assert.ok(await page.locator(".crawl > div").evaluate((element) => element.getAnimations().length > 0));
+      if (route === "/pt") await expect.poll(() => page.locator(".crawl > div").evaluate((element) => element.getAnimations().length)).toBeGreaterThan(0);
     }
   }
   console.log("PASS: image alignment, stones, saber, mobile composition and both reduced-motion preferences (including crawl) at 5 viewport widths.");

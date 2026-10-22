@@ -1,10 +1,11 @@
 // Run against a running app: node tests/hero-ctas.browser.mjs
 import assert from "node:assert/strict";
-import { chromium, expect } from "@playwright/test";
+import { expect } from "@playwright/test";
 
-const browser = await chromium.launch();
+import { baseURL, launchBrowser } from "./browser-utils.mjs";
+
+const browser = await launchBrowser();
 const page = await browser.newPage();
-const baseURL = process.env.BASE_URL || "http://127.0.0.1:3100";
 const github = "https://github.com/glaucia86";
 const linkedin = "https://www.linkedin.com/in/glaucialemos";
 const youtube = "https://www.youtube.com/@GlauciaLemos";
@@ -14,7 +15,7 @@ const socials = [
   ["LinkedIn", linkedin],
   ["Instagram", "https://www.instagram.com/glaucia.lemos.dev"],
 ];
-const youtubeLabels = { pt: "Assistir no YouTube", en: "Watch on YouTube", es: "Ver en YouTube" };
+const eventLabels = { pt: "Veja eventos", en: "See events", es: "Ver eventos" };
 const messages = {
   pt: "Gostaria de convidar você para palestrar.",
   en: "I would like to invite you to speak at an event.",
@@ -24,11 +25,11 @@ const messages = {
 try {
   for (const lang of ["pt", "en", "es"]) {
     const routes = [
-      ["", `/${lang}/servicos`, youtube],
+      ["", `/${lang}/servicos`, `/${lang}/eventos`],
       ["/servicos", "#contato", `/${lang}/eventos`],
       ["/sobre", "#trajetoria", linkedin],
       ["/projetos", github, "#projetos"],
-      ["/conteudo", "#artigos", linkedin],
+      ["/conteudo", "#artigos", youtube],
       ["/eventos", `/${lang}/servicos?assunto=palestra#contato`, "#eventos"],
       ["/pagina-inexistente", `/${lang}`, null],
     ];
@@ -47,7 +48,7 @@ try {
       const links = page.locator(".page-hero .actions a");
       await expect(links).toHaveCount(secondary ? 2 : 1);
       if (route === "") {
-        await expect(links.nth(1)).toContainText(youtubeLabels[lang]);
+        await expect(links.nth(1)).toContainText(eventLabels[lang]);
         await footerLinks.first().focus();
         await page.keyboard.press("Tab");
         await expect(footerLinks.nth(1)).toBeFocused();

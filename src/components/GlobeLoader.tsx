@@ -1,4 +1,5 @@
 "use client";
 import dynamic from "next/dynamic";
-const EventGlobe = dynamic(() => import("./EventGlobe"), { ssr: false });
-export function GlobeLoader({ markers }: { markers: { location: [number, number]; size: number }[] }) { return <EventGlobe markers={markers} />; }
+import type { EventGlobeProps } from "./EventGlobe";
+const EventGlobe = dynamic(() => import("./EventGlobe"), { ssr: false, loading: () => <div className="globe-placeholder" aria-hidden="true" /> });
+export function GlobeLoader(props: EventGlobeProps) { return <EventGlobe {...props} />; }

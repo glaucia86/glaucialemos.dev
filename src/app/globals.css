@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./tokens.css";
 @import "./hero-scenes.css";
+@import "./events.css";
 * {
   box-sizing: border-box;
 }
@@ -975,3 +976,8 @@ html.reduce-motion .hero-scene-layer * {
     max-width: 60%;
   }
 }
+
+.event-countries { margin-block: 0 3rem; max-width: 80ch; }
+.event-countries h2 { font-size: clamp(1.4rem, 3vw, 2rem); }
+.event-countries p { color: var(--text-muted); line-height: 1.7; }
+.event-countries ul { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding-left: 1.2rem; margin-block: 1.25rem; }

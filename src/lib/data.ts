@@ -24,16 +24,19 @@ export const getProjetos = () => projetos;
 export const getArtigos = () => artigos;
 export const getServicos = () => servicos;
 
-export function getEventStats() {
-  const paises = new Set(
+export function getEventCountries() {
+  return [...new Set(
     eventos
       .map((evento) => evento.pais)
       .filter((pais): pais is string => pais !== null && pais !== "Global"),
-  );
+  )].sort((a, b) => a.localeCompare(b, "pt-BR"));
+}
+
+export function getEventStats() {
 
   return {
     eventos: eventos.length,
-    paises: paises.size,
+    paises: getEventCountries().length,
     idiomas: {
       "pt-BR": eventos.filter((evento) => evento.idioma === "pt-BR").length,
       en: eventos.filter((evento) => evento.idioma === "en").length,

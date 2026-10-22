@@ -4,6 +4,7 @@ import {
   getArtigos,
   getCargos,
   getEventStats,
+  getEventCountries,
   getEventos,
   getProjetos,
   getServicos,
@@ -12,7 +13,7 @@ import { eventoSchema } from "@/lib/types";
 
 describe("dados", () => {
   it("carrega e valida todas as coleções", () => {
-    expect(getEventos()).toHaveLength(105);
+    expect(getEventos()).toHaveLength(116);
     expect(getCargos().length).toBeGreaterThan(0);
     expect(getProjetos().length).toBeGreaterThan(0);
     expect(getArtigos().length).toBeGreaterThan(0);
@@ -38,10 +39,16 @@ describe("dados", () => {
       idiomas,
     });
     expect(getEventStats()).toEqual({
-      eventos: 105,
-      paises: 8,
-      idiomas: { "pt-BR": 76, en: 24, es: 5 },
+      eventos: 116,
+      paises: 9,
+      idiomas: { "pt-BR": 87, en: 24, es: 5 },
     });
+  });
+
+  it("inclui a África do Sul e permite auditar os países representados", () => {
+    expect(getEventCountries()).toEqual(["África do Sul", "Argentina", "Brasil", "Canadá", "Estados Unidos", "França", "Grécia", "México", "República Dominicana"]);
+    expect(getEventos().filter(e => e.ano > 2023)).toHaveLength(11);
+    expect(getEventos().filter(e => e.ano > 2023).every(e => e.fonte.startsWith("https://"))).toBe(true);
   });
 
   it("rejeita um evento com idioma inválido", () => {
@@ -51,7 +58,7 @@ describe("dados", () => {
   });
 
   it("não conta país nulo nem Global", () => {
-    expect(getEventStats().paises).toBe(8);
+    expect(getEventStats().paises).toBe(9);
     expect(getEventos().some((evento) => evento.pais === null)).toBe(true);
     expect(getEventos().some((evento) => evento.pais === "Global")).toBe(true);
   });
