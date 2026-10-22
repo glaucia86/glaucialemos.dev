@@ -1,48 +1,102 @@
 # Design system
 
-Fonte: cores extraídas do banner da marca (k-means). `src/app/tokens.css`, importado por
-`globals.css`, concentra CSS vars e `@theme` do Tailwind 4. Sem dependências novas.
+## Direção
 
-- **Paleta:** primary roxo `#5a3d7e`, secondary magenta `#893866`, accent laranja
-  `#e07828`, acento secundário amarelo `#f8e838`. Escalas 50–950 para as três
-  paletas e neutros levemente arroxeados. Gradiente: `--gradient-brand`
-  (90° roxo → magenta → vinho `#a73457`).
-- **Semântica:** `--surface-light/soft/dark`, `--text-body/heading/muted`,
-  `--text-inverse/inverse-muted`, `--link`, `--link-hover`, `--border` e `--focus`.
-  Header e overlays usam roxos escuros; o foco em superfícies escuras usa accent
-  claro. Hero limita a coluna de texto à parte opaca do gradiente.
-- **Uso:** `color: var(--text-body)` ou `text-body bg-surface`;
-  `bg-primary`, `text-secondary-700`, `bg-accent text-neutral-950`.
-  CTA: `--text-on-accent` sobre `--color-accent`; título do hero: `--accent-light`.
-  Estados `--color-success/warning/danger/info` têm versões `-text` para fundos
-  claros. Use estas versões para texto; não presuma AA em toda a escala.
-- **Tipografia:** Geist e Geist Mono existentes via `--font-sans/mono`;
-  `--text-xs` a `--text-8xl`. Raios `--radius-sm/md/lg/full`, sombras
-  `--shadow-sm/md`, espaçamento base `--spacing` (4 px) e aliases usuais entre
-  `--space-1` e `--space-24`.
-- **Cenas:** pigmentos `--rock-*`, `--force-*` e `--scene-*` também ficam nos tokens.
-  Dagobah usa coordenadas lógicas 1024×576: mão (620,285), pedras 30% maiores,
-  três planos e as mesmas fases, steps e parallax. Desktop reserva a coluna do
-  texto; mobile reserva uma área de ilustração abaixo do texto e CTA.
-  Reduced-motion e easter eggs foram mantidos.
+Portfólio de engenharia, educação e liderança com cenas em pixel art e acabamento
+cinematográfico. A identidade roxa, magenta e laranja, as ilustrações e os três
+idiomas permanecem. A evolução trabalha hierarquia, profundidade, leitura e
+navegação, sem mudar URLs, nomes de navegação ou dados históricos.
 
-| Par | Contraste |
-| --- | ---: |
-| Texto / claro | 12,64:1 |
-| Texto secundário / suave | 6,66:1 |
-| Título / claro | 15,31:1 |
-| Texto hero / escuro | 18,04:1 |
-| Texto secundário hero / escuro | 13,01:1 |
-| Texto secundário header / marca escura | 9,59:1 |
-| Título accent / escuro | 12,96:1 |
-| Texto CTA / laranja | 6,05:1 |
-| Link primary / claro; suave | 10,97:1; 10,39:1 |
-| Link secondary / claro; suave | 9,66:1; 9,15:1 |
-| Link / tag; seleção / primary | 9,02:1; 8,74:1 |
-| Success; warning; danger; info / superfície clara utilizada | 7,29:1; 6,82:1; 8,57:1; 10,97:1 |
+Referências de intensidade: `DESIGN_VARIANCE: 6`, `MOTION_INTENSITY: 7`,
+`VISUAL_DENSITY: 4`. São critérios de composição, não controles do produto.
+CSS nativo, Tailwind 4 e Geist; nenhuma biblioteca visual adicional.
 
-`tests/contrast.test.ts` resolve os aliases diretamente dos tokens e calcula
-luminância sRGB/WCAG: mínimo 4,5:1; 3:1 para título grande. `npm test` imprime
-as razões. Os pares de hero acima usam a superfície sólida; fotos e gradientes
-compostos também exigem revisão visual. Neste ambiente, servidor e Chromium
-foram bloqueados por `EPERM`; não houve validação visual no navegador.
+## Tokens
+
+`src/app/tokens.css` centraliza cores, tipografia, raios, espaçamento e movimento.
+
+- Marca: primary `#5a3d7e`, secondary `#893866`, accent `#e07828`.
+- Superfícies: `--surface-light` (base), `--surface-soft`, `--surface-raised`,
+  `--surface-tag` e `--surface-dark` (cenas). Os nomes históricos são preservados;
+  no tema escuro, `--surface-light` representa a base escura da página.
+- Texto: `--text-body`, `--text-heading`, `--text-muted`, inversos e links.
+- Os temas seguem `prefers-color-scheme`, com overrides semânticos próprios.
+- Raios: 8 px para controles; 16 px para cards; 24 px para painéis e retratos.
+- Conteúdo: até 1180 px, margens responsivas. Header: 72 px.
+- Ritmo: `--section-gap`, de 72 a 128 px. Tipografia fluida, com escala menor
+  para títulos extensos; texto de apoio limitado para preservar a ilustração.
+- Movimento: `--duration-fast`, `--duration-enter` e `--ease-out`.
+
+`tests/contrast.test.ts` mede contraste dos temas claro e escuro em 20 pares de
+uso real por tema, incluindo cards, avisos e tags. Texto exige 4,5:1 e título
+accent grande exige 3:1. Sobre imagens, a revisão visual complementa os tokens.
+
+## Componentes e páginas
+
+- Header: estado atual com `aria-current`, controles de 44 px, foco visível,
+  menu com entrada por teclado e retorno de foco ao fechar com Escape.
+- Idiomas: preservam rota, consulta e âncora, inclusive o convite para palestra.
+- Hero: título, descrição e ações; informações complementares ficam no conteúdo.
+  No mobile, todas as cenas têm uma área própria abaixo do texto.
+- Home: estatísticas legíveis, retrato com moldura tonal, serviços e narrativa.
+- Sobre: título equilibrado e trajetória com ritmo vertical e marcadores pixel.
+- Projetos: primeiro projeto em destaque, cards com hierarquia e estados de hover.
+- Conteúdo: cards, filtros acessíveis e lotes de 12 artigos com contador anunciado.
+- Eventos: globo em painel com órbitas, legenda e coordenadas deduplicadas;
+  barras proporcionais por idioma/formato e histórico expansível. O globo tem
+  representação geométrica estática com movimento reduzido ou quando WebGL/JavaScript
+  não estão disponíveis. A legenda estática direciona ao histórico de eventos.
+  Contadores entregam o valor real no HTML e aos leitores de tela; a animação
+  visual começa ao entrar na tela, sem atualizar o estado React a cada frame.
+- Serviços: linhas editoriais, preços e descrições; formulário com estados claros.
+- 404: mantém o idioma e o universo visual. O documento global usa as mesmas fontes.
+
+## Cenas e movimento
+
+`CinematicScene` move a imagem e os efeitos juntos para preservar as coordenadas.
+O deslocamento é limitado a 8 px na horizontal e 5 px na vertical em dispositivos
+com ponteiro preciso. A margem de 10 px impede vazamentos nas bordas.
+
+- Dagobah: três planos de pedras, corrente de força e ondas luminosas.
+- Hoth: neve pixel distribuída em diferentes velocidades e tamanhos.
+- Tatooine: luz dos sóis, areia e sinais de R2-D2.
+- Kashyyyk: folhas, vaga-lumes e atmosfera florestal.
+- Nevarro: anéis de projeção em perspectiva e feixe holográfico.
+- Bespin: nuvens, luz ambiente e sabre ancorado ao emissor da imagem.
+- Estrela da Morte: iluminação de alerta na página 404.
+
+Entradas escalonadas orientam a leitura do hero. Revelações de seções usam
+`animation-timeline: view()` com conteúdo visível nos navegadores sem suporte.
+Não há interceptação de scroll. O controlador usa IntersectionObserver, eventos
+de ponteiro e atualização por requestAnimationFrame, sem estado React por frame.
+
+Cenas pausam fora da tela e em abas ocultas. Preferência do sistema e controle
+manual desativam profundidade e efeitos. Conteúdo permanece legível. Em mobile,
+não há parallax de ponteiro; a ilustração é separada do texto.
+
+Camadas: cena -1, conteúdo 1, header 40, transição 80, modal 90, skip link 100.
+O globo também pausa fora da tela, em abas ocultas e com movimento reduzido.
+A rotação usa tempo decorrido, mantendo a velocidade em telas com diferentes
+frequências. A resolução acompanha o tamanho renderizado, limitada a DPR 2.
+
+Observers, eventos e frames são removidos na desmontagem.
+
+## Validação
+
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run build
+npm run test:e2e
+```
+
+Playwright inicia seu próprio servidor na porta 3100. Para um servidor existente,
+use `BASE_URL`. Para Chromium do sistema, use
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium`.
+Os testes cobrem redirecionamento, 404, idiomas, teclado, biblioteca, pausa de
+cenas, redução de movimento, fallback do globo sem WebGL/JavaScript e as seis páginas em 320 px.
+
+A implementação usa `experimental.globalNotFound` do Next.js 15.5 para o documento
+404 global, pois a raiz HTML é definida pelo segmento de idioma. Rever essa opção
+quando atualizar o Next.js.

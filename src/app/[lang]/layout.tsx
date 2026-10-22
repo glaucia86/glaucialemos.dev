@@ -1,14 +1,10 @@
 import "../globals.css";
 import { getDictionary } from "@/i18n/dictionaries";
-import { isLocale, locales } from "@/i18n/config";
-import { notFound } from "next/navigation";
+import { defaultLocale, isLocale, locales } from "@/i18n/config";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { SiteChrome } from "@/components/SiteChrome";
-import localFont from "next/font/local";
-
-const geist = localFont({ src: "../../../node_modules/next/dist/next-devtools/server/font/geist-latin.woff2", variable: "--font-geist", display: "swap" });
-const geistMono = localFont({ src: "../../../node_modules/next/dist/next-devtools/server/font/geist-mono-latin.woff2", variable: "--font-geist-mono", display: "swap" });
+import { geist, geistMono } from "../fonts";
 
 type Props = { children: ReactNode; params: Promise<{ lang: string }> };
 
@@ -24,11 +20,13 @@ export async function generateMetadata({ params }: Omit<Props, "children">): Pro
 
 export default async function LangLayout({ children, params }: Props) {
   const { lang } = await params;
-  if (!isLocale(lang)) notFound();
+  // Pages reject unknown locales through their not-found boundary. The root
+  // document must still render so that boundary has a valid html/body shell.
+  const locale = isLocale(lang) ? lang : defaultLocale;
 
   return (
-    <html lang={lang === "pt" ? "pt-BR" : lang} className={`${geist.variable} ${geistMono.variable}`}>
-      <body><SiteChrome lang={lang} dictionary={getDictionary(lang)}>{children}</SiteChrome></body>
+    <html lang={locale === "pt" ? "pt-BR" : locale} className={`${geist.variable} ${geistMono.variable}`}>
+      <body><SiteChrome lang={locale} dictionary={getDictionary(locale)}>{children}</SiteChrome></body>
     </html>
   );
 }

@@ -4,10 +4,17 @@ import { describe, expect, it } from "vitest";
 
 const tokenFile = path.join(process.cwd(), "src/app/tokens.css");
 const css = fs.readFileSync(tokenFile, "utf8");
-const tokens = new Map([...css.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+);/g)]
-  .map(([, key, value]) => [key, value.trim()]));
+function parseTokens(source: string) {
+  return new Map([...source.matchAll(/(--[\w-]+)\s*:\s*([^;{}]+);/g)]
+    .map(([, key, value]) => [key, value.trim()]));
+}
+const [base, dark = ""] = css.split("@media (prefers-color-scheme: dark)");
+const themes = {
+  light: parseTokens(base),
+  dark: new Map([...parseTokens(base), ...parseTokens(dark.split("@theme inline")[0])]),
+};
 
-function readColor(name: string): string {
+function readColor(name: string, tokens: Map<string, string>): string {
   let value = tokens.get(name);
   const visited = new Set<string>();
   while (value?.startsWith("var(")) {
@@ -47,7 +54,9 @@ const pairs = [
   ["link primary / suave", "--link", "--surface-soft", 4.5],
   ["link secondary / claro", "--link-hover", "--surface-light", 4.5],
   ["link secondary / suave", "--link-hover", "--surface-soft", 4.5],
-  ["link / tag", "--link", "--color-primary-100", 4.5],
+  ["link / tag", "--link", "--surface-tag", 4.5],
+  ["texto / card", "--text-body", "--surface-raised", 4.5],
+  ["texto secundário / card", "--text-muted", "--surface-raised", 4.5],
   ["seleção / primary", "--text-inverse", "--color-primary", 4.5],
   ["success / claro", "--color-success-text", "--surface-light", 4.5],
   ["warning / suave", "--color-warning-text", "--surface-soft", 4.5],
@@ -55,14 +64,14 @@ const pairs = [
   ["info / claro", "--color-info-text", "--surface-light", 4.5],
 ] as const;
 
-describe("contraste WCAG dos tokens da marca", () => {
+describe.each(Object.entries(themes))("contraste WCAG no tema %s", (_theme, tokens) => {
   it("calibra o cálculo com os extremos WCAG", () => {
     expect(contrast("#000000", "#ffffff")).toBe(21);
     expect(contrast("#5a3d7e", "#5a3d7e")).toBe(1);
   });
 
   it.each(pairs)("%s", (label, foreground, background, minimum) => {
-    const ratio = contrast(readColor(foreground), readColor(background));
+    const ratio = contrast(readColor(foreground, tokens), readColor(background, tokens));
     console.log(`${label}: ${ratio.toFixed(2)}:1 (mínimo ${minimum}:1)`);
     expect(ratio).toBeGreaterThanOrEqual(minimum);
   });

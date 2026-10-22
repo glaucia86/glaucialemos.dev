@@ -1,8 +1,8 @@
 // Run against a running app: node tests/hero-scenes.browser.mjs
 import assert from "node:assert/strict";
-import { chromium } from "@playwright/test";
+import { chromium, expect } from "@playwright/test";
 
-const browser = await chromium.launch();
+const browser = await chromium.launch({ executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined });
 const page = await browser.newPage();
 const baseURL = process.env.BASE_URL || "http://127.0.0.1:3100";
 await page.addInitScript(() => localStorage.setItem("reduce-motion", "false"));
@@ -106,13 +106,12 @@ try {
       for (const preference of ["manual", "system"]) {
         if (preference === "manual") await page.locator(".motion-toggle").click();
         await page.emulateMedia({ reducedMotion: preference === "system" ? "reduce" : "no-preference" });
-        const stopped = await page.locator(".hero-scene-layer").evaluate((layer) =>
+        await expect.poll(() => page.locator(".hero-scene-layer").evaluate((layer) =>
           [layer, ...layer.querySelectorAll("*")].every((element) => {
             const style = getComputedStyle(element);
             return style.animationName === "none" && style.opacity === "0";
           }),
-        );
-        assert.ok(stopped, `${route}, ${width}px: ${preference} reduced-motion`);
+        ), { message: `${route}, ${width}px: ${preference} reduced-motion` }).toBe(true);
         if (route === "/pt") {
           const crawl = await page.locator(".crawl > div").evaluate((element) => {
             const style = getComputedStyle(element);

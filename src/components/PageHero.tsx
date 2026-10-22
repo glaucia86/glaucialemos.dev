@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { HeroScene } from "./HeroScene";
+import { CinematicScene } from "./CinematicScene";
 
 type PageHeroProps = {
   eyebrow: string;
@@ -25,13 +26,15 @@ export function PageHero({ eyebrow, title, subtitle, image, imageAlt, primary, s
   const primaryExternal = primary.href.startsWith("https://");
   const secondaryExternal = secondary?.href.startsWith("https://");
 
-  return <section className={`page-hero${strongOverlay ? " page-hero--strong" : ""}`}>
-    <Image className="page-hero__image" src={image} alt={imageAlt} fill priority sizes="100vw" />
-    <HeroScene image={image} />
-    <div className="page-hero__shade" aria-hidden="true" />
+  return <section className={`page-hero${strongOverlay ? " page-hero--strong" : ""}${title.length > 38 ? " page-hero--long-title" : ""}`}>
+    <CinematicScene key={image}>
+      <Image className="page-hero__image" src={image} alt={imageAlt} fill priority fetchPriority="high" sizes="100vw" />
+      <div className="page-hero__shade" aria-hidden="true" />
+      <HeroScene image={image} />
+    </CinematicScene>
     <div className="page-hero__content">
       <p className="eyebrow">{eyebrow}</p>
-      <h1>{firstLine}{secondLine && <span>{secondLine}</span>}</h1>
+      <h1>{firstLine}{secondLine && <> <span>{secondLine}</span></>}</h1>
       <p className="page-hero__subtitle">{subtitle}</p>
       {extra}
       <div className="actions">

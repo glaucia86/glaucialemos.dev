@@ -268,3 +268,49 @@
 }
 .alarm-light{top:-38%;width:42%;height:100%;opacity:.5;background:conic-gradient(from 82deg,transparent 0 34%,color-mix(in srgb, var(--scene-saber) 53%, transparent) 39%,transparent 45% 100%);transform-origin:50% 38%;animation:alarm-sweep 3.2s linear infinite}.alarm-light--left{left:32%}.alarm-light--right{left:52%;animation-delay:-1.6s}
 @keyframes scene-pulse{50%{transform:scale(1.12);opacity:.65}}@keyframes snow-fall{0%{transform:translate3d(0,-5vh,0);opacity:0}10%{opacity:.75}100%{transform:translate3d(30px,115vh,0);opacity:.25}}@keyframes r2-blink{0%,38%,48%,100%{opacity:1;transform:scale(1)}40%,46%{opacity:.2;transform:scale(.75)}}@keyframes sand-blow{0%{transform:translate3d(0,0,0);opacity:0}12%{opacity:.7}100%{transform:translate3d(110vw,-35px,0);opacity:0}}@keyframes leaf-fall{0%{transform:translate3d(0,-8vh,0) rotate(0);opacity:0}12%{opacity:.8}50%{transform:translate3d(35px,52vh,0) rotate(190deg)}100%{transform:translate3d(-20px,112vh,0) rotate(390deg);opacity:.2}}@keyframes firefly{0%,100%{transform:translate3d(0,0,0);opacity:.2}45%{transform:translate3d(12px,-10px,0);opacity:1}70%{transform:translate3d(-8px,6px,0);opacity:.45}}@keyframes hologram-spin{to{transform:rotate(360deg)}}@keyframes alarm-sweep{50%{opacity:.8}to{transform:rotate(360deg)}}
+
+/* The camera moves the complete scene, never the illustration alone. */
+.scene-world { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.scene-atmosphere, .scene-texture { position: absolute; inset: 0; pointer-events: none; }
+.scene-atmosphere { z-index: 0; opacity: .35; background: radial-gradient(ellipse at 85% 35%, color-mix(in srgb, var(--scene-hologram) 18%, transparent), transparent 55%); mix-blend-mode: screen; animation: atmosphere-breathe 12s ease-in-out infinite alternate; }
+.scene-texture { z-index: 1; opacity: .055; background: repeating-linear-gradient(0deg, transparent 0 3px, var(--color-primary-950) 3px 4px); mask-image: linear-gradient(90deg, transparent 30%, black 85%); }
+.scene-world:has(.hero-scene-layer--dagobah) .scene-atmosphere { background: radial-gradient(ellipse at 65% 65%, color-mix(in srgb, var(--force-light) 25%, transparent), transparent 55%); }
+.scene-world:has(.hero-scene-layer--hoth) .scene-atmosphere { background: linear-gradient(125deg, transparent 45%, color-mix(in srgb, var(--color-white) 16%, transparent) 65%, transparent 82%); }
+.scene-world:has(.hero-scene-layer--tatooine) .scene-atmosphere { background: radial-gradient(ellipse at 80% 20%, color-mix(in srgb, var(--color-accent) 28%, transparent), transparent 60%); }
+.scene-world:has(.hero-scene-layer--bespin) .scene-atmosphere { background: radial-gradient(ellipse at 72% 54%, color-mix(in srgb, var(--scene-saber) 14%, transparent), transparent 45%); }
+@keyframes atmosphere-breathe { from { transform: translate3d(-1%, 0, 0); opacity: .2; } to { transform: translate3d(1%, -1%, 0); opacity: .55; } }
+.scene-world[data-active="false"] *, .scene-world[data-active="false"] *::before, .scene-world[data-active="false"] *::after { animation-play-state: paused !important; }
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .scene-world { inset: -10px; transform: translate3d(var(--scene-x, 0px), var(--scene-y, 0px), 0); transition: transform 850ms cubic-bezier(.16, 1, .3, 1); }
+}
+/* Every mobile scene has its own stage below the copy, including Hoth and Kashyyyk. */
+@media (max-width: 900px) {
+  .page-hero:has(.scene-world) { --scene-height: clamp(320px, 65vw, 500px); --scene-position: 72%; display: block; min-height: 0; padding-bottom: var(--scene-height); }
+  .page-hero:has(.hero-scene-layer--dagobah) { --scene-position: 55%; }
+  .page-hero:has(:is(.hero-scene-layer--bespin, .hero-scene-layer--tatooine)) { --scene-position: 80%; }
+  .page-hero:has(.hero-scene-layer--nevarro) { --scene-position: 90%; }
+  .page-hero:has(.scene-world) .page-hero__content { padding: 3rem 0 2rem; }
+  .page-hero:has(.scene-world) .page-hero__image { top: auto !important; height: var(--scene-height) !important; object-position: var(--scene-position) 50%; }
+  .page-hero:has(.scene-world) :is(.page-hero__shade, .hero-scene-layer, .scene-atmosphere, .scene-texture) { top: auto; height: var(--scene-height); }
+  .page-hero:has(.scene-world) .page-hero__shade { background: var(--hero-overlay-scene); }
+  .hero-scene-layer--tatooine { container-type: size; }
+  .hero-scene-layer--tatooine .scene-image-plane { width: max(100cqw, 177.777778cqh); height: max(100cqh, 56.25cqw); left: var(--scene-position); top: 50%; transform: translate(calc(-1 * var(--scene-position)), -50%); }
+  .scene-texture { mask-image: linear-gradient(transparent, black); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-world { transform: none !important; }
+  .scene-atmosphere { animation: none !important; opacity: .2; }
+}
+html.reduce-motion .scene-world { transform: none !important; }
+html.reduce-motion .scene-atmosphere { animation: none !important; opacity: .2; }
+/* Light follows each world's story: projected rings, force ripples, snowfall. */
+.hologram-ring { transform: rotateX(55deg); animation: hologram-orbit 8s linear infinite; border-width: 1px; }
+.hologram-ring::before, .hologram-ring::after { content: ""; position: absolute; inset: -18%; border: 1px solid var(--scene-hologram); border-radius: 50%; opacity: .4; transform: rotateY(65deg); }
+.hologram-ring::after { inset: 18%; transform: rotateX(65deg); }
+.hologram-glow::after { content: ""; position: absolute; inset: -30% -10%; background: linear-gradient(0deg, color-mix(in srgb, var(--scene-hologram) 25%, transparent), transparent 75%); clip-path: polygon(50% 100%, 0 0, 100% 0); opacity: .6; }
+.force-current::after { content: ""; position: absolute; inset: -160% -10%; border: 1px solid color-mix(in srgb, var(--force-light) 30%, transparent); border-radius: 50%; animation: force-ripple 4.8s ease-out infinite; }
+.snowflake { border-radius: 0; box-shadow: 0 0 5px color-mix(in srgb, var(--color-white) 20%, transparent); }
+@keyframes hologram-orbit { from { transform: perspective(400px) rotateX(55deg) rotateZ(0); } to { transform: perspective(400px) rotateX(55deg) rotateZ(360deg); } }
+@keyframes force-ripple { 0% { transform: scale(.4); opacity: 0; } 30% { opacity: .5; } 100% { transform: scale(1.4); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .hero-scene-layer *::before, .hero-scene-layer *::after { animation: none !important; } }
+html.reduce-motion .hero-scene-layer *::before, html.reduce-motion .hero-scene-layer *::after { animation: none !important; }

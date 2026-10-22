@@ -13,7 +13,11 @@ const sceneByImage: Record<string, Scene> = {
 };
 
 const particles = (className: string, count: number) =>
-  Array.from({ length: count }, (_, index) => <i className={className} key={index} />);
+  Array.from({ length: count }, (_, index) => <i className={className} key={index} style={{
+    "--x": `${className === "snowflake" ? (index * 37 + 7) % 97 : (index * 13 + 3) % 44}%`,
+    "--y": `${(index * 17 + 3) % 36}%`,
+    animationDelay: `${-index * 1.7}s`,
+  } as CSSProperties} />);
 
 // Each character is one SVG pixel; the three silhouettes share one palette.
 const rockPalette: Record<string, string> = {
