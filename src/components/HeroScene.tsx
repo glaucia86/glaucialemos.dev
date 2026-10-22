@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { SceneMotion } from "./SceneMotion";
 
 type Scene = "dagobah" | "hoth" | "tatooine" | "kashyyyk" | "nevarro" | "bespin" | "death-star";
 
@@ -50,14 +51,13 @@ const rockLayers = [
 function Dagobah() {
   return <div className="scene-image-plane">
     <span className="force-glow"><span className="force-current" /></span>
-    {rockLayers.map(({ depth, rocks }, layerIndex) => <div className={`force-depth force-depth--${depth}`} key={depth}>
-      {rocks.map(({ x, y, size, shape, desktop }, index) => <span
+    {rockLayers.map(({ depth, rocks }) => <div className={`force-depth force-depth--${depth}`} key={depth}>
+      {rocks.map(({ x, y, size, shape, desktop }) => <span
         className={`force-rock${desktop ? " force-rock--desktop" : ""}`}
         key={`${x}-${y}`}
         style={{
           left: `${x / 1024 * 100}%`, top: `${y / 576 * 100}%`, width: `${size / 1024 * 100}%`,
-          "--float-duration": `${4.2 + index * .6 + layerIndex * .4}s`,
-          "--float-delay": `${-index * 1.3 - layerIndex * .8}s`,
+          "--rock-turn": `${shape === 1 ? -3 : 3}deg`,
         } as CSSProperties}
       >
         <svg viewBox="0 0 12 12" shapeRendering="crispEdges" focusable="false">
@@ -91,8 +91,8 @@ function Tatooine() {
   </>;
 }
 
-function Kashyyyk() { return <>{particles("falling-leaf", 10)}{particles("firefly", 8)}</>; }
-function Nevarro() { return <><span className="hologram-glow" /><span className="hologram-ring" /></>; }
+function Kashyyyk() { return <><div className="scene-particles">{particles("falling-leaf", 10)}</div><div className="scene-particles">{particles("firefly", 8)}</div></>; }
+function Nevarro() { return <div className="scene-image-plane"><span className="hologram-glow" /><span className="hologram-ring" /></div>; }
 function Bespin() {
   return <>
     <div className="bespin-clouds">{particles("moving-cloud", 4)}</div>
@@ -114,5 +114,5 @@ export function HeroScene({ image }: { image: string }) {
   const scene = sceneByImage[image];
   if (!scene) return null;
   const Scene = scenes[scene];
-  return <div className={`hero-scene-layer hero-scene-layer--${scene}`} aria-hidden="true"><Scene /></div>;
+  return <SceneMotion className={`hero-scene-layer hero-scene-layer--${scene}`}><Scene /></SceneMotion>;
 }

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:browser": "node tests/run-browser.mjs"
   },
   "dependencies": {
     "cobe": "^2.0.1",
