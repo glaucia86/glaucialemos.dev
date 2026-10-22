@@ -1,9 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
-import { SpatialScene, type SpatialSceneLabels } from "./SpatialScene";
-import { getDictionary } from "@/i18n/dictionaries";
+import { HeroScene } from "./HeroScene";
 
 type PageHeroProps = {
-  sceneLabels?: SpatialSceneLabels;
   eyebrow: string;
   title: string;
   subtitle: React.ReactNode;
@@ -21,13 +20,15 @@ function splitTitle(title: string) {
   return [words.slice(0, splitAt).join(" "), words.slice(splitAt).join(" ")];
 }
 
-export function PageHero({ sceneLabels = getDictionary("pt").motion, eyebrow, title, subtitle, image, imageAlt, primary, secondary, extra, strongOverlay = false }: PageHeroProps) {
+export function PageHero({ eyebrow, title, subtitle, image, imageAlt, primary, secondary, extra, strongOverlay = false }: PageHeroProps) {
   const [firstLine, secondLine] = splitTitle(title);
   const primaryExternal = primary.href.startsWith("https://");
   const secondaryExternal = secondary?.href.startsWith("https://");
 
   return <section className={`page-hero${strongOverlay ? " page-hero--strong" : ""}`}>
-    <SpatialScene image={image} imageAlt={imageAlt} labels={sceneLabels} />
+    <Image className="page-hero__image" src={image} alt={imageAlt} fill priority sizes="100vw" />
+    <HeroScene image={image} />
+    <div className="page-hero__shade" aria-hidden="true" />
     <div className="page-hero__content">
       <p className="eyebrow">{eyebrow}</p>
       <h1>{firstLine}{secondLine && <span>{secondLine}</span>}</h1>

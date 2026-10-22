@@ -6,7 +6,7 @@ export type Dictionary = {
   metadata: { title: string; description: string };
   nav: { home: string; about: string; projects: string; content: string; events: string; services: string; language: string };
   accessibility: { skip: string; primaryNav: string; highlights: string };
-  motion: { reduce: string; enable: string; enable3d: string; dismiss3d: string };
+  motion: { reduce: string; enable: string };
   common: { source: string; stars: string; language: string; all: string; unavailable: string };
   home: { eyebrow: string; heading: string; value: string; primaryCta: string; secondaryCta: string; stats: [string,string,string,string]; servicesEyebrow: string; servicesTitle: string; servicesBody: string; crawlOpening: string; crawlSkip: string; crawlTitle: string; crawl: [string,string,string]; heroImageAlt: string; aboutTitle: string; aboutImageAlt: string };
   about: { bio: BioSegment[][]; primaryCta: string; secondaryCta: string; metadata: { title: string; description: string }; eyebrow: string; title: string; intro: string; mvp: string; timeline: string; timelineLabels: { role: string; period: string; achievements: string; tech: string }; heroImageAlt: string };
@@ -23,7 +23,7 @@ const pt: Dictionary = {
   metadata: { title: "Glaucia Lemos — IA para quem constrói", description: "Engenharia, liderança e adoção responsável de IA no desenvolvimento de software." },
   nav: { home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", language: "Idioma" },
   accessibility: { skip: "Pular para o conteúdo", primaryNav: "Navegação principal", highlights: "Destaques em números" },
-  motion: { enable3d: "Ativar efeito 3D", dismiss3d: "Dispensar efeito 3D", reduce: "Reduzir animações", enable: "Ativar animações" }, common: { source: "Fonte", stars: "estrelas", language: "Linguagem", all: "Todos", unavailable: "Não informada" },
+  motion: { reduce: "Reduzir animações", enable: "Ativar animações" }, common: { source: "Fonte", stars: "estrelas", language: "Linguagem", all: "Todos", unavailable: "Não informada" },
   home: { eyebrow: "Engenharia • Liderança • IA", heading: "Glaucia Lemos", value: "Ensino engenheiros e líderes a adotar IA no ciclo de desenvolvimento — com prática, estratégia e responsabilidade.", primaryCta: "Contrate um workshop ou mentoria", secondaryCta: "Veja eventos", stats: ["eventos","países","idiomas","estrelas nos principais projetos"], servicesEyebrow: "Como posso ajudar", servicesTitle: "Da curiosidade à prática com IA", servicesBody: "Workshops para times, mentoria para lideranças e palestras que conectam tecnologia a decisões reais.", crawlOpening: "Há muito tempo, em uma comunidade não tão distante…", crawlSkip: "Pular introdução", crawlTitle: "Uma história em construção", crawl: ["De software developer a educadora global, Glaucia construiu sua trajetória compartilhando conhecimento.","Como Microsoft MVP e ex Cloud Advocate, aproximou comunidades da América Latina de JavaScript, TypeScript, nuvem e IA.","Hoje ajuda pessoas e organizações a transformar a adoção de IA em uma competência de engenharia — não apenas em uma ferramenta."], heroImageAlt: "Mestre Yoda em uma paisagem pantanosa de Dagobah", aboutTitle: "Sobre mim", aboutImageAlt: "Glaucia Lemos representada como Jedi, com túnica marrom e sabre de luz azul" },
   about: {
     timelineLabels: { role: "Cargo", period: "Período", achievements: "Contribuições", tech: "Tecnologias" },

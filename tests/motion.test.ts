@@ -26,6 +26,13 @@ describe("redução de movimento", () => {
     expect(shouldReduceMotion(system, manual)).toBe(expected);
   });
 
+  it("a regra CSS central desliga animações e oculta as camadas das cenas", () => {
+    const css = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf8");
+
+    expect(css).toMatch(/html\.reduce-motion[^{}]*\.hero-scene-layer[^{}]*\{[^}]*animation\s*:\s*none\s*!important[^}]*\}/);
+    expect(css).toMatch(/prefers-reduced-motion\s*:\s*reduce[\s\S]*\.hero-scene-layer[^{}]*\{[^}]*animation\s*:\s*none\s*!important[^}]*\}/);
+  });
+
   it("oculta a intro e desliga suas animações nas duas preferências", () => {
     const css = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf8");
     const manual = css.slice(css.indexOf("html.reduce-motion .opening-crawl"));
