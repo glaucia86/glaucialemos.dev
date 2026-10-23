@@ -171,7 +171,7 @@
 .yoda-force__robe { background-image: url("/pixel/yoda-force/robe.webp"); }
 .yoda-force__ear--left { background-image: url("/pixel/yoda-force/ear-left.webp"); }
 .yoda-force__ear--right { background-image: url("/pixel/yoda-force/ear-right.webp"); }
-/* At rest: a faint glow in both palms and, with motion on, an occasional ear twitch. */
+/* At rest: a faint glow in both palms and, with motion on, an occasional ear flick. */
 .force-palm--pose { opacity: .4; }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.reduce-motion) .yoda-force__ear--right { animation: yoda-ear-right 7s steps(1) infinite; }

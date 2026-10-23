@@ -12,7 +12,9 @@ const rockShapes = [
   [".....ooo....", "....ohllo...", "...olllmo...", "..olllmmmo..", "..ollmmmmo..", ".olGgmmmddo.", ".omggmmdddo.", ".ommmmddddo.", "..ommmdddo..", "..oddddddo..", "...oooooo...", "............"],
   ["............", "............", "...ooooo....", "..ohlllloo..", ".olllllmmmo.", "ollllmmmmddo", "olGgmmmmdddo", "omggmmmddddo", ".ommmmddddo.", "..oooooooo..", "............", "............"],
 ];
-// Fan out above-left from the palm at (620, 285), in 1024 × 576 image space.
+// Fan out above-left from the palm, in 1024 × 576 image space. The fan was drawn for the original
+// palm at (620, 285); ROCK_SHIFT moves it to the Force-pose Yoda's raised hands so they stay visible.
+const ROCK_SHIFT = { x: -40, y: -55 };
 const rockLayers = [
   { depth: "back", rocks: [
     { x: 480, y: 140, size: 22.1, shape: 0 },
@@ -92,7 +94,7 @@ export function DagobahScene() {
           data-depth={layerIndex + 1}
           key={`${x}-${y}`}
           style={{
-            left: `${x / 1024 * 100}%`, top: `${y / 576 * 100}%`, width: `${size / 1024 * 100}%`,
+            left: `${(x + ROCK_SHIFT.x) / 1024 * 100}%`, top: `${(y + ROCK_SHIFT.y) / 576 * 100}%`, width: `${size / 1024 * 100}%`,
             "--float-duration": `${4.2 + index * .6 + layerIndex * .4}s`,
             "--float-delay": `${-index * 1.3 - layerIndex * .8}s`,
           } as CSSProperties}

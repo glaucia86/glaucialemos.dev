@@ -100,9 +100,7 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
           .to(element, { x: 0, y: 0, rotation: 0, duration: 1.8, ease: "elastic.out(1, .35)" });
       });
     };
-    // The Force, held: charging → Yoda switches to the Force pose → an X-wing rises from the swamp.
-    const palmAura = section.querySelector<HTMLElement>(".force-palm");
-    const character = section.querySelector<HTMLElement>(".dagobah-character");
+    // The Force, held: charging → Yoda powers up → an X-wing rises from the swamp.
     const pose = section.querySelector<HTMLElement>(".yoda-force")!;
     const aura = pose.querySelector(".yoda-force__aura");
     const robe = pose.querySelector(".yoda-force__robe");
@@ -121,9 +119,8 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
     const later = (callback: () => void, ms: number) => timers.push(window.setTimeout(callback, ms));
     const clearTimers = () => { timers.forEach((timer) => { clearTimeout(timer); clearInterval(timer); }); timers = []; };
     const stopLoops = () => { loops.forEach((loop) => loop.kill()); loops = []; };
-    const preload = () => { pose.dataset.loaded = "true"; };
     const centre = (element: Element) => { const box = element.getBoundingClientRect(); return { x: box.left + box.width / 2, y: box.top + box.height / 2 }; };
-    palmsOf = () => stage === "force" || stage === "xwing" ? posePalms.map(centre) : glowPalm();
+    palmsOf = () => posePalms.map(centre);
     const ring = (point: { x: number; y: number }, scale: number) => {
       const box = section.getBoundingClientRect();
       const wave = document.createElement("span");
@@ -132,7 +129,7 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
       section.appendChild(wave);
       gsap.fromTo(wave, { scale: .1, autoAlpha: 1 }, { scale, autoAlpha: 0, duration: .9, ease: "power2.out", onComplete: () => wave.remove() });
     };
-    const charge = (on: boolean) => gsap.to(palmAura, { autoAlpha: on ? 1 : 0, scale: on ? 1.6 : 1, duration: on ? .25 : .5, ease: on ? "power2.out" : "power2.in", overwrite: true });
+    const charge = (on: boolean) => gsap.to(posePalms, { opacity: on ? 1 : .4, scale: on ? 1.6 : 1, duration: on ? .25 : .5, ease: on ? "power2.out" : "power2.in", overwrite: true });
 
     const raiseXwing = () => {
       setStage("xwing");
@@ -156,14 +153,13 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
       particles.intensify(true);
       charge(false);
       gsap.timeline()
-        .set(pose, { autoAlpha: 1, x: 0, filter: FLASH })
-        .set(character, { autoAlpha: 0 })
-        .to(pose, { filter: "brightness(1) saturate(1)", duration: .36, ease: "steps(4)" });
+        .fromTo(pose, { filter: FLASH }, { filter: "brightness(1.15) saturate(1.2)", duration: .36, ease: "steps(4)" })
+        .to(pose, { y: -5, duration: .35, ease: "back.out(3)" }, 0);
       ring(centre(pose), 5);
       gsap.to(layer, { keyframes: { x: [-6, 5, -3, 2, 0] }, duration: .35, ease: "none", overwrite: "auto" });
       loops.push(
         gsap.fromTo(aura, { opacity: .35, scale: .95 }, { opacity: .95, scale: 1.07, duration: .7, repeat: -1, yoyo: true, ease: "sine.inOut" }),
-        gsap.fromTo(posePalms, { autoAlpha: .5, scale: .8 }, { autoAlpha: 1, scale: 1.9, duration: .45, repeat: -1, yoyo: true, ease: "sine.inOut" }),
+        gsap.fromTo(posePalms, { opacity: .5, scale: .8 }, { opacity: 1, scale: 1.9, duration: .45, repeat: -1, yoyo: true, ease: "sine.inOut" }),
         gsap.timeline({ repeat: -1, defaults: { ease: "steps(2)" } }).to(earRight, { rotation: -12, duration: .14 }).to(earRight, { rotation: 3, duration: .4 }).to(earRight, { rotation: -5, duration: .5 }),
         gsap.timeline({ repeat: -1, delay: .1, defaults: { ease: "steps(2)" } }).to(earLeft, { rotation: 10, duration: .14 }).to(earLeft, { rotation: -2, duration: .45 }).to(earLeft, { rotation: 4, duration: .5 }),
         gsap.fromTo(robe, { skewX: -1.3 }, { skewX: 1.3, duration: .55, repeat: -1, yoyo: true, ease: "steps(3)" }),
@@ -183,7 +179,8 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
     const reset = () => {
       clearTimers(); stopLoops();
       gsap.set([earLeft, earRight, robe], { rotation: 0, skewX: 0 });
-      gsap.to(posePalms, { autoAlpha: 0, scale: 1, duration: .3, overwrite: true });
+      gsap.to(posePalms, { opacity: .4, scale: 1, duration: .3, overwrite: true });
+      gsap.to(aura, { opacity: 0, scale: 1, duration: .5, overwrite: true });
       gsap.to(meter, { scaleX: 0, duration: .3, overwrite: true });
       particles.intensify(false);
     };
@@ -198,11 +195,9 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
       posePalms.forEach((palm) => ring(centre(palm), 6));
       gsap.timeline()
         .to(pose, { x: -10, duration: .12, ease: "power2.out" })
-        .to(pose, { x: 0, duration: .25, ease: "power2.in" })
-        .to(pose, { filter: FLASH, duration: .12, ease: "steps(2)" }, "+=.15")
-        .set(pose, { autoAlpha: 0, filter: "none" })
-        .set(character, { autoAlpha: 1 })
-        .fromTo(character, { filter: "brightness(4) saturate(0)" }, { filter: "brightness(1) saturate(1)", duration: .3, ease: "steps(3)" });
+        .to(pose, { x: 0, y: 0, duration: .25, ease: "power2.in" })
+        .to(pose, { filter: FLASH, duration: .1, ease: "steps(2)" }, "+=.1")
+        .to(pose, { filter: "brightness(1) saturate(1)", duration: .3, ease: "steps(3)" });
       gsap.to(layer, { keyframes: { y: [0, 4, -2, 1, 0] }, duration: .45, delay: .35, ease: "none", overwrite: "auto" });
       pushes.forEach((element, index) => gsap.timeline({ delay: index * .03 })
         .to(element, { x: `-=${gsap.utils.random(30, 70)}`, y: "-=30", duration: .2, ease: "power3.out", overwrite: true })
@@ -222,7 +217,6 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
     };
     const down = (event: PointerEvent) => {
       if ((event.target as Element).closest(INTERACTIVE) || event.button !== 0) return;
-      preload();
       cancelPress();
       press = { x: event.clientX, y: event.clientY };
       setStage("charging");
@@ -236,7 +230,6 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
       release();
     };
     const abort = () => { cancelPress(); release(); };
-    section.addEventListener("pointerenter", preload, { once: true });
     section.addEventListener("pointermove", move, { passive: true });
     section.addEventListener("pointermove", drag, { passive: true });
     section.addEventListener("pointerleave", leave);
@@ -274,10 +267,9 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
     return () => {
       cancelIntro(); stopActivity(); particles.destroy(); jump?.destroy();
       clearTimers(); stopLoops();
-      gsap.killTweensOf([pose, character, ship, meter, rings, posePalms, earLeft, earRight, robe, aura]);
-      gsap.set([pose, character, ship, meter, earLeft, earRight, robe, aura, ...rings, ...posePalms], { clearProps: "all" });
+      gsap.killTweensOf([pose, ship, meter, rings, posePalms, earLeft, earRight, robe, aura]);
+      gsap.set([pose, ship, meter, earLeft, earRight, robe, aura, ...rings, ...posePalms], { clearProps: "transform,filter,opacity,visibility" });
       delete layer.dataset.levitating; delete section.dataset.forceStage;
-      section.removeEventListener("pointerenter", preload);
       section.removeEventListener("pointermove", move); section.removeEventListener("pointermove", drag); section.removeEventListener("pointerleave", leave); section.removeEventListener("pointerleave", abort);
       section.removeEventListener("pointercancel", abort); section.removeEventListener("pointerdown", down); section.removeEventListener("pointerup", up);
       section.querySelectorAll(".force-wave").forEach((wave) => wave.remove());

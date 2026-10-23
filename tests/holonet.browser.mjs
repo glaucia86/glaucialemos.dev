@@ -68,10 +68,8 @@ await check("Force Push cria a onda de choque e não navega", async () => {
   await context.close();
 });
 
-await check("segurar: Yoda muda para a pose da Força, levanta o X-wing e volta ao soltar", async () => {
+await check("segurar: o Yoda (mesmo personagem) se energiza, levanta o X-wing e volta ao soltar", async () => {
   const { context, page, errors } = await open();
-  const sprites = [];
-  page.on("request", (request) => { if (request.url().includes("/pixel/yoda-force/")) sprites.push(request.url()); });
   await page.keyboard.press("Escape");
   await page.waitForTimeout(2400);
   const hero = page.locator(".home-hero-v2");
@@ -82,9 +80,9 @@ await check("segurar: Yoda muda para a pose da Força, levanta o X-wing e volta 
   await page.waitForTimeout(800);
   assert.equal(await hero.getAttribute("data-force-stage"), "force");
   assert.equal(await layer.getAttribute("data-levitating"), "true");
-  assert.ok(await opacity(".yoda-force") > .9);
-  assert.ok(await opacity(".dagobah-character") < .1);
-  assert.ok(sprites.some((url) => url.endsWith("body.webp")));
+  assert.equal(await page.locator(".dagobah-character").count(), 0);
+  assert.ok(await opacity(".yoda-force__aura") > .2);
+  assert.ok(await page.evaluate(() => performance.getEntriesByType("resource").some((entry) => entry.name.endsWith("/pixel/yoda-force/body.webp"))));
   await page.screenshot({ path: `${shots}/force-1440.png` });
   await page.waitForTimeout(2600);
   assert.equal(await hero.getAttribute("data-force-stage"), "xwing");
@@ -95,8 +93,8 @@ await check("segurar: Yoda muda para a pose da Força, levanta o X-wing e volta 
   await page.mouse.up();
   assert.equal(await hero.getAttribute("data-force-stage"), "idle");
   await page.waitForTimeout(1500);
-  assert.ok(await opacity(".yoda-force") < .1);
-  assert.ok(await opacity(".dagobah-character") > .9);
+  assert.ok(await opacity(".yoda-force") > .9);
+  assert.ok(await opacity(".yoda-force__aura") < .1);
   assert.equal(await page.locator(".hero-copy h1").evaluate((element) => getComputedStyle(element).filter), "none");
   assert.deepEqual(errors, []);
   await context.close();
@@ -157,7 +155,7 @@ await check("movimento reduzido: sem boot, sem canvas, composição estática", 
   const { context, page, errors } = await open({ reducedMotion: "reduce" });
   await page.mouse.move(1150, 450);
   await page.mouse.down(); await page.waitForTimeout(700); await page.mouse.up();
-  assert.equal(await page.locator(".yoda-force").getAttribute("data-loaded"), null);
+  assert.ok(await visible(page, ".yoda-force__body"));
   assert.equal(await page.locator(".home-hero-v2").getAttribute("data-force-stage"), null);
   assert.notEqual(await page.evaluate(() => document.documentElement.dataset.boot), "pending");
   assert.equal(await visible(page, ".force-particles"), false);
