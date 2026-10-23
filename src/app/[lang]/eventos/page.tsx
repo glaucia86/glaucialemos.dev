@@ -1,4 +1,42 @@
-import type { Metadata } from "next"; import { notFound } from "next/navigation"; import { AnimatedNumber } from "@/components/AnimatedNumber"; import { GlobeLoader } from "@/components/GlobeLoader"; import { PageHero } from "@/components/PageHero"; import { isLocale } from "@/i18n/config"; import { getDictionary } from "@/i18n/dictionaries"; import { getEventos, getEventStats } from "@/lib/data";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { GlobeLoader } from "@/components/GlobeLoader";
+import { PageHero } from "@/components/PageHero";
+import { EventHistory } from "@/components/EventHistory";
+import { isLocale } from "@/i18n/config";
+import { getDictionary } from "@/i18n/dictionaries";
+import { eventsUI } from "@/i18n/events-ui";
+import { getEventos, getEventStats, getEventCountries } from "@/lib/data";
 type Props = { params: Promise<{ lang: string }> };
-export async function generateMetadata({ params }: Props): Promise<Metadata> { const { lang } = await params; return isLocale(lang) ? getDictionary(lang).events.metadata : {}; }
-export default async function Events({ params }: Props) { const { lang } = await params; if (!isLocale(lang)) notFound(); const d = getDictionary(lang); const events = getEventos(); const stats = getEventStats(); const markers = events.filter((event) => event.lat !== null && event.lon !== null).map((event) => ({ location: [event.lat!, event.lon!] as [number,number], size: .035 })); const types = { palestra: 0, workshop: 0, organizacao: 0 }; events.forEach((event) => types[event.tipo]++); const years = [...new Set(events.map((event) => event.ano))].sort((a,b) => b-a); return <main id="main" className="inner-page"><PageHero eyebrow={d.events.eyebrow} title={d.events.title} subtitle={d.events.intro} image="/pixel/eventos-grogu.jpg" imageAlt={d.events.heroImageAlt} primary={{ href: `/${lang}/servicos?assunto=palestra#contato`, label: d.events.primaryCta }} secondary={{ href: "#eventos", label: d.events.secondaryCta }} /><section className="globe-wrap"><GlobeLoader markers={markers} /><div className="event-stats">{[stats.eventos,stats.paises,Object.values(stats.idiomas).filter(Boolean).length].map((value,i) => <div key={d.events.labels[i]}><strong><AnimatedNumber value={value} /></strong><span>{d.events.labels[i]}</span></div>)}</div></section><section className="breakdowns"><div><h2>{d.events.languageBreakdown}</h2>{Object.entries(stats.idiomas).map(([key,value]) => <p key={key}><span>{key}</span><strong>{value}</strong></p>)}</div><div><h2>{d.events.typeBreakdown}</h2>{Object.entries(types).map(([key,value]) => <p key={key}><span>{d.events.types[key as keyof typeof types]}</span><strong>{value}</strong></p>)}</div></section><p className="data-note">{d.events.audienceNote}</p><section id="eventos" className="event-history"><h2>{d.events.history}</h2><p>{d.events.note}</p>{years.map((year) => <details key={year}><summary>{year} <span>{events.filter((event) => event.ano === year).length}</span></summary><ul>{events.filter((event) => event.ano === year).map((event,index) => <li key={`${event.nome}-${index}`}><div><strong>{event.nome}</strong><span>{event.cidade} · {event.idioma} · {d.events.types[event.tipo]}</span></div><a href={event.fonte}>{d.common.source} ↗</a></li>)}</ul></details>)}</section></main>; }
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { lang } = await params;
+  return isLocale(lang) ? getDictionary(lang).events.metadata : {};
+}
+export default async function Events({ params }: Props) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+  const d = getDictionary(lang), ui = eventsUI[lang];
+  const events = getEventos(), stats = getEventStats();
+  const locations = new Map<string, { location: [number, number]; size: number }>();
+  events.filter(event => event.lat !== null && event.lon !== null).forEach(event => locations.set(`${event.lat},${event.lon}`, { location: [event.lat!,event.lon!], size: .035 }));
+  const types = { palestra: 0, workshop: 0, organizacao: 0 };
+  events.forEach(event => types[event.tipo]++);
+  return <main id="main" className="events-page">
+    <PageHero
+      eyebrow={d.events.eyebrow}
+      title={d.events.title}
+      subtitle={d.events.intro}
+      image="/pixel/eventos-grogu.jpg"
+      imageAlt={d.events.heroImageAlt}
+      primary={{ href: `/${lang}/servicos?assunto=palestra#contato`, label: d.events.primaryCta }}
+      secondary={{ href: "#eventos", label: d.events.secondaryCta }}
+    />
+    <section className="globe-wrap events-atlas" aria-labelledby="atlas-title">
+      <GlobeLoader markers={[...locations.values()]} labels={ui.globe} />
+      <div className="atlas-copy"><h2 id="atlas-title">{ui.journey}</h2><p>{ui.journeyBody}</p><div className="event-stats">{[stats.eventos,stats.paises,Object.values(stats.idiomas).filter(Boolean).length].map((value,i) => <div key={d.events.labels[i]}><strong>{value.toLocaleString(lang)}</strong><span>{d.events.labels[i]}</span></div>)}</div><div className="event-countries"><h3>{d.events.countriesTitle}</h3><ul>{getEventCountries().map(country => <li key={country}>{country}</li>)}</ul><details><summary>{d.events.mapNote}</summary><p>{d.events.countryNote}</p></details></div></div>
+    </section>
+    <section id="eventos" className="event-history"><div className="archive-heading"><h2>{ui.archive}</h2><p>{ui.archiveBody}</p></div><EventHistory events={events} labels={{...ui,source:d.common.source,types:d.events.types}} /><p className="archive-note">{d.events.note}</p></section>
+    <section className="breakdowns"><div><h2>{d.events.languageBreakdown}</h2>{Object.entries(stats.idiomas).map(([key,value]) => <p key={key}><span>{key}</span><strong>{value}</strong></p>)}</div><div><h2>{d.events.typeBreakdown}</h2>{Object.entries(types).map(([key,value]) => <p key={key}><span>{d.events.types[key as keyof typeof types]}</span><strong>{value}</strong></p>)}</div></section>
+    <p className="data-note">{d.events.audienceNote}</p>
+  </main>;
+}
