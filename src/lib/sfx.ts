@@ -32,13 +32,16 @@ let context: AudioContext | null = null;
 let enabled: boolean | null = null;
 
 export function isSoundEnabled() {
-  if (enabled === null) enabled = typeof window !== "undefined" && readSoundPreference(window.localStorage);
+  if (enabled === null) {
+    try { enabled = typeof window !== "undefined" && readSoundPreference(window.localStorage); }
+    catch { enabled = false; }
+  }
   return enabled;
 }
 
 export function setSoundEnabled(value: boolean) {
   enabled = value;
-  writeSoundPreference(window.localStorage, value);
+  try { writeSoundPreference(window.localStorage, value); } catch { /* Keep the in-memory preference when storage access is blocked. */ }
   window.dispatchEvent(new CustomEvent(SOUND_EVENT, { detail: value }));
   if (value) play("granted");
 }
