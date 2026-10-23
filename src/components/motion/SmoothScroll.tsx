@@ -23,6 +23,9 @@ export function SmoothScroll() {
     gsap.ticker.lagSmoothing(0);
     return () => { gsap.ticker.remove(tick); lenis.destroy(); delete window.__lenis; };
   }, [motion]);
-  useEffect(() => { window.__lenis?.scrollTo(0, { immediate: true }); requestAnimationFrame(() => ScrollTrigger.refresh()); }, [pathname]);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(frame);
+  }, [pathname]);
   return null;
 }
