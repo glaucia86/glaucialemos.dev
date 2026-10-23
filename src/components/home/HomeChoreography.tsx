@@ -59,7 +59,7 @@ export function HomeChoreography() {
       const run = () => { if (!gsap.isTweening(element)) gsap.to(element, { duration: .6, scrambleText: { text, chars: SCRAMBLE_CHARS, speed: .9 } }); };
       const host = element.closest("article") ?? element;
       host.addEventListener("pointerenter", run); element.addEventListener("focus", run);
-      cleanups.push(() => { host.removeEventListener("pointerenter", run); element.removeEventListener("focus", run); });
+      cleanups.push(() => { host.removeEventListener("pointerenter", run); element.removeEventListener("focus", run); gsap.killTweensOf(element); element.textContent = text; });
     });
 
     // Episode II: the saber ignites from the hilt the first time the card is seen.
