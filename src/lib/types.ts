@@ -49,7 +49,18 @@ export const servicoSchema = z.object({
   preco: z.literal("sob consulta"),
 });
 
+export const contribuicaoSchema = z.object({
+  repo: z.string().regex(/^[\w.-]+\/[\w.-]+$/),
+  url: z.url(),
+  estrelas: z.number().int().nonnegative(),
+  linguagem: z.string(),
+  papel: textoLocalizadoSchema,
+  descricao: textoLocalizadoSchema,
+  prs: z.url(),
+});
+
 export type Evento = z.infer<typeof eventoSchema>;
+export type Contribuicao = z.infer<typeof contribuicaoSchema>;
 export type Cargo = z.infer<typeof cargoSchema>;
 export type Projeto = z.infer<typeof projetoSchema>;
 export type Artigo = z.infer<typeof artigoSchema>;

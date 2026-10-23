@@ -1,9 +1,33 @@
 [
   {
+    "empresa": "Itaú Unibanco",
+    "cargo": "AI Transformation Lead · Engineering Specialist II (Itaú Agro Varejo)",
+    "periodo": "mai 2026 – atual",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
+  },
+  {
+    "empresa": "Packt",
+    "cargo": "Co-author & Technical Reviewer · Building Agentic AI Apps with Next.js, TypeScript and MCP",
+    "periodo": "set 2025 – atual",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
+  },
+  {
+    "empresa": "Zup Innovation",
+    "cargo": "AI Developer Specialist · GenAI (Itaú Unibanco)",
+    "periodo": "set 2025 – abr 2026",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
+  },
+  {
     "empresa": "Microsoft",
-    "cargo": "Cloud Advocate II em JavaScript/Node.js/TypeScript",
-    "periodo": "dez 2019 – mai 2025",
+    "cargo": "Developer Advocate II · AI JavaScript/TypeScript",
+    "periodo": "mar 2021 – jun 2025",
     "fonte": "https://www.linkedin.com/posts/glaucialemos_como-muitos-j%C3%A1-sabem-essa-semana-estou-encerrando-activity-7328778074047647744-JMQ7"
+  },
+  {
+    "empresa": "Microsoft",
+    "cargo": "Developer Advocate · JavaScript/Node.js & TypeScript",
+    "periodo": "dez 2019 – fev 2021",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
   },
   {
     "empresa": "Microsoft",
@@ -12,22 +36,52 @@
     "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
   },
   {
+    "empresa": "Node.js Foundation",
+    "cargo": "Contributor · Node.js Internationalization Working Group",
+    "periodo": "dez 2018 – dez 2019",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
+  },
+  {
     "empresa": "Zoox Smart Data",
     "cargo": "Software Developer",
     "periodo": "set 2018 – dez 2018",
     "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
   },
   {
-    "empresa": "HackDev",
-    "cargo": "Software Developer | Founder",
-    "periodo": "abr 2014 – mar 2019",
-    "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+    "empresa": "ESX",
+    "cargo": "Software Development Engineer",
+    "periodo": "mai 2018 – jul 2018",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
+  },
+  {
+    "empresa": "Udemy",
+    "cargo": "Technical Instructor",
+    "periodo": "nov 2017 – dez 2018",
+    "fonte": "https://www.udemy.com/user/glaucialemos/"
   },
   {
     "empresa": "Resource IT Solutions",
     "cargo": "Software Developer",
     "periodo": "abr 2017 – set 2017",
     "fonte": "https://github.com/glaucia86/glaucialemos/blob/752b1694d24b9691de4697fb7f5cb1ba7e578312/src/content/resume/index.md"
+  },
+  {
+    "empresa": "Oi S.A",
+    "cargo": "Senior Digital Relationship Analyst",
+    "periodo": "ago 2016 – out 2016",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
+  },
+  {
+    "empresa": "HackDev",
+    "cargo": "Software Engineer · Microsoft Software Consultant Specialist",
+    "periodo": "abr 2016 – mar 2019",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
+  },
+  {
+    "empresa": "Pagar.me",
+    "cargo": "Software Developer",
+    "periodo": "fev 2016 – mar 2016",
+    "fonte": "https://www.linkedin.com/in/glaucialemos"
   },
   {
     "empresa": "GlobalLogic LATAM",

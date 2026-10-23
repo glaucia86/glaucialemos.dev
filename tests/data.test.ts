@@ -3,6 +3,7 @@ import eventosJson from "@/data/eventos.json";
 import {
   getArtigos,
   getCargos,
+  getContribuicoes,
   getEventStats,
   getEventos,
   getProjetos,
@@ -12,7 +13,7 @@ import { eventoSchema } from "@/lib/types";
 
 describe("dados", () => {
   it("carrega e valida todas as coleções", () => {
-    expect(getEventos()).toHaveLength(105);
+    expect(getEventos()).toHaveLength(134);
     expect(getCargos().length).toBeGreaterThan(0);
     expect(getProjetos().length).toBeGreaterThan(0);
     expect(getArtigos().length).toBeGreaterThan(0);
@@ -38,10 +39,27 @@ describe("dados", () => {
       idiomas,
     });
     expect(getEventStats()).toEqual({
-      eventos: 105,
-      paises: 8,
-      idiomas: { "pt-BR": 76, en: 24, es: 5 },
+      eventos: 134,
+      paises: 9,
+      idiomas: { "pt-BR": 103, en: 26, es: 5 },
     });
+  });
+
+  it("inclui os eventos de 2024 a 2026 com fonte pública e sem duplicatas", () => {
+    const recentes = getEventos().filter((evento) => evento.ano > 2023);
+    expect(recentes).toHaveLength(19);
+    expect(recentes.every((evento) => evento.fonte.startsWith("https://"))).toBe(true);
+    const desde2023 = getEventos().filter((evento) => evento.ano >= 2023);
+    expect(new Set(desde2023.map((evento) => `${evento.ano}|${evento.nome}`)).size).toBe(desde2023.length);
+  });
+
+  it("valida as contribuições open source com textos nos três idiomas", () => {
+    const contribuicoes = getContribuicoes();
+    expect(contribuicoes.map((item) => item.repo)).toContain("Azure-Samples/serverless-chat-langchainjs");
+    for (const item of contribuicoes) {
+      expect(item.url).toBe(`https://github.com/${item.repo}`);
+      expect(Object.values(item.descricao).every(Boolean)).toBe(true);
+    }
   });
 
   it("rejeita um evento com idioma inválido", () => {
@@ -51,7 +69,7 @@ describe("dados", () => {
   });
 
   it("não conta país nulo nem Global", () => {
-    expect(getEventStats().paises).toBe(8);
+    expect(getEventStats().paises).toBe(9);
     expect(getEventos().some((evento) => evento.pais === null)).toBe(true);
     expect(getEventos().some((evento) => evento.pais === "Global")).toBe(true);
   });

@@ -105,6 +105,8 @@ h1, h2, h3 { text-wrap: balance; }
 .inner-page > :not(.page-hero) { max-width: var(--content-width); }
 .inner-page .card-grid { gap: 1.5rem; padding-block: 4rem; }
 .inner-page .project-card h2 { overflow-wrap: anywhere; font-size: 1.5rem; margin-top: 2rem; }
+.inner-page .contribution-card h3 { overflow-wrap: anywhere; font-size: 1.25rem; margin: 2rem 0 .75rem; }
+.inner-page .contribution-card__links { flex: 0 0 auto; display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 0; }
 .service-cards { gap: 1.5rem; }
 .service-cards article { padding: 2rem; border-top: 3px solid var(--color-primary); }
 .service-cards h2 { margin-top: 1.5rem; }

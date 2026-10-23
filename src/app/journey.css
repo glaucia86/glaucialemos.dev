@@ -11,14 +11,14 @@
 .home-page .journey-milestones a { display: inline-flex; align-items: center; min-height: 32px; margin-left: 1rem; font-size: .75rem; color: var(--link); text-decoration: underline; text-underline-offset: 3px; }
 .home-page .home-projects .section-intro h2 { max-width: 21ch; }
 .home-page .code-feature { display: grid; grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
-.home-page .typescript-demo { background: var(--surface-dark); color: var(--text-inverse); --focus: var(--focus-inverse); min-width: 0; border-top: 3px solid var(--color-primary-400); }
+.home-page .rag-demo { background: var(--surface-dark); color: var(--text-inverse); --focus: var(--focus-inverse); min-width: 0; border-top: 3px solid var(--color-primary-400); }
 .home-page .demo-topline { display: flex; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border-inverse); color: var(--text-inverse-muted); font: .7rem var(--font-mono); }
 .home-page .demo-controls { display: flex; flex-wrap: wrap; gap: .5rem; padding: 1.25rem 1.5rem 0; }
 .home-page .demo-controls button, .home-page .country-controls button { min-height: 44px; border: 1px solid var(--color-primary-400); padding: .65rem .9rem; background: transparent; color: var(--text-inverse); font-size: .8rem; border-radius: 2px; }
 .home-page .demo-controls button[aria-pressed="true"], .home-page .country-controls button[aria-pressed="true"] { background: var(--color-primary-200); color: var(--color-primary-950); border-color: var(--color-primary-200); font-weight: 700; }
 .home-page .demo-controls button:hover, .home-page .country-controls button:hover { border-color: var(--color-accent-300); }
 .home-page .demo-state { font: .8rem var(--font-mono); padding: 1.5rem 1.5rem 0; margin: 0; color: var(--text-inverse-muted); }
-.home-page .typescript-demo pre { margin: 0; padding: 1.5rem; overflow: auto; font: clamp(.72rem, 1.2vw, 1rem)/1.9 var(--font-mono); }
+.home-page .rag-demo pre { margin: 0; padding: 1.5rem; overflow: auto; font: clamp(.72rem, 1.2vw, 1rem)/1.9 var(--font-mono); }
 .home-page .code-keyword { color: var(--color-primary-300); }
 .home-page .code-type { color: var(--color-accent-300); }
 .home-page .code-error { text-decoration: underline wavy var(--color-accent-300); text-underline-offset: 6px; }
@@ -91,7 +91,7 @@
 @media (max-width: 450px) {
   .home-page .home-hero .actions { flex-direction: column; align-items: flex-start; }
   .home-page .home-hero .hero-link { display: inline-flex; align-items: center; min-height: 44px; }
-  .home-page .demo-topline, .home-page .typescript-demo pre, .home-page .demo-note { padding: 1rem; }
+  .home-page .demo-topline, .home-page .rag-demo pre, .home-page .demo-note { padding: 1rem; }
   .home-page .demo-controls { padding: 1rem 1rem 0; }
   .home-page .demo-diagnostic { margin-inline: 1rem; }
   .home-page .demo-state { padding-left: 1rem; }

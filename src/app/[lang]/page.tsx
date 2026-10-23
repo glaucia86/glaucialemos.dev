@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { TypeScriptDemo } from "@/components/TypeScriptDemo";
+import { RagDemo } from "@/components/RagDemo";
 import { EventMap } from "@/components/EventMap";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { BootSequence } from "@/components/home/BootSequence";
@@ -12,17 +12,17 @@ import { HeroMotion } from "@/components/home/HeroMotion";
 import { HudClock } from "@/components/home/HudClock";
 import { HomeChoreography } from "@/components/home/HomeChoreography";
 import { MissionIcon } from "@/components/home/MissionIcon";
-import { curateProjects, curateMilestones, homeServiceSubjects, formatExperiencePeriod } from "@/lib/home-curation";
+import { curateMilestones, homeServiceSubjects, formatExperiencePeriod, featuredContribution, HOME_ARCHIVE_SIZE } from "@/lib/home-curation";
 import { bootScript } from "@/lib/boot";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getEventStats, getServicos, getCargos, getEventos } from "@/lib/data";
-import { getProjetosComEstrelas } from "@/lib/github";
+import { getContribuicoesComEstrelas, getTopRepos } from "@/lib/github";
 import { socialLinks } from "@/data/social";
 
-export const revalidate = 86400;
+export const revalidate = 2592000;
 
-const sabers = ["var(--energy-blue)", "var(--energy-green)", "var(--energy-purple)"];
+const sabers = ["var(--energy-blue)", "var(--energy-green)", "var(--energy-purple)", "var(--energy-gold)"];
 const numerals = ["I", "II", "III", "IV", "V"];
 
 function ChapterTag({ index, label }: { index: number; label: string }) {
@@ -42,9 +42,8 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const d = getDictionary(lang);
   const h = d.holonet;
   const stats = getEventStats();
-  const projects = curateProjects(await getProjetosComEstrelas());
-  const featured = projects.find(project => project.nome === "curso-typescript-zero-to-hero");
-  const others = projects.filter(project => project !== featured);
+  const projects = await getTopRepos(HOME_ARCHIVE_SIZE);
+  const featured = (await getContribuicoesComEstrelas()).find(contribution => contribution.repo === featuredContribution);
   const milestones = curateMilestones(getCargos());
   const format = new Intl.NumberFormat(lang);
   const languages = Object.values(stats.idiomas).filter(Boolean).length;
@@ -58,7 +57,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
     {/* Episode I — Dagobah */}
     <div className="home-hero">
-      <HeroMotion jumpLabel={h.episodes[1]} labelledBy="hero-title">
+      <HeroMotion jumpLabel={h.episodes[1]} forceLabel={h.hud.force} labelledBy="hero-title">
         <Image className="page-hero__image" src="/pixel/dagobah-background.webp" alt={d.home.heroImageAlt} fill priority fetchPriority="high" sizes="100vw" />
         <DagobahScene />
         <div className="page-hero__shade" aria-hidden="true" />
@@ -99,12 +98,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
                 <path className="jedi-blade__edge" d="M211 583 130 123" />
                 <path className="jedi-blade__core" d="M211 583 130 123" />
               </svg>
+              <svg className="jedi-bolts" viewBox="0 0 864 1152" aria-hidden="true" focusable="false" />
             </div></div>
             <span className="holo-card__sheen" aria-hidden="true" />
             <span className="holo-card__scan" aria-hidden="true" />
             <figcaption><span className="holo-card__name">Glaucia Lemos</span><span className="holo-card__class">{h.jedi.card}</span></figcaption>
           </figure>
-          <span className="holo-card__id" aria-hidden="true">ID · GL-0001 · DEV · EDUCATOR · MVP</span>
+          <span className="holo-card__id" aria-hidden="true">ID · GL-0001 · PRINCIPAL SWE · AI LEAD · MVP</span>
+          <button type="button" className="jedi-deflect" hidden><span className="jedi-deflect__icon" aria-hidden="true" />{h.jedi.deflect}</button>
         </div>
         <div className="jedi-copy">
           <ChapterTag index={1} label={h.episodes[1]} />
@@ -141,7 +142,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <Link className="text-link" href={`/${lang}/projetos`}>{d.home.projectsLink}<span aria-hidden="true">↗</span></Link>
         </div>
         <div className="holocron-grid">
-          <TypeScriptDemo copy={d.journey.demo} terminal={h.holocron} />
+          <RagDemo copy={d.journey.demo} terminal={h.holocron} />
           {featured && <article className="holocron holocron--featured" data-tilt data-reveal="up">
             <svg className="holocron-cube" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
               <path fill="#9fdcff" d="M7 1h2v1h2v1h2v1h1v1h-2v1h-2v1H8V6H6V5H4V4H2V3h2V2h3z" />
@@ -149,19 +150,19 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
               <path fill="#0a5f8f" d="M8 7h2V6h2V5h2v7h-1v1h-2v1H8z" />
               <path className="holocron-cube__glow" fill="#efffff" d="M7 3h2v1H7zM4 7h1v3H4zM11 8h1v3h-1z" />
             </svg>
-            <p className="holocron__label">{h.holocron.featured}</p>
+            <p className="holocron__label">{h.holocron.featured} · {featured.papel[lang]}</p>
             <h3>{d.home.projectsTitle}</h3>
             <p>{d.journey.demo.explanation}</p>
-            <p className="holocron__repo" data-scramble-hover>{featured.nome}</p>
+            <p className="holocron__repo" data-scramble-hover>{featured.repo}</p>
             <p className="holocron__stars"><span aria-hidden="true">★</span> <span data-count={featured.estrelas}>{format.format(featured.estrelas)}</span> {d.common.stars}</p>
-            <a className="button primary" data-magnetic href={featured.url}>{d.journey.demo.course}<span aria-hidden="true">↗</span></a>
+            <a className="button primary" data-magnetic href={featured.url}>{d.journey.demo.cta}<span aria-hidden="true">↗</span></a>
           </article>}
         </div>
         <p className="holocron-archive">{h.holocron.archive}</p>
-        <div className="holocron-list" data-reveal="stagger">{others.map((project, index) => <article className="holocron" key={project.nome} data-tilt>
+        <div className="holocron-list" data-reveal="stagger">{projects.map((project, index) => <article className="holocron" key={project.nome} data-tilt>
           <span className="holocron__index" aria-hidden="true">0{index + 2}</span>
           <h3><a href={project.url} data-scramble-hover>{project.nome}</a><span aria-hidden="true"> ↗</span></h3>
-          <p>{d.journey.projects[project.nome === "ai-js-course" ? 0 : 1]}</p>
+          <p>{d.journey.projects[project.nome] ?? project.descricao}</p>
           <p className="holocron__stars"><span aria-hidden="true">★</span> <span data-count={project.estrelas}>{format.format(project.estrelas)}</span> {d.common.stars}</p>
         </article>)}</div>
       </div>

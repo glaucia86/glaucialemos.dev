@@ -1,16 +1,21 @@
 import { describe, it, expect } from 'vitest';
-import { groupEvents, curateProjects, hasCoordinates, formatExperiencePeriod } from '@/lib/home-curation';
-import { getEventos, getProjetos } from '@/lib/data';
+import { groupEvents, curateMilestones, hasCoordinates, formatExperiencePeriod, HOME_ARCHIVE_SIZE } from '@/lib/home-curation';
+import { getCargos, getEventos, getProjetos } from '@/lib/data';
 
 describe('home curation', () => {
   it('localizes the source periods without changing their dates', () => {
     expect(formatExperiencePeriod('dez 2019 – mai 2025', 'en')).toBe('Dec 2019 – May 2025');
     expect(formatExperiencePeriod('mar 2019 – dez 2019', 'es')).toBe('mar 2019 – dic 2019');
     expect(formatExperiencePeriod('dez 2013 – dez 2014', 'pt')).toBe('dez 2013 – dez 2014');
+    expect(formatExperiencePeriod('mai 2026 – atual', 'en')).toBe('May 2026 – present');
+    expect(formatExperiencePeriod('mai 2026 – atual', 'es')).toBe('may 2026 – actualidad');
+    expect(formatExperiencePeriod('mai 2026 – atual', 'pt')).toBe('mai 2026 – atual');
   });
-  it('keeps the course first even when star counts change', () => {
-    const projects = getProjetos().map(project => ({ ...project, estrelas: project.nome === 'repocheckai' ? 99999 : 0 }));
-    expect(curateProjects(projects).map(project => project.nome)).toEqual(['curso-typescript-zero-to-hero', 'ai-js-course', 'repocheckai']);
+  it('traces the career route up to the current AI role', () => {
+    expect(curateMilestones(getCargos()).map(cargo => cargo.empresa)).toEqual(['TopDown Sistemas', 'Microsoft', 'Microsoft', 'Itaú Unibanco']);
+  });
+  it('keeps a fallback snapshot large enough for the home archive', () => {
+    expect(getProjetos().length).toBeGreaterThanOrEqual(HOME_ARCHIVE_SIZE);
   });
   it('keeps all records exactly once and never places missing coordinates on the map', () => {
     const events = getEventos();

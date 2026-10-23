@@ -1,13 +1,6 @@
 .hero-scene-layer{position:absolute;z-index:-1;inset:0;overflow:hidden;pointer-events:none}.hero-scene-layer>*{position:absolute;display:block;will-change:transform,opacity}
 .hero-scene-layer[data-paused="true"],
 .hero-scene-layer[data-paused="true"] * { animation-play-state: paused !important; }
-.dagobah-character {
-  left: 59.375%; top: 39.583333%; width: 16.25%; height: 30.416667%;
-  overflow: hidden;
-  /* Preserve the original pixels; the polygon follows ears, hand, robe and stick. */
-  clip-path: polygon(0 28%,6% 28%,10% 35%,20% 34%,20% 21%,15% 18%,15% 14%,29% 16%,34% 4%,46% 0,61% 2%,70% 12%,76% 14%,100% 15%,88% 26%,79% 28%,77% 34%,85% 43%,90% 60%,94% 94%,85% 98%,78% 94%,70% 100%,50% 97%,33% 97%,30% 91%,24% 89%,26% 70%,27% 58%,15% 51%,4% 42%,0 34%);
-}
-.dagobah-character img { position: absolute; width: 615.384615%; height: 328.767123%; max-width: none; left: -365.384615%; top: -130.136986%; image-rendering: pixelated; }
 .dagobah-atmosphere { inset: 0; transform: translate(var(--pointer-x, 0px), var(--pointer-y, 0px)); transition: transform 600ms ease-out; }
 .dagobah-mist { position: absolute; width: 80%; height: 24%; left: 25%; top: 58%; background: radial-gradient(ellipse, color-mix(in srgb, var(--force-mid) 15%, transparent), transparent 70%); animation: dagobah-mist 18s ease-in-out infinite alternate; }
 .dagobah-mist--front { top: 78%; left: 45%; width: 60%; height: 20%; animation-delay: -9s; animation-duration: 24s; }
@@ -153,6 +146,55 @@
   transform-origin: 100% 75%;
   animation: force-breathe 4.8s ease-in-out infinite;
 }
+.force-palm {
+  position: absolute;
+  left: 60.546875%;
+  top: 49.479167%;
+  width: 5%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-white) 85%, var(--force-light)) 0 12%, color-mix(in srgb, var(--force-light) 60%, transparent) 30%, transparent 70%);
+  mix-blend-mode: screen;
+}
+.force-palm--pose { width: 3.4%; }
+/* Yoda: AI-generated sprite layers (body, robe, ears) over the Yoda-free background plate. */
+.hero-scene-layer--dagobah {
+  --xwing-outline: #13211f; --xwing-light: #c7d1cd; --xwing-mid: #8f9e99; --xwing-dark: #55635f; --xwing-canopy: #1d3a4f;
+}
+.yoda-force { pointer-events: none; }
+.yoda-force__part, .yoda-force__aura { position: absolute; inset: 0; display: block; }
+.yoda-force__part { background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; }
+.yoda-force__body { background-image: url("/pixel/yoda-force/body.webp"); }
+.yoda-force__robe { background-image: url("/pixel/yoda-force/robe.webp"); }
+.yoda-force__ear--left { background-image: url("/pixel/yoda-force/ear-left.webp"); }
+.yoda-force__ear--right { background-image: url("/pixel/yoda-force/ear-right.webp"); }
+/* At rest: a faint glow in both palms and, with motion on, an occasional ear twitch. */
+.force-palm--pose { opacity: .4; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .yoda-force__ear--right { animation: yoda-ear-right 7s steps(1) infinite; }
+  html:not(.reduce-motion) .yoda-force__ear--left { animation: yoda-ear-left 7s steps(1) 2.4s infinite; }
+}
+@keyframes yoda-ear-right { 0%, 90%, 100% { rotate: 0deg; } 92% { rotate: -9deg; } 95% { rotate: 2deg; } }
+@keyframes yoda-ear-left { 0%, 90%, 100% { rotate: 0deg; } 92% { rotate: 8deg; } 95% { rotate: -2deg; } }
+.yoda-force__aura {
+  inset: -14% -10% -6%;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(ellipse at 40% 38%, color-mix(in srgb, var(--force-light) 38%, transparent), color-mix(in srgb, var(--force-mid) 14%, transparent) 45%, transparent 70%);
+  mix-blend-mode: screen;
+}
+/* The swamp beside the platform: the X-wing rises out of this clipped window (bottom = water line). */
+.force-swamp { left: 31%; top: 30%; width: 28%; height: 49%; overflow: hidden; pointer-events: none; }
+.swamp-xwing {
+  position: absolute; left: 18%; bottom: 0; width: 64%; height: auto;
+  transform: translateY(115%);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--force-light) 55%, transparent));
+}
+.swamp-ripples { left: 45%; top: 79%; width: 18%; height: 3.4%; translate: -50% -50%; pointer-events: none; }
+.swamp-ripples i { position: absolute; inset: 0; border: 2px solid color-mix(in srgb, var(--force-light) 60%, transparent); border-radius: 50%; opacity: 0; }
 .force-current {
   position: absolute;
   right: 0;

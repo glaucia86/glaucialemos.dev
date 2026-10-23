@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import Image from "next/image";
+import force from "./yoda-force.json";
 
 // Each character is one SVG pixel; the three silhouettes share one palette.
 const rockPalette: Record<string, string> = {
@@ -33,11 +33,59 @@ const rockLayers = [
 ];
 const fireflies = [[70, 40], [78, 30], [88, 52], [64, 62], [92, 22], [83, 70], [56, 48], [96, 58]];
 
+// X-wing raised from the swamp, nose left; same one-character-per-pixel convention as the rocks.
+const xwingPalette: Record<string, string> = {
+  o: "var(--xwing-outline)", l: "var(--xwing-light)", m: "var(--xwing-mid)", d: "var(--xwing-dark)",
+  r: "var(--energy-red)", c: "var(--xwing-canopy)", w: "var(--color-white)", e: "var(--color-accent-300)",
+  g: "var(--rock-moss)", G: "var(--rock-moss-light)",
+};
+const xwing = [
+  "................................................",
+  "..............ooooooooooooooooooooooooo.........",
+  "............oommmmmmmmmmmmmmmmmmmmmmmmmooo......",
+  "...........oddlllllllllllGGllllllllllllllmo.....",
+  "............ooooooooooooooGooorrrrlllllllo......",
+  "..........................o...ommmmmmmmmo.......",
+  ".............................olllllllllo........",
+  "...................ooooo....omggmmmmmmo.........",
+  "..................ocwccco..ollllllllloooooooo...",
+  "......oooooooooooocccccccooooooooooodmmmmmmmdo..",
+  "...ooommllllllllllllllllllglllllllllddddddddeeo.",
+  "..odmmmmmmmmrrrrrmmmmmmmmmmmrrrrrrmmddddddddeeo.",
+  "...ooddddggGmmmgmmmmmmggGmmGmmmmmmmmddddddddeeo.",
+  ".....oooooGoooooooooooooGoooooooooggdddddddddo..",
+  "..........o.............o..ommmmmmmmmoooooooo...",
+  "............................oddddgddddo.........",
+  ".............................ommGmmmmmmo........",
+  "..............................oddddggdddo.......",
+  "............oooooooooooooooooorrrrmmmGmmmo......",
+  "...........oddmmmmGmmmmmmmmmmmmmmmmmmmmmmdo.....",
+  "............ooddddddggddddddddddddddddgooo......",
+  "..............oooooooGoooooooooooooooGo.........",
+];
+// Horizontal runs of one colour keep the sprite to a few dozen rects.
+const xwingRuns = xwing.flatMap((row, y) => [...row.matchAll(/([^.])\1*/g)].map((match) => ({ x: match.index, y, width: match[0].length, pixel: match[1] })));
+const pct = (value: number) => `${value}%`;
+
 export function DagobahScene() {
   return <div className="hero-scene-layer hero-scene-layer--dagobah" data-paused="true" aria-hidden="true">
     <div className="scene-image-plane">
-      <div className="dagobah-character"><Image src="/pixel/home-yoda.jpg" alt="" width={1280} height={720} sizes="(max-width: 900px) 900px, 100vw" priority /></div>
-      <span className="force-glow"><span className="force-current" /></span>
+      <span className="force-glow" style={{ left: pct(force.palms[0].x), top: pct(force.palms[0].y) }}><span className="force-current" /></span>
+      {/* Yoda (AI-generated sprite layers): calm at rest, fully charged while the scene is held. */}
+      <div className="yoda-force" style={{ left: pct(force.box.left), top: pct(force.box.top), width: pct(force.box.width), height: pct(force.box.height) }}>
+        <span className="yoda-force__aura" />
+        <span className="yoda-force__part yoda-force__body" />
+        <span className="yoda-force__part yoda-force__robe" style={{ transformOrigin: force.origins.robe }} />
+        <span className="yoda-force__part yoda-force__ear yoda-force__ear--left" style={{ transformOrigin: force.origins.earLeft }} />
+        <span className="yoda-force__part yoda-force__ear yoda-force__ear--right" style={{ transformOrigin: force.origins.earRight }} />
+      </div>
+      {force.palms.map(({ x, y }, index) => <span className="force-palm force-palm--pose" key={index} style={{ left: pct(x), top: pct(y) }} />)}
+      <div className="force-swamp">
+        <svg className="swamp-xwing" viewBox="0 0 48 22" shapeRendering="crispEdges" focusable="false">
+          {xwingRuns.map(({ x, y, width, pixel }) => <rect key={`${x}-${y}`} x={x} y={y} width={width} height="1" fill={xwingPalette[pixel]} />)}
+        </svg>
+      </div>
+      <span className="swamp-ripples">{[0, 1, 2].map((ring) => <i key={ring} />)}</span>
       {rockLayers.map(({ depth, rocks }, layerIndex) => <div className={`force-depth force-depth--${depth}`} key={depth}>
         {rocks.map(({ x, y, size, shape, desktop }, index) => <span
           className={`force-rock${desktop ? " force-rock--desktop" : ""}`}

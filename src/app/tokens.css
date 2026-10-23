@@ -142,6 +142,7 @@
   --energy-green: #7cf29a;
   --energy-red: #ff4d5e;
   --energy-purple: #c58bff;
+  --energy-gold: #ffd166;
   --font-pixel-stack: var(--font-departure, "Courier New"), ui-monospace, monospace;
   --ease-hyper: cubic-bezier(.7, 0, .2, 1);
   --duration-boot: 2200ms;

@@ -68,15 +68,77 @@ await check("Force Push cria a onda de choque e não navega", async () => {
   await context.close();
 });
 
-await check("terminal alterna estados acessíveis", async () => {
+await check("segurar: Yoda muda para a pose da Força, levanta o X-wing e volta ao soltar", async () => {
+  const { context, page, errors } = await open();
+  const sprites = [];
+  page.on("request", (request) => { if (request.url().includes("/pixel/yoda-force/")) sprites.push(request.url()); });
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(2400);
+  const hero = page.locator(".home-hero-v2");
+  const layer = page.locator(".hero-scene-layer");
+  const opacity = (selector) => page.locator(selector).first().evaluate((element) => Number(getComputedStyle(element).opacity));
+  await page.mouse.move(1150, 450);
+  await page.mouse.down();
+  await page.waitForTimeout(800);
+  assert.equal(await hero.getAttribute("data-force-stage"), "force");
+  assert.equal(await layer.getAttribute("data-levitating"), "true");
+  assert.ok(await opacity(".yoda-force") > .9);
+  assert.ok(await opacity(".dagobah-character") < .1);
+  assert.ok(sprites.some((url) => url.endsWith("body.webp")));
+  await page.screenshot({ path: `${shots}/force-1440.png` });
+  await page.waitForTimeout(2600);
+  assert.equal(await hero.getAttribute("data-force-stage"), "xwing");
+  const ship = await page.locator(".swamp-xwing").boundingBox();
+  const water = await page.locator(".swamp-ripples").boundingBox();
+  assert.ok(ship && water && ship.y + ship.height < water.y + water.height / 2, "X-wing acima da água");
+  await page.screenshot({ path: `${shots}/xwing-1440.png` });
+  await page.mouse.up();
+  assert.equal(await hero.getAttribute("data-force-stage"), "idle");
+  await page.waitForTimeout(1500);
+  assert.ok(await opacity(".yoda-force") < .1);
+  assert.ok(await opacity(".dagobah-character") > .9);
+  assert.equal(await page.locator(".hero-copy h1").evaluate((element) => getComputedStyle(element).filter), "none");
+  assert.deepEqual(errors, []);
+  await context.close();
+});
+
+await check("a Jedi rebate os disparos pelo botão e pelo card", async () => {
+  const { context, page, errors } = await open();
+  await page.keyboard.press("Escape");
+  await page.locator("#jedi").scrollIntoViewIfNeeded();
+  await page.waitForTimeout(1200);
+  const button = page.getByRole("button", { name: "Rebater disparos" });
+  assert.ok(await button.isVisible());
+  await button.click();
+  await page.waitForTimeout(450);
+  assert.ok(await page.locator(".jedi-bolts .jedi-bolt").count() > 0);
+  assert.ok(await page.locator(".jedi-bolts .jedi-spark").count() > 0);
+  await page.screenshot({ path: `${shots}/jedi-deflect-1440.png` });
+  await page.waitForTimeout(1800);
+  assert.equal(await page.locator(".jedi-bolts .jedi-bolt").count(), 0);
+  await page.locator(".holo-card__frame").click();
+  await page.waitForTimeout(200);
+  assert.ok(await page.locator(".jedi-bolts .jedi-bolt").count() > 0);
+  assert.deepEqual(errors, []);
+  await context.close();
+});
+
+await check("terminal RAG alterna estados acessíveis", async () => {
   const { context, page } = await open({}, "en");
   await page.keyboard.press("Escape");
   await page.locator("#projetos").scrollIntoViewIfNeeded();
-  await page.getByRole("button", { name: "Corrected input" }).click();
-  assert.equal(await page.locator(".typescript-demo").getAttribute("data-state"), "valid");
-  assert.ok(await page.locator("#demo-corrected").isVisible());
-  await page.getByRole("button", { name: "Incorrect input" }).click();
-  assert.equal(await page.locator(".typescript-demo").getAttribute("data-state"), "invalid");
+  await page.getByRole("button", { name: "Question with sources" }).click();
+  assert.equal(await page.locator(".rag-demo").getAttribute("data-state"), "valid");
+  assert.ok(await page.locator("#demo-grounded").isVisible());
+  assert.match(await page.locator("#demo-grounded").innerText(), /retriever\.invoke\(question\)/);
+  await page.getByRole("button", { name: "Question without sources" }).click();
+  assert.equal(await page.locator(".rag-demo").getAttribute("data-state"), "invalid");
+  assert.match(await page.locator("#demo-ungrounded").innerText(), /capital of France/);
+  assert.equal(await page.locator(".holocron--featured a").getAttribute("href"), "https://github.com/Azure-Samples/serverless-chat-langchainjs");
+  const archive = page.locator(".holocron-list .holocron");
+  assert.equal(await archive.count(), 6);
+  const stars = await page.locator(".holocron-list [data-count]").evaluateAll((items) => items.map((item) => Number(item.dataset.count)));
+  assert.deepEqual(stars, [...stars].sort((a, b) => b - a));
   await context.close();
 });
 
@@ -93,9 +155,14 @@ await check("som fica desligado por padrão e persiste o opt-in", async () => {
 
 await check("movimento reduzido: sem boot, sem canvas, composição estática", async () => {
   const { context, page, errors } = await open({ reducedMotion: "reduce" });
+  await page.mouse.move(1150, 450);
+  await page.mouse.down(); await page.waitForTimeout(700); await page.mouse.up();
+  assert.equal(await page.locator(".yoda-force").getAttribute("data-loaded"), null);
+  assert.equal(await page.locator(".home-hero-v2").getAttribute("data-force-stage"), null);
   assert.notEqual(await page.evaluate(() => document.documentElement.dataset.boot), "pending");
   assert.equal(await visible(page, ".force-particles"), false);
   assert.equal(await visible(page, ".hud-hint"), false);
+  assert.equal(await visible(page, ".jedi-deflect"), false);
   assert.equal(await page.locator(".pin-spacer").count(), 0);
   await page.screenshot({ path: `${shots}/reduced-1440.png` });
   assert.deepEqual(errors, []);
@@ -106,7 +173,9 @@ await check("sem JavaScript: conteúdo completo e sem overlay", async () => {
   const { context, page } = await open({ javaScriptEnabled: false });
   assert.equal(await visible(page, ".boot"), false);
   assert.ok(await visible(page, ".hero-name"));
-  assert.ok(await page.locator("#demo-corrected").isVisible());
+  assert.ok(await page.locator("#demo-grounded").isVisible());
+  assert.ok(await page.locator("#demo-ungrounded").isVisible());
+  assert.equal(await visible(page, ".jedi-deflect"), false);
   await page.screenshot({ path: `${shots}/nojs-full.png`, fullPage: true });
   await context.close();
 });

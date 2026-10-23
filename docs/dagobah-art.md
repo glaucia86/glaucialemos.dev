@@ -27,5 +27,20 @@ brilho da mão, névoa/partículas CSS e folhagem SVG em primeiro plano.
 O plano lógico permanece em 1024×576, alinhado ao recorte da imagem por container
 queries; no celular, a cena ocupa uma região independente abaixo dos CTAs.
 
+## Pose da Força (outubro de 2026)
+
+Glaucia gerou com IA a mesma cena com Yoda na pose da Força (`docs/art/segments-yoda/yoda-home.jpg`,
+1792×1008) e os recortes por segmentação (`yoda.png`, `robe.png`, `pointy-ears/*`). Céu, cipós,
+folhagem, água e rocha ficaram guardados como arte-fonte: o enquadramento dessa cena difere do
+`home-yoda.jpg`, então eles não encaixam no fundo atual. Nada em `docs/art` vai para o deploy.
+
+`node scripts/build-yoda-force.mjs` gera as camadas em `public/pixel/yoda-force/` (corpo, manto e
+orelhas, webp sem perdas) e `src/components/home/yoda-force.json`. Orelhas e manto são localizados
+no sprite pela menor diferença de cor e recortados dos pixels do próprio sprite. Escala 0,75
+(equilíbrio entre a cabeça e a altura do Yoda original), com os pés ancorados em (873, 498) no
+plano 1280×720. As camadas só são baixadas quando a pessoa interage com a cena.
+
+O X-wing é um sprite SVG próprio de 48×22 pixels, desenhado no mesmo padrão das pedras.
+
 As imagens originais não foram sobrescritas. A conversão de PNG para WebP pode
 ser reproduzida com `node tests/prepare-assets.mjs` após `npm ci`.
