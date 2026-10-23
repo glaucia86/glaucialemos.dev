@@ -1,0 +1,33 @@
+{
+  "environment": "Chromium headless; production build; cold contexts; 390x844 DPR1; CPU 4x; latency 40ms; download 10Mbps; local server; 61-frame scroll round trip",
+  "runs": [
+    {
+      "lcp": 1776,
+      "cls": 0,
+      "jsBytes": 127668,
+      "ScriptDuration": 0.044971,
+      "LayoutDuration": 0.001664
+    },
+    {
+      "lcp": 608,
+      "cls": 0.000021364847937648557,
+      "jsBytes": 127668,
+      "ScriptDuration": 0.041406,
+      "LayoutDuration": 0.001995
+    },
+    {
+      "lcp": 612,
+      "cls": 0.000021364847937648557,
+      "jsBytes": 127668,
+      "ScriptDuration": 0.042701,
+      "LayoutDuration": 0.001792
+    }
+  ],
+  "median": {
+    "lcp": 612,
+    "cls": 0.000021364847937648557,
+    "jsBytes": 127668,
+    "ScriptDuration": 0.042701,
+    "LayoutDuration": 0.001792
+  }
+}

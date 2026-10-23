@@ -1,6 +1,7 @@
 "use client";
 import createGlobe from "cobe";
 import { useEffect, useRef } from "react";
+import { observeMotionActivity } from "@/lib/motion";
 
 // Cobe expects normalized RGB; resolve the same CSS tokens used by the UI.
 function globeColor(styles: CSSStyleDeclaration, token: string): [number, number, number] {
@@ -15,6 +16,7 @@ export default function EventGlobe({ markers }: { markers: { location: [number, 
     if (!canvas.current) return;
     let phi = 0;
     let frame = 0;
+    let active = false;
     const styles = getComputedStyle(canvas.current);
     const globe = createGlobe(canvas.current, {
       devicePixelRatio: 2, width: 700, height: 700, phi: 0, theta: .25,
@@ -25,14 +27,18 @@ export default function EventGlobe({ markers }: { markers: { location: [number, 
       markers,
     });
     const rotate = () => {
-      if (!document.documentElement.classList.contains("reduce-motion")) {
-        phi += .0025;
-        globe.update({ phi });
-      }
+      if (!active) return;
+      phi += .0025;
+      globe.update({ phi });
       frame = requestAnimationFrame(rotate);
     };
-    frame = requestAnimationFrame(rotate);
-    return () => { cancelAnimationFrame(frame); globe.destroy(); };
+    const stopObserving = observeMotionActivity(canvas.current, (next) => {
+      if (active === next) return;
+      active = next;
+      if (active) frame = requestAnimationFrame(rotate);
+      else cancelAnimationFrame(frame);
+    });
+    return () => { stopObserving(); cancelAnimationFrame(frame); globe.destroy(); };
   }, [markers]);
 
   return <canvas ref={canvas} className="globe" aria-hidden="true" />;

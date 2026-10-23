@@ -12,11 +12,13 @@ describe("redução de movimento", () => {
     expect(shouldReduceMotion(system, manual)).toBe(expected);
   });
 
-  it("a regra CSS central desliga animações e oculta as camadas das cenas", () => {
+  it("a regra CSS central desliga animações sem ocultar a composição estática", () => {
     const css = fs.readFileSync(path.join(process.cwd(), "src/app/globals.css"), "utf8");
 
     expect(css).toMatch(/html\.reduce-motion[^{}]*\.hero-scene-layer[^{}]*\{[^}]*animation\s*:\s*none\s*!important[^}]*\}/);
     expect(css).toMatch(/prefers-reduced-motion\s*:\s*reduce[\s\S]*\.hero-scene-layer[^{}]*\{[^}]*animation\s*:\s*none\s*!important[^}]*\}/);
+    const sceneRules = [...css.matchAll(/\.hero-scene-layer[^{}]*\{([^}]*)\}/g)];
+    for (const [, rule] of sceneRules) expect(rule).not.toMatch(/opacity\s*:\s*0/);
   });
 
   it("a regra central para o crawl e mantém o texto visível nas duas preferências", () => {

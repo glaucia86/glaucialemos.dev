@@ -1,4 +1,27 @@
 .hero-scene-layer{position:absolute;z-index:-1;inset:0;overflow:hidden;pointer-events:none}.hero-scene-layer>*{position:absolute;display:block;will-change:transform,opacity}
+.hero-scene-layer[data-paused="true"],
+.hero-scene-layer[data-paused="true"] * { animation-play-state: paused !important; }
+.dagobah-character {
+  left: 59.375%; top: 39.583333%; width: 16.25%; height: 30.416667%;
+  overflow: hidden;
+  /* Preserve the original pixels; the polygon follows ears, hand, robe and stick. */
+  clip-path: polygon(0 28%,6% 28%,10% 35%,20% 34%,20% 21%,15% 18%,15% 14%,29% 16%,34% 4%,46% 0,61% 2%,70% 12%,76% 14%,100% 15%,88% 26%,79% 28%,77% 34%,85% 43%,90% 60%,94% 94%,85% 98%,78% 94%,70% 100%,50% 97%,33% 97%,30% 91%,24% 89%,26% 70%,27% 58%,15% 51%,4% 42%,0 34%);
+}
+.dagobah-character img { position: absolute; width: 615.384615%; height: 328.767123%; max-width: none; left: -365.384615%; top: -130.136986%; image-rendering: pixelated; }
+.dagobah-atmosphere { inset: 0; transform: translate(var(--pointer-x, 0px), var(--pointer-y, 0px)); transition: transform 600ms ease-out; }
+.dagobah-mist { position: absolute; width: 80%; height: 24%; left: 25%; top: 58%; background: radial-gradient(ellipse, color-mix(in srgb, var(--force-mid) 15%, transparent), transparent 70%); animation: dagobah-mist 18s ease-in-out infinite alternate; }
+.dagobah-mist--front { top: 78%; left: 45%; width: 60%; height: 20%; animation-delay: -9s; animation-duration: 24s; }
+.dagobah-mote { position: absolute; left: calc(48% + var(--mote-x, 0%)); top: calc(30% + var(--mote-y, 0%)); width: 2px; height: 2px; background: var(--force-light); opacity: .3; animation: dagobah-mote 7s steps(8, end) infinite; }
+.dagobah-mote:nth-of-type(2) { --mote-x: 9%; --mote-y: 29%; animation-delay: -2s; }
+.dagobah-mote:nth-of-type(3) { --mote-x: 20%; --mote-y: 8%; animation-delay: -4s; }
+.dagobah-mote:nth-of-type(4) { --mote-x: 33%; --mote-y: 20%; animation-delay: -1s; }
+.dagobah-mote:nth-of-type(5) { --mote-x: 28%; --mote-y: 42%; animation-delay: -5s; }
+.dagobah-mote:nth-of-type(6) { --mote-x: 13%; --mote-y: 47%; animation-delay: -3s; }
+.dagobah-mote:nth-of-type(7) { --mote-x: 40%; --mote-y: 37%; animation-delay: -6s; }
+.dagobah-foreground { inset: 0; width: 100%; height: 100%; transform: translate(calc(var(--pointer-x, 0px) * -1.5), calc(var(--pointer-y, 0px) * -1)); transition: transform 600ms ease-out; }
+@keyframes dagobah-mist { from { transform: translateX(-3%); opacity: .4; } to { transform: translateX(4%); opacity: .8; } }
+@keyframes dagobah-mote { 0%,100% { transform: translateY(0); opacity: .15; } 50% { transform: translate(4px,-14px); opacity: .7; } }
+@media (max-width: 900px) { .dagobah-mote:nth-of-type(n+4), .dagobah-mist--front { display: none; } }
 .hero-scene-layer--tatooine .scene-image-plane {
   left: 0;
   top: 0;

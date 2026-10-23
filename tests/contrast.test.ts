@@ -35,6 +35,10 @@ function contrast(foreground: string, background: string): number {
 
 // Changing a semantic token to a low-contrast shade must fail its real usage pair.
 const pairs = [
+  ['demo keywords / dark', '--color-primary-300', '--surface-dark', 4.5],
+  ['demo types / dark', '--color-accent-300', '--surface-dark', 4.5],
+  ['map source / dark', '--color-accent-200', '--surface-dark', 4.5],
+  ['selected country / light purple', '--color-primary-950', '--color-primary-200', 4.5],
   ["texto / claro", "--text-body", "--surface-light", 4.5],
   ["texto secundário / suave", "--text-muted", "--surface-soft", 4.5],
   ["título / claro", "--text-heading", "--surface-light", 4.5],
@@ -47,7 +51,14 @@ const pairs = [
   ["link primary / suave", "--link", "--surface-soft", 4.5],
   ["link secondary / claro", "--link-hover", "--surface-light", 4.5],
   ["link secondary / suave", "--link-hover", "--surface-soft", 4.5],
-  ["link / tag", "--link", "--color-primary-100", 4.5],
+  ["link / tag", "--link", "--tag-surface", 4.5],
+  ["título / elevado", "--text-heading", "--surface-raised", 4.5],
+  ["texto secundário / elevado", "--text-muted", "--surface-raised", 4.5],
+  ["energia azul / espaço", "--energy-blue", "--surface-dark", 4.5],
+  ["energia verde / espaço", "--energy-green", "--surface-dark", 4.5],
+  ["energia vermelha / espaço", "--energy-red", "--surface-dark", 4.5],
+  ["energia roxa / espaço", "--energy-purple", "--surface-dark", 4.5],
+  ["foco / claro", "--focus", "--surface-light", 3],
   ["seleção / primary", "--text-inverse", "--color-primary", 4.5],
   ["success / claro", "--color-success-text", "--surface-light", 4.5],
   ["warning / suave", "--color-warning-text", "--surface-soft", 4.5],

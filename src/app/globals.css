@@ -7,7 +7,7 @@
 
 html {
   background: var(--surface-light);
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {
@@ -774,11 +774,6 @@ footer small {
   }
 }
 
-@media(pointer:fine) {
-  a,button,select,summary {
-    cursor: var(--cursor-saber);
-  }
-}
 
 @media(max-width:900px) {
   .site-header {
@@ -909,7 +904,6 @@ html.reduce-motion .crawl > div {
 html.reduce-motion .hero-scene-layer,
 html.reduce-motion .hero-scene-layer * {
   animation: none !important;
-  opacity: 0 !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -926,7 +920,6 @@ html.reduce-motion .hero-scene-layer * {
   .hero-scene-layer,
   .hero-scene-layer * {
     animation: none !important;
-    opacity: 0 !important;
   }
 }
 

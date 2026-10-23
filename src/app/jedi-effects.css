@@ -1,0 +1,92 @@
+/* Both layers share the original 3:4 plane and one crop, including without JS. */
+.jedi-portrait { min-width: 0; }
+.jedi-portrait .portrait-frame { position: relative; }
+.portrait-viewport {
+  position: relative;
+  height: clamp(340px, 36vw, 480px);
+  overflow: hidden;
+  border-radius: 2px;
+  container-type: size;
+}
+.portrait-image-plane {
+  position: absolute;
+  width: max(100cqw, 75cqh);
+  height: max(100cqh, 133.333333cqw);
+  left: 50%; top: 23%;
+  transform: translate(-50%, -23%);
+}
+.portrait-image-plane > img,
+.portrait-image-plane > svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; max-width: none; border-radius: 0; }
+.jedi-blade, .jedi-portrait .portrait-frame::after {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--jedi-duration-out) var(--ease-out);
+}
+.jedi-blade path { fill: none; stroke-linecap: round; }
+.jedi-blade__halo { stroke: var(--jedi-blue); stroke-width: 44; opacity: var(--jedi-halo-opacity); filter: blur(8px); }
+.jedi-blade__edge { stroke: var(--jedi-blue); stroke-width: 26; opacity: .55; }
+.jedi-blade__core { stroke: var(--jedi-core); stroke-width: 13; }
+.jedi-portrait .portrait-frame::after {
+  content: "";
+  position: absolute; inset: 1px;
+  box-shadow: inset 6px 0 10px -5px var(--jedi-blue), inset 0 0 0 1px color-mix(in srgb, var(--jedi-blue) 35%, transparent);
+}
+@media (hover: hover) and (pointer: fine) {
+  .jedi-portrait[data-motion-ready="true"]:has(.portrait-frame:hover) .jedi-blade,
+  .jedi-portrait[data-motion-ready="true"]:has(.portrait-frame:hover) .portrait-frame::after { opacity: 1; transition-duration: var(--jedi-duration-in); }
+}
+.about-preview:has(.trajectory-link:focus-visible) .jedi-portrait[data-motion-ready="true"] .jedi-blade,
+.about-preview:has(.trajectory-link:focus-visible) .jedi-portrait[data-motion-ready="true"] .portrait-frame::after { opacity: 1; transition-duration: var(--jedi-duration-in); }
+.jedi-portrait[data-motion-ready="true"][data-pulse="active"] .jedi-blade { animation: jedi-pulse var(--jedi-duration-pulse) ease-in-out; }
+.jedi-portrait[data-motion-ready="true"][data-pulse="active"] .portrait-frame::after { animation: jedi-reflection-pulse var(--jedi-duration-pulse) ease-in-out; }
+@keyframes jedi-pulse { 0%, 100% { opacity: 0; } 45% { opacity: 1; } }
+@keyframes jedi-reflection-pulse { 0%, 100% { opacity: 0; } 45% { opacity: var(--jedi-reflection-opacity); } }
+
+/* This rail fits inside the existing gutter; fixed positioning never affects flow. */
+.reading-progress {
+  display: none;
+  position: fixed;
+  z-index: 30;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: var(--progress-simple-gutter);
+  height: var(--progress-simple-height);
+  pointer-events: none;
+  user-select: none;
+}
+.reading-progress[data-ready="true"] { display: block; }
+.reading-progress__track {
+  position: absolute;
+  width: var(--progress-simple-width);
+  height: 100%;
+  left: 50%; top: 0;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--jedi-blue) 18%, transparent);
+}
+.reading-progress__fill { position: absolute; inset: 0; border-radius: inherit; background: var(--jedi-blue); transform: scaleY(0); transform-origin: bottom; transition: none; }
+.reading-progress__hilt { display: none; }
+.reading-progress__metal { fill: var(--color-neutral-400); }
+.reading-progress__grip { fill: var(--color-neutral-800); }
+.reading-progress__ridges { fill: var(--color-neutral-600); }
+@media (min-width: 1100px) and (hover: hover) and (pointer: fine) {
+  .reading-progress { width: var(--progress-gutter); height: var(--progress-height); }
+  .reading-progress__track { width: 5px; height: var(--progress-blade-height); }
+  .reading-progress__fill { background: var(--jedi-core); box-shadow: 0 0 0 1px var(--jedi-blue), 0 0 7px 2px color-mix(in srgb, var(--jedi-blue) 60%, transparent); }
+  .reading-progress__hilt { display: block; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 16px; height: var(--progress-hilt-height); }
+}
+html.reduce-motion .jedi-blade,
+html.reduce-motion .jedi-portrait .portrait-frame::after { opacity: 0 !important; animation: none !important; transition: none !important; }
+html.reduce-motion .reading-progress { width: var(--progress-simple-gutter); height: var(--progress-simple-height); }
+html.reduce-motion .reading-progress__track { width: var(--progress-simple-width); height: 100%; }
+html.reduce-motion .reading-progress__fill { background: var(--jedi-blue); box-shadow: none; transition: none; }
+html.reduce-motion .reading-progress__hilt { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .jedi-blade, .jedi-portrait .portrait-frame::after { opacity: 0 !important; animation: none !important; transition: none !important; }
+  .reading-progress { width: var(--progress-simple-gutter); height: var(--progress-simple-height); }
+  .reading-progress__track { width: var(--progress-simple-width); height: 100%; }
+  .reading-progress__fill { background: var(--jedi-blue); box-shadow: none; transition: none; }
+  .reading-progress__hilt { display: none; }
+}
+@media (max-width: 900px) { .portrait-viewport { height: 440px; } }
+@media (max-width: 600px) { .portrait-viewport { height: 360px; } }

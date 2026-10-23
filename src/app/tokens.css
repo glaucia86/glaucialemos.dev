@@ -58,13 +58,20 @@
   --color-brand-wine: #a73457;
 
   --color-success: #388653;
-  --color-success-text: #246239;
+  --color-success-text: #7fd39a;
   --color-warning: var(--color-accent-secondary);
-  --color-warning-text: #765000;
+  --color-warning-text: #f8e838;
   --color-danger: var(--color-brand-wine);
-  --color-danger-text: #8b2546;
+  --color-danger-text: #ff9bb8;
   --color-info: var(--color-primary);
-  --color-info-text: var(--color-primary-700);
+  --color-info-text: var(--color-primary-200);
+
+  /* HoloNet space surfaces: near-black tints of the brand purple. */
+  --color-space-0: #07050d;
+  --color-space-1: #0d0a17;
+  --color-space-2: #151023;
+  --color-space-3: #1f1832;
+  --color-space-line: #2e2547;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -88,23 +95,59 @@
 }
 
 :root {
-  color-scheme: light;
-  --surface-light: var(--color-white);
-  --surface-soft: var(--color-neutral-50);
-  --surface-dark: var(--color-primary-950);
-  --text-body: var(--color-neutral-800);
-  --text-heading: var(--color-primary-900);
-  --text-muted: var(--color-neutral-600);
+  --content-width: 1180px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --section-space: clamp(4.5rem, 9vw, 8rem);
+  --surface-editorial: #f6f3f8;
+  --scene-foreground: #082b25;
+  --scene-foreground-light: #174137;
+  --duration-fast: 180ms;
+  --duration-normal: 300ms;
+  --duration-enter: 600ms;
+  /* Jedi accents are sampled from the portrait, independent of scene pigments. */
+  --jedi-blue: #08a9fa;
+  --jedi-core: #efffff;
+  --jedi-halo-opacity: .38;
+  --jedi-reflection-opacity: .65;
+  --jedi-duration-in: 220ms;
+  --jedi-duration-out: var(--duration-normal);
+  --jedi-duration-pulse: var(--duration-enter);
+  --progress-height: 168px;
+  --progress-blade-height: 144px;
+  --progress-hilt-height: 24px;
+  --progress-gutter: 36px;
+  --progress-simple-height: 112px;
+  --progress-simple-width: 3px;
+  --progress-simple-gutter: 8px;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --shadow-lift: 0 16px 40px color-mix(in srgb, var(--color-space-0) 60%, transparent);
+  color-scheme: dark;
+  --surface-light: var(--color-space-1);
+  --surface-soft: var(--color-space-2);
+  --surface-raised: var(--color-space-3);
+  --surface-dark: var(--color-space-0);
+  --text-body: var(--color-neutral-200);
+  --text-heading: var(--color-white);
+  --text-muted: var(--color-neutral-300);
   --text-inverse: var(--color-white);
   --text-inverse-muted: var(--color-neutral-200);
   --text-on-accent: var(--color-neutral-950);
   --accent-light: var(--color-accent-200);
-  --link: var(--color-primary-700);
-  --link-hover: var(--color-secondary-700);
-  --border: var(--color-primary-200);
+  --link: var(--color-primary-200);
+  --link-hover: var(--color-accent-200);
+  --tag-surface: var(--color-space-3);
+  --border: var(--color-space-line);
+  --hud-line: var(--color-space-line);
+  --energy-blue: var(--jedi-blue);
+  --energy-green: #7cf29a;
+  --energy-red: #ff4d5e;
+  --energy-purple: #c58bff;
+  --font-pixel-stack: var(--font-departure, "Courier New"), ui-monospace, monospace;
+  --ease-hyper: cubic-bezier(.7, 0, .2, 1);
+  --duration-boot: 2200ms;
   --border-inverse: color-mix(in srgb, var(--color-white) 22%, transparent);
   --surface-glass: color-mix(in srgb, var(--color-white) 6%, transparent);
-  --focus: var(--color-primary);
+  --focus: var(--color-accent-200);
   --focus-inverse: var(--accent-light);
   --gradient-brand: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-brand-wine));
   --gradient-header: linear-gradient(90deg, var(--color-primary-950), var(--color-brand-dark));
@@ -146,6 +189,7 @@
 @theme inline {
   --font-sans: var(--font-geist, ui-sans-serif), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono, "Courier New"), monospace;
+  --font-pixel: var(--font-pixel-stack);
   --color-surface: var(--surface-light);
   --color-surface-soft: var(--surface-soft);
   --color-surface-dark: var(--surface-dark);

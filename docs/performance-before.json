@@ -1,0 +1,21 @@
+{
+  "environment": "Chromium headless; production build; cold contexts; 390x844 DPR1; CPU 4x; latency 40ms; download 10Mbps; local server",
+  "runs": [
+    {
+      "lcp": 1600,
+      "cls": 0
+    },
+    {
+      "lcp": 420,
+      "cls": 0.00003775295431023907
+    },
+    {
+      "lcp": 416,
+      "cls": 0.00003775295431023907
+    }
+  ],
+  "median": {
+    "lcp": 420,
+    "cls": 0.00003775295431023907
+  }
+}

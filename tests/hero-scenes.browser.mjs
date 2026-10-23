@@ -11,7 +11,7 @@ try {
   for (const width of [390, 900, 901, 1280, 1920]) {
     await page.setViewportSize({ width, height: 900 });
     for (const route of ["/pt", "/pt/servicos"]) {
-      await page.goto(`${baseURL}${route}`);
+      await page.goto(`${baseURL}${route}`, { waitUntil: "domcontentloaded" });
       const plane = page.locator(".scene-image-plane");
       await plane.waitFor({ state: "attached", timeout: 10000 });
       await page.waitForFunction(() => document.querySelector(".motion-toggle")?.getAttribute("aria-pressed") === "false");
@@ -53,7 +53,7 @@ try {
           }, time);
           assert.ok(safe, `${route}, ${width}px: stones overlap text or cross x=430 at ${time}ms`);
         }
-        assert.ok(await page.locator(".crawl > div").evaluate((element) => element.getAnimations().length > 0));
+        assert.equal(await page.locator(".dagobah-character").count(), 1);
       } else {
         assert.equal(await page.locator(".saber-hilt").count(), 0, "Use the image's single hilt");
         const saber = await plane.evaluate((element) => {
@@ -109,27 +109,26 @@ try {
         const stopped = await page.locator(".hero-scene-layer").evaluate((layer) =>
           [layer, ...layer.querySelectorAll("*")].every((element) => {
             const style = getComputedStyle(element);
-            return style.animationName === "none" && style.opacity === "0";
+            return style.animationName === "none";
           }),
         );
         assert.ok(stopped, `${route}, ${width}px: ${preference} reduced-motion`);
+        assert.equal(await page.locator(".hero-scene-layer").evaluate((layer) => getComputedStyle(layer).opacity), "1");
         if (route === "/pt") {
-          const crawl = await page.locator(".crawl > div").evaluate((element) => {
+          const character = await page.locator(".dagobah-character").evaluate((element) => {
             const style = getComputedStyle(element);
             return { animations: element.getAnimations().length, transform: style.transform, opacity: style.opacity, height: element.getBoundingClientRect().height };
           });
-          assert.equal(crawl.animations, 0, `${preference}: crawl must stop`);
-          assert.equal(crawl.transform, "none");
-          assert.equal(crawl.opacity, "1");
-          assert.ok(crawl.height > 0);
+          assert.equal(character.animations, 0);
+          assert.equal(character.opacity, "1");
+          assert.ok(character.height > 0);
         }
         if (preference === "manual") await page.locator(".motion-toggle").click();
       }
       await page.emulateMedia({ reducedMotion: "no-preference" });
-      if (route === "/pt") assert.ok(await page.locator(".crawl > div").evaluate((element) => element.getAnimations().length > 0));
     }
   }
-  console.log("PASS: image alignment, stones, saber, mobile composition and both reduced-motion preferences (including crawl) at 5 viewport widths.");
+  console.log("PASS: image alignment, stones, saber, mobile composition and visible static scenes with both reduced-motion preferences at 5 viewport widths.");
 } finally {
   await browser.close();
 }

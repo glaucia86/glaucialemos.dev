@@ -9,3 +9,8 @@ coverage/
 test-results/
 playwright-report/
 *.tsbuildinfo
+docs/screenshots/editorial/*
+!docs/screenshots/editorial/home-pt-1280.png
+!docs/screenshots/editorial/home-pt-390.png
+!docs/screenshots/editorial/hero-pt-1280.png
+!docs/screenshots/editorial/hero-pt-390.png

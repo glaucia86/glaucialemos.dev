@@ -24,11 +24,11 @@ const messages = {
 try {
   for (const lang of ["pt", "en", "es"]) {
     const routes = [
-      ["", `/${lang}/servicos`, youtube],
+      ["", `/${lang}/servicos`, "#projetos"],
       ["/servicos", "#contato", `/${lang}/eventos`],
       ["/sobre", "#trajetoria", linkedin],
       ["/projetos", github, "#projetos"],
-      ["/conteudo", "#artigos", linkedin],
+      ["/conteudo", "#artigos", youtube],
       ["/eventos", `/${lang}/servicos?assunto=palestra#contato`, "#eventos"],
       ["/pagina-inexistente", `/${lang}`, null],
     ];
@@ -47,7 +47,7 @@ try {
       const links = page.locator(".page-hero .actions a");
       await expect(links).toHaveCount(secondary ? 2 : 1);
       if (route === "") {
-        await expect(links.nth(1)).toContainText(youtubeLabels[lang]);
+        await expect(links.nth(1)).toHaveAttribute("href", "#projetos");
         await footerLinks.first().focus();
         await page.keyboard.press("Tab");
         await expect(footerLinks.nth(1)).toBeFocused();
@@ -56,6 +56,7 @@ try {
           return link.matches(":focus-visible") && style.outlineStyle === "solid" && parseFloat(style.outlineWidth) >= 3;
         }));
       }
+      if (route === "/conteudo") await expect(links.nth(1)).toContainText(youtubeLabels[lang]);
       if (route === "/servicos") await expect(page.locator("#contato > a")).toHaveAttribute("href", linkedin);
       for (const [index, href] of [primary, secondary].filter(Boolean).entries()) {
         const link = links.nth(index);
