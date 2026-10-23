@@ -1,11 +1,10 @@
 // Run against a running app: node tests/hero-ctas.browser.mjs
 import assert from "node:assert/strict";
-import { expect } from "@playwright/test";
+import { chromium, expect } from "@playwright/test";
 
-import { baseURL, launchBrowser } from "./browser-utils.mjs";
-
-const browser = await launchBrowser();
+const browser = await chromium.launch();
 const page = await browser.newPage();
+const baseURL = process.env.BASE_URL || "http://127.0.0.1:3100";
 const github = "https://github.com/glaucia86";
 const linkedin = "https://www.linkedin.com/in/glaucialemos";
 const youtube = "https://www.youtube.com/@GlauciaLemos";
@@ -15,7 +14,7 @@ const socials = [
   ["LinkedIn", linkedin],
   ["Instagram", "https://www.instagram.com/glaucia.lemos.dev"],
 ];
-const eventLabels = { pt: "Veja eventos", en: "See events", es: "Ver eventos" };
+const youtubeLabels = { pt: "Assistir no YouTube", en: "Watch on YouTube", es: "Ver en YouTube" };
 const messages = {
   pt: "Gostaria de convidar você para palestrar.",
   en: "I would like to invite you to speak at an event.",
@@ -25,7 +24,7 @@ const messages = {
 try {
   for (const lang of ["pt", "en", "es"]) {
     const routes = [
-      ["", `/${lang}/servicos`, `/${lang}/eventos`],
+      ["", `/${lang}/servicos`, "#projetos"],
       ["/servicos", "#contato", `/${lang}/eventos`],
       ["/sobre", "#trajetoria", linkedin],
       ["/projetos", github, "#projetos"],
@@ -48,7 +47,7 @@ try {
       const links = page.locator(".page-hero .actions a");
       await expect(links).toHaveCount(secondary ? 2 : 1);
       if (route === "") {
-        await expect(links.nth(1)).toContainText(eventLabels[lang]);
+        await expect(links.nth(1)).toHaveAttribute("href", "#projetos");
         await footerLinks.first().focus();
         await page.keyboard.press("Tab");
         await expect(footerLinks.nth(1)).toBeFocused();
@@ -57,6 +56,7 @@ try {
           return link.matches(":focus-visible") && style.outlineStyle === "solid" && parseFloat(style.outlineWidth) >= 3;
         }));
       }
+      if (route === "/conteudo") await expect(links.nth(1)).toContainText(youtubeLabels[lang]);
       if (route === "/servicos") await expect(page.locator("#contato > a")).toHaveAttribute("href", linkedin);
       for (const [index, href] of [primary, secondary].filter(Boolean).entries()) {
         const link = links.nth(index);

@@ -1,0 +1,1655 @@
+[
+  {
+    "lang": "pt",
+    "width": 320,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".hero-link > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "div:nth-child(2) > .eyebrow > .section-number"
+          ],
+          [
+            "ol > li:nth-child(2) > p"
+          ],
+          [
+            "ol > li:nth-child(3) > p"
+          ],
+          [
+            ".section-intro > div > .eyebrow"
+          ],
+          [
+            ".section-intro > div > .eyebrow > .section-number"
+          ],
+          [
+            "#home-projects-title"
+          ],
+          [
+            ".text-link[href$=\"projetos\"]"
+          ],
+          [
+            ".demo-topline > span:nth-child(1)"
+          ],
+          [
+            ".demo-topline > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-incorrect\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-corrected\"]"
+          ],
+          [
+            "#demo-corrected > .demo-state"
+          ],
+          [
+            "#demo-corrected > pre > code"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(1)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(2)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(3)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(4)"
+          ],
+          [
+            ".code-valid"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dd"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dd"
+          ],
+          [
+            ".demo-note"
+          ],
+          [
+            ".project-feature > .eyebrow"
+          ],
+          [
+            ".project-feature > h3"
+          ],
+          [
+            ".project-feature > p:nth-child(3)"
+          ],
+          [
+            ".repository-name"
+          ],
+          [
+            ".project-feature > .repository-stars"
+          ],
+          [
+            ".project-feature > .text-link"
+          ],
+          [
+            ".project-rows > article:nth-child(1) > .project-index"
+          ],
+          [
+            "article:nth-child(1) > h3 > a"
+          ],
+          [
+            "article:nth-child(1) > p"
+          ],
+          [
+            "article:nth-child(1) > .repository-stars"
+          ],
+          [
+            ".project-rows > article:nth-child(2) > .project-index"
+          ],
+          [
+            "article:nth-child(2) > h3 > a"
+          ],
+          [
+            "article:nth-child(2) > p"
+          ],
+          [
+            "article:nth-child(2) > .repository-stars"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(15) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(15) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(15) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(15) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(15) > a"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "lang": "pt",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".page-hero__content > .eyebrow"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "h1 > span"
+          ],
+          [
+            ".page-hero__subtitle"
+          ],
+          [
+            ".hero-link"
+          ],
+          [
+            ".hero-link > span[aria-hidden=\"true\"]"
+          ],
+          [
+            ".scene-caption"
+          ],
+          [
+            ".scene-caption > span:nth-child(2)"
+          ],
+          [
+            "figcaption"
+          ],
+          [
+            "figcaption > span"
+          ],
+          [
+            "div:nth-child(2) > .eyebrow > .section-number"
+          ],
+          [
+            "li:nth-child(1) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(1) > p"
+          ],
+          [
+            "ol > li:nth-child(1) > a"
+          ],
+          [
+            "li:nth-child(2) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(2) > p"
+          ],
+          [
+            "ol > li:nth-child(2) > a"
+          ],
+          [
+            "li:nth-child(3) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(3) > p"
+          ],
+          [
+            "ol > li:nth-child(3) > a"
+          ],
+          [
+            ".section-intro > div > .eyebrow"
+          ],
+          [
+            ".section-intro > div > .eyebrow > .section-number"
+          ],
+          [
+            "#home-projects-title"
+          ],
+          [
+            ".text-link[href$=\"projetos\"]"
+          ],
+          [
+            ".demo-topline > span:nth-child(1)"
+          ],
+          [
+            ".demo-topline > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-incorrect\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-corrected\"]"
+          ],
+          [
+            "#demo-corrected > .demo-state"
+          ],
+          [
+            "#demo-corrected > pre > code"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(1)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(2)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(3)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(4)"
+          ],
+          [
+            ".code-valid"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dd"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dd"
+          ],
+          [
+            ".demo-note"
+          ],
+          [
+            ".project-feature > .eyebrow"
+          ],
+          [
+            ".project-feature > h3"
+          ],
+          [
+            ".project-feature > p:nth-child(3)"
+          ],
+          [
+            ".repository-name"
+          ],
+          [
+            ".project-feature > .repository-stars"
+          ],
+          [
+            ".project-feature > .text-link"
+          ],
+          [
+            ".project-rows > article:nth-child(1) > .project-index"
+          ],
+          [
+            "article:nth-child(1) > h3 > a"
+          ],
+          [
+            "article:nth-child(1) > p"
+          ],
+          [
+            "article:nth-child(1) > .repository-stars"
+          ],
+          [
+            ".project-rows > article:nth-child(2) > .project-index"
+          ],
+          [
+            "article:nth-child(2) > h3 > a"
+          ],
+          [
+            "article:nth-child(2) > p"
+          ],
+          [
+            "article:nth-child(2) > .repository-stars"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta > span:nth-child(2)"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "lang": "en",
+    "width": 320,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".hero-link > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "div:nth-child(2) > .eyebrow > .section-number"
+          ],
+          [
+            "ol > li:nth-child(2) > p"
+          ],
+          [
+            "ol > li:nth-child(3) > p"
+          ],
+          [
+            ".section-intro > div > .eyebrow"
+          ],
+          [
+            ".section-intro > div > .eyebrow > .section-number"
+          ],
+          [
+            "#home-projects-title"
+          ],
+          [
+            ".text-link[href$=\"projetos\"]"
+          ],
+          [
+            ".demo-topline > span:nth-child(1)"
+          ],
+          [
+            ".demo-topline > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-incorrect\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-corrected\"]"
+          ],
+          [
+            "#demo-corrected > .demo-state"
+          ],
+          [
+            "#demo-corrected > pre > code"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(1)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(2)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(3)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(4)"
+          ],
+          [
+            ".code-valid"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dd"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dd"
+          ],
+          [
+            ".demo-note"
+          ],
+          [
+            ".project-feature > .eyebrow"
+          ],
+          [
+            ".project-feature > h3"
+          ],
+          [
+            ".project-feature > p:nth-child(3)"
+          ],
+          [
+            ".repository-name"
+          ],
+          [
+            ".project-feature > .repository-stars"
+          ],
+          [
+            ".project-feature > .text-link"
+          ],
+          [
+            ".project-rows > article:nth-child(1) > .project-index"
+          ],
+          [
+            "article:nth-child(1) > h3 > a"
+          ],
+          [
+            "article:nth-child(1) > p"
+          ],
+          [
+            "article:nth-child(1) > .repository-stars"
+          ],
+          [
+            ".project-rows > article:nth-child(2) > .project-index"
+          ],
+          [
+            "article:nth-child(2) > h3 > a"
+          ],
+          [
+            "article:nth-child(2) > p"
+          ],
+          [
+            "article:nth-child(2) > .repository-stars"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(6) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(6) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(6) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(6) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(6) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(14) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(14) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(14) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(14) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(14) > a"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "lang": "en",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".page-hero__content > .eyebrow"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "h1 > span"
+          ],
+          [
+            ".page-hero__subtitle"
+          ],
+          [
+            ".hero-link"
+          ],
+          [
+            ".hero-link > span[aria-hidden=\"true\"]"
+          ],
+          [
+            ".scene-caption"
+          ],
+          [
+            ".scene-caption > span:nth-child(2)"
+          ],
+          [
+            "figcaption"
+          ],
+          [
+            "figcaption > span"
+          ],
+          [
+            "div:nth-child(2) > .eyebrow > .section-number"
+          ],
+          [
+            "li:nth-child(1) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(1) > p"
+          ],
+          [
+            "ol > li:nth-child(1) > a"
+          ],
+          [
+            "li:nth-child(2) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(2) > p"
+          ],
+          [
+            "ol > li:nth-child(2) > a"
+          ],
+          [
+            "li:nth-child(3) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(3) > p"
+          ],
+          [
+            "ol > li:nth-child(3) > a"
+          ],
+          [
+            ".section-intro > div > .eyebrow"
+          ],
+          [
+            ".section-intro > div > .eyebrow > .section-number"
+          ],
+          [
+            "#home-projects-title"
+          ],
+          [
+            ".text-link[href$=\"projetos\"]"
+          ],
+          [
+            ".demo-topline > span:nth-child(1)"
+          ],
+          [
+            ".demo-topline > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-incorrect\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-corrected\"]"
+          ],
+          [
+            "#demo-corrected > .demo-state"
+          ],
+          [
+            "#demo-corrected > pre > code"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(1)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(2)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(3)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(4)"
+          ],
+          [
+            ".code-valid"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dd"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dd"
+          ],
+          [
+            ".demo-note"
+          ],
+          [
+            ".project-feature > .eyebrow"
+          ],
+          [
+            ".project-feature > h3"
+          ],
+          [
+            ".project-feature > p:nth-child(3)"
+          ],
+          [
+            ".repository-name"
+          ],
+          [
+            ".project-feature > .repository-stars"
+          ],
+          [
+            ".project-feature > .text-link"
+          ],
+          [
+            ".project-rows > article:nth-child(1) > .project-index"
+          ],
+          [
+            "article:nth-child(1) > h3 > a"
+          ],
+          [
+            "article:nth-child(1) > p"
+          ],
+          [
+            "article:nth-child(1) > .repository-stars"
+          ],
+          [
+            ".project-rows > article:nth-child(2) > .project-index"
+          ],
+          [
+            "article:nth-child(2) > h3 > a"
+          ],
+          [
+            "article:nth-child(2) > p"
+          ],
+          [
+            "article:nth-child(2) > .repository-stars"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(7) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(8) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(9) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(10) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(11) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(12) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(13) > a"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(14) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(14) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brazil\"] > li:nth-child(14) > .event-meta > span:nth-child(2)"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "lang": "es",
+    "width": 320,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".hero-link > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "div:nth-child(2) > .eyebrow > .section-number"
+          ],
+          [
+            "ol > li:nth-child(2) > p"
+          ],
+          [
+            "ol > li:nth-child(3) > p"
+          ],
+          [
+            ".section-intro > div > .eyebrow"
+          ],
+          [
+            ".section-intro > div > .eyebrow > .section-number"
+          ],
+          [
+            "#home-projects-title"
+          ],
+          [
+            ".text-link[href$=\"projetos\"]"
+          ],
+          [
+            ".demo-topline > span:nth-child(1)"
+          ],
+          [
+            ".demo-topline > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-incorrect\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-corrected\"]"
+          ],
+          [
+            "#demo-corrected > .demo-state"
+          ],
+          [
+            "#demo-corrected > pre > code"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(1)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(2)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(3)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(4)"
+          ],
+          [
+            ".code-valid"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dd"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dd"
+          ],
+          [
+            ".demo-note"
+          ],
+          [
+            ".project-feature > .eyebrow"
+          ],
+          [
+            ".project-feature > h3"
+          ],
+          [
+            ".project-feature > p:nth-child(3)"
+          ],
+          [
+            ".repository-name"
+          ],
+          [
+            ".project-feature > .repository-stars"
+          ],
+          [
+            ".project-feature > .text-link"
+          ],
+          [
+            ".project-rows > article:nth-child(1) > .project-index"
+          ],
+          [
+            "article:nth-child(1) > h3 > a"
+          ],
+          [
+            "article:nth-child(1) > p"
+          ],
+          [
+            "article:nth-child(1) > .repository-stars"
+          ],
+          [
+            ".project-rows > article:nth-child(2) > .project-index"
+          ],
+          [
+            "article:nth-child(2) > h3 > a"
+          ],
+          [
+            "article:nth-child(2) > p"
+          ],
+          [
+            "article:nth-child(2) > .repository-stars"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(6) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(14) > a"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "lang": "es",
+    "width": 1280,
+    "violations": [],
+    "incomplete": [
+      {
+        "id": "color-contrast",
+        "nodes": [
+          [
+            ".page-hero__content > .eyebrow"
+          ],
+          [
+            "h1"
+          ],
+          [
+            "h1 > span"
+          ],
+          [
+            ".page-hero__subtitle"
+          ],
+          [
+            ".hero-link"
+          ],
+          [
+            ".hero-link > span[aria-hidden=\"true\"]"
+          ],
+          [
+            ".scene-caption"
+          ],
+          [
+            ".scene-caption > span:nth-child(2)"
+          ],
+          [
+            "figcaption"
+          ],
+          [
+            "figcaption > span"
+          ],
+          [
+            "div:nth-child(2) > .eyebrow > .section-number"
+          ],
+          [
+            "li:nth-child(1) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(1) > p"
+          ],
+          [
+            "ol > li:nth-child(1) > a"
+          ],
+          [
+            "li:nth-child(2) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(2) > p"
+          ],
+          [
+            "ol > li:nth-child(2) > a"
+          ],
+          [
+            "li:nth-child(3) > .milestone-period"
+          ],
+          [
+            "ol > li:nth-child(3) > p"
+          ],
+          [
+            "ol > li:nth-child(3) > a"
+          ],
+          [
+            ".section-intro > div > .eyebrow"
+          ],
+          [
+            ".section-intro > div > .eyebrow > .section-number"
+          ],
+          [
+            "#home-projects-title"
+          ],
+          [
+            ".text-link[href$=\"projetos\"]"
+          ],
+          [
+            ".demo-topline > span:nth-child(1)"
+          ],
+          [
+            ".demo-topline > span[aria-hidden=\"true\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-incorrect\"]"
+          ],
+          [
+            "button[aria-controls=\"demo-corrected\"]"
+          ],
+          [
+            "#demo-corrected > .demo-state"
+          ],
+          [
+            "#demo-corrected > pre > code"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(1)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(2)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-type:nth-child(3)"
+          ],
+          [
+            "#demo-corrected > pre > code > .code-keyword:nth-child(4)"
+          ],
+          [
+            ".code-valid"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(1) > dd"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dt"
+          ],
+          [
+            "#demo-corrected > .demo-diagnostic > div:nth-child(2) > dd"
+          ],
+          [
+            ".demo-note"
+          ],
+          [
+            ".project-feature > .eyebrow"
+          ],
+          [
+            ".project-feature > h3"
+          ],
+          [
+            ".project-feature > p:nth-child(3)"
+          ],
+          [
+            ".repository-name"
+          ],
+          [
+            ".project-feature > .repository-stars"
+          ],
+          [
+            ".project-feature > .text-link"
+          ],
+          [
+            ".project-rows > article:nth-child(1) > .project-index"
+          ],
+          [
+            "article:nth-child(1) > h3 > a"
+          ],
+          [
+            "article:nth-child(1) > p"
+          ],
+          [
+            "article:nth-child(1) > .repository-stars"
+          ],
+          [
+            ".project-rows > article:nth-child(2) > .project-index"
+          ],
+          [
+            "article:nth-child(2) > h3 > a"
+          ],
+          [
+            "article:nth-child(2) > p"
+          ],
+          [
+            "article:nth-child(2) > .repository-stars"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(7) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(8) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(9) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(10) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(11) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(12) > a"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta > span:nth-child(1)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > .event-meta > span:nth-child(2)"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > h4"
+          ],
+          [
+            "ul[aria-label=\"Brasil\"] > li:nth-child(13) > a"
+          ]
+        ]
+      }
+    ]
+  }
+]

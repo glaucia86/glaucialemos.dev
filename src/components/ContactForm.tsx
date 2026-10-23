@@ -7,7 +7,10 @@ import { socialLinks } from "@/data/social";
 
 export function ContactForm({ copy, formId }: { copy: Dictionary["services"]; formId?: string }) {
   const searchParams = useSearchParams();
-  const initialMessage = searchParams.get("assunto") === "palestra" ? copy.talkMessage : "";
+  const subject = searchParams.get("assunto");
+  const initialMessage = subject === "palestra" ? copy.talkMessage
+    : subject === "workshop" ? copy.workshopMessage
+    : subject === "mentoria" ? copy.mentoringMessage : "";
   const [state, setState] = useState<"idle" | "sending" | "success" | "error">("idle");
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {

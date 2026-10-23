@@ -26,7 +26,7 @@ export function PageHero({ eyebrow, title, subtitle, image, imageAlt, primary, s
   const secondaryExternal = secondary?.href.startsWith("https://");
 
   return <section className={`page-hero${strongOverlay ? " page-hero--strong" : ""}`}>
-    <Image className="page-hero__image" src={image} alt={imageAlt} fill priority sizes="100vw" />
+    <Image className="page-hero__image" src={image === "/pixel/home-yoda.jpg" ? "/pixel/dagobah-background.webp" : image} alt={imageAlt} fill priority fetchPriority={image === "/pixel/home-yoda.jpg" ? "high" : undefined} sizes="100vw" />
     <HeroScene image={image} />
     <div className="page-hero__shade" aria-hidden="true" />
     <div className="page-hero__content">

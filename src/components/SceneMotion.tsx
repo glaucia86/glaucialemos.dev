@@ -1,56 +1,48 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
-import { useReducedMotion } from "./MotionPreference";
+import { useEffect, useRef, type ReactNode } from "react";
 
-// Own only animation lifecycle. The scene geometry/markup stays server-rendered.
-export function SceneMotion({ className, children }: { className: string; children: ReactNode }) {
+// The illustration stays server-rendered. Only lifecycle and pointer input hydrate.
+export function SceneMotion({ scene, children }: { scene: string; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
-  const [visible, setVisible] = useState(false);
-  const [foreground, setForeground] = useState(false);
-
   useEffect(() => {
-    const element = ref.current;
-    if (!element) return;
-    const updateVisibility = () => setForeground(!document.hidden);
-    updateVisibility();
-    document.addEventListener("visibilitychange", updateVisibility);
-    // Unsupported observers deliberately keep a static scene.
-    const observer = typeof IntersectionObserver === "undefined" ? null : new IntersectionObserver(
-      ([entry]) => setVisible(entry.isIntersecting), { threshold: 0 },
-    );
-    observer?.observe(element);
-    return () => {
-      observer?.disconnect();
-      document.removeEventListener("visibilitychange", updateVisibility);
-    };
-  }, []);
-
-  useEffect(() => {
-    const scene = ref.current;
-    const hero = scene?.closest<HTMLElement>(".page-hero");
-    if (!scene || !hero || !className.includes("--dagobah") || reduced || !visible || !foreground) return;
+    const layer = ref.current;
+    const hero = layer?.closest<HTMLElement>(".page-hero");
+    if (!layer || !hero) return;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    const fine = matchMedia("(hover: hover) and (pointer: fine)");
+    let visible = false;
+    let active = false;
     const reset = () => {
-      scene.style.removeProperty("--look-x");
-      scene.style.removeProperty("--look-y");
-      scene.removeAttribute("data-focused");
+      layer.style.setProperty("--pointer-x", "0px");
+      layer.style.setProperty("--pointer-y", "0px");
     };
+    const update = () => {
+      active = visible && !document.hidden && !reduced.matches && !document.documentElement.classList.contains("reduce-motion");
+      layer.dataset.paused = String(!active);
+      if (!active) reset();
+    };
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; update(); });
+    observer.observe(layer);
+    const preference = new MutationObserver(update);
+    preference.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     const move = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse") return;
-      const bounds = hero.getBoundingClientRect();
-      scene.style.setProperty("--look-x", `${((event.clientX - bounds.left) / bounds.width - .5) * 14}px`);
-      scene.style.setProperty("--look-y", `${((event.clientY - bounds.top) / bounds.height - .5) * 10}px`);
-      scene.dataset.focused = "true";
+      if (!active || !fine.matches || innerWidth <= 900) return;
+      const box = hero.getBoundingClientRect();
+      layer.style.setProperty("--pointer-x", `${((event.clientX - box.left) / box.width - .5) * 12}px`);
+      layer.style.setProperty("--pointer-y", `${((event.clientY - box.top) / box.height - .5) * 8}px`);
     };
     hero.addEventListener("pointermove", move, { passive: true });
     hero.addEventListener("pointerleave", reset);
+    document.addEventListener("visibilitychange", update);
+    reduced.addEventListener("change", update);
+    fine.addEventListener("change", reset);
     return () => {
-      hero.removeEventListener("pointermove", move);
-      hero.removeEventListener("pointerleave", reset);
-      reset();
+      observer.disconnect(); preference.disconnect();
+      hero.removeEventListener("pointermove", move); hero.removeEventListener("pointerleave", reset);
+      document.removeEventListener("visibilitychange", update);
+      reduced.removeEventListener("change", update); fine.removeEventListener("change", reset);
     };
-  }, [className, reduced, visible, foreground]);
-
-  return <div ref={ref} className={className} aria-hidden="true" data-motion={!reduced && visible && foreground ? "running" : "paused"}>{children}</div>;
+  }, []);
+  return <div ref={ref} className={`hero-scene-layer hero-scene-layer--${scene}`} data-paused="true" aria-hidden="true">{children}</div>;
 }

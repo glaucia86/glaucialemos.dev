@@ -1,0 +1,70 @@
+[
+  {
+    "repo": "Azure-Samples/serverless-chat-langchainjs",
+    "url": "https://github.com/Azure-Samples/serverless-chat-langchainjs",
+    "estrelas": 864,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Coautora · 2ª maior contribuidora",
+      "en": "Co-author · 2nd top contributor",
+      "es": "Coautora · 2.ª mayor contribuidora"
+    },
+    "descricao": {
+      "pt": "Chat RAG serverless com LangChain.js, Azure OpenAI e Cosmos DB. Implementei a base da API em Azure Functions (embeddings, vector store, upload, chain, streaming e AI Chat Protocol) e os tutoriais.",
+      "en": "Serverless RAG chat with LangChain.js, Azure OpenAI and Cosmos DB. I built the Azure Functions API foundation (embeddings, vector store, upload, chain, streaming and the AI Chat Protocol) and the tutorials.",
+      "es": "Chat RAG serverless con LangChain.js, Azure OpenAI y Cosmos DB. Implementé la base de la API en Azure Functions (embeddings, vector store, carga, chain, streaming y AI Chat Protocol) y los tutoriales."
+    },
+    "prs": "https://github.com/Azure-Samples/serverless-chat-langchainjs/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "microsoft/generative-ai-for-beginners",
+    "url": "https://github.com/microsoft/generative-ai-for-beginners",
+    "estrelas": 121946,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Contribuidora · samples TypeScript",
+      "en": "Contributor · TypeScript samples",
+      "es": "Contribuidora · ejemplos TypeScript"
+    },
+    "descricao": {
+      "pt": "Currículo oficial de IA generativa da Microsoft. Criei os exemplos em TypeScript das lições de geração de texto, chat, busca, geração de imagens e function calling, além da tradução para o português.",
+      "en": "Microsoft's official generative AI curriculum. I wrote the TypeScript samples for the text generation, chat, search, image generation and function calling lessons, plus the Portuguese translation.",
+      "es": "Currículo oficial de IA generativa de Microsoft. Creé los ejemplos en TypeScript de las lecciones de generación de texto, chat, búsqueda, generación de imágenes y function calling, además de la traducción al portugués."
+    },
+    "prs": "https://github.com/microsoft/generative-ai-for-beginners/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure-Samples/contoso-real-estate",
+    "url": "https://github.com/Azure-Samples/contoso-real-estate",
+    "estrelas": 974,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Contribuidora · modernização",
+      "en": "Contributor · modernization",
+      "es": "Contribuidora · modernización"
+    },
+    "descricao": {
+      "pt": "Arquitetura de referência JavaScript para empresas, com integração OpenAI. Migrei a API para o modelo de programação v4 do Azure Functions e corrigi rotas e dependências.",
+      "en": "Enterprise JavaScript reference architecture with OpenAI integration. I migrated the API to the Azure Functions v4 programming model and fixed routes and dependencies.",
+      "es": "Arquitectura de referencia JavaScript para empresas con integración OpenAI. Migré la API al modelo de programación v4 de Azure Functions y corregí rutas y dependencias."
+    },
+    "prs": "https://github.com/Azure-Samples/contoso-real-estate/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure-Samples/microblog-ai-remix",
+    "url": "https://github.com/Azure-Samples/microblog-ai-remix",
+    "estrelas": 54,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Criadora e mantenedora",
+      "en": "Creator and maintainer",
+      "es": "Creadora y mantenedora"
+    },
+    "descricao": {
+      "pt": "Microblog com IA usando Remix, Azure Functions e Azure OpenAI. Conduzi a migração de Static Web Apps para Container Apps, o CI, as políticas de segurança e as atualizações para ESLint 9 e Tailwind 4.",
+      "en": "AI-powered microblog with Remix, Azure Functions and Azure OpenAI. I led the move from Static Web Apps to Container Apps, CI, security policies and the upgrades to ESLint 9 and Tailwind 4.",
+      "es": "Microblog con IA usando Remix, Azure Functions y Azure OpenAI. Conduje la migración de Static Web Apps a Container Apps, el CI, las políticas de seguridad y las actualizaciones a ESLint 9 y Tailwind 4."
+    },
+    "prs": "https://github.com/Azure-Samples/microblog-ai-remix/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  }
+]

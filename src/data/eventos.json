@@ -1,5 +1,41 @@
 [
   {
+    "nome": "Codex Community Meetup Rio — From PRD to Production: AI PDLC com Codex",
+    "ano": 2026,
+    "cidade": "Rio de Janeiro",
+    "pais": "Brasil",
+    "lat": -22.9068,
+    "lon": -43.1729,
+    "idioma": "pt-BR",
+    "tipo": "organizacao",
+    "publico": "Não informado",
+    "fonte": "https://luma.com/4hudcuqo"
+  },
+  {
+    "nome": "IEEE CS80 Rio (UERJ) — Do Spec ao Harness: como estruturar agentes de código com mais controle",
+    "ano": 2026,
+    "cidade": "Rio de Janeiro",
+    "pais": "Brasil",
+    "lat": -22.9068,
+    "lon": -43.1729,
+    "idioma": "pt-BR",
+    "tipo": "palestra",
+    "publico": "Não informado",
+    "fonte": "https://www.cs80rio.com.br/"
+  },
+  {
+    "nome": "Codex Community Meetup Rio — Spec-Driven Development com Codex",
+    "ano": 2026,
+    "cidade": "Rio de Janeiro",
+    "pais": "Brasil",
+    "lat": -22.9068,
+    "lon": -43.1729,
+    "idioma": "pt-BR",
+    "tipo": "organizacao",
+    "publico": "Não informado",
+    "fonte": "https://luma.com/1fzq5u6f"
+  },
+  {
     "nome": "VS Code Live: Agent Sessions Day Brasil",
     "ano": 2026,
     "cidade": "Online",
@@ -36,6 +72,30 @@
     "fonte": "https://globalai.community/e/oyoh5sq2"
   },
   {
+    "nome": "AI Live Coding Series — Criando um Servidor MCP com TypeScript · Parte 3",
+    "ano": 2025,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://pt.linkedin.com/posts/glaucialemos_ai-live-coding-series-parte-3-criando-activity-7359619267165642752-qaKs"
+  },
+  {
+    "nome": "WoMakersCode Hacking de Carreira — Além do Código: DevOps, Cloud e Segurança",
+    "ano": 2025,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "palestra",
+    "publico": "Não informado",
+    "fonte": "https://dev.to/womakerscode/alem-do-codigo-devops-cloud-e-seguranca-com-glaucia-lemos-developer-advocate-na-microsoft-12h4"
+  },
+  {
     "nome": "AI Live Coding Series — Criando um Servidor MCP com TypeScript · Parte 1",
     "ano": 2025,
     "cidade": "Online",
@@ -46,6 +106,42 @@
     "tipo": "workshop",
     "publico": "Não informado",
     "fonte": "https://www.youtube.com/watch?v=iuZpwUKlAFs"
+  },
+  {
+    "nome": "RAGHack — Building RAG apps with LangChain.js",
+    "ano": 2024,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "en",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/es-es/reactor/events/23328/"
+  },
+  {
+    "nome": "Microsoft Reactor — App LOB com OpenAI, Azure CS e Microsoft Graph · Ep3",
+    "ano": 2024,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://www.youtube.com/watch?v=EBVD__WJ60M"
+  },
+  {
+    "nome": "Microsoft Reactor — Fundamentos da IA Generativa",
+    "ano": 2024,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "palestra",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/it-it/reactor/events/21825/"
   },
   {
     "nome": "Microsoft Reactor — GitHub Copilot para construir um aplicativo · Ep1",
@@ -130,6 +226,126 @@
     "tipo": "palestra",
     "publico": "Não informado",
     "fonte": "https://pt.linkedin.com/posts/glaucialemos_palestra-hoje-na-ibmec-sobre-como-criar-aplica%C3%A7%C3%B5es-activity-7187177227552243712-U_TR"
+  },
+  {
+    "nome": "Microsoft Reactor — GitHub Universe 2023: O que rolou?!",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "palestra",
+    "publico": "Não informado",
+    "fonte": "https://www.youtube.com/watch?v=PlWflTyrZww"
+  },
+  {
+    "nome": "Microsoft Reactor — LangChain com Microsoft Azure OpenAI · Parte 4",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/en-us/reactor/series/s-1197/"
+  },
+  {
+    "nome": "Microsoft Reactor — LangChain com Microsoft Azure OpenAI · Parte 3",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/en-us/reactor/series/s-1197/"
+  },
+  {
+    "nome": "Microsoft Reactor — LangChain com Microsoft Azure OpenAI · Parte 2",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/en-us/reactor/series/s-1197/"
+  },
+  {
+    "nome": "Microsoft Reactor — LangChain com Microsoft Azure OpenAI · Parte 1",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/en-us/reactor/series/s-1197/"
+  },
+  {
+    "nome": "Learn Live — Develop and Deconstruct the Authentication, Payments & Search",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "en",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/en-us/reactor/events/20700/"
+  },
+  {
+    "nome": "Microsoft Reactor — Let's Coding: Projeto Open Source Contoso Real Estate",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/en-us/reactor/series/s-1168/"
+  },
+  {
+    "nome": "Microsoft Reactor — API REST em TypeScript com GitHub Copilot & Codespaces · Parte 2",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/en-us/reactor/series/s-1168/"
+  },
+  {
+    "nome": "Mulheres e Carreira em Tecnologia Rio de Janeiro 2023",
+    "ano": 2023,
+    "cidade": "Rio de Janeiro",
+    "pais": "Brasil",
+    "lat": -22.9068,
+    "lon": -43.1729,
+    "idioma": "pt-BR",
+    "tipo": "organizacao",
+    "publico": "Não informado",
+    "fonte": "https://www.sympla.com.br/evento/mulheres-e-carreira-em-tecnologia-rio-de-janeiro/1843473"
+  },
+  {
+    "nome": "Bits of Build — Conversa com especialistas sobre DevOps & Developer Tools",
+    "ano": 2023,
+    "cidade": "Online",
+    "pais": null,
+    "lat": null,
+    "lon": null,
+    "idioma": "pt-BR",
+    "tipo": "palestra",
+    "publico": "Não informado",
+    "fonte": "https://developer.microsoft.com/es-es/reactor/events/20001/"
   },
   {
     "nome": "CityJs Brazil 2023",

@@ -1,11 +1,13 @@
 import artigosJson from "@/data/artigos.json";
 import eventosJson from "@/data/eventos.json";
 import cargosJson from "@/data/experiencia.json";
+import contribuicoesJson from "@/data/contribuicoes.json";
 import projetosJson from "@/data/projetos.json";
 import servicosJson from "@/data/servicos.json";
 import {
   artigoSchema,
   cargoSchema,
+  contribuicaoSchema,
   eventoSchema,
   projetoSchema,
   servicoSchema,
@@ -17,12 +19,14 @@ const cargos = z.array(cargoSchema).parse(cargosJson);
 const projetos = z.array(projetoSchema).parse(projetosJson);
 const artigos = z.array(artigoSchema).parse(artigosJson);
 const servicos = z.array(servicoSchema).parse(servicosJson);
+const contribuicoes = z.array(contribuicaoSchema).parse(contribuicoesJson);
 
 export const getEventos = () => eventos;
 export const getCargos = () => cargos;
 export const getProjetos = () => projetos;
 export const getArtigos = () => artigos;
 export const getServicos = () => servicos;
+export const getContribuicoes = () => contribuicoes;
 
 export function getEventCountries() {
   return [...new Set(
