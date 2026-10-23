@@ -16,6 +16,7 @@ export function SmoothScroll() {
     if (!motion) return;
     const lenis = new Lenis({ lerp: .11, wheelMultiplier: .9, anchors: { offset: -80 }, autoRaf: false });
     window.__lenis = lenis;
+    if (document.documentElement.dataset.boot === "pending") lenis.stop();
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
