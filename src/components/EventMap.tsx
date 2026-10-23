@@ -70,7 +70,7 @@ export function EventMap({ events, locale, copy, source, galaxy }: { events: Map
       <p className="sr-only" role="status">{name(selected ?? 'unlocated')} · {groups.find(group => group.country === selected)?.events.length} {copy.count}</p>
       {groups.map((group, index) => <div className="event-country" key={group.country} id={`country-${index}`} hidden={selected !== group.country}>
         <h3>{name(group.country)} <span>{group.events.length} {galaxy.signal}</span></h3>
-        <ul tabIndex={0} aria-label={name(group.country)}>{group.events.map((event, eventIndex) => <li key={`${event.nome}-${event.ano}-${eventIndex}`}>
+        <ul data-lenis-prevent="" tabIndex={0} aria-label={name(group.country)}>{group.events.map((event, eventIndex) => <li key={`${event.nome}-${event.ano}-${eventIndex}`}>
           <p className="event-meta"><span>{event.ano}</span> · {event.cidade} · <span>{languages.of(event.idioma)}</span></p>
           <h4>{event.nome}</h4><a href={event.fonte}>{source}<span aria-hidden="true"> ↗</span></a>
         </li>)}</ul>
