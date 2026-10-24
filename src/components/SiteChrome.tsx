@@ -66,6 +66,7 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
       <div className="footer-hud" aria-hidden="true"><span>GL-OS // HOLONET</span><span className="footer-hud__signal"><i /><i /><i /><i /></span><span>{dictionary.holonet.credits.end}</span></div>
       <div><strong>Glaucia Lemos</strong><p>{dictionary.footer.tagline}</p></div><SocialLinks labels={dictionary.footer.socialLabels} />
       <small>© {new Date().getFullYear()} · {dictionary.footer.rights}<button type="button" className="footer-top" onClick={top}>{dictionary.holonet.credits.top} <span aria-hidden="true">↑</span></button></small>
+      <p className="footer-notice">{dictionary.footer.independenceNotice}</p>
     </footer>
     <Comlink copy={dictionary.comlink} pathname={pathname} />
     <dialog ref={dialogRef} className="egg-overlay" aria-label={dictionary.easterEgg.message} onCancel={() => setEgg(false)}><div className="lightsaber" /><p>{dictionary.easterEgg.message}</p><button autoFocus onClick={() => setEgg(false)}>{dictionary.easterEgg.close}</button></dialog>

@@ -98,6 +98,7 @@ footer strong { font: 400 1.3rem var(--font-pixel); letter-spacing: 0; }
 .footer-hud__signal { display: inline-flex; align-items: end; gap: 2px; height: 12px; }
 .footer-hud__signal i { width: 3px; background: var(--energy-green); }
 .footer-hud__signal i:nth-child(1) { height: 3px; } .footer-hud__signal i:nth-child(2) { height: 6px; } .footer-hud__signal i:nth-child(3) { height: 9px; } .footer-hud__signal i:nth-child(4) { height: 12px; animation: hud-blink 1.6s steps(1) infinite; }
+.footer-notice { grid-column: 1 / -1; font-size: .875rem; line-height: 1.6; }
 footer small { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; font-family: var(--font-mono); }
 .footer-top { font-family: var(--font-pixel) !important; }
 .footer-top { min-height: 44px; padding: 0 .9rem; border: 1px solid var(--hud-line); background: transparent; color: var(--text-inverse-muted); font: inherit; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; }
