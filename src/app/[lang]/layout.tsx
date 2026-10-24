@@ -2,6 +2,7 @@ import "../globals.css";
 import "../editorial.css";
 import "../jedi-effects.css";
 import "../pixel-ui.css";
+import "../comlink.css";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, locales } from "@/i18n/config";
 import { notFound } from "next/navigation";

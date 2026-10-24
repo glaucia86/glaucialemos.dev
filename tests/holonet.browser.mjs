@@ -140,6 +140,31 @@ await check("terminal RAG alterna estados acessíveis", async () => {
   await context.close();
 });
 
+await check("comlink: konami e Força pelo terminal, dica de toque no celular", async () => {
+  const { context, page, errors } = await open();
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(1200);
+  await page.getByRole("button", { name: "Abrir o canal secreto" }).click();
+  await page.locator("#comlink-input").fill("konami");
+  await page.keyboard.press("Enter");
+  await page.waitForFunction(() => document.querySelector("dialog.egg-overlay")?.open, null, { timeout: 2000 });
+  await page.keyboard.press("Escape");
+  await page.getByRole("button", { name: "Abrir o canal secreto" }).click();
+  await page.locator("#comlink-input").fill("força");
+  await page.keyboard.press("Enter");
+  await page.waitForFunction(() => document.querySelector(".home-hero-v2")?.dataset.forceStage === "force", null, { timeout: 3000 });
+  await page.waitForFunction(() => document.querySelector(".home-hero-v2")?.dataset.forceStage === "idle", null, { timeout: 6000 });
+  assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem("holonet-secrets") ?? "[]")).then((ids) => ids.sort()), ["force-hold", "konami"]);
+  assert.deepEqual(errors, []);
+  await context.close();
+  const mobile = await open({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await mobile.page.waitForFunction(() => document.documentElement.dataset.boot !== "pending", null, { timeout: 6000 });
+  await mobile.page.waitForTimeout(1500);
+  assert.ok(await visible(mobile.page, ".force-touch-hint"));
+  assert.ok(await visible(mobile.page, ".comlink-toggle"));
+  await mobile.context.close();
+});
+
 await check("som fica desligado por padrão e persiste o opt-in", async () => {
   const { context, page } = await open();
   await page.keyboard.press("Escape");

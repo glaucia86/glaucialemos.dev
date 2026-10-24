@@ -3,6 +3,7 @@
 import { gsap, ScrollTrigger, SplitText, useGSAP, FINE_POINTER, SCRAMBLE_CHARS } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { play } from "@/lib/sfx";
+import { bringIntoView, discover, onEgg } from "@/lib/eggs";
 
 const enter = (trigger: Element, start = "top 82%") => ({ trigger, start, once: true });
 
@@ -79,6 +80,7 @@ export function HomeChoreography() {
       let volley: gsap.core.Timeline | null = null;
       const deflect = () => {
         if (volley?.isActive()) return;
+        discover("deflect");
         if (ignition.progress() < 1) ignition.progress(1);
         volley = gsap.timeline();
         HITS.forEach((t, index) => {
@@ -108,7 +110,8 @@ export function HomeChoreography() {
       deflectButton.hidden = false;
       deflectButton.addEventListener("click", deflect);
       frame?.addEventListener("click", fromCard);
-      cleanups.push(() => { deflectButton.hidden = true; deflectButton.removeEventListener("click", deflect); frame?.removeEventListener("click", fromCard); volley?.kill(); bolts.replaceChildren(); });
+      const stopEgg = onEgg("deflect", () => void bringIntoView(card).then(deflect));
+      cleanups.push(() => { stopEgg(); deflectButton.hidden = true; deflectButton.removeEventListener("click", deflect); frame?.removeEventListener("click", fromCard); volley?.kill(); bolts.replaceChildren(); });
     }
     const route = page.querySelector<HTMLElement>("[data-route]");
     if (route) {

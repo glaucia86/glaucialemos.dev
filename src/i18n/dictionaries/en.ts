@@ -1,11 +1,15 @@
 import { journey } from '../journey';
 import { holonet } from '../holonet';
+import { echo } from '../echo-base';
+import { comlink } from '../comlink';
 import type { Dictionary } from "./pt";
 import pt from "./pt";
 const en: Dictionary = {
   ...pt,
   journey: journey.en,
   holonet: holonet.en,
+  echo: echo.en,
+  comlink: comlink.en,
   metadata: { title: "Glaucia Lemos — AI for builders", description: "Engineering, leadership, and responsible AI adoption in software development." },
   nav: { home: "Home", about: "About", projects: "Projects", content: "Content", events: "Events", services: "Services", language: "Language" }, motion: { reduce: "Reduce motion", enable: "Enable motion", system: "Reduced by system" }, common: { source: "Source", stars: "stars", language: "Language", all: "All", unavailable: "Not specified" },
   accessibility: { skip: "Skip to content", primaryNav: "Primary navigation", highlights: "Highlights in numbers" },

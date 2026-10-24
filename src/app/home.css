@@ -386,3 +386,16 @@ html.reduce-motion :is(.force-particles, .hero-jump), html.reduce-motion .xwing 
 @media (prefers-reduced-motion: reduce) { :is(.force-particles, .hero-jump), .xwing { display: none; } }
 html.reduce-motion .home-page .home-hero-v2 { cursor: auto; }
 .home-hero-v2[data-motion="false"] .hud-hint { display: none; }
+
+/* ——— Touch: the Force hint lives under the scene; a long press never opens the system menu ——— */
+.force-touch-hint { display: none; }
+@media (max-width: 900px), (pointer: coarse) {
+  .home-hero-v2[data-motion="true"] .force-touch-hint {
+    position: absolute; z-index: 2; left: 50%; bottom: 1rem; translate: -50% 0; display: inline-flex; align-items: center; gap: .6rem; margin: 0; padding: .45rem .8rem;
+    background: color-mix(in srgb, var(--color-space-0) 72%, transparent); color: var(--force-light); font: 400 .58rem/1.4 var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; pointer-events: none;
+  }
+  .force-touch-hint span { width: 6px; height: 6px; background: var(--force-light); animation: hud-blink 1s steps(1) infinite; }
+  .home-hero-v2[data-force-stage]:not([data-force-stage="idle"]) .force-touch-hint { opacity: 0; }
+  .home-hero-v2 { -webkit-touch-callout: none; touch-action: pan-y; }
+  .home-hero-v2 :is(.hero-scene-layer, .force-particles) { -webkit-user-select: none; user-select: none; }
+}

@@ -12,6 +12,7 @@ import { HeroMotion } from "@/components/home/HeroMotion";
 import { HudClock } from "@/components/home/HudClock";
 import { HomeChoreography } from "@/components/home/HomeChoreography";
 import { MissionIcon } from "@/components/home/MissionIcon";
+import { ChapterTag as Tag, ChapterJump as Jump, numerals } from "@/components/home/Chapter";
 import { curateMilestones, homeServiceSubjects, formatExperiencePeriod, featuredContribution, HOME_ARCHIVE_SIZE } from "@/lib/home-curation";
 import { bootScript } from "@/lib/boot";
 import { isLocale } from "@/i18n/config";
@@ -23,17 +24,13 @@ import { socialLinks } from "@/data/social";
 export const revalidate = 2592000;
 
 const sabers = ["var(--energy-blue)", "var(--energy-green)", "var(--energy-purple)", "var(--energy-gold)"];
-const numerals = ["I", "II", "III", "IV", "V"];
 
 function ChapterTag({ index, label }: { index: number; label: string }) {
-  return <p className="chapter-tag"><span className="chapter-tag__ep" aria-hidden="true">EP.{numerals[index]}</span>{label}</p>;
+  return <Tag code={`EP.${numerals[index]}`} label={label} />;
 }
 
 function ChapterJump({ label, index }: { label: string; index: number }) {
-  return <div className="chapter-jump" aria-hidden="true" data-jump>
-    <span className="chapter-jump__streaks">{Array.from({ length: 9 }, (_, streak) => <i key={streak} />)}</span>
-    <span className="chapter-jump__label">EP.{numerals[index]} <b>{label}</b></span>
-  </div>;
+  return <Jump code={`EP.${numerals[index]}`} label={label} />;
 }
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
@@ -57,7 +54,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
     {/* Episode I — Dagobah */}
     <div className="home-hero">
-      <HeroMotion jumpLabel={h.episodes[1]} forceLabel={h.hud.force} labelledBy="hero-title">
+      <HeroMotion jumpLabel={h.episodes[1]} forceLabel={h.hud.force} touchLabel={h.hud.touch} labelledBy="hero-title">
         <Image className="page-hero__image" src="/pixel/dagobah-background.webp" alt={d.home.heroImageAlt} fill priority fetchPriority="high" sizes="100vw" />
         <DagobahScene />
         <div className="page-hero__shade" aria-hidden="true" />

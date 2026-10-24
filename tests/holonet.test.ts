@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { shouldBoot, bootScript, BOOT_KEY } from "@/lib/boot";
+import { shouldBoot, bootScript, bootScriptFor, BOOT_KEY, ECHO_BOOT_KEY } from "@/lib/boot";
 import { readSoundPreference, writeSoundPreference, soundBank, SOUND_KEY } from "@/lib/sfx";
 
 describe("boot da HoloNet", () => {
@@ -17,6 +17,11 @@ describe("boot da HoloNet", () => {
     expect(bootScript).toContain('localStorage.getItem("reduce-motion")');
     expect(bootScript).toContain("prefers-reduced-motion: reduce");
     expect(bootScript).toMatch(/try\{[\s\S]*\}catch/);
+  });
+
+  it("a Base Eco usa uma chave própria, sem afetar a abertura da home", () => {
+    expect(bootScriptFor(ECHO_BOOT_KEY)).toContain(`sessionStorage.getItem("${ECHO_BOOT_KEY}")`);
+    expect(ECHO_BOOT_KEY).not.toBe(BOOT_KEY);
   });
 });
 
