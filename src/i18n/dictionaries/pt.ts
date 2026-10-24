@@ -2,6 +2,7 @@ import { journey, type JourneyCopy } from '../journey';
 import { holonet, type HolonetCopy } from '../holonet';
 import { echo, type EchoCopy } from '../echo-base';
 import { comlink, type ComlinkCopy } from '../comlink';
+import { tatooine, type TatooineCopy } from '../tatooine';
 import type { SocialNetwork } from "@/data/social";
 
 export type Dictionary = {
@@ -9,6 +10,7 @@ export type Dictionary = {
   holonet: HolonetCopy;
   echo: EchoCopy;
   comlink: ComlinkCopy;
+  tatooine: TatooineCopy;
   metadata: { title: string; description: string };
   nav: { home: string; about: string; projects: string; content: string; events: string; services: string; language: string };
   accessibility: { skip: string; primaryNav: string; highlights: string };
@@ -30,6 +32,7 @@ const pt: Dictionary = {
   holonet: holonet.pt,
   echo: echo.pt,
   comlink: comlink.pt,
+  tatooine: tatooine.pt,
   metadata: { title: "Glaucia Lemos — IA para quem constrói", description: "Engenharia, liderança e adoção responsável de IA no desenvolvimento de software." },
   nav: { home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", language: "Idioma" },
   accessibility: { skip: "Pular para o conteúdo", primaryNav: "Navegação principal", highlights: "Destaques em números" },

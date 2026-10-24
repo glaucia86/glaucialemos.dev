@@ -34,7 +34,7 @@
 
 ![i18n](https://img.shields.io/badge/i18n-pt_·_en_·_es-5a3d7e)
 ![a11y](https://img.shields.io/badge/a11y-respeita_movimento_reduzido-893866)
-![Segredos](https://img.shields.io/badge/easter_eggs-13_escondidos-e07828)
+![Segredos](https://img.shields.io/badge/easter_eggs-24_escondidos-e07828)
 ![A Força](https://img.shields.io/badge/feito_com-a_For%C3%A7a-2ea44f)
 
 <br />
@@ -91,7 +91,7 @@ Engineer e AI Transformation Lead. Cada página é uma cena em um planeta difere
 | `/` | — | Escolhe `/pt`, `/en` ou `/es` pelo cabeçalho `Accept-Language` |
 | `/[lang]` | Dagobah, com Yoda | A história da HoloNet em cinco episódios, números, projetos e contato |
 | `/[lang]/sobre` | Base Eco, em Hoth | Trajetória com faixas paralelas, Leia e C-3PO |
-| `/[lang]/projetos` | R2-D2 | Repositórios do GitHub ordenados por estrelas |
+| `/[lang]/projetos` | Tatooine, com R2-D2 | Telemetria ao vivo do GitHub, arquivo com filtros e o Esquadrão Microsoft de contribuições |
 | `/[lang]/conteudo` | Chewbacca | Artigos e conteúdos com filtros |
 | `/[lang]/eventos` | Grogu | Um globo arrastável e o histórico pesquisável de mais de 130 palestras |
 | `/[lang]/servicos` | Darth Vader | Workshops, mentorias, palestras e formulário de contato |
@@ -113,7 +113,7 @@ Engineer e AI Transformation Lead. Cada página é uma cena em um planeta difere
   30 dias. Se a API falhar ou demorar, entra a cópia local.
 - **Pixel art em camadas.** Scripts Node separam Leia e Yoda em camadas, para que pisquem,
   tremam de frio, saquem o blaster ou canalizem a Força.
-- **13 segredos.** Um registro único de easter eggs, com gatilhos por teclado, gestos de toque
+- **24 segredos.** Um registro único de easter eggs, com gatilhos por teclado, gestos de toque
   e terminal (Comlink). Todos podem ser encontrados no celular.
 
 ## Galeria
@@ -347,6 +347,7 @@ glaucialemos.dev/
 │   ├── components/
 │   │   ├── home/              # Dagobah, BootSequence, partículas da Força, hiperespaço
 │   │   ├── about/             # Base Eco, Leia, C-3PO, CareerMap, EchoEggs
+│   │   ├── projects/          # Tatooine: R2Telemetry, RepoArchive, AllianceSquadrons, TatooineEggs
 │   │   └── motion/            # FxLayer, SmoothScroll
 │   ├── data/                  # eventos, projetos, carreira, serviços (JSON + Zod)
 │   ├── i18n/                  # dicionários pt · en · es
@@ -357,7 +358,7 @@ glaucialemos.dev/
 
 ## Caça aos easter eggs
 
-O site esconde **13 segredos**. Abra o **Comlink** (o terminal no canto da tela) para
+O site esconde **24 segredos**. Abra o **Comlink** (o terminal no canto da tela) para
 acompanhar seu progresso. Digite uma palavra-código nele ou direto na página.
 
 <details>
@@ -375,6 +376,12 @@ acompanhar seu progresso. Digite uma palavra-código nele ou direto na página.
 | Base Eco | Algo observa do céu. A Leia tem um blaster. |
 | Base Eco | Insista um pouco com o droide de protocolo |
 | Base Eco | Fique parada alguns segundos e sinta o frio |
+| Tatooine | Um comando antigo, de 2018, ainda responde no terminal do R2 |
+| Tatooine | Dois sóis, um depois do outro |
+| Tatooine | Segure o R2. Os planos estão neste droide. |
+| Tatooine | Procure droides no mercado. Circulando. |
+| Tatooine | Mercadores baixinhos de capuz rondam o horizonte: *Utinni!* |
+| Tatooine | Um certo Skywalker odeia areia. Um certo BB-8 adora dunas. |
 
 </details>
 

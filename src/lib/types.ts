@@ -26,6 +26,27 @@ export const projetoSchema = z.object({
   estrelas: z.number().int().nonnegative(),
   linguagem: z.string().nullable(),
   descricao: z.string(),
+  forks: z.number().int().nonnegative().default(0),
+  topicos: z.array(z.string()).default([]),
+  criado: z.string().default(""),
+  atualizado: z.string().default(""),
+});
+
+const countSchema = z.object({ name: z.string(), count: z.number().int().nonnegative() });
+
+// Fallback for the Projects telemetry when the GitHub API is unavailable.
+export const githubStatsSchema = z.object({
+  followers: z.number().int().nonnegative(),
+  gists: z.number().int().nonnegative(),
+  publicRepos: z.number().int().nonnegative(),
+  since: z.number().int(),
+  originals: z.number().int().nonnegative(),
+  stars: z.number().int().nonnegative(),
+  forks: z.number().int().nonnegative(),
+  languages: z.array(countSchema),
+  years: z.array(z.object({ year: z.number().int(), count: z.number().int().nonnegative() })),
+  mergedPrs: z.number().int().nonnegative(),
+  prsByRepo: z.record(z.string(), z.number().int().nonnegative()),
 });
 
 export const artigoSchema = z.object({
@@ -63,5 +84,6 @@ export type Evento = z.infer<typeof eventoSchema>;
 export type Contribuicao = z.infer<typeof contribuicaoSchema>;
 export type Cargo = z.infer<typeof cargoSchema>;
 export type Projeto = z.infer<typeof projetoSchema>;
+export type GithubStats = z.infer<typeof githubStatsSchema>;
 export type Artigo = z.infer<typeof artigoSchema>;
 export type Servico = z.infer<typeof servicoSchema>;

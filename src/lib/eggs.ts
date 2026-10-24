@@ -1,6 +1,6 @@
 // Easter egg registry shared by every page. Triggers (keyboard, touch gestures, the Comlink) only emit an id;
 // the component that owns the effect listens, plays it and marks it as discovered.
-export type EggPage = "global" | "home" | "about";
+export type EggPage = "global" | "home" | "about" | "projects";
 export const EGGS = [
   { id: "konami", page: "global", phrases: ["konami", "uuddlrlrba"] },
   { id: "force-push", page: "home", phrases: ["push", "empurrar", "empujar"] },
@@ -15,6 +15,17 @@ export const EGGS = [
   { id: "tauntaun", page: "about", phrases: ["tauntaun"] },
   { id: "threepio-arm", page: "about", phrases: ["cpo", "threepio", "droide", "droid"] },
   { id: "settle", page: "about", phrases: ["neve", "snow", "nieve"] },
+  { id: "npx", page: "projects", phrases: ["npx", "npxglaucialemos", "glaucialemos"] },
+  { id: "utinni", page: "projects", phrases: ["utinni", "jawa", "jawas"] },
+  { id: "plans", page: "projects", phrases: ["planos", "plans", "planes", "estreladamorte", "deathstar", "estrelladelamuerte"] },
+  { id: "sunset", page: "projects", phrases: ["pordosol", "sunset", "atardecer", "binario", "binary"] },
+  { id: "podrace", page: "projects", phrases: ["podrace", "corrida", "carrera", "boonta"] },
+  { id: "mindtrick", page: "projects", phrases: ["truquemental", "mindtrick", "trucomental", "movealong", "circulando"] },
+  { id: "cantina", page: "projects", phrases: ["cantina", "moseisley"] },
+  { id: "artoo", page: "projects", phrases: ["artoo", "beepboop", "bipbup", "erredos"] },
+  { id: "sand", page: "projects", phrases: ["areia", "sand", "arena"] },
+  { id: "hellothere", page: "projects", phrases: ["hellothere", "olaquemesta", "holaquetal", "generalkenobi"] },
+  { id: "bb8", page: "projects", phrases: ["beebee", "bbeight", "bebeoito", "bebeocho"] },
 ] as const satisfies readonly { id: string; page: EggPage; phrases: readonly string[] }[];
 export type EggId = (typeof EGGS)[number]["id"];
 
@@ -27,7 +38,8 @@ export const normalizePhrase = (text: string) => text.normalize("NFD").replace(/
 
 export function pageOf(pathname: string): EggPage {
   const parts = pathname.split("/").filter(Boolean);
-  return parts.length <= 1 ? "home" : parts[1] === "sobre" ? "about" : "global";
+  if (parts.length <= 1) return "home";
+  return parts[1] === "sobre" ? "about" : parts[1] === "projetos" ? "projects" : "global";
 }
 
 export const eggsFor = (page: EggPage) => EGGS.filter((egg) => egg.page === "global" || egg.page === page);

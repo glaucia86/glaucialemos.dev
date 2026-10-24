@@ -66,5 +66,243 @@
       "es": "Microblog con IA usando Remix, Azure Functions y Azure OpenAI. Conduje la migración de Static Web Apps a Container Apps, el CI, las políticas de seguridad y las actualizaciones a ESLint 9 y Tailwind 4."
     },
     "prs": "https://github.com/Azure-Samples/microblog-ai-remix/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure-Samples/azure-search-openai-demo",
+    "url": "https://github.com/Azure-Samples/azure-search-openai-demo",
+    "estrelas": 7791,
+    "linguagem": "Python",
+    "papel": {
+      "pt": "Contribuidora · i18n pt-BR",
+      "en": "Contributor · pt-BR i18n",
+      "es": "Contribuidora · i18n pt-BR"
+    },
+    "descricao": {
+      "pt": "Sample de referência de RAG no Azure, com Azure AI Search e Azure OpenAI. Adicionei a tradução da interface para o português do Brasil e a configuração do novo idioma.",
+      "en": "The reference RAG sample on Azure, with Azure AI Search and Azure OpenAI. I added the Brazilian Portuguese UI translation and the configuration for the new language.",
+      "es": "Sample de referencia de RAG en Azure, con Azure AI Search y Azure OpenAI. Agregué la traducción de la interfaz al portugués de Brasil y la configuración del nuevo idioma."
+    },
+    "prs": "https://github.com/Azure-Samples/azure-search-openai-demo/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure-Samples/azure-search-openai-javascript",
+    "url": "https://github.com/Azure-Samples/azure-search-openai-javascript",
+    "estrelas": 323,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Contribuidora · correção",
+      "en": "Contributor · fix",
+      "es": "Contribuidora · corrección"
+    },
+    "descricao": {
+      "pt": "Versão TypeScript do sample de RAG com Azure AI Search. Incluí o parâmetro --purge no comando azd down, para remover os recursos de vez.",
+      "en": "The TypeScript version of the Azure AI Search RAG sample. I added the --purge parameter to the azd down command, so resources are fully removed.",
+      "es": "Versión TypeScript del sample de RAG con Azure AI Search. Incluí el parámetro --purge en el comando azd down, para eliminar los recursos por completo."
+    },
+    "prs": "https://github.com/Azure-Samples/azure-search-openai-javascript/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure-Samples/llama-index-python",
+    "url": "https://github.com/Azure-Samples/llama-index-python",
+    "estrelas": 62,
+    "linguagem": "Python",
+    "papel": {
+      "pt": "Contribuidora · segurança",
+      "en": "Contributor · security",
+      "es": "Contribuidora · seguridad"
+    },
+    "descricao": {
+      "pt": "Sample para começar com LlamaIndex no Azure. Atualizei o Next.js para corrigir a vulnerabilidade CVE-2025-29927.",
+      "en": "A starter sample for LlamaIndex on Azure. I upgraded Next.js to patch the CVE-2025-29927 vulnerability.",
+      "es": "Sample para empezar con LlamaIndex en Azure. Actualicé Next.js para corregir la vulnerabilidad CVE-2025-29927."
+    },
+    "prs": "https://github.com/Azure-Samples/llama-index-python/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure-Samples/serverless-full-stack-apps-azure-sql",
+    "url": "https://github.com/Azure-Samples/serverless-full-stack-apps-azure-sql",
+    "estrelas": 139,
+    "linguagem": "JavaScript",
+    "papel": {
+      "pt": "Contribuidora · modernização",
+      "en": "Contributor · modernization",
+      "es": "Contribuidora · modernización"
+    },
+    "descricao": {
+      "pt": "Solução full stack com Static Web Apps, Azure Functions e Azure SQL. Atualizei o Azure Functions da versão 3 para a 4, na versão Node.js.",
+      "en": "A full stack solution with Static Web Apps, Azure Functions and Azure SQL. I upgraded Azure Functions from version 3 to 4 in the Node.js version.",
+      "es": "Solución full stack con Static Web Apps, Azure Functions y Azure SQL. Actualicé Azure Functions de la versión 3 a la 4, en la versión Node.js."
+    },
+    "prs": "https://github.com/Azure-Samples/serverless-full-stack-apps-azure-sql/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure-Samples/copilot-nodejs-todo",
+    "url": "https://github.com/Azure-Samples/copilot-nodejs-todo",
+    "estrelas": 9,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Contribuidora · tradução",
+      "en": "Contributor · translation",
+      "es": "Contribuidora · traducción"
+    },
+    "descricao": {
+      "pt": "Workshop de GitHub Copilot para criar uma aplicação Node.js com Azure Cosmos DB. Traduzi o workshop para o português.",
+      "en": "A GitHub Copilot workshop to build a Node.js app with Azure Cosmos DB. I translated the workshop into Portuguese.",
+      "es": "Taller de GitHub Copilot para crear una aplicación Node.js con Azure Cosmos DB. Traduje el taller al portugués."
+    },
+    "prs": "https://github.com/Azure-Samples/copilot-nodejs-todo/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "microsoft/MicrosoftCloud",
+    "url": "https://github.com/microsoft/MicrosoftCloud",
+    "estrelas": 95,
+    "linguagem": "HTML",
+    "papel": {
+      "pt": "Contribuidora · workshops",
+      "en": "Contributor · workshops",
+      "es": "Contribuidora · talleres"
+    },
+    "descricao": {
+      "pt": "Cenários de ponta a ponta da Microsoft Cloud. Escrevi os workshops de Microsoft Graph com Next.js e revisei a documentação.",
+      "en": "End-to-end Microsoft Cloud scenarios. I wrote the Microsoft Graph with Next.js workshops and reviewed the documentation.",
+      "es": "Escenarios de punta a punta de Microsoft Cloud. Escribí los talleres de Microsoft Graph con Next.js y revisé la documentación."
+    },
+    "prs": "https://github.com/microsoft/MicrosoftCloud/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "MicrosoftDocs/node-essentials",
+    "url": "https://github.com/MicrosoftDocs/node-essentials",
+    "estrelas": 117,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Contribuidora · soluções dos cursos",
+      "en": "Contributor · course solutions",
+      "es": "Contribuidora · soluciones de los cursos"
+    },
+    "descricao": {
+      "pt": "Código oficial da trilha de Node.js no Microsoft Learn. Criei as soluções finais dos exercícios (dependências, depuração, arquivos e diretórios, Express e rotas), uma versão com Playwright e o workflow de build e testes no GitHub Actions.",
+      "en": "Official code for the Node.js path on Microsoft Learn. I created the final solutions for the exercises (dependencies, debugging, files and directories, Express and routing), a Playwright version and the GitHub Actions build and test workflow.",
+      "es": "Código oficial de la ruta de Node.js en Microsoft Learn. Creé las soluciones finales de los ejercicios (dependencias, depuración, archivos y directorios, Express y rutas), una versión con Playwright y el workflow de build y pruebas en GitHub Actions."
+    },
+    "prs": "https://github.com/MicrosoftDocs/node-essentials/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "MicrosoftDocs/azure-dev-docs",
+    "url": "https://github.com/MicrosoftDocs/azure-dev-docs",
+    "estrelas": 185,
+    "linguagem": "Markdown",
+    "papel": {
+      "pt": "Contribuidora · tutoriais",
+      "en": "Contributor · tutorials",
+      "es": "Contribuidora · tutoriales"
+    },
+    "descricao": {
+      "pt": "Documentação do Azure para desenvolvedores. Corrigi passos e comandos do tutorial de Azure Functions com Node.js e incluí exemplos com Svelte.",
+      "en": "Azure documentation for developers. I fixed steps and commands in the Azure Functions with Node.js tutorial and added Svelte samples.",
+      "es": "Documentación de Azure para desarrolladores. Corregí pasos y comandos del tutorial de Azure Functions con Node.js e incluí ejemplos con Svelte."
+    },
+    "prs": "https://github.com/MicrosoftDocs/azure-dev-docs/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "MicrosoftDocs/mslearn-build-api-azure-functions",
+    "url": "https://github.com/MicrosoftDocs/mslearn-build-api-azure-functions",
+    "estrelas": 25,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Contribuidora · modernização",
+      "en": "Contributor · modernization",
+      "es": "Contribuidora · modernización"
+    },
+    "descricao": {
+      "pt": "Exercício do Microsoft Learn para criar APIs com Azure Functions. Migrei o código para o modelo de programação v4 e criei a branch de solução.",
+      "en": "A Microsoft Learn exercise for building APIs with Azure Functions. I migrated the code to the v4 programming model and created the solution branch.",
+      "es": "Ejercicio de Microsoft Learn para crear APIs con Azure Functions. Migré el código al modelo de programación v4 y creé la rama de solución."
+    },
+    "prs": "https://github.com/MicrosoftDocs/mslearn-build-api-azure-functions/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure/static-web-apps-cli",
+    "url": "https://github.com/Azure/static-web-apps-cli",
+    "estrelas": 667,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Contribuidora · correção",
+      "en": "Contributor · fix",
+      "es": "Contribuidora · corrección"
+    },
+    "descricao": {
+      "pt": "CLI oficial do Azure Static Web Apps. Corrigi o comando de desenvolvimento gerado pelo swa init em projetos Next.js.",
+      "en": "The official Azure Static Web Apps CLI. I fixed the dev command generated by swa init for Next.js projects.",
+      "es": "CLI oficial de Azure Static Web Apps. Corregí el comando de desarrollo generado por swa init en proyectos Next.js."
+    },
+    "prs": "https://github.com/Azure/static-web-apps-cli/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Azure/static-web-apps",
+    "url": "https://github.com/Azure/static-web-apps",
+    "estrelas": 346,
+    "linguagem": "Markdown",
+    "papel": {
+      "pt": "Contribuidora · documentação",
+      "en": "Contributor · documentation",
+      "es": "Contribuidora · documentación"
+    },
+    "descricao": {
+      "pt": "Repositório oficial do Azure Static Web Apps. Reformulei o README, com sumário e novos links de exemplos.",
+      "en": "The official Azure Static Web Apps repository. I revamped the README, with a table of contents and new sample links.",
+      "es": "Repositorio oficial de Azure Static Web Apps. Rehice el README, con índice y nuevos enlaces de ejemplos."
+    },
+    "prs": "https://github.com/Azure/static-web-apps/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "nodejs/nodejs.org",
+    "url": "https://github.com/nodejs/nodejs.org",
+    "estrelas": 6870,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Contribuidora · tradução",
+      "en": "Contributor · translation",
+      "es": "Contribuidora · traducción"
+    },
+    "descricao": {
+      "pt": "O site oficial do Node.js. Traduzi páginas para o português do Brasil e entrei na lista de palestrantes da comunidade.",
+      "en": "The official Node.js website. I translated pages into Brazilian Portuguese and joined the community speakers list.",
+      "es": "El sitio oficial de Node.js. Traduje páginas al portugués de Brasil y entré en la lista de oradoras de la comunidad."
+    },
+    "prs": "https://github.com/nodejs/nodejs.org/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "nodejs/nodejs-pt",
+    "url": "https://github.com/nodejs/nodejs-pt",
+    "estrelas": 107,
+    "linguagem": "Markdown",
+    "papel": {
+      "pt": "Contribuidora · comunidade",
+      "en": "Contributor · community",
+      "es": "Contribuidora · comunidad"
+    },
+    "descricao": {
+      "pt": "Grupo de tradução do nodejs.org para o português. Atualizei o README e a lista de membros.",
+      "en": "The Portuguese translation group for nodejs.org. I updated the README and the members list.",
+      "es": "Grupo de traducción de nodejs.org al portugués. Actualicé el README y la lista de miembros."
+    },
+    "prs": "https://github.com/nodejs/nodejs-pt/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
+  },
+  {
+    "repo": "Bullas/girls-in-tech-brazil",
+    "url": "https://github.com/Bullas/girls-in-tech-brazil",
+    "estrelas": 66,
+    "linguagem": "TypeScript",
+    "papel": {
+      "pt": "Desenvolvedora do site",
+      "en": "Website developer",
+      "es": "Desarrolladora del sitio"
+    },
+    "descricao": {
+      "pt": "Repositório colaborativo que reúne criadoras de conteúdo brasileiras da área de tecnologia. Desenvolvi o site do projeto.",
+      "en": "A collaborative repository of Brazilian women who create tech content. I built the project's website.",
+      "es": "Repositorio colaborativo que reúne a creadoras de contenido brasileñas del área de tecnología. Desarrollé el sitio del proyecto."
+    },
+    "prs": "https://github.com/Bullas/girls-in-tech-brazil/pulls?q=is%3Apr+author%3Aglaucia86+is%3Amerged"
   }
 ]

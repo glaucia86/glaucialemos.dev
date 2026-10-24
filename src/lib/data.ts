@@ -2,6 +2,7 @@ import artigosJson from "@/data/artigos.json";
 import eventosJson from "@/data/eventos.json";
 import cargosJson from "@/data/experiencia.json";
 import contribuicoesJson from "@/data/contribuicoes.json";
+import githubStatsJson from "@/data/github-stats.json";
 import projetosJson from "@/data/projetos.json";
 import servicosJson from "@/data/servicos.json";
 import {
@@ -9,6 +10,7 @@ import {
   cargoSchema,
   contribuicaoSchema,
   eventoSchema,
+  githubStatsSchema,
   projetoSchema,
   servicoSchema,
 } from "./types";
@@ -20,6 +22,7 @@ const projetos = z.array(projetoSchema).parse(projetosJson);
 const artigos = z.array(artigoSchema).parse(artigosJson);
 const servicos = z.array(servicoSchema).parse(servicosJson);
 const contribuicoes = z.array(contribuicaoSchema).parse(contribuicoesJson);
+const githubStats = githubStatsSchema.parse(githubStatsJson);
 
 export const getEventos = () => eventos;
 export const getCargos = () => cargos;
@@ -27,6 +30,7 @@ export const getProjetos = () => projetos;
 export const getArtigos = () => artigos;
 export const getServicos = () => servicos;
 export const getContribuicoes = () => contribuicoes;
+export const getGithubStats = () => githubStats;
 
 export function getEventCountries() {
   return [...new Set(

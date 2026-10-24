@@ -28,5 +28,14 @@
   Regenere com `node scripts/build-leia-layers.mjs [--debug]`, que gera `public/pixel/leia/*.webp` e `src/components/about/leia.json`.
   `LeiaActor.tsx` carrega as camadas (`data-leia="idle|blaster|shiver"` e `data-blink` no hero). `leiaShoot` é o disparo
   na sonda, usado por `EchoEggs.destroyProbe`.
+- Projetos (Tatooine/R2-D2): `src/app/[lang]/projetos/page.tsx` + `src/app/tatooine.css` (reusa `home.css` e `HomeChoreography`
+  via `className="home-page projects-page"`). Textos em `src/i18n/tatooine.ts`. Componentes em `src/components/projects/`
+  (`R2Telemetry`, `RepoArchive`, `AllianceSquadrons`, `TatooineEggs`). Intro usa `BootSequence variant="astromech"` com a chave `r2-boot`.
+  Dados: `getAllRepos`, `getGithubTelemetry` e `getMergedPrs` (`src/lib/github.ts`), categorias e ordenação em `src/lib/repos.ts`.
+  Reservas offline: `src/data/projetos.json` e `src/data/github-stats.json`, regeneradas por `node scripts/snapshot-github.mjs` (Node 23.6+).
+  Contribuições (Microsoft, Azure, Node.js, comunidade) em `src/data/contribuicoes.json`, agrupadas em esquadrões pelo dono do repo.
+  Os hotspots do hero (R2, sóis, sandcrawler) ficam em `.tatooine-plane`, com a mesma projeção cover da arte (`--scene-x: 72%`).
+  Easter eggs (página `projects`): npx, utinni, plans, sunset, podrace, mindtrick, cantina, artoo, sand, hellothere, bb8. Teste: `tests/tatooine.browser.mjs`.
+  O teste `social.test.ts` proíbe menções à Twitch em `src`. Tons do `sfx.ts` têm no máximo 0,6 s cada.
 - Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
   `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).

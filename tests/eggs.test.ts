@@ -26,6 +26,17 @@ describe("easter eggs", () => {
     expect(new Set(EGGS.flatMap((egg) => egg.phrases)).size).toBe(EGGS.flatMap((egg) => egg.phrases).length);
   });
 
+  it("reconhece os segredos de Tatooine na página de Projetos", () => {
+    expect(pageOf("/pt/projetos")).toBe("projects");
+    expect(pageOf("/en/projetos/")).toBe("projects");
+    expect(eggsFor("projects").map((egg) => egg.id)).toEqual(["konami", "npx", "utinni", "plans", "sunset", "podrace", "mindtrick", "cantina", "artoo", "sand", "hellothere", "bb8"]);
+    expect(matchPhrase("npx glaucia_lemos86")).toBe("npx");
+    expect(matchPhrase("Hello there!")).toBe("hellothere");
+    expect(matchPhrase("Estrela da Morte")).toBe("plans");
+    expect(matchPhrase("Pôr do sol")).toBe("sunset");
+    expect(matchTail("xxutinni", ["utinni"])).toBe("utinni");
+  });
+
   it("lê os segredos descobertos com storage vazio, inválido ou bloqueado", () => {
     expect(readFound({ getItem: () => null })).toEqual([]);
     expect(readFound({ getItem: () => "{" })).toEqual([]);

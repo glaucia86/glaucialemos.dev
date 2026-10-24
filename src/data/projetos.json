@@ -2,72 +2,504 @@
   {
     "nome": "curso-typescript-zero-to-hero",
     "url": "https://github.com/glaucia86/curso-typescript-zero-to-hero",
-    "estrelas": 3169,
+    "estrelas": 3168,
     "linguagem": "TypeScript",
-    "descricao": "Repositório responsável pelo Curso de TypeScript - Zero to Hero"
+    "descricao": "Repositório responsável pelo Curso de TypeScript - Zero to Hero",
+    "forks": 271,
+    "topicos": [],
+    "criado": "2021-02-01",
+    "atualizado": "2023-05-18"
   },
   {
     "nome": "js-101-beginners-ms",
     "url": "https://github.com/glaucia86/js-101-beginners-ms",
     "estrelas": 657,
     "linguagem": "JavaScript",
-    "descricao": "Repositório responsável por todos os códigos desenvolvidos durante a Série para Iniciantes em JavaScript"
+    "descricao": "Repositório responsável por todos os códigos desenvolvidos durante a Série para Iniciantes em JavaScript",
+    "forks": 72,
+    "topicos": [
+      "curso",
+      "javascript",
+      "microsoft",
+      "microsoft-learn",
+      "nodejs",
+      "tutorial"
+    ],
+    "criado": "2021-07-07",
+    "atualizado": "2021-07-13"
   },
   {
     "nome": "frontend-bootcamp-online",
     "url": "https://github.com/glaucia86/frontend-bootcamp-online",
     "estrelas": 282,
     "linguagem": null,
-    "descricao": "Repositório responsável pelo Front-End Bootcamp Online"
+    "descricao": "Repositório responsável pelo Front-End Bootcamp Online",
+    "forks": 20,
+    "topicos": [
+      "angular",
+      "azure",
+      "bootcamp",
+      "css",
+      "git",
+      "github",
+      "html",
+      "javascript",
+      "react",
+      "vue",
+      "webapp"
+    ],
+    "criado": "2019-07-09",
+    "atualizado": "2020-10-29"
   },
   {
     "nome": "glaucia_lemos86",
     "url": "https://github.com/glaucia86/glaucia_lemos86",
     "estrelas": 156,
     "linguagem": "JavaScript",
-    "descricao": "Desenvolvimento de um Cartão Pessoal via NPX "
+    "descricao": "Desenvolvimento de um Cartão Pessoal via NPX",
+    "forks": 19,
+    "topicos": [
+      "javascript",
+      "nodejs",
+      "npm",
+      "npx",
+      "personal-card",
+      "tierney-cyren"
+    ],
+    "criado": "2018-12-21",
+    "atualizado": "2021-04-05"
   },
   {
     "nome": "repocheckai",
     "url": "https://github.com/glaucia86/repocheckai",
     "estrelas": 121,
     "linguagem": "TypeScript",
-    "descricao": "Agentic CLI Tool for GitHub Repository Health Analysis"
+    "descricao": "Agentic CLI Tool for GitHub Repository Health Analysis",
+    "forks": 10,
+    "topicos": [
+      "ai",
+      "cli-tool",
+      "copilot-sdk",
+      "github-copilot",
+      "typescript"
+    ],
+    "criado": "2026-01-22",
+    "atualizado": "2026-07-08"
   },
   {
     "nome": "workshop-mean-serverless",
     "url": "https://github.com/glaucia86/workshop-mean-serverless",
     "estrelas": 118,
     "linguagem": "TypeScript",
-    "descricao": "Repositório responsável pela realização do workshop de MEAN & Serverless"
+    "descricao": "Repositório responsável pela realização do workshop de MEAN & Serverless",
+    "forks": 78,
+    "topicos": [
+      "angular",
+      "azure",
+      "azure-functions",
+      "cosmosdb",
+      "mean-stack",
+      "mongodb",
+      "nodejs",
+      "serverless"
+    ],
+    "criado": "2019-08-23",
+    "atualizado": "2020-11-19"
   },
   {
     "nome": "ai-js-course",
     "url": "https://github.com/glaucia86/ai-js-course",
     "estrelas": 115,
     "linguagem": "TypeScript",
-    "descricao": "A repository for a AI JavaScript/TypeScript free course"
+    "descricao": "A repository for a AI JavaScript/TypeScript free course",
+    "forks": 7,
+    "topicos": [],
+    "criado": "2025-02-23",
+    "atualizado": "2025-09-25"
   },
   {
     "nome": "microblog-ai-nextjs",
     "url": "https://github.com/glaucia86/microblog-ai-nextjs",
     "estrelas": 112,
     "linguagem": "TypeScript",
-    "descricao": "An application to create and generate intelligent content"
+    "descricao": "An application to create and generate intelligent content",
+    "forks": 8,
+    "topicos": [
+      "ai",
+      "github-models",
+      "gpt-4",
+      "microblog",
+      "project",
+      "tailwindcss",
+      "typescript",
+      "workshop"
+    ],
+    "criado": "2025-06-22",
+    "atualizado": "2025-08-08"
   },
   {
     "nome": "weather-mcp-server",
     "url": "https://github.com/glaucia86/weather-mcp-server",
     "estrelas": 99,
     "linguagem": "TypeScript",
-    "descricao": "A robust Weather MCP Server in TypeScript"
+    "descricao": "A robust Weather MCP Server in TypeScript",
+    "forks": 11,
+    "topicos": [],
+    "criado": "2025-08-09",
+    "atualizado": "2025-10-28"
   },
   {
     "nome": "jwt-node-vue",
     "url": "https://github.com/glaucia86/jwt-node-vue",
     "estrelas": 97,
     "linguagem": "JavaScript",
-    "descricao": "Repositório responsável pelo primeiro projeto da série de vídeos: Coding Stuff."
+    "descricao": "Repositório responsável pelo primeiro projeto da série de vídeos: Coding Stuff.",
+    "forks": 13,
+    "topicos": [
+      "azure",
+      "azurefunctions",
+      "cosmosdb",
+      "express",
+      "jwt",
+      "jwt-authentication",
+      "mongodb",
+      "mongoose",
+      "node",
+      "nodejs",
+      "vue"
+    ],
+    "criado": "2021-01-02",
+    "atualizado": "2025-04-07"
+  },
+  {
+    "nome": "glaucia86",
+    "url": "https://github.com/glaucia86/glaucia86",
+    "estrelas": 88,
+    "linguagem": null,
+    "descricao": "Repository Profile",
+    "forks": 26,
+    "topicos": [],
+    "criado": "2020-11-21",
+    "atualizado": "2026-09-27"
+  },
+  {
+    "nome": "employee-crud-api",
+    "url": "https://github.com/glaucia86/employee-crud-api",
+    "estrelas": 82,
+    "linguagem": "TypeScript",
+    "descricao": "Aplicação CRUD com api com diferentes frameworks e sendo consumido por um único Back-End",
+    "forks": 20,
+    "topicos": [],
+    "criado": "2020-07-13",
+    "atualizado": "2024-01-09"
+  },
+  {
+    "nome": "projeto.crud.php",
+    "url": "https://github.com/glaucia86/projeto.crud.php",
+    "estrelas": 82,
+    "linguagem": "JavaScript",
+    "descricao": "Pequeno projeto CRUD em PHP utilizando o Bootstrap com recurso do PDO",
+    "forks": 68,
+    "topicos": [],
+    "criado": "2015-01-26",
+    "atualizado": "2020-08-14"
+  },
+  {
+    "nome": "rag-search-ingestion-langchainjs-gemini",
+    "url": "https://github.com/glaucia86/rag-search-ingestion-langchainjs-gemini",
+    "estrelas": 82,
+    "linguagem": "PowerShell",
+    "descricao": "A PDF search ingestion RAG application with Docker + LangChain.js + Gemini",
+    "forks": 10,
+    "topicos": [],
+    "criado": "2025-09-10",
+    "atualizado": "2026-02-25"
+  },
+  {
+    "nome": "nodejs-postgresql-azure",
+    "url": "https://github.com/glaucia86/nodejs-postgresql-azure",
+    "estrelas": 75,
+    "linguagem": "JavaScript",
+    "descricao": "Repositório responsável pela série de artigos sobre Node.js com PostgreSQL",
+    "forks": 18,
+    "topicos": [
+      "azure",
+      "azure-devops",
+      "azure-functions",
+      "azure-storage",
+      "crud-application",
+      "github-actions",
+      "nodejs",
+      "postgresql"
+    ],
+    "criado": "2020-03-01",
+    "atualizado": "2023-03-02"
+  },
+  {
+    "nome": "livecoding-frontend-projects",
+    "url": "https://github.com/glaucia86/livecoding-frontend-projects",
+    "estrelas": 73,
+    "linguagem": "CSS",
+    "descricao": "Repositório com projetos Front-End",
+    "forks": 7,
+    "topicos": [
+      "angular",
+      "azure",
+      "chatkit",
+      "front-end-development",
+      "frontend",
+      "node-js",
+      "pusher",
+      "reactjs",
+      "vuejs",
+      "web-development"
+    ],
+    "criado": "2020-01-01",
+    "atualizado": "2023-01-07"
+  },
+  {
+    "nome": "demos-playwright-e2e",
+    "url": "https://github.com/glaucia86/demos-playwright-e2e",
+    "estrelas": 54,
+    "linguagem": "JavaScript",
+    "descricao": "Diferentes demos em relação ao uso do Playwright para realização de palestras sobre o assunto",
+    "forks": 9,
+    "topicos": [
+      "automated-testing",
+      "cross-browser-testing",
+      "javascript",
+      "microsoft",
+      "nodejs",
+      "open-source",
+      "playwright",
+      "playwright-python",
+      "playwright-tests",
+      "playwright-typescript"
+    ],
+    "criado": "2021-04-30",
+    "atualizado": "2021-11-09"
+  },
+  {
+    "nome": "tutorial-crud-mean",
+    "url": "https://github.com/glaucia86/tutorial-crud-mean",
+    "estrelas": 49,
+    "linguagem": "TypeScript",
+    "descricao": "Repositório responsável pelo tutorial realizado no canal do youtube",
+    "forks": 14,
+    "topicos": [
+      "angular",
+      "continuous-integration",
+      "eslint",
+      "expressjs",
+      "javascript",
+      "mean",
+      "mongodb",
+      "nodejs"
+    ],
+    "criado": "2019-02-15",
+    "atualizado": "2023-05-04"
+  },
+  {
+    "nome": "crud-mvc5-ef-angularjs",
+    "url": "https://github.com/glaucia86/crud-mvc5-ef-angularjs",
+    "estrelas": 48,
+    "linguagem": "JavaScript",
+    "descricao": "Repositório do tutorial do canal do meu canal do youtube",
+    "forks": 18,
+    "topicos": [
+      "angularjs",
+      "bootstrap3",
+      "crud-application",
+      "entity-framework",
+      "mvc5",
+      "tutorial"
+    ],
+    "criado": "2017-12-10",
+    "atualizado": "2021-04-05"
+  },
+  {
+    "nome": "workshop-net-core-iniciantes",
+    "url": "https://github.com/glaucia86/workshop-net-core-iniciantes",
+    "estrelas": 48,
+    "linguagem": "HTML",
+    "descricao": "Repositório responsável pelo workshop para aprender os principais conceitos de desenvolvimento em .NET CORE & EF",
+    "forks": 21,
+    "topicos": [
+      "azure-app-service",
+      "build",
+      "csharp-code",
+      "dotnet-core",
+      "ef-core",
+      "razor-pages",
+      "visual-studio-code"
+    ],
+    "criado": "2018-09-28",
+    "atualizado": "2021-04-05"
+  },
+  {
+    "nome": "azure-sql-prisma-vue",
+    "url": "https://github.com/glaucia86/azure-sql-prisma-vue",
+    "estrelas": 46,
+    "linguagem": "JavaScript",
+    "descricao": "A real case study how to apply Azure SQL with Prisma &  Vue",
+    "forks": 8,
+    "topicos": [
+      "azd-templates",
+      "azure",
+      "azure-functions",
+      "azure-sql-database",
+      "azure-static-web-apps",
+      "github-actions",
+      "nodejs"
+    ],
+    "criado": "2021-12-14",
+    "atualizado": "2023-01-13"
+  },
+  {
+    "nome": "docker-zero-to-hero-series",
+    "url": "https://github.com/glaucia86/docker-zero-to-hero-series",
+    "estrelas": 45,
+    "linguagem": "JavaScript",
+    "descricao": "Repositório responsável pela série de artigos sobre Docker",
+    "forks": 6,
+    "topicos": [
+      "azure",
+      "azure-devops",
+      "azure-registry",
+      "conteiner",
+      "docker",
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "criado": "2019-07-04",
+    "atualizado": "2023-03-01"
+  },
+  {
+    "nome": "todo-list-mcp-server",
+    "url": "https://github.com/glaucia86/todo-list-mcp-server",
+    "estrelas": 45,
+    "linguagem": "TypeScript",
+    "descricao": "A Todo List MCP Server",
+    "forks": 7,
+    "topicos": [],
+    "criado": "2025-08-08",
+    "atualizado": "2025-08-08"
+  },
+  {
+    "nome": "health-monitoring-system",
+    "url": "https://github.com/glaucia86/health-monitoring-system",
+    "estrelas": 42,
+    "linguagem": "TypeScript",
+    "descricao": "Sistema Integrado de Monitoramento e Gerenciamento de Dados Médicos para Pacientes com Câncer de Mama Avançado",
+    "forks": 11,
+    "topicos": [],
+    "criado": "2025-11-25",
+    "atualizado": "2025-12-01"
+  },
+  {
+    "nome": "video-nodejs-mongo-restful-crud",
+    "url": "https://github.com/glaucia86/video-nodejs-mongo-restful-crud",
+    "estrelas": 41,
+    "linguagem": "JavaScript",
+    "descricao": "Código desenvolvido durante a gravação das videos aulas sobre: CRUD com Node.Js + MongoDb + Express.js",
+    "forks": 17,
+    "topicos": [
+      "mlab",
+      "mongodb",
+      "mongoose",
+      "nodejs"
+    ],
+    "criado": "2017-09-21",
+    "atualizado": "2020-11-19"
+  },
+  {
+    "nome": "vuejs-todolist-swa",
+    "url": "https://github.com/glaucia86/vuejs-todolist-swa",
+    "estrelas": 35,
+    "linguagem": "Vue",
+    "descricao": "Repositorio responsável por realizar uma demo em como usar o SWA integrado com o GitHub Actions",
+    "forks": 40,
+    "topicos": [
+      "azure",
+      "azure-static-web-apps",
+      "github-actions",
+      "nodejs",
+      "static-web-apps",
+      "swa",
+      "vuejs"
+    ],
+    "criado": "2020-06-22",
+    "atualizado": "2023-01-06"
+  },
+  {
+    "nome": "hands-on-bots-node",
+    "url": "https://github.com/glaucia86/hands-on-bots-node",
+    "estrelas": 32,
+    "linguagem": "JavaScript",
+    "descricao": "Repositório responsável pelas vídeo aulas inerentes a nova série do canal: Hands on",
+    "forks": 9,
+    "topicos": [
+      "bot",
+      "bot-framework",
+      "bots-node",
+      "handson",
+      "javascript",
+      "microsoft-bot-framework",
+      "nodejs"
+    ],
+    "criado": "2018-01-31",
+    "atualizado": "2023-04-20"
+  },
+  {
+    "nome": "intro-starwars-app",
+    "url": "https://github.com/glaucia86/intro-starwars-app",
+    "estrelas": 28,
+    "linguagem": "JavaScript",
+    "descricao": "Repositório responsável pela artigo escrito no dev.to AQUI em como desenvolver a intro do Star Wars com Node.js & Express.js.",
+    "forks": 8,
+    "topicos": [
+      "azure",
+      "azure-blob-storage",
+      "css",
+      "express",
+      "html",
+      "javascript",
+      "nodejs",
+      "star-wars",
+      "tutorial"
+    ],
+    "criado": "2019-12-20",
+    "atualizado": "2023-02-12"
+  },
+  {
+    "nome": "vuejs-workshop",
+    "url": "https://github.com/glaucia86/vuejs-workshop",
+    "estrelas": 26,
+    "linguagem": "JavaScript",
+    "descricao": "Repositório responsável pelos workshops de Vue.js com Azure App Service",
+    "forks": 5,
+    "topicos": [
+      "app-service",
+      "azure",
+      "azure-app-service",
+      "mevn-stack",
+      "mongodb",
+      "todolist",
+      "vuejs"
+    ],
+    "criado": "2019-06-19",
+    "atualizado": "2023-03-03"
+  },
+  {
+    "nome": "curso-tdd-csharp-nunit",
+    "url": "https://github.com/glaucia86/curso-tdd-csharp-nunit",
+    "estrelas": 25,
+    "linguagem": "C#",
+    "descricao": "Curso de TDD com .NET C# com nUnit pelo meu Canal do Youtube e disponibilizado no site Code4Coders",
+    "forks": 13,
+    "topicos": [],
+    "criado": "2017-02-14",
+    "atualizado": "2017-05-22"
   }
 ]
-

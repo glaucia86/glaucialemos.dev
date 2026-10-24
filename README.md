@@ -34,7 +34,7 @@
 
 ![i18n](https://img.shields.io/badge/i18n-pt_·_en_·_es-5a3d7e)
 ![a11y](https://img.shields.io/badge/a11y-reduced_motion_aware-893866)
-![Secrets](https://img.shields.io/badge/easter_eggs-13_hidden-e07828)
+![Secrets](https://img.shields.io/badge/easter_eggs-24_hidden-e07828)
 ![The Force](https://img.shields.io/badge/made_with-the_Force-2ea44f)
 
 <br />
@@ -95,7 +95,7 @@ and the Home is narrated as a five-episode **HoloNet transmission**:
 | `/` | — | Picks `/pt`, `/en` or `/es` from your `Accept-Language` header |
 | `/[lang]` | Dagobah, with Yoda | The five-episode HoloNet story, stats, projects and contact |
 | `/[lang]/sobre` | Echo Base, on Hoth | Career trajectory with parallel tracks, Leia and C-3PO |
-| `/[lang]/projetos` | R2-D2 | Top GitHub repositories ranked by stars |
+| `/[lang]/projetos` | Tatooine, with R2-D2 | Live GitHub telemetry, a filterable archive and the Microsoft Squadron of contributions |
 | `/[lang]/conteudo` | Chewbacca | Articles and content with filters |
 | `/[lang]/eventos` | Grogu | A draggable globe and a searchable history of 130+ talks |
 | `/[lang]/servicos` | Darth Vader | Workshops, mentoring, talks and the contact form |
@@ -117,7 +117,7 @@ and the Home is narrated as a five-episode **HoloNet transmission**:
   30 days, falling back to a local snapshot if the API fails or times out.
 - **Layered pixel art.** Leia and Yoda are split into layers by Node scripts, so they can blink,
   shiver, draw a blaster or channel the Force.
-- **13 secrets.** A shared easter egg registry, with keyboard, touch-gesture and
+- **24 secrets.** A shared easter egg registry, with keyboard, touch-gesture and
   terminal (Comlink) triggers. Every secret can be found on mobile too.
 
 ## Gallery
@@ -351,6 +351,7 @@ glaucialemos.dev/
 │   ├── components/
 │   │   ├── home/              # Dagobah, BootSequence, Force particles, hyperspace
 │   │   ├── about/             # Echo Base, Leia, C-3PO, CareerMap, EchoEggs
+│   │   ├── projects/          # Tatooine: R2Telemetry, RepoArchive, AllianceSquadrons, TatooineEggs
 │   │   └── motion/            # FxLayer, SmoothScroll
 │   ├── data/                  # events, projects, career, services (JSON + Zod)
 │   ├── i18n/                  # pt · en · es dictionaries
@@ -361,7 +362,7 @@ glaucialemos.dev/
 
 ## Easter egg hunt
 
-The site hides **13 secrets**. Open the **Comlink** (the terminal in the corner of the
+The site hides **24 secrets**. Open the **Comlink** (the terminal in the corner of the
 screen) to track your progress. Type a code word into it, or straight onto the page.
 
 <details>
@@ -379,6 +380,12 @@ screen) to track your progress. Type a code word into it, or straight onto the p
 | Echo Base | Something is watching from the sky. Leia has a blaster. |
 | Echo Base | Keep bothering the protocol droid |
 | Echo Base | Stand still for a few seconds and feel the cold |
+| Tatooine | An old command from 2018 still answers in R2's terminal |
+| Tatooine | Two suns, one after the other |
+| Tatooine | Hold R2. The plans are in this droid. |
+| Tatooine | Search the market for droids. Move along. |
+| Tatooine | Small hooded traders roam the horizon: *Utinni!* |
+| Tatooine | A certain Skywalker hates sand. A certain BB-8 loves dunes. |
 
 </details>
 

@@ -1,0 +1,124 @@
+{
+  "followers": 4548,
+  "gists": 105,
+  "publicRepos": 561,
+  "since": 2012,
+  "originals": 319,
+  "stars": 6882,
+  "forks": 1125,
+  "languages": [
+    {
+      "name": "JavaScript",
+      "count": 115
+    },
+    {
+      "name": "TypeScript",
+      "count": 69
+    },
+    {
+      "name": "C#",
+      "count": 36
+    },
+    {
+      "name": "HTML",
+      "count": 17
+    },
+    {
+      "name": "CSS",
+      "count": 9
+    },
+    {
+      "name": "Python",
+      "count": 9
+    },
+    {
+      "name": "other",
+      "count": 24
+    }
+  ],
+  "years": [
+    {
+      "year": 2014,
+      "count": 18
+    },
+    {
+      "year": 2015,
+      "count": 5
+    },
+    {
+      "year": 2016,
+      "count": 28
+    },
+    {
+      "year": 2017,
+      "count": 43
+    },
+    {
+      "year": 2018,
+      "count": 47
+    },
+    {
+      "year": 2019,
+      "count": 50
+    },
+    {
+      "year": 2020,
+      "count": 23
+    },
+    {
+      "year": 2021,
+      "count": 11
+    },
+    {
+      "year": 2022,
+      "count": 19
+    },
+    {
+      "year": 2023,
+      "count": 19
+    },
+    {
+      "year": 2024,
+      "count": 9
+    },
+    {
+      "year": 2025,
+      "count": 27
+    },
+    {
+      "year": 2026,
+      "count": 20
+    }
+  ],
+  "mergedPrs": 88,
+  "prsByRepo": {
+    "Bullas/girls-in-tech-brazil": 1,
+    "Azure-Samples/microblog-ai-remix": 10,
+    "Azure-Samples/llama-index-python": 1,
+    "Azure/static-web-apps": 2,
+    "Azure-Samples/azure-search-openai-demo": 1,
+    "Azure-Samples/serverless-chat-langchainjs": 11,
+    "MicrosoftDocs/mslearn-build-api-azure-functions": 3,
+    "MicrosoftDocs/node-essentials": 17,
+    "microsoft/generative-ai-for-beginners": 6,
+    "Azure-Samples/azure-search-openai-javascript": 1,
+    "Azure-Samples/contoso-real-estate": 4,
+    "MicrosoftDocs/cloud-developer-advocates": 3,
+    "Azure-Samples/copilot-nodejs-todo": 1,
+    "microsoft/MicrosoftCloud": 3,
+    "Azure/static-web-apps-cli": 1,
+    "Azure-Samples/serverless-full-stack-apps-azure-sql": 1,
+    "cyz/skilling": 2,
+    "mvpsbr/livrocsharp": 1,
+    "softchris/graphql-workshop-dotnet": 1,
+    "MicrosoftDocs/azure-dev-docs": 5,
+    "CDCDev/CDC2019": 1,
+    "CollabCodeTech/collabstore-frontend": 2,
+    "plataforma-desafios-js/Plataforma-Desafios-JS-API": 1,
+    "nodejs/nodejs.org": 2,
+    "nodejs/nodejs-pt": 2,
+    "insideoutprojectbr/mulheres-palestrantes": 1,
+    "lucasgomide/videos-pt.br-tecnologia": 2,
+    "cyz/Maratona-BOTs": 2
+  }
+}

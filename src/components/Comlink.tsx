@@ -58,7 +58,7 @@ export function Comlink({ copy, pathname }: { copy: ComlinkCopy; pathname: strin
     const id = matchPhrase(input.current?.value ?? "");
     const egg = EGGS.find((item) => item.id === id);
     if (!id || !egg) { setFeedback(copy.unknown); play("error"); return; }
-    if (!list.some((item) => item.id === id)) { setFeedback(copy.elsewhere.replace("{page}", copy.pages[egg.page === "home" ? "home" : "about"])); play("error"); return; }
+    if (!list.some((item) => item.id === id)) { setFeedback(copy.elsewhere.replace("{page}", copy.pages[egg.page === "global" ? "home" : egg.page])); play("error"); return; }
     setFeedback(copy.sent);
     if (input.current) input.current.value = "";
     run(id);

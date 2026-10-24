@@ -5,7 +5,7 @@ export type ComlinkCopy = {
   open: string; title: string; channel: string; counter: string; master: string; placeholder: string; send: string;
   sent: string; unknown: string; elsewhere: string; play: string; close: string; hidden: string; fresh: string;
   reset: string; resetConfirm: string; resetDone: string;
-  pages: { home: string; about: string };
+  pages: Record<"home" | "about" | "projects", string>;
   eggs: Record<EggId, Entry>;
 };
 
@@ -15,7 +15,7 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     placeholder: "digite uma transmissão…", send: "Transmitir", sent: "Sinal enviado.", unknown: "Transmissão desconhecida. Tente uma das dicas abaixo.",
     elsewhere: "Sinal fora de alcance. Tente na página {page}.", play: "Reproduzir", close: "Fechar canal", hidden: "Sinal criptografado", fresh: "Novo segredo descoberto!",
     reset: "Apagar memória", resetConfirm: "Confirmar: apagar {n} segredos?", resetDone: "Memória apagada, como a do C-3PO no fim do Episódio III. A caçada recomeça.",
-    pages: { home: "Início", about: "Sobre" },
+    pages: { home: "Início", about: "Sobre", projects: "Projetos" },
     eggs: {
       konami: { name: "Código Konami", hint: "Um código antigo: cima, cima, baixo, baixo… No celular, deslize o dedo e toque duas vezes." },
       "force-push": { name: "Empurrão da Força", hint: "No pântano da página inicial, um toque rápido basta." },
@@ -30,6 +30,17 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
       tauntaun: { name: "Tauntaun", hint: "A neve esconde um amigo de duas patas." },
       "threepio-arm": { name: "Braço do C-3PO", hint: "Insista um pouco com o droide de protocolo." },
       settle: { name: "Neve acumulada", hint: "Fique paradinha e deixe Hoth trabalhar." },
+      npx: { name: "Holocron npx", hint: "Um cartão de visitas antigo ainda roda no terminal do R2." },
+      utinni: { name: "Utinni!", hint: "Mercadores baixinhos de capuz rondam o horizonte. Toque no sandcrawler." },
+      plans: { name: "Os planos", hint: "Os planos estão neste droide. Segure o R2 para projetá-los." },
+      sunset: { name: "Pôr do sol binário", hint: "Dois sóis, um depois do outro." },
+      podrace: { name: "Corrida de pods", hint: "Na Boonta Eve, a ordem de largada muda tudo. Mude a ordenação do arquivo." },
+      mindtrick: { name: "Truque mental Jedi", hint: "Procure droides no arquivo e veja o que acontece." },
+      cantina: { name: "Banda da Cantina", hint: "Toque três vezes nas linguagens e a banda de Mos Eisley sobe ao palco." },
+      artoo: { name: "R2 eletrocutado", hint: "Insista com o R2. Ele aguenta… até certo ponto." },
+      sand: { name: "Areia por todo lado", hint: "Um certo Skywalker odeia isso. Toque três vezes na areia." },
+      hellothere: { name: "Hello there!", hint: "Um velho general cumprimenta quem segura o título do mercado." },
+      bb8: { name: "BB-8 nas dunas", hint: "Um droide da nova geração rola pelas dunas. Deslize rápido sobre elas." },
     },
   },
   en: {
@@ -37,7 +48,7 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     placeholder: "type a transmission…", send: "Transmit", sent: "Signal sent.", unknown: "Unknown transmission. Try one of the hints below.",
     elsewhere: "Signal out of range. Try it on the {page} page.", play: "Replay", close: "Close channel", hidden: "Encrypted signal", fresh: "New secret discovered!",
     reset: "Wipe memory", resetConfirm: "Confirm: wipe {n} secrets?", resetDone: "Memory wiped, just like C-3PO's at the end of Episode III. The hunt starts over.",
-    pages: { home: "Home", about: "About" },
+    pages: { home: "Home", about: "About", projects: "Projects" },
     eggs: {
       konami: { name: "Konami Code", hint: "An ancient code: up, up, down, down… On a phone, swipe and then tap twice." },
       "force-push": { name: "Force push", hint: "In the swamp on the home page, a quick tap is enough." },
@@ -52,6 +63,17 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
       tauntaun: { name: "Tauntaun", hint: "The snow hides a two-legged friend." },
       "threepio-arm": { name: "C-3PO's arm", hint: "Keep bothering the protocol droid." },
       settle: { name: "Settling snow", hint: "Stay still and let Hoth do its thing." },
+      npx: { name: "npx holocron", hint: "An old business card still runs on R2's terminal." },
+      utinni: { name: "Utinni!", hint: "Small hooded traders roam the horizon. Tap the sandcrawler." },
+      plans: { name: "The plans", hint: "The plans are in this droid. Hold R2 to project them." },
+      sunset: { name: "Binary sunset", hint: "Two suns, one after the other." },
+      podrace: { name: "Podrace", hint: "At the Boonta Eve, the starting order changes everything. Change the archive's sort." },
+      mindtrick: { name: "Jedi mind trick", hint: "Search the archive for droids and see what happens." },
+      cantina: { name: "Cantina band", hint: "Tap the languages three times and the Mos Eisley band takes the stage." },
+      artoo: { name: "Zapped R2", hint: "Keep bothering R2. He can take it… up to a point." },
+      sand: { name: "Sand everywhere", hint: "A certain Skywalker hates it. Tap the sand three times." },
+      hellothere: { name: "Hello there!", hint: "An old general greets whoever holds the market's title." },
+      bb8: { name: "BB-8 on the dunes", hint: "A new-generation droid rolls over the dunes. Swipe fast across them." },
     },
   },
   es: {
@@ -59,7 +81,7 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     placeholder: "escribe una transmisión…", send: "Transmitir", sent: "Señal enviada.", unknown: "Transmisión desconocida. Prueba una de las pistas.",
     elsewhere: "Señal fuera de alcance. Prueba en la página {page}.", play: "Reproducir", close: "Cerrar canal", hidden: "Señal cifrada", fresh: "¡Nuevo secreto descubierto!",
     reset: "Borrar memoria", resetConfirm: "¿Confirmas? Borrar {n} secretos", resetDone: "Memoria borrada, como la de C-3PO al final del Episodio III. La búsqueda vuelve a empezar.",
-    pages: { home: "Inicio", about: "Sobre mí" },
+    pages: { home: "Inicio", about: "Sobre mí", projects: "Proyectos" },
     eggs: {
       konami: { name: "Código Konami", hint: "Un código antiguo: arriba, arriba, abajo, abajo… En el móvil, desliza y toca dos veces." },
       "force-push": { name: "Empujón de la Fuerza", hint: "En el pantano de la página de inicio basta un toque rápido." },
@@ -74,6 +96,17 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
       tauntaun: { name: "Tauntaun", hint: "La nieve esconde un amigo de dos patas." },
       "threepio-arm": { name: "Brazo de C-3PO", hint: "Insiste un poco con el droide de protocolo." },
       settle: { name: "Nieve acumulada", hint: "Quédate quieta y deja que Hoth haga lo suyo." },
+      npx: { name: "Holocrón npx", hint: "Una vieja tarjeta de visita todavía corre en la terminal de R2." },
+      utinni: { name: "¡Utinni!", hint: "Pequeños mercaderes encapuchados rondan el horizonte. Toca el reptador de arena." },
+      plans: { name: "Los planos", hint: "Los planos están en este droide. Mantén a R2 para proyectarlos." },
+      sunset: { name: "Atardecer binario", hint: "Dos soles, uno después del otro." },
+      podrace: { name: "Carrera de vainas", hint: "En la Boonta Eve, el orden de salida lo cambia todo. Cambia el orden del archivo." },
+      mindtrick: { name: "Truco mental Jedi", hint: "Busca droides en el archivo y mira lo que pasa." },
+      cantina: { name: "Banda de la Cantina", hint: "Toca tres veces los lenguajes y la banda de Mos Eisley sube al escenario." },
+      artoo: { name: "R2 electrocutado", hint: "Insiste con R2. Aguanta… hasta cierto punto." },
+      sand: { name: "Arena por todas partes", hint: "Cierto Skywalker la odia. Toca tres veces la arena." },
+      hellothere: { name: "Hello there!", hint: "Un viejo general saluda a quien mantiene pulsado el título del mercado." },
+      bb8: { name: "BB-8 en las dunas", hint: "Un droide de nueva generación rueda por las dunas. Desliza rápido sobre ellas." },
     },
   },
 };

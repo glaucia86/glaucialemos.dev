@@ -2,6 +2,7 @@ import { journey } from '../journey';
 import { holonet } from '../holonet';
 import { echo } from '../echo-base';
 import { comlink } from '../comlink';
+import { tatooine } from '../tatooine';
 import type { Dictionary } from "./pt";
 import pt from "./pt";
 const es: Dictionary = {
@@ -10,6 +11,7 @@ const es: Dictionary = {
   holonet: holonet.es,
   echo: echo.es,
   comlink: comlink.es,
+  tatooine: tatooine.es,
   metadata: { title: "Glaucia Lemos — IA para quienes crean", description: "Ingeniería, liderazgo y adopción responsable de IA en software." }, nav: { home: "Inicio", about: "Sobre mí", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Servicios", language: "Idioma" }, motion: { reduce: "Reducir animaciones", enable: "Activar animaciones", system: "Reducido por el sistema" }, common: { source: "Fuente", stars: "estrellas", language: "Lenguaje", all: "Todos", unavailable: "No informado" },
   accessibility: { skip: "Saltar al contenido", primaryNav: "Navegación principal", highlights: "Cifras destacadas" },
   home: { ...pt.home, projectsTitle: "Conocimiento que se convierte en código.", projectsLink: "Explora los proyectos", aboutLink: "Conoce mi trayectoria", contactTitle: "¿Construimos el próximo paso?", contactBody: "Trae el desafío de tu equipo. Conectemos estrategia, ingeniería e IA con tu realidad.", contactCta: "Conversemos", sceneCaption: "Un viaje de aprendizaje continuo", eyebrow: "Ingeniería • Liderazgo • IA", value: "Ayudo a profesionales de ingeniería y líderes a aplicar IA en el desarrollo de software. Enseño con código, práctica y contexto.", primaryCta: "Talleres y mentoría", secondaryCta: "Explora mi trabajo", stats: ["eventos","países","idiomas","estrellas en proyectos principales"], servicesEyebrow: "Cómo puedo ayudar", servicesTitle: "De la curiosidad a la práctica con IA", servicesBody: "Talleres, mentoría y charlas que conectan tecnología con decisiones reales.", crawlTitle: "Una historia en construcción", crawl: ["De desarrolladora a educadora global, Glaucia construyó su camino compartiendo conocimiento.","Como Microsoft MVP y ex Cloud Advocate, acercó comunidades a JavaScript, TypeScript, nube e IA.","Hoy ayuda a convertir la adopción de IA en una capacidad de ingeniería, no solo en una herramienta."], heroImageAlt: "Maestro Yoda en los pantanos de Dagobah", aboutTitle: "Sobre mí", aboutImageAlt: "Glaucia Lemos representada como Jedi con túnica marrón y sable de luz azul" },
