@@ -7,8 +7,8 @@
 <pre>
    ██████╗ ██╗         ·  HOLONET v4.2 // establishing secure link
   ██╔════╝ ██║         ·  loading profile: GLAUCIA_LEMOS
-  ██║  ███╗██║         ·  class: principal software engineer
-  ██║   ██║██║         ·         ai transformation lead · microsoft mvp
+  ██║  ███╗██║         ·  class: Principal Software Engineer
+  ██║   ██║██║         ·         AI Transformation Lead · Microsoft MVP · Codex Ambassador · Devin Ambassador
   ╚██████╔╝███████╗    ·  ACCESS GRANTED
    ╚═════╝ ╚══════╝
 </pre>
@@ -59,24 +59,28 @@
 
 ## Table of contents
 
-- [About the project](#about-the-project)
-- [Highlights](#highlights)
-- [Gallery](#gallery)
-- [Tech stack](#tech-stack)
-- [Architecture](#architecture)
-- [Getting started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Windows](#windows)
-  - [macOS](#macos)
-  - [Linux](#linux)
-  - [Environment variables](#environment-variables)
-- [Available scripts](#available-scripts)
-- [Testing](#testing)
-- [Project structure](#project-structure)
-- [Easter egg hunt](#easter-egg-hunt)
-- [Further reading](#further-reading)
-- [Credits and disclaimer](#credits-and-disclaimer)
-- [About me](#about-me)
+- [glaucialemos.dev](#glaucialemosdev)
+    - [*A personal website told as a HoloNet transmission, in pixel art, from a galaxy far, far away.*](#a-personal-website-told-as-a-holonet-transmission-in-pixel-art-from-a-galaxy-far-far-away)
+  - [Table of contents](#table-of-contents)
+  - [About the project](#about-the-project)
+  - [Highlights](#highlights)
+  - [Gallery](#gallery)
+  - [Tech stack](#tech-stack)
+  - [Architecture](#architecture)
+  - [Getting started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Windows](#windows)
+    - [macOS](#macos)
+    - [Linux](#linux)
+      - [Production build (all systems)](#production-build-all-systems)
+    - [Environment variables](#environment-variables)
+  - [Available scripts](#available-scripts)
+  - [Testing](#testing)
+  - [Project structure](#project-structure)
+  - [Easter egg hunt](#easter-egg-hunt)
+  - [Further reading](#further-reading)
+  - [Credits and disclaimer](#credits-and-disclaimer)
+  - [About me](#about-me)
 
 ---
 
