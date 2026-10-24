@@ -8,7 +8,7 @@
    ██████╗ ██╗         ·  HOLONET v4.2 // establishing secure link
   ██╔════╝ ██║         ·  loading profile: GLAUCIA_LEMOS
   ██║  ███╗██║         ·  class: Principal Software Engineer
-  ██║   ██║██║         ·         AI Transformation Lead · Microsoft MVP · Codex Ambassador · Devin Ambassador
+  ██║   ██║██║         ·         AI Transformation Lead · Microsoft MVP · Codex
   ╚██████╔╝███████╗    ·  ACCESS GRANTED
    ╚═════╝ ╚══════╝
 </pre>
