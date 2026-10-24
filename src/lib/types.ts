@@ -67,7 +67,7 @@ export const servicoSchema = z.object({
   id: z.string(),
   titulo: textoLocalizadoSchema,
   descricao: textoLocalizadoSchema,
-  preco: z.literal("sob consulta"),
+  preco: z.enum(["sob consulta", "gratuito"]),
 });
 
 export const contribuicaoSchema = z.object({

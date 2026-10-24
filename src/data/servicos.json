@@ -2,30 +2,30 @@
   {
     "id": "workshop-sdlc-agentes-ia",
     "titulo": {
-      "pt": "Workshop ao vivo: SDLC com agentes de IA para times TypeScript",
-      "en": "Live workshop: SDLC with AI agents for TypeScript teams",
-      "es": "Taller en vivo: SDLC con agentes de IA para equipos TypeScript"
+      "pt": "Workshop gratuito ao vivo: SDLC com agentes de IA para times TypeScript",
+      "en": "Free live workshop: SDLC with AI agents for TypeScript teams",
+      "es": "Taller gratuito en vivo: SDLC con agentes de IA para equipos TypeScript"
     },
     "descricao": {
       "pt": "Workshop prático ao vivo para integrar agentes de IA ao ciclo de desenvolvimento de software de times TypeScript.",
       "en": "Live hands-on workshop for integrating AI agents into the software development lifecycle of TypeScript teams.",
       "es": "Taller práctico en vivo para integrar agentes de IA en el ciclo de desarrollo de software de equipos TypeScript."
     },
-    "preco": "sob consulta"
+    "preco": "gratuito"
   },
   {
     "id": "mentoria-consultoria-lideranca-tecnica",
     "titulo": {
-      "pt": "Mentoria e consultoria para líderes técnicos e profissionais seniores",
-      "en": "Mentoring and consulting for technical leaders and senior professionals",
-      "es": "Mentoría y consultoría para líderes técnicos y profesionales sénior"
+      "pt": "Mentoria gratuita para líderes técnicos e profissionais seniores",
+      "en": "Free mentoring for technical leaders and senior professionals",
+      "es": "Mentoría gratuita para líderes técnicos y profesionales sénior"
     },
     "descricao": {
       "pt": "Acompanhamento personalizado em estratégia técnica, carreira, liderança e adoção responsável de IA.",
       "en": "Personalized guidance on technical strategy, career development, leadership, and responsible AI adoption.",
       "es": "Acompañamiento personalizado en estrategia técnica, carrera, liderazgo y adopción responsable de IA."
     },
-    "preco": "sob consulta"
+    "preco": "gratuito"
   },
   {
     "id": "palestras",
