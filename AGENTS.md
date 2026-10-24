@@ -12,5 +12,21 @@
 - Repositórios: `getTopRepos` (`src/lib/github.ts`) busca o ranking por estrelas no GitHub, revalidado a cada 30 dias;
   `src/data/projetos.json` é só a reserva. `GITHUB_TOKEN` (opcional, só servidor) aumenta o limite da API.
 - CI: `.github/workflows/ci.yml` roda lint, typecheck, testes e build em push/PR.
+- Execução: não suba o servidor nem rode testes de navegador por conta própria; peça para a usuária executar e compartilhar o resultado.
+- Sobre (Base Eco/Hoth): `src/app/[lang]/sobre/page.tsx` + `src/app/about.css` (reusa `home.css` e `HomeChoreography` via
+  `className="home-page about-page"`). Textos em `src/i18n/echo-base.ts`. Trajetória calculada por `src/lib/career.ts`
+  (ordem, faixas paralelas, eras). Intro usa `BootSequence` com a chave de sessão `echo-boot`. Teste: `tests/echo-base.browser.mjs`.
+  Easter eggs em `src/components/about/EchoEggs.tsx`: "help me"/"obiwan" (holomensagem), "eu te amo"/"i love you"
+  ("Eu sei."), "hoth" (nevasca), clique na sonda (autodestruição), clique na neve (tauntaun), neve acumulando após 6 s parado.
+- Segredos (easter eggs): registro único em `src/lib/eggs.ts` (`emitEgg`/`onEgg`/`discover`, salvo em
+  `localStorage["holonet-secrets"]`). Gatilhos (teclado, gestos, Comlink) só emitem o id; quem executa o efeito chama
+  `discover`. O Comlink (`src/components/Comlink.tsx`, textos em `src/i18n/comlink.ts`) fica no `SiteChrome` e torna
+  todo segredo acessível no celular. "Apagar memória" no Comlink (dois cliques) chama `forget()` e zera o progresso.
+  Janelas `showModal()` ficam acima da mira (`.fx-cursor`): enquanto há uma aberta, o `pixel-ui.css` devolve o cursor nativo.
+  Ao criar um segredo novo: registre em `EGGS`, adicione nome/dica nos 3 idiomas e um gesto de toque equivalente.
+- Leia viva (Fase 3B): briefing, prompts e montagem em `docs/leia-art.md`. Arte-fonte em `docs/art/segments-leia`.
+  Regenere com `node scripts/build-leia-layers.mjs [--debug]`, que gera `public/pixel/leia/*.webp` e `src/components/about/leia.json`.
+  `LeiaActor.tsx` carrega as camadas (`data-leia="idle|blaster|shiver"` e `data-blink` no hero). `leiaShoot` é o disparo
+  na sonda, usado por `EchoEggs.destroyProbe`.
 - Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
   `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).

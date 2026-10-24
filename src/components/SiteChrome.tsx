@@ -9,6 +9,8 @@ import { PageEffects } from "./PageEffects";
 import { SmoothScroll } from "./motion/SmoothScroll";
 import { FxLayer } from "./motion/FxLayer";
 import { isSoundEnabled, setSoundEnabled } from "@/lib/sfx";
+import { KONAMI_GESTURES, discover, emitEgg, gestureOf, konamiStep, onEgg } from "@/lib/eggs";
+import { Comlink } from "./Comlink";
 
 const routes = [["home", ""], ["about", "sobre"], ["projects", "projetos"], ["content", "conteudo"], ["events", "eventos"], ["services", "servicos"]] as const;
 
@@ -19,7 +21,22 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
   const [sound, setSound] = useState(false); const [scrolled, setScrolled] = useState(false);
   useEffect(() => { try { setReduced(localStorage.getItem("reduce-motion") === "true"); } catch { setReduced(false); } setSound(isSoundEnabled()); }, []);
   useEffect(() => { if (reduced === null) return; document.documentElement.classList.toggle("reduce-motion", reduced); try { localStorage.setItem("reduce-motion", String(reduced)); } catch { /* Browsing without storage still supports the control. */ } }, [reduced]);
-  useEffect(() => { const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]; let position = 0; const onKey = (event: KeyboardEvent) => { position = event.key.toLowerCase() === code[position]?.toLowerCase() ? position + 1 : 0; if (position === code.length) { setEgg(true); position = 0; } }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
+  useEffect(() => { const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]; let position = 0; const onKey = (event: KeyboardEvent) => { position = event.key.toLowerCase() === code[position]?.toLowerCase() ? position + 1 : 0; if (position === code.length) { emitEgg("konami"); position = 0; } }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
+  // Konami on touch screens: swipe ↑ ↑ ↓ ↓ ← → ← → and tap twice.
+  useEffect(() => {
+    let position = 0; let start: { x: number; y: number; t: number } | null = null;
+    const down = (event: TouchEvent) => { const touch = event.touches[0]; start = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY, t: performance.now() } : null; };
+    const up = (event: TouchEvent) => {
+      const touch = event.changedTouches[0]; if (!start || !touch) return;
+      const gesture = gestureOf(touch.clientX - start.x, touch.clientY - start.y, performance.now() - start.t); start = null;
+      if (!gesture) return;
+      position = konamiStep(position, gesture);
+      if (position === KONAMI_GESTURES.length) { position = 0; emitEgg("konami"); }
+    };
+    addEventListener("touchstart", down, { passive: true }); addEventListener("touchend", up, { passive: true });
+    const stop = onEgg("konami", () => { discover("konami"); setEgg(true); });
+    return () => { removeEventListener("touchstart", down); removeEventListener("touchend", up); stop(); };
+  }, []);
   useEffect(() => { const dialog = dialogRef.current; if (!dialog) return; if (egg && !reduced && !matchMedia("(prefers-reduced-motion: reduce)").matches && !dialog.open) dialog.showModal(); if ((!egg || reduced) && dialog.open) dialog.close(); }, [egg, reduced]);
   useEffect(() => { setMenuOpen(false); }, [pathname]);
   useEffect(() => { const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setMenuOpen(false); }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
@@ -50,6 +67,7 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
       <div><strong>Glaucia Lemos</strong><p>{dictionary.footer.tagline}</p></div><SocialLinks labels={dictionary.footer.socialLabels} />
       <small>© {new Date().getFullYear()} · {dictionary.footer.rights}<button type="button" className="footer-top" onClick={top}>{dictionary.holonet.credits.top} <span aria-hidden="true">↑</span></button></small>
     </footer>
+    <Comlink copy={dictionary.comlink} pathname={pathname} />
     <dialog ref={dialogRef} className="egg-overlay" aria-label={dictionary.easterEgg.message} onCancel={() => setEgg(false)}><div className="lightsaber" /><p>{dictionary.easterEgg.message}</p><button autoFocus onClick={() => setEgg(false)}>{dictionary.easterEgg.close}</button></dialog>
   </>;
 }

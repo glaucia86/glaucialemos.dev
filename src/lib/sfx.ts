@@ -1,5 +1,5 @@
 // 8-bit effects synthesized with Web Audio: no files, off by default, opt-in only.
-export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" | "error" | "success" | "levitate" | "deflect" | "rumble" | "splash";
+export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" | "error" | "success" | "levitate" | "deflect" | "rumble" | "splash" | "ion" | "wind" | "ice" | "probe" | "holo" | "tauntaun" | "blaster";
 type Tone = { wave: OscillatorType; from: number; to: number; duration: number; gain: number; delay?: number };
 
 export const SOUND_KEY = "sfx-enabled";
@@ -18,6 +18,13 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   deflect: [{ wave: "square", from: 1400, to: 300, duration: .12, gain: .035 }, { wave: "sawtooth", from: 220, to: 90, duration: .2, gain: .03, delay: .02 }],
   rumble: [{ wave: "sawtooth", from: 48, to: 36, duration: .6, gain: .07 }, { wave: "triangle", from: 96, to: 140, duration: .6, gain: .04, delay: .05 }],
   splash: [{ wave: "square", from: 900, to: 120, duration: .22, gain: .03 }, { wave: "triangle", from: 260, to: 50, duration: .5, gain: .06, delay: .03 }],
+  ion: [{ wave: "sawtooth", from: 60, to: 30, duration: .6, gain: .06 }, { wave: "square", from: 1800, to: 220, duration: .5, gain: .03, delay: .05 }, { wave: "triangle", from: 440, to: 110, duration: .55, gain: .04, delay: .1 }],
+  wind: [{ wave: "triangle", from: 300, to: 520, duration: .6, gain: .015 }, { wave: "sine", from: 600, to: 380, duration: .6, gain: .012, delay: .25 }],
+  ice: [{ wave: "square", from: 2400, to: 900, duration: .08, gain: .03 }, { wave: "square", from: 1800, to: 600, duration: .1, gain: .03, delay: .07 }, { wave: "triangle", from: 900, to: 120, duration: .4, gain: .04, delay: .12 }],
+  probe: [{ wave: "sawtooth", from: 220, to: 40, duration: .5, gain: .06 }, { wave: "square", from: 90, to: 30, duration: .6, gain: .05, delay: .04 }],
+  holo: [{ wave: "sine", from: 440, to: 660, duration: .3, gain: .03 }, { wave: "triangle", from: 880, to: 1320, duration: .4, gain: .02, delay: .15 }],
+  tauntaun: [{ wave: "square", from: 300, to: 520, duration: .12, gain: .03 }, { wave: "square", from: 520, to: 260, duration: .2, gain: .03, delay: .13 }],
+  blaster: [{ wave: "square", from: 1900, to: 260, duration: .16, gain: .035 }, { wave: "sawtooth", from: 950, to: 140, duration: .2, gain: .02, delay: .015 }],
 };
 
 export function readSoundPreference(storage: Pick<Storage, "getItem"> | undefined) {

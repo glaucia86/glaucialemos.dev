@@ -6,6 +6,7 @@ import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
 import { play } from "@/lib/sfx";
+import { bringIntoView, discover, onEgg } from "@/lib/eggs";
 import { createForceParticles } from "./force-particles";
 import { createHyperspace } from "./hyperspace";
 
@@ -17,7 +18,7 @@ const FLASH = "brightness(6) saturate(0)";
 type ForceStage = "idle" | "charging" | "force" | "xwing";
 
 // Server markup arrives as children; this island only adds the Force, the intro and the jump.
-export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { children: ReactNode; jumpLabel: string; forceLabel: string; labelledBy: string }) {
+export function HeroMotion({ children, jumpLabel, forceLabel, touchLabel, labelledBy }: { children: ReactNode; jumpLabel: string; forceLabel: string; touchLabel: string; labelledBy: string }) {
   const hero = useRef<HTMLElement>(null);
   const particleCanvas = useRef<HTMLCanvasElement>(null);
   const jumpCanvas = useRef<HTMLCanvasElement>(null);
@@ -80,7 +81,8 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
     const leave = () => { section.style.setProperty("--pointer-x", "0px"); section.style.setProperty("--pointer-y", "0px"); toX.forEach((to) => to(0)); toY.forEach((to) => to(0)); };
 
     // Force push: a pixel shockwave, a burst of particles and every rock thrown back.
-    const push = (event: PointerEvent) => {
+    const push = (event: { clientX: number; clientY: number }) => {
+      discover("force-push");
       const box = section.getBoundingClientRect();
       const wave = document.createElement("span");
       wave.className = "force-wave";
@@ -147,6 +149,7 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
 
     const enterForce = () => {
       press = null;
+      discover("force-hold");
       setStage("force");
       layer.dataset.levitating = "true";
       play("levitate");
@@ -237,6 +240,17 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
     section.addEventListener("pointercancel", abort);
     section.addEventListener("pointerdown", down);
     section.addEventListener("pointerup", up);
+    // A long press on touch screens must summon the Force, not the system menu.
+    const noMenu = (event: Event) => { if (stage !== "idle") event.preventDefault(); };
+    section.addEventListener("contextmenu", noMenu);
+    // Replays from the Comlink.
+    let replay: number | undefined;
+    const stopEggs = onEgg(["force-push", "force-hold"], (id) => void bringIntoView(section).then(() => {
+      if (id === "force-push") { const { x, y } = centre(pose); push({ clientX: x - 120, clientY: y }); return; }
+      if (stage !== "idle") return;
+      enterForce();
+      clearTimeout(replay); replay = window.setTimeout(release, 3800);
+    }));
 
     // Desktop camera: push into Dagobah, then jump to hyperspace while pinned.
     let jump: ReturnType<typeof createHyperspace> | null = null;
@@ -272,6 +286,7 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
       delete layer.dataset.levitating; delete section.dataset.forceStage;
       section.removeEventListener("pointermove", move); section.removeEventListener("pointermove", drag); section.removeEventListener("pointerleave", leave); section.removeEventListener("pointerleave", abort);
       section.removeEventListener("pointercancel", abort); section.removeEventListener("pointerdown", down); section.removeEventListener("pointerup", up);
+      section.removeEventListener("contextmenu", noMenu); stopEggs(); clearTimeout(replay);
       section.querySelectorAll(".force-wave").forEach((wave) => wave.remove());
       leave();
     };
@@ -282,6 +297,7 @@ export function HeroMotion({ children, jumpLabel, forceLabel, labelledBy }: { ch
     <canvas ref={particleCanvas} className="force-particles" aria-hidden="true" />
     <span className="force-vignette" aria-hidden="true" />
     <p className="force-meter" aria-hidden="true">{forceLabel}<span className="force-meter__bar"><i /></span></p>
+    <p className="force-touch-hint" aria-hidden="true"><span />{touchLabel}</p>
     <div className="hero-jump" aria-hidden="true">
       <canvas ref={jumpCanvas} className="hero-jump__canvas" />
       <p className="hero-jump__label">{jumpLabel}</p>

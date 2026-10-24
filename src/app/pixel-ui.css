@@ -117,6 +117,11 @@ footer small { display: flex; align-items: center; justify-content: space-betwee
 
 html.has-fx-cursor, html.has-fx-cursor * { cursor: none !important; }
 html.has-fx-cursor :is(input, textarea, [contenteditable="true"]) { cursor: text !important; }
+/* Modal dialogs live in the browser's top layer, above the reticle: hand the native pointer back while one is open. */
+html.has-fx-cursor:has(dialog:modal), html.has-fx-cursor:has(dialog:modal) * { cursor: auto !important; }
+html.has-fx-cursor:has(dialog:modal) dialog :is(a, button, summary, select, label[for]) { cursor: pointer !important; }
+html.has-fx-cursor:has(dialog:modal) dialog :is(input, textarea) { cursor: text !important; }
+html:has(dialog:modal) :is(.fx-cursor, .fx-trail) { visibility: hidden; }
 .fx-cursor, .fx-trail i { position: fixed; z-index: 95; left: 0; top: 0; pointer-events: none; }
 .fx-cursor { width: 28px; height: 28px; margin: -14px 0 0 -14px; transition: width var(--duration-fast) var(--ease-out), height var(--duration-fast) var(--ease-out), margin var(--duration-fast) var(--ease-out), opacity var(--duration-fast); }
 .fx-cursor::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; background: var(--energy-blue); box-shadow: 0 0 8px var(--energy-blue); }
