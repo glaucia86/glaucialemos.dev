@@ -6,6 +6,7 @@ import { groupEras, normalizeEra, yearOf, type CareerRole, type Era } from "@/li
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { formatExperiencePeriod } from "@/lib/home-curation";
+import { play } from "@/lib/sfx";
 
 const vars = (values: Record<string, string | number>) => values as CSSProperties;
 
@@ -24,6 +25,7 @@ export function CareerMap({ roles, copy, locale, source, ship }: { roles: Career
     return () => removeEventListener("popstate", sync);
   }, []);
   const filter = (next: Era | "all") => {
+    if (next !== era) play("click-niveora", { detune: next === "all" ? 0 : 300 });
     setEra(next); setExpanded(null);
     const url = new URL(location.href);
     if (next === "all") url.searchParams.delete("era"); else url.searchParams.set("era", next);

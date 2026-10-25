@@ -102,7 +102,7 @@ try {
     });
     await page.goto(`${baseURL}/pt`);
     await expect(page.locator(".hero-scene-layer")).toHaveAttribute("data-motion", "running");
-    for (const slug of ["projetos", "conteudo"]) {
+    for (const slug of ["conteudo"]) {
       await page.locator(`nav a[href="/pt/${slug}"]`).click();
       await expect(page).toHaveURL(`${baseURL}/pt/${slug}`);
       await expect(page.locator(".hero-scene-layer")).toHaveAttribute("data-motion", "running");
@@ -128,7 +128,7 @@ try {
   await check("secondary scenes share cover geometry and distribute fireflies", async (page) => {
     for (const width of [390, 900, 901, 1280, 1920]) {
       await page.setViewportSize({ width, height: 900 });
-      for (const route of ["projetos", "eventos"]) {
+      for (const route of ["eventos"]) {
         await page.goto(`${baseURL}/pt/${route}`);
         const alignment = await page.locator(".scene-image-plane").evaluate((plane) => {
           const image = plane.closest(".page-hero").querySelector(".page-hero__image");

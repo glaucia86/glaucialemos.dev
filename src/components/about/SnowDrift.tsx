@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { gsap } from "@/lib/gsap";
 import { useMotionEnabled } from "@/lib/use-motion";
 import { discover, onEgg } from "@/lib/eggs";
+import { play } from "@/lib/sfx";
 
 const IDLE_MS = 6000;
 const GRACE_MS = 2500;
@@ -18,8 +19,9 @@ export function SnowDrift() {
     let idle: ReturnType<typeof setTimeout> | undefined;
     let lastY = scrollY;
     let graceUntil = 0;
-    const settle = () => { page.dataset.settled = "true"; discover("snowdrift"); };
-    const shake = () => page.querySelectorAll<HTMLElement>(".snowcap").forEach((cap) => {
+    const settle = () => { page.dataset.settled = "true"; discover("snowdrift"); play("snow"); };
+    const shake = () => { if (page.dataset.settled) play("snow", { detune: 400 }); shakeCaps(); };
+    const shakeCaps = () => page.querySelectorAll<HTMLElement>(".snowcap").forEach((cap) => {
       const box = cap.getBoundingClientRect();
       if (box.bottom < 0 || box.top > innerHeight) return;
       for (let index = 0; index < 6; index++) {

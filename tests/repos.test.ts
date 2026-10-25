@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getProjetos } from "@/lib/data";
-import { categorize, isDroidQuery, languageShare, matchesQuery, reposByYear, sortRepos, totals } from "@/lib/repos";
+import { categorize, languageShare, matchesQuery, reposByYear, sortRepos, totals } from "@/lib/repos";
 
 const repo = (nome: string, extra: Partial<{ descricao: string; topicos: string[]; estrelas: number; forks: number; atualizado: string; linguagem: string | null }> = {}) => ({
   nome, descricao: "", topicos: [], estrelas: 0, forks: 0, atualizado: "", linguagem: null, ...extra,
@@ -50,10 +50,5 @@ describe("arquivo de repositórios", () => {
     expect(matchesQuery(item, "NODEJS")).toBe(true);
     expect(matchesQuery(item, "  ")).toBe(true);
     expect(matchesQuery(item, "python")).toBe(false);
-  });
-
-  it("reconhece a busca por droides do truque mental", () => {
-    for (const query of ["droids", "Droides", " the droids ", "droid"]) expect(isDroidQuery(query)).toBe(true);
-    expect(isDroidQuery("android")).toBe(false);
   });
 });

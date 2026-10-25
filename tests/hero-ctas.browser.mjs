@@ -88,24 +88,6 @@ try {
     await expect(page.locator(".hologram-glow")).toBeHidden();
 
     for (const lang of ["pt", "en", "es"]) {
-      await page.goto(`${baseURL}/${lang}/projetos`);
-      const composition = await page.locator(".page-hero").evaluate((hero) => {
-        const text = hero.querySelector(".page-hero__content").getBoundingClientRect();
-        const image = hero.querySelector(".page-hero__image").getBoundingClientRect();
-        const plane = hero.querySelector(".scene-image-plane").getBoundingClientRect();
-        const frame = hero.getBoundingClientRect();
-        // R2-D2's center in the 1024 × 576 reference image.
-        const r2 = { x: plane.x + plane.width * .78, y: plane.y + plane.height * .78 };
-        return {
-          belowText: image.top >= text.bottom,
-          r2Visible: r2.x > frame.left && r2.x < frame.right && r2.y > text.bottom && r2.y < frame.bottom,
-          shade: getComputedStyle(hero.querySelector(".page-hero__shade")).backgroundImage,
-          noOverflow: document.documentElement.scrollWidth <= window.innerWidth,
-        };
-      });
-      assert.ok(composition.belowText && composition.r2Visible && composition.noOverflow, `${lang}, ${width}px: ${JSON.stringify(composition)}`);
-      assert.match(composition.shade, /28%/);
-
       await page.goto(`${baseURL}/${lang}/eventos`);
       await page.locator(".page-hero__image").evaluate((image) => image.decode());
       const eventsComposition = await page.locator(".page-hero").evaluate((hero) => {

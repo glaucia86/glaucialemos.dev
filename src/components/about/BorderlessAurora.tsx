@@ -7,6 +7,10 @@ import type { AuroraRecords } from "@/lib/aurora";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
+import { play } from "@/lib/sfx";
+
+// One aurora chord per language: the same voice, shifted (cents), so each choice sounds different.
+const CHORD: Record<Locale, number> = { pt: 0, en: 500, es: -300 };
 
 const signals = { pt: { name: "Português", symbol: "◇", x: 77 }, en: { name: "English", symbol: "✦", x: 160 }, es: { name: "Español", symbol: "≋", x: 243 } };
 const ribbons = Array.from({ length: 72 }, (_, i) => ({
@@ -58,7 +62,7 @@ export function BorderlessAurora({ locale, records }: { locale: Locale; records:
             <rect className="aurora-spark" x={signals[selected].x - 1} y="134" width="2" height="3" fill="#fff" />
           </svg>
           <div className="aurora-signals" role="group" aria-label={copy.controls} hidden={!ready}>
-            {locales.map(lang => <button type="button" key={lang} lang={lang} aria-pressed={selected === lang} aria-controls={`aurora-record-${lang}`} onClick={() => { setSelected(lang); setPulse(value => value + 1); }}><span aria-hidden="true">{signals[lang].symbol}</span>{signals[lang].name}</button>)}
+            {locales.map(lang => <button type="button" key={lang} lang={lang} aria-pressed={selected === lang} aria-controls={`aurora-record-${lang}`} onClick={() => { setSelected(lang); setPulse(value => value + 1); play("aurora", { detune: CHORD[lang] }); }}><span aria-hidden="true">{signals[lang].symbol}</span>{signals[lang].name}</button>)}
           </div>
         </div>
         <div className="aurora-records" aria-live={ready ? "polite" : "off"} aria-atomic="true">

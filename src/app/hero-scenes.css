@@ -15,18 +15,12 @@
 @keyframes dagobah-mist { from { transform: translateX(-3%); opacity: .4; } to { transform: translateX(4%); opacity: .8; } }
 @keyframes dagobah-mote { 0%,100% { transform: translateY(0); opacity: .15; } 50% { transform: translate(4px,-14px); opacity: .7; } }
 @media (max-width: 900px) { .dagobah-mote:nth-of-type(n+4), .dagobah-mist--front { display: none; } }
-.hero-scene-layer--tatooine .scene-image-plane {
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
 @media (max-width: 640px) {
   .hero-scene-layer--nevarro :is(.hologram-glow, .hologram-ring) {
     display: none;
   }
 
-  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) {
+  .page-hero:has(.hero-scene-layer--nevarro) {
     --scene-height: clamp(360px, 65vw, 500px);
     --scene-position: 80%;
     display: block;
@@ -36,36 +30,28 @@
 
   .page-hero:has(.hero-scene-layer--nevarro) { --scene-position: 90%; }
 
-  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__content {
+  .page-hero:has(.hero-scene-layer--nevarro) .page-hero__content {
     padding: 3rem 0 2rem;
   }
 
-  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__image {
+  .page-hero:has(.hero-scene-layer--nevarro) .page-hero__image {
     top: auto !important;
     height: var(--scene-height) !important;
     object-position: var(--scene-position) 50%;
   }
 
-  .page-hero:has(:is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro)) .page-hero__shade {
+  .page-hero:has(.hero-scene-layer--nevarro) .page-hero__shade {
     top: auto;
     height: var(--scene-height);
     background: var(--hero-overlay-scene);
   }
 
-  :is(.hero-scene-layer--tatooine, .hero-scene-layer--nevarro) {
+  .hero-scene-layer--nevarro {
     top: auto;
     height: var(--scene-height);
     container-type: size;
   }
 
-  .hero-scene-layer--tatooine .scene-image-plane {
-    width: max(100cqw, 177.777778cqh);
-    height: max(100cqh, 56.25cqw);
-    left: var(--scene-position);
-    top: 50%;
-    transform: translate(calc(-1 * var(--scene-position)), -50%);
-    will-change: auto;
-  }
 }
 /* These two planes match the 1024 × 576 image's object-cover crop. */
 .hero-scene-layer--dagobah,

@@ -31,15 +31,16 @@ describe("easter eggs", () => {
     expect(new Set(EGGS.flatMap((egg) => egg.phrases)).size).toBe(EGGS.flatMap((egg) => egg.phrases).length);
   });
 
-  it("reconhece os segredos de Tatooine na página de Projetos", () => {
+  it("reconhece os segredos de Marte na página de Projetos", () => {
     expect(pageOf("/pt/projetos")).toBe("projects");
     expect(pageOf("/en/projetos/")).toBe("projects");
-    expect(eggsFor("projects").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "npx", "utinni", "plans", "sunset", "podrace", "mindtrick", "cantina", "artoo", "sand", "hellothere", "bb8"]);
-    expect(matchPhrase("npx glaucia_lemos86")).toBe("npx");
-    expect(matchPhrase("Hello there!")).toBe("hellothere");
-    expect(matchPhrase("Estrela da Morte")).toBe("plans");
-    expect(matchPhrase("Pôr do sol")).toBe("sunset");
-    expect(matchTail("xxutinni", ["utinni"])).toBe("utinni");
+    expect(eggsFor("projects").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "rover-scan", "sample-cache", "terminal-launch", "first-sprout", "before-pretty", "lost-bug", "dust-fall"]);
+    expect(matchPhrase("npx glaucia_lemos86")).toBe("terminal-launch");
+    expect(matchPhrase("Varredura")).toBe("rover-scan");
+    expect(matchPhrase("Carcaça")).toBe("before-pretty");
+    expect(matchPhrase("Poeira")).toBe("dust-fall");
+    expect(matchTail("xxdepurar", ["lost-bug"])).toBe("lost-bug");
+    expect(matchTail("umbroto", ["first-sprout"])).toBe("first-sprout");
   });
 
   it("lê os segredos descobertos com storage vazio, inválido ou bloqueado", () => {

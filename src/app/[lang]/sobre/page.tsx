@@ -74,7 +74,7 @@ export default async function About({ params }: Props) {
   const [first, second] = splitTitle(d.about.title);
   const ticker = [...n.hud.ticker, ...n.hud.ticker];
 
-  return <main id="main" className="home-page about-page" tabIndex={-1}>
+  return <main id="main" className="home-page about-page" data-sound-world="niveora" tabIndex={-1}>
     <script dangerouslySetInnerHTML={{ __html: bootScriptFor(NIVEORA_BOOT_KEY) }} />
     <BootSequence lines={n.boot.lines} granted={n.boot.granted} skip={n.boot.skip} label={n.boot.label} storageKey={NIVEORA_BOOT_KEY} brand={n.boot.brand} variant="niveora" armOnNavigation />
     <ReadingProgress variant="niveora" />

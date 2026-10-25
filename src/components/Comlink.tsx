@@ -37,7 +37,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
       if (!letter.current || letter.current.open) return;
       dialog.current?.close();
       letterOpener.current = document.activeElement as HTMLElement;
-      letter.current.showModal(); discover("curious-letter");
+      letter.current.showModal(); discover("curious-letter"); play("letter");
     };
     const stop = onEgg("curious-letter", openLetter);
     const reset = () => { clearTimeout(replayTimer.current); letter.current?.close(); };

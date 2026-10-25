@@ -1,24 +1,38 @@
 # Handoff — Migração Galáxia Encantada
 
-## Retomada — refinamento de Projetos/Marte
+## Sons de 2026-10-25 — digitação no terminal e paleta por mundo
 
-**Próxima intenção da Glaucia:** iniciar o refinamento da próxima página, Projetos (`/[lang]/projetos`), no mundo Marte / Vale das Invenções. Começar pela análise e proposta de experiência; este handoff não autoriza commit, merge, publicação ou implementação automática de todas as ideias discutidas.
+- `src/lib/sfx.ts`: timbre de ruído filtrado (`wave: "noise"`), `play(kind, { detune, gain })`, intervalo mínimo por som (`MIN_GAP`/`allowed`), nada toca com a aba oculta. Tudo continua opt-in, ≤ 0,6 s e sem loops (`tests/sfx.test.ts`, `tests/holonet.test.ts`).
+- Terminal de Marte: `dig`, `disk-in`, `crt-on`, uma tecla `type` por caractere do prompt, rajada de teclas + `return` por linha do cartão, `disk-out` ao ejetar.
+- Hover/clique por mundo: `data-sound-world` no `<main>` (Home `observatory`, Sobre `niveora`, Projetos `mars`), lido pelo `FxLayer` via `uiSound`. Páginas não migradas mantêm `blip`/`key`.
+- Sobre: eras do mapa, fio do `BetweenLines` (`thread`), passos e estrela do `BorrowedStar`, acorde por idioma no `BorderlessAurora`, neve do `SnowDrift` (`snow`), carta curiosa (`letter`).
+- Projetos: rajada (`gust-dust`, só com a cena ativa), salto da rolagem (`scan-sweep` e `static`, uma vez por passagem), colônia (`build`, uma vez por lote por visita), painel de poeira (`brush`), inseto no hover/foco.
+- Verificação: lint, typecheck, 197 testes e build passaram. Escuta pendente com a Glaucia.
 
-**Estado conferido:** branch `feat/niveora-sobre`, com alterações rastreadas e arquivos novos ainda sem commit. Preservar todo o working tree. Home aprovada na `main`; Sobre implementada nesta branch; Projetos ainda usa Tatooine/R2-D2. Não refazer a Etapa B de Nivéora: poses e atuação já foram integradas. Os registros mais recentes abaixo prevalecem sobre os relatos históricos.
+## Ajustes de 2026-10-25 — terminal antigo, colônia e bancada do site
 
-**Última verificação de código:** lint, typecheck, 166 testes em 23 arquivos e build com `ƒ Middleware` passaram na entrega anterior. Não foram repetidos para esta atualização exclusivamente documental. Testes de navegador e conferência visual da última entrega continuam pendentes; não presumir aprovação visual nem execução da suíte pela Glaucia.
+- **Telemetria:** continua lida da API do GitHub no servidor, agora a cada 24 h (`REVALIDATE_SECONDS = 86_400`; `revalidate = 86400` em Home e Projetos). Sem rota nova nem custo extra; `GITHUB_TOKEN` segue opcional. Selo "Leitura do GitHub em {data}" na seção.
+- **Diálogos centralizados:** o reset `* { margin: 0 }` anulava a centralização do `<dialog>`; `.mars-dialog` e `.crt` usam `margin: auto`.
+- **Terminal antigo (`RetroTerminal.tsx`, segredo `terminal-launch`):** Prince sentado ao lado do computador; clicar/tocar/Enter nele desenterra um disquete; arrastar até o drive, tocar ou Enter insere; o computador liga e abre a tela CRT verde centralizada com `A:\> npx glaucia_lemos86`, o cartão de 2018, a nota de 2013 e "Atualizar para hoje"/"Ejetar". Rádio e frase executam a cadeia. Arte final: folha `GE-PROP-03B-mars-lab.png` (aprovada), recortada por `PROP_SHEETS` em `retro-computer-off/on`, `floppy-flat`, `floppy-upright`; a tela verde translúcida do Grok fica opaca com `fillHoles`.
+- **A colônia que cresceu (`ColonyGrowth.tsx`):** substitui os Estratos; módulos por ano via `colonyLots` (`src/lib/mars-records.ts`), construção por rolagem, estufa com o broto (`first-sprout`) no lote mais novo.
+- **Bancada do site refeita:** três estações + comparação antes/depois (`BeforeAfter.tsx`, range nativo) com a pose do Grok × sprite na placa e botão para a versão 3 × 3 recusada. O script gera `public/galaxia/bench/mars-lab/{raw-idle,plate,grid-3}.webp` (sai `sheet.webp`).
+- Verificação: lint, typecheck e 181 testes passaram. Build não rodado (dev aberto). `tests/marte.browser.mjs` atualizado (CRT centralizado, disquete por teclado, colônia, comparação), não executado.
 
-### Ponto de partida para Marte
+**Prompt GE-PROP-03B-mars-lab** (anexar GE-PROP-03 e GE-PL-03):
+```text
+Create a clean pixel-art GAME PROPS ASSET SHEET for Marte — Vale das Invenções, matching the attached GE-PROP-03 props (same crisp pixel size, palette and lighting: iron red #743A31, rust #BD5632, copper #D27A43, golden orange #F3AE62, cyan #42CFE0). Original objects, each separated with generous empty space, front three-quarter view: (1) RETRO LAB COMPUTER OFF: a chunky 1980s-style desktop computer customised for a Mars lab, beige-copper casing with small cyan status LEDs, a dark curved CRT monitor (screen off, deep green-black glass), a separate keyboard, and a visible empty 3.5-inch floppy drive slot on the base unit; (2) THE SAME COMPUTER ON: identical object and position, CRT screen glowing soft phosphor green with faint scanlines but NO text, drive LED lit; (3) A 3.5-inch FLOPPY DISK lying flat, dusty with a little red Mars dust, blank paper label, metal shutter; (4) the same floppy disk upright, clean. Crisp square pixels, limited palette, no smooth gradients, no blur, no 3D, no text, no logos, no brand names. True transparent PNG background.
+```
 
-- Ler a seção 4.3 do plano de migração. Inspecionar `src/app/[lang]/projetos/page.tsx`, `src/app/tatooine.css`, `src/i18n/tatooine.ts` e `src/components/projects/`. Preservar os dados e recursos úteis de repositórios, filtros, telemetria e contribuições, definindo sua apresentação autoral.
-- Artes-fonte disponíveis: `GE-PL-03-mars-lab.png`, `GE-GL-03-mars-lab.png`, `GE-DOG-03-mars-lab.png` e `approved-source/props/mars-lab/` (rover, console, amostras e beacon). Inspecionar a integração existente antes de gerar assets; não alterar as placas aprovadas.
-- Repetir o tipo de rolagem da Home, com variação própria de Marte: poeira, sinais de laboratório e telemetria. Pixel art fina, personagem sem atuação automática gratuita; movimento reduzido, toque e teclado desde a proposta.
-- **Direção criativa escolhida:** encanto e conexão. Distribuir easter eggs pelo conteúdo, com pistas perceptíveis, fatos reais e recompensas distintas. Não concentrar tudo no hero nem bloquear informações profissionais atrás de enigmas.
-- **Ideias para refinar, ainda sem especificação aprovada para Marte:** “O projeto antes de ficar bonito” (abrir a carcaça de um card e revelar esboço/decisão real) e “Um bug perdido no laboratório” (pequeno circuito de entrada/processamento/saída ligado a um projeto real). Esboços, falhas e decisões pessoais precisam de evidência ou relato da Glaucia; nunca inventá-los. Não criar erros reais na interface para representar o bug.
-- Os três segredos já entregues em Nivéora são a referência de distribuição: fio no mapa, Prince no diário/estrela no convite final e carta global no rádio. A carta já funciona após três descobertas válidas; reutilizar essa estrutura, sem duplicar progresso nem criar outro armazenamento.
-- É possível refinar Marte sem mudar de branch. Antes de implementar a migração, definir uma base isolada que preserve as mudanças da Sobre; não trocar de branch carregando alterações acidentalmente nem fazer commit/merge sem autorização.
+## Entrega de 2026-10-25 — Projetos/Marte, Vale das Invenções
 
-**Operação:** não iniciar servidor nem executar suíte de navegador pelo agente. A Glaucia executa e compartilha resultados. Não rodar build com dev aberto. Não há autorização de commit, push ou publicação nesta passagem.
+**Estado:** a `feat/niveora-sobre` já estava mesclada na `main` (PR #7). Marte foi implementado na branch nova `feat/marte-projetos`, criada da `main`, sem commit, push ou publicação. A validação visual de Nivéora e de Marte continua pendente com a Glaucia.
+
+- **Assets:** composição aprovada (Glaucia 87; 93; h 47 · Prince 75,5; 93; h 14 · rover 75,5; 63,6 · beacon 61,8; 61,5 · console 96; 93,5 · maleta 67; 93,5). A Glaucia pediu o Prince mais de frente: a sheet `GE-DOG-03B-mars-lab.png` (stand, gaze, watch, sniff, três quartos com capacete) foi normalizada pela pose `side` e virou a referência do palco. A pose de frente da `GE-DOG-03` está sem capacete e não é usada. Costuras novas: `SEAMS` (Glaucia, x = 702) e costura da 03B (x = 1274); a mesclagem por caixa agora respeita costuras (saída de Nivéora conferida, sem mudança). O broto verde da pose `sniff` virou prop (`DERIVED_PROPS`) e o 7º segredo, por pedido dela.
+- **Página:** hero com poeira em pixel e salto de rolagem próprio (rajada lateral, varredura com grade/osciloscópio e os números reais, estática âmbar “SINAL ADQUIRIDO”); Telemetria (amostras minerais, estratos do tempo, console npx); Arquivo (filtros, busca, ordenação, destaque e carcaças); Estações parceiras (contribuições); Próxima missão. Tatooine removido (CSS, textos, componentes, sprites, teste de navegador, mapeamento no `HeroScene`).
+- **Segredos (7, todos com registros reais e fonte):** ver `AGENTS.md`. Catálogo total: 22 (2 globais + 6 Home + 7 Sobre + 7 Projetos). Primeiros commits em `src/data/marte-registros.json` (snapshot de 25/10/2026). Nota da Glaucia aplicada: o cartão npx é de 2018, mas a carreira começa em dez/2013 (TopDown Sistemas, de `experiencia.json`).
+- **Verificação:** lint, typecheck, `npm test` (24 arquivos / 179 testes) e build com `ƒ Middleware` passaram; `node --check` nas suítes de navegador alteradas. `tests/marte.browser.mjs` foi escrito e **não foi executado**; `hero-ctas` e `scene-lifecycle` deixaram de checar Projetos como cena Star Wars.
+- **Correção (abertura curta):** o `SmoothScroll` desliga o lag smoothing do GSAP para o Lenis; ao navegar para Projetos (página pesada, ainda mais no `npm run dev`), a montagem bloqueava a thread e o GSAP pulava para o fim da abertura. O `BootSequence` agora liga `lagSmoothing(500, 33)` enquanto a abertura toca (o Lenis está parado), restaura `0` ao fechar e só começa a timeline depois de dois frames. Vale para todas as páginas.
+- **Para a Glaucia validar:** `npm run start -- --hostname 127.0.0.1 --port 3100` e `node tests/marte.browser.mjs` (capturas em `docs/screenshots/marte/`). Conferir: texto público da decisão “pixelada demais”, leitura do console no desktop e no celular, alvo de toque dos atores em 390 px, poeira/rajadas, salto, carcaças e circuito do bug.
 
 ## Entrega de 2026-10-25 — histórias além da cena
 
@@ -78,7 +92,7 @@ Estado em 25/10/2026. Leia este arquivo, depois o `AGENTS.md` e o `docs/galaxia-
 - **Ideias antigas não implementadas:** “Degelo total” (`thaw`) e Prince abanar sozinho. Não estão aprovadas para execução; a numeração antiga foi superada pelos novos segredos narrativos.
 - **Erro de hidratação no `<body>`** (`cz-shortcut-listen`): vem da extensão ColorZilla; resolvido com `suppressHydrationWarning` no `<body>` de `src/app/[lang]/layout.tsx`.
 - **Backup do Star Wars:** `archive/star-wars` (= `main` em `8adb94b`), já enviada ao GitHub.
-- **Próxima página:** Projetos (`/[lang]/projetos`), Marte, o Vale das Invenções (seção 4.3 do plano).
+- **Projetos:** Marte implementado em `feat/marte-projetos` (ver o registro no topo); validação visual pendente.
 - **Depois:** Conteúdo/Lúmina → Eventos/Atlas → Serviços/Aurélia → 404/Maré Rubra → modo história → auditoria final.
 
 ## Como a Sobre (Nivéora) ficou
@@ -204,13 +218,11 @@ Create a production-ready 2D PIXEL ART DOG SPRITE SHEET of PRINCE, the EXACT sam
 - Os arquivos estão em CRLF no working tree (autocrlf). Ao editar por script, normalize `\r\n`.
 
 ## Pendências conhecidas
-- Catálogo atual com 26 segredos (2 globais + Home 6 + Sobre 7 + Projetos 11). O total final será recalculado ao substituir os segredos legados das próximas páginas; não perseguir a estimativa antiga como meta.
+- Catálogo atual com 22 segredos (2 globais + Home 6 + Sobre 7 + Projetos 7). O total final será recalculado ao substituir os segredos legados das próximas páginas; não perseguir a estimativa antiga como meta.
 - `tests/scene-lifecycle.browser.mjs` ainda espera o `SceneMotion` antigo na Home (`data-motion="running"`); a Sobre saiu da lista. Revisar na auditoria final.
 - Aviso do rodapé atualizado em 2026-10-25: site pessoal independente e opiniões próprias (PT/EN/ES).
 - Nomes internos legados (`holonet`, `holo-card`, `stellar`, `jedi-effects.css`, `HeroScene`/`PageHero` com mapa por imagem) ficam para a auditoria final. A seção 7.1 do plano pede desacoplar `sceneByImage` → `sceneId` ao migrar Conteúdo, Eventos e Serviços.
 - Os testes de navegador da Home (`tests/holonet.browser.mjs`) foram atualizados, mas ainda não rodaram.
 
 ## Prompt para abrir a nova sessão
-> Leia `AGENTS.md`, `docs/galaxia-encantada/HANDOFF.md` (comece por “Retomada — refinamento de Projetos/Marte”) e a seção 4.3 de `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Quero iniciar o refinamento de Projetos/Marte, o Vale das Invenções. A branch atual é `feat/niveora-sobre`, com alterações e arquivos novos sem commit: preserve tudo e não refaça a Sobre. Inspecione a página atual de Projetos, suas fontes de dados e as artes aprovadas de `mars-lab`; apresente uma proposta de narrativa, seções, rolagem e easter eggs distribuídos pelo conteúdo. A direção é encanto e conexão, usando registros reais, com experiências como “O projeto antes de ficar bonito” e “Um bug perdido no laboratório” para refinarmos. Não invente bastidores pessoais, não inicie servidor ou testes de navegador e não faça commit, push ou publicação. Comece em planejamento; a validação visual final da Sobre continua pendente.
-
-O refinamento de Marte pode começar agora; a implementação deve preservar o trabalho de Nivéora e usar uma base isolada, conforme combinado com a Glaucia.
+> Leia `AGENTS.md` e `docs/galaxia-encantada/HANDOFF.md` (comece por “Entrega de 2026-10-25 — Projetos/Marte”). A branch é `feat/marte-projetos`, com alterações sem commit: preserve tudo. Vou compartilhar o resultado de `node tests/marte.browser.mjs` e capturas de Marte para ajustarmos. Não inicie servidor nem testes de navegador e não faça commit, push ou publicação.

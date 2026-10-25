@@ -39,5 +39,30 @@
       "snow-pawprint-05": 0.34,
       "snow-pawprint-06": 0.34
     }
+  },
+  "mars-lab": {
+    "grid": 1,
+    "plateGrid": 0,
+    "colors": { "actor": 160, "prop": 128 },
+    "stages": {
+      "glaucia": { "x": 87, "y": 93, "height": 47, "reference": "idle" },
+      "prince": { "x": 75.5, "y": 93, "height": 14, "reference": "stand" }
+    },
+    "actorScale": {},
+    "props": {
+      "rover-idle": 0.78,
+      "rover-scanning": 0.78,
+      "analysis-console-idle": 0.72,
+      "analysis-console-activated": 0.72,
+      "data-beacon": 0.62,
+      "sample-case-sealed": 0.6,
+      "mineral-sample-small": 0.6,
+      "mineral-sample-large": 0.6,
+      "sprout": 0.3,
+      "retro-computer-off": 0.6,
+      "retro-computer-on": 0.6,
+      "floppy-flat": 0.2,
+      "floppy-upright": 0.2
+    }
   }
 }

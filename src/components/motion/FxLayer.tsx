@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, FINE_POINTER } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
-import { play } from "@/lib/sfx";
+import { play, uiSound } from "@/lib/sfx";
 
 const INTERACTIVE = "a, button, [role='button'], summary, select, label[for]";
 
@@ -16,12 +16,15 @@ export function FxLayer() {
 
   useEffect(() => {
     let last: Element | null = null;
+    // Each world has its own hover and click voice (data-sound-world on <main>); a slight detune keeps it alive.
+    const world = () => document.querySelector<HTMLElement>("main")?.dataset.soundWorld;
+    const vary = () => ({ detune: (Math.random() - .5) * 80 });
     const over = (event: PointerEvent) => {
       const target = (event.target as Element | null)?.closest(INTERACTIVE) ?? null;
-      if (target && target !== last) play("blip");
+      if (target && target !== last) play(uiSound(world(), "hover"), vary());
       last = target;
     };
-    const click = (event: MouseEvent) => { if ((event.target as Element | null)?.closest(INTERACTIVE)) play("key"); };
+    const click = (event: MouseEvent) => { if ((event.target as Element | null)?.closest(INTERACTIVE)) play(uiSound(world(), "click"), vary()); };
     document.addEventListener("pointerover", over, { passive: true });
     document.addEventListener("click", click, { passive: true });
     return () => { document.removeEventListener("pointerover", over); document.removeEventListener("click", click); };
