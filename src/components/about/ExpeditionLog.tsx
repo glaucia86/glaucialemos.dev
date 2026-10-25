@@ -1,24 +1,15 @@
-import type { CSSProperties } from "react";
+import { CrystalBadges } from "./CrystalBadges";
 import type { NiveoraCopy } from "@/i18n/niveora";
 import { ChapterTag } from "@/components/home/Chapter";
 import { NiveoraPortrait } from "./NiveoraPortrait";
 import { PORTRAIT_CRACKS, iceShards } from "./ice-geometry";
+import { PrinceFootprint } from "./BorrowedStar";
+import { niveoraStories } from "@/i18n/niveora-stories";
+import type { Locale } from "@/i18n/config";
 
 // Ice block over the portrait. Shown only when JS can thaw it.
 const SHARDS = iceShards(5, 6, 100, 130);
-const TINTS = [["#55e9e8", "#bff7f6"], ["#b89dfc", "#e4dbff"], ["#f3a5d8", "#ffe1f3"], ["#88cbe9", "#e9f6ff"]];
-
-// A cut crystal in 16 × 16 pixels: dark facet, bright facet and a glint.
-function CrystalBadge({ tint, glint }: { tint: string; glint: string }) {
-  return <svg className="badge__icon" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
-    <path fill="#0d2342" d="M6 0h4v1h1v2h1v2h1v6h-1v2h-1v2h-1v1H6v-1H5v-2H4v-2H3V5h1V3h1V1h1z" />
-    <path fill={tint} d="M7 1h2v2h1v2h1v6h-1v2H9v2H7v-2H6v-2H5V5h1V3h1z" />
-    <path fill={glint} d="M7 2h1v3H7zM6 5h1v4H6zM8 9h1v3H8z" />
-    <path fill="#ffffff" d="M7 3h1v1H7z" />
-  </svg>;
-}
-
-export function ExpeditionLog({ copy, tag, stats, locale }: { copy: NiveoraCopy["log"]; tag: [string, string]; stats: number[]; locale: string }) {
+export function ExpeditionLog({ copy, tag, stats, locale }: { copy: NiveoraCopy["log"]; tag: [string, string]; stats: number[]; locale: Locale }) {
   const format = new Intl.NumberFormat(locale);
   return <section className="chapter chapter--log" id="diario" aria-labelledby="log-title">
     <div className="chapter__inner log-grid">
@@ -52,20 +43,13 @@ export function ExpeditionLog({ copy, tag, stats, locale }: { copy: NiveoraCopy[
           </div>)}
         </dl>
         <p className="log-languages">{copy.languages}</p>
+        <PrinceFootprint copy={niveoraStories[locale]} />
       </div>
     </div>
     <div className="chapter__inner badges">
       <h3 className="badges__title">{copy.badgesTitle}</h3>
       <p className="badges__intro">{copy.badgesIntro}</p>
-      <ul className="badge-list" data-reveal="stagger">{copy.badges.map(({ name, note }, index) => <li key={name}>
-        <button type="button" className="badge" aria-pressed="false" title={copy.flip} style={{ "--tint": TINTS[index][0] } as CSSProperties}>
-          <span className="snowcap" aria-hidden="true" />
-          <span className="badge__inner">
-            <span className="badge__face badge__face--front"><CrystalBadge tint={TINTS[index][0]} glint={TINTS[index][1]} /><b>{name}</b></span>
-            <span className="badge__face badge__face--back"><b>{name}</b><span>{note}</span></span>
-          </span>
-        </button>
-      </li>)}</ul>
+      <CrystalBadges copy={copy} />
     </div>
   </section>;
 }

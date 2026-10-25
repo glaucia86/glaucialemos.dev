@@ -60,3 +60,12 @@ export function careerStats(roles: CareerRole[], now = monthOf(new Date())) {
 }
 
 export const yearOf = (month: number) => Math.floor(month / 12);
+
+export function normalizeEra(value: string | null): Era | "all" {
+  return ERAS.includes(value as Era) ? value as Era : "all";
+}
+
+export function careerSelection(roles: CareerRole[], era: Era | "all", selected?: CareerRole) {
+  const visible = roles.filter(role => era === "all" || role.era === era);
+  return selected && visible.includes(selected) ? selected : [...visible].sort((a, b) => b.start - a.start || b.end - a.end)[0];
+}

@@ -5,6 +5,7 @@ import { gsap } from "@/lib/gsap";
 import { play } from "@/lib/sfx";
 import { buzz } from "@/lib/eggs";
 import type { NiveoraCopy } from "@/i18n/niveora";
+import { createIceBlocks } from "./ice-blocks";
 
 export const FREEZE_EVENT = "niveora:freeze";
 export const STORM_END_EVENT = "niveora:storm-end";
@@ -46,13 +47,15 @@ export function FrozenCards({ copy }: { copy: NiveoraCopy["ice"] }) {
   useEffect(() => {
     const page = document.querySelector<HTMLElement>(".about-page");
     if (!page) return;
-    const blocks = new Set<HTMLElement>();
+    const blocks = createIceBlocks((block, target) => {
+      gsap.killTweensOf([block, target, ...block.querySelectorAll("*")]);
+      gsap.set(target, { clearProps: "x" });
+    });
     let melt: ReturnType<typeof setTimeout> | undefined;
     const coarse = () => matchMedia("(pointer: coarse)").matches;
     const announce = (text: string) => { if (status.current) status.current.textContent = text; };
 
-    const release = (target: HTMLElement, block: HTMLElement) => { block.remove(); blocks.delete(block); target.classList.remove("is-frozen"); };
-    const shatter = (target: HTMLElement, block: HTMLElement) => {
+    const shatter = (block: HTMLElement) => {
       if (block.dataset.shattered) return;
       block.dataset.shattered = "true";
       play("ice"); buzz([20, 30, 40]); announce(copy.done);
@@ -63,7 +66,7 @@ export function FrozenCards({ copy }: { copy: NiveoraCopy["ice"] }) {
         gsap.to(shard, { x: gsap.utils.random(-90, 90), y: gsap.utils.random(30, 160), rotation: gsap.utils.random(-180, 180), autoAlpha: 0, duration: gsap.utils.random(.5, .9), ease: "power2.in" });
       }
       gsap.to(block.querySelector(".ice-block__frost"), { autoAlpha: 0, duration: .25, ease: "steps(3)" });
-      setTimeout(() => release(target, block), 950);
+      blocks.releaseAfter(block, 950);
     };
 
     const freeze = (target: HTMLElement) => {
@@ -74,7 +77,7 @@ export function FrozenCards({ copy }: { copy: NiveoraCopy["ice"] }) {
       block.tabIndex = 0;
       block.setAttribute("role", "button");
       block.innerHTML = `<canvas class="ice-block__frost"></canvas><svg class="ice-block__cracks" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">${CRACKS.map((d, index) => `<path class="ice-block__crack ice-block__crack--${index + 1}" d="${d}"/>`).join("")}</svg><span class="ice-block__hint" aria-hidden="true"></span>`;
-      target.append(block); blocks.add(block);
+      target.append(block); blocks.add(block, target);
       const canvas = block.querySelector("canvas")!;
       const hint = block.querySelector<HTMLElement>(".ice-block__hint")!;
       hint.textContent = coarse() ? copy.touch : copy.desktop;
@@ -91,7 +94,7 @@ export function FrozenCards({ copy }: { copy: NiveoraCopy["ice"] }) {
         hits++; block.dataset.hits = String(hits); label();
         play("ice"); buzz(18);
         gsap.fromTo(target, { x: 0 }, { keyframes: { x: [-3, 3, -2, 0] }, duration: .2, ease: "none" });
-        if (hits >= HITS) shatter(target, block);
+        if (hits >= HITS) shatter(block);
       };
       // Scraping with a mouse or pen clears the frost where it passes.
       const scrape = (event: PointerEvent) => {
@@ -103,7 +106,7 @@ export function FrozenCards({ copy }: { copy: NiveoraCopy["ice"] }) {
           cleared[y * width + x] = 1; scraped++; context.clearRect(x, y, 1, 1);
         }
         hint.hidden = true;
-        if (scraped / cleared.length >= CLEAR) shatter(target, block);
+        if (scraped / cleared.length >= CLEAR) shatter(block);
       };
       const key = (event: KeyboardEvent) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); hit(); } };
       block.addEventListener("click", hit);
@@ -117,7 +120,7 @@ export function FrozenCards({ copy }: { copy: NiveoraCopy["ice"] }) {
       clearTimeout(melt);
       melt = setTimeout(() => blocks.forEach((block) => {
         block.dataset.melting = "true";
-        setTimeout(() => release(block.parentElement as HTMLElement, block), 1500);
+        blocks.releaseAfter(block, 1500);
       }), MELT_MS);
     };
     addEventListener(FREEZE_EVENT, onFreeze);
@@ -125,7 +128,7 @@ export function FrozenCards({ copy }: { copy: NiveoraCopy["ice"] }) {
     return () => {
       removeEventListener(FREEZE_EVENT, onFreeze); removeEventListener(STORM_END_EVENT, onStormEnd);
       clearTimeout(melt);
-      blocks.forEach((block) => release(block.parentElement as HTMLElement, block));
+      blocks.dispose();
     };
   }, [copy]);
 

@@ -55,7 +55,7 @@ export function HomeChoreography() {
         .fromTo(jump.querySelector(".chapter-jump__label"), { letterSpacing: ".1em", autoAlpha: 0 }, { letterSpacing: ".5em", autoAlpha: 1, ease: "power1.inOut", duration: .5 }, 0);
     });
 
-    all(".chapter--credits .credits").forEach((credits) => gsap.from(credits, { scale: .92, autoAlpha: 0, duration: 1.2, ease: "expo.out", scrollTrigger: enter(credits, "top 85%") }));
+    all(".chapter--credits:not(.chapter--expedition) .credits").forEach((credits) => gsap.from(credits, { scale: .92, autoAlpha: 0, duration: 1.2, ease: "expo.out", scrollTrigger: enter(credits, "top 85%") }));
 
     if (fine) {
       all("[data-tilt]").forEach((card) => {

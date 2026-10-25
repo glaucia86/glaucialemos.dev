@@ -5,6 +5,22 @@ import { createBlizzardJump } from "@/components/about/blizzard-jump";
 const canvas = () => ({ clientWidth: 1440, clientHeight: 810, width: 0, height: 0, getContext: () => null }) as unknown as HTMLCanvasElement;
 
 describe("motor de neve de Nivéora", () => {
+  it("mantém a reação durante a dissipação e pausa o vento fora da tela", () => {
+    let frame: FrameRequestCallback = () => {};
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => { frame = callback; return 1; });
+    const changes: boolean[] = [];
+    const snow = createSnow({ back: canvas(), front: canvas(), onGust: on => changes.push(on) });
+    snow.gust(); snow.start();
+    let now = 100;
+    const advance = (ms: number) => { for (let t = 0; t < ms; t += 50) { now += 50; frame(now); } };
+    advance(2600);
+    expect(changes).toEqual([true]);
+    snow.stop(); advance(10000);
+    expect(changes).toEqual([true]);
+    snow.start(); advance(2000);
+    expect(changes).toEqual([true, false]);
+    snow.destroy();
+  });
   beforeEach(() => { vi.stubGlobal("ResizeObserver", class { observe() {} disconnect() {} }); vi.stubGlobal("cancelAnimationFrame", () => {}); });
   afterEach(() => { vi.unstubAllGlobals(); });
 

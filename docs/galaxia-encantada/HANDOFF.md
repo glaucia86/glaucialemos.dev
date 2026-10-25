@@ -1,12 +1,81 @@
 # Handoff — Migração Galáxia Encantada
 
+## Retomada — refinamento de Projetos/Marte
+
+**Próxima intenção da Glaucia:** iniciar o refinamento da próxima página, Projetos (`/[lang]/projetos`), no mundo Marte / Vale das Invenções. Começar pela análise e proposta de experiência; este handoff não autoriza commit, merge, publicação ou implementação automática de todas as ideias discutidas.
+
+**Estado conferido:** branch `feat/niveora-sobre`, com alterações rastreadas e arquivos novos ainda sem commit. Preservar todo o working tree. Home aprovada na `main`; Sobre implementada nesta branch; Projetos ainda usa Tatooine/R2-D2. Não refazer a Etapa B de Nivéora: poses e atuação já foram integradas. Os registros mais recentes abaixo prevalecem sobre os relatos históricos.
+
+**Última verificação de código:** lint, typecheck, 166 testes em 23 arquivos e build com `ƒ Middleware` passaram na entrega anterior. Não foram repetidos para esta atualização exclusivamente documental. Testes de navegador e conferência visual da última entrega continuam pendentes; não presumir aprovação visual nem execução da suíte pela Glaucia.
+
+### Ponto de partida para Marte
+
+- Ler a seção 4.3 do plano de migração. Inspecionar `src/app/[lang]/projetos/page.tsx`, `src/app/tatooine.css`, `src/i18n/tatooine.ts` e `src/components/projects/`. Preservar os dados e recursos úteis de repositórios, filtros, telemetria e contribuições, definindo sua apresentação autoral.
+- Artes-fonte disponíveis: `GE-PL-03-mars-lab.png`, `GE-GL-03-mars-lab.png`, `GE-DOG-03-mars-lab.png` e `approved-source/props/mars-lab/` (rover, console, amostras e beacon). Inspecionar a integração existente antes de gerar assets; não alterar as placas aprovadas.
+- Repetir o tipo de rolagem da Home, com variação própria de Marte: poeira, sinais de laboratório e telemetria. Pixel art fina, personagem sem atuação automática gratuita; movimento reduzido, toque e teclado desde a proposta.
+- **Direção criativa escolhida:** encanto e conexão. Distribuir easter eggs pelo conteúdo, com pistas perceptíveis, fatos reais e recompensas distintas. Não concentrar tudo no hero nem bloquear informações profissionais atrás de enigmas.
+- **Ideias para refinar, ainda sem especificação aprovada para Marte:** “O projeto antes de ficar bonito” (abrir a carcaça de um card e revelar esboço/decisão real) e “Um bug perdido no laboratório” (pequeno circuito de entrada/processamento/saída ligado a um projeto real). Esboços, falhas e decisões pessoais precisam de evidência ou relato da Glaucia; nunca inventá-los. Não criar erros reais na interface para representar o bug.
+- Os três segredos já entregues em Nivéora são a referência de distribuição: fio no mapa, Prince no diário/estrela no convite final e carta global no rádio. A carta já funciona após três descobertas válidas; reutilizar essa estrutura, sem duplicar progresso nem criar outro armazenamento.
+- É possível refinar Marte sem mudar de branch. Antes de implementar a migração, definir uma base isolada que preserve as mudanças da Sobre; não trocar de branch carregando alterações acidentalmente nem fazer commit/merge sem autorização.
+
+**Operação:** não iniciar servidor nem executar suíte de navegador pelo agente. A Glaucia executa e compartilha resultados. Não rodar build com dev aberto. Não há autorização de commit, push ou publicação nesta passagem.
+
+## Entrega de 2026-10-25 — histórias além da cena
+
+Três novos segredos implementados sobre a branch e as alterações existentes, sem modificar placa, hero, insígnias ou aurora. Sem dependências novas, commit, push ou publicação.
+
+Verificação final desta entrega: `npm run lint`, `npm run typecheck`, `npm test` (**23 arquivos / 166 testes**), `npm run build` (com `ƒ Middleware`), `node --check tests/niveora.browser.mjs` e `git diff --check` passaram. Processos conferidos antes do build, sem Next dev ativo. Para validar no navegador, iniciar produção na porta 3100 e executar `node tests/niveora.browser.mjs` em outro terminal.
+
+- **`between-lines` (Sobre):** fio acionável depois do mapa abre uma anotação com três conexões documentadas — Udemy desde novembro/2017, internacionalização do Node.js desde dezembro/2018, exemplos TypeScript/tradução portuguesa no Generative AI for Beginners. Curadoria em `src/lib/niveora-stories.ts` usa fontes dos datasets. `BetweenLines` oferece detalhes nativos sem JS, foco ao fechar e desenho do fio por 1,2 s quando movimento está habilitado. Filtros do mapa não afetam a anotação.
+- **`borrowed-star` (Sobre):** pegada após os idiomas do diário chama Prince por 2,4 s, reutilizando as quatro poses de caminhada e uma estrela SVG separada. A estrela do convite final fica disponível imediatamente; a descoberta acontece ao abrir o bilhete. Rádio vai direto ao bilhete. Nenhuma interação com a atuação do hero. Movimento reduzido dispensa caminhada; RAF/GSAP pausam fora da tela/aba; cliques repetidos não reiniciam a sequência. Preferência de movimento cancela a solicitação pendente, evitando caminhada invisível ao reativar.
+- **`curious-letter` (global):** após três IDs válidos distintos, excluindo a própria carta, o rádio mostra um envelope. Diálogo abre somente por ação do visitante. A regra `remainingDiscoveries` é compartilhada por comando, botão, execução e descoberta; carta bloqueada informa quantos segredos faltam. Textos PT/EN/ES em `src/i18n/niveora-stories.ts`, com fallback nativo sem JS na Sobre.
+- **Memória:** mesma chave v2 e mesmas APIs de descoberta; Sobre tem 7 segredos e catálogo tem 26. `subscribeReset` distingue reset explícito/remoção via storage de novas descobertas. Reset local ou em outra aba fecha histórias, recolhe estrela/carta, cancela caminhada e callbacks. Nenhuma voz ou som adicional.
+- **Verificação:** testes unitários novos para elegibilidade, deduplicação, persistência, reset entre abas e curadoria/traduções; suíte de navegador atualizada para teclado/toque, PT/EN/ES, foco, rádio, recarga, pausa, preferência de movimento, reset e fallback sem JS. Navegador/servidor não executados pelo agente, conforme AGENTS.md. Reflow em 720 CSS px permanece na suíte; zoom real de 200% e revisão visual ficam com a Glaucia.
+
+## Correção de runtime — timers de FrozenCards (2026-10-25)
+
+Corrigido `Cannot read properties of null (reading 'classList')` no encerramento do gelo: a remoção por quebra/cleanup podia ocorrer antes do callback de derretimento, tornando `parentElement` nulo. `ice-blocks.ts` agora guarda o card dono, cancela o timer anterior e torna a remoção idempotente. O cleanup libera todos os blocos/timers e cancela os tweens do gelo. Três testes de regressão cobrem timers concorrentes, desmontagem e recongelamento. Lint, typecheck e 162 testes (22 arquivos) passaram. Build não repetido porque o Next dev está ativo; servidor e navegador não foram operados pelo agente.
+
+## Entrega de 2026-10-25 — vento, Prince e aurora sem fronteiras
+
+Implementação do plano nesta sessão, sobre as alterações anteriores da `feat/niveora-sobre`. Sem commit, push, publicação, dependências ou alteração da placa aprovada. Este registro substitui **apenas a descrição do mapa** da entrega abaixo; insígnias, contador, progresso de gelo e textos aprovados foram preservados.
+
+- **Vento:** `createSnow.onGust(active)` informa início e fim real da dissipação (intensidade menor que 12%). `brace`/`wind` acompanham esse estado; frio prevalece na nevasca, caminhada e cápsula mantêm prioridade. O relógio do motor pausa junto à cena.
+- **Prince:** primeira busca continua com 8.760 ms; `paw-tracks` só é descoberto aos 4.920 ms, quando a cápsula surge. `paw-tracks` ou `memory-capsule` restauram a cápsula na hidratação. Novo clique chama `greetingSample`: 840 ms de sacudidas + 2.160 ms abanando, sem caminhada/pegadas nem reinício por cliques repetidos. A saudação também registra `paw-tracks` quando a Glaucia revelou a cápsula primeiro. Sem movimento, apenas texto e cápsula. Reset explícito pelo rádio aguarda o encerramento da interação; outras descobertas não contam como reset. Atrasos da atuação da cápsula/prisma usam o relógio ativo, pausando fora da tela/aba.
+- **Mapa:** markup e visual recuperados de `d657c1ddc3eb8647c9bbfdf996cb4a8e7ca8e02a`, limitados ao mapa. Trilhas paralelas, durações proporcionais, bandas e nave ligada à rolagem. Detalhes junto às barras por hover, foco ou botão; lado de abertura considera o filtro ampliado. Sem coluna de experiências, cartão persistente ou seletor mapa/lista. `?era=`, `popstate`, fallback desconhecido e lista até 900 px/sem JS preservados.
+- **Aurora:** `BorderlessAurora.tsx`, textos em `src/i18n/aurora.ts`, curadoria explícita por URL em `src/lib/aurora.ts`. Lago, aurora refletida e sinais em SVG de coordenadas inteiras/CSS. Seleção local PT/EN/ES, conteúdo imediato, onda de 1,6 s substituída a cada escolha, pausa fora da tela/aba; três registros no HTML sem JS. A seção não acrescenta segredo. Um sinal segue até a nave ao rolar e acende os motores; decolagem preservada sem exigir todos os idiomas.
+- **Ritmo:** intervalos de Nivéora limitados por `--niveora-gap`; fechamento sem mínimo de 80svh e sem dependência de reveal para ficar visível. Mudanças do mapa, artigo selecionado e dimensões da página recalculam ScrollTrigger.
+
+Verificação local: lint, typecheck, suíte unitária (21 arquivos / 159 testes) e build de produção com `ƒ Middleware`. Revisão independente corrigiu reset indevido na nevasca, descoberta após Glaucia, posição de tooltip filtrado e espaço acima das insígnias. `tests/niveora.browser.mjs` foi atualizado; **não foi executado**, conforme AGENTS.md. Validação visual, toque, zoom real de 200% e execução da suíte continuam com a Glaucia. Com dev parado, iniciar `npm run start -- --hostname 127.0.0.1 --port 3100` e executar `node tests/niveora.browser.mjs`; compartilhar resultado e capturas.
+
+## Entrega de 2026-10-25 — trajetória legível e identidade de Nivéora
+
+Plano executado nesta sessão: os cinco ajustes pedidos, na branch `feat/niveora-sobre`, sem dependências novas, commit, push ou publicação.
+
+- **Mapa:** `CareerMap` agora é client e concentra filtro, seleção e apresentação. Cada experiência tem uma linha e uma coluna de texto que quebra; barras continuam proporcionais. Seleção inicial mais recente, preservada ao trocar etapa quando aplicável e ao alternar mapa/lista. Detalhe persistente com cargo completo, empresa, período, vínculo atual e fonte. `?era=` e `popstate` sincronizados; valor desconhecido abre todas. Até 900 px e sem JS, lista completa; botões nativos respondem a Enter/Espaço/toque. Etapas e lista em ordem recente. A nave só anima com eixo visível, aba ativa e movimento permitido. Controles antigos removidos de `AboutChoreography`.
+- **Insígnias:** `CrystalBadges` com estrela, terminal, engrenagem e livro em SVG pixel art; IDs e destinos centralizados em `BADGES`, rótulos PT/EN/ES. Botão independente vira/volta sem aninhar link; face oculta usa `hidden`, foco fica no botão. Sem movimento, sem rotação. Sem JS, faces empilhadas e links disponíveis. Os alvos de `FrozenCards` foram preservados.
+- **Descobertas:** contador junto à cena, fora do HUD decorativo; total derivado apenas de `EGGS.page === "about"`. `useDiscoveries` usa snapshot/assinatura compartilhados com Comlink; `egg:reset` em `forget()`, storage entre abas, deduplicação e fallback em memória quando storage falha.
+- **Identidade/textos:** progresso `variant="niveora"` com gelo/ciano/cristal apenas na Sobre; CTA de workshops e mentorias com destino localizado preservado; aviso pessoal independente/opiniões próprias no rodapé dos três idiomas.
+
+Decisões de implementação: fallback sem JS mostra todas as etapas, independentemente da query, para manter HTML estático completo. A contagem SSR começa em zero e sincroniza na hidratação. O efeito da nave fica restrito à visibilidade do eixo; detalhes de carreira não dependem de animação. Sem alteração das demais páginas além do aviso global do rodapé.
+
+Verificações: `npm run lint`, `npm run typecheck`, `npm test` (20 arquivos, 156 testes) passaram; `node --check tests/niveora.browser.mjs` e `git diff --check` passaram. Build de produção passou com `ƒ Middleware`; processos Node conferidos antes, sem dev ativo. Testes novos cobrem seleção, traduções/modelo das insígnias, deduplicação, storage bloqueado, persistência, evento entre abas e reset. Revisão de código independente encontrou sobreposição do fallback sem JS das insígnias, corrigida com faces empilhadas e assert de geometria na suíte de navegador.
+
+**Pendente de execução pela Glaucia:** `tests/niveora.browser.mjs` foi ampliado, mas não executado nesta sessão, conforme AGENTS.md. Executar servidor de produção e suíte; conferir visual PT/EN/ES, mapa com nomes longos/Cume, teclado/toque, descongelamento e zoom real de 200%. A suíte verifica reflow em 720 CSS px (equivalente à largura útil de 1440 px a 200%), mas não substitui a conferência de zoom do navegador. Capturas em `docs/screenshots/niveora/`.
+
+```powershell
+npm run start -- --hostname 127.0.0.1 --port 3100
+# Em outro terminal:
+node tests/niveora.browser.mjs
+```
+
 Estado em 25/10/2026. Leia este arquivo, depois o `AGENTS.md` e o `docs/galaxia-encantada/PLANO-MIGRACAO.md`.
 
 ## Onde estamos
 - **Home** (`/[lang]`, Observatório das Primeiras Luzes): aprovada e mesclada na `main` (PR #6).
-- **Sobre** (`/[lang]/sobre`, Nivéora, o Mundo Nevado das Auroras): migrada na branch `feat/niveora-sobre` (saiu da `main` em `470799e`). Tudo ainda **sem commit** (cerca de 85 arquivos alterados/novos). Lint, typecheck, 146 testes e build passam. Os testes de navegador (`tests/niveora.browser.mjs`) ainda não rodaram. Não faça commit nem push sem a Glaucia aprovar.
+- **Sobre** (`/[lang]/sobre`, Nivéora, o Mundo Nevado das Auroras): implementada na branch `feat/niveora-sobre`, com alterações e arquivos novos ainda sem commit. Última entrega: lint, typecheck, 166 testes e build passaram; validação visual e execução de `tests/niveora.browser.mjs` pendentes. Não faça commit nem push sem a Glaucia autorizar.
 - **Em andamento:** Etapa B de Nivéora. As três sheets novas foram normalizadas e recortadas em **23 poses adicionais**; prévias compostas geradas. **Composição aprovada pela Glaucia**, com ambos na plataforma superior. Atuação implementada; validação visual e testes de navegador pendentes (ver registro abaixo).
-- **Decisões pendentes da Glaucia:** (1) 6º segredo "Degelo total" (`thaw`, quebrar todo o gelo à mão → rádio com 24); (2) Prince abanar o rabo sozinho de vez em quando (desligado por padrão; ela recusou "vida própria" na Home).
+- **Ideias antigas não implementadas:** “Degelo total” (`thaw`) e Prince abanar sozinho. Não estão aprovadas para execução; a numeração antiga foi superada pelos novos segredos narrativos.
 - **Erro de hidratação no `<body>`** (`cz-shortcut-listen`): vem da extensão ColorZilla; resolvido com `suppressHydrationWarning` no `<body>` de `src/app/[lang]/layout.tsx`.
 - **Backup do Star Wars:** `archive/star-wars` (= `main` em `8adb94b`), já enviada ao GitHub.
 - **Próxima página:** Projetos (`/[lang]/projetos`), Marte, o Vale das Invenções (seção 4.3 do plano).
@@ -16,7 +85,7 @@ Estado em 25/10/2026. Leia este arquivo, depois o `AGENTS.md` e o `docs/galaxia-
 - **Cena:** Glaucia (parca térmica; poses `idle`, `blink`, `capsule` ajoelhada, `cheer`) em x=84 %, pés em y=80 % e Prince de corpo inteiro (`stand`, `sniff`) em x=76 %, pés em y=80 %, na plataforma superior de neve. Cristal prismático na saliência de gelo, estação (o `aurora-beacon`) à direita, cápsula enterrada em x=64 %, y=80 %.
 - **Motor:** `snow-engine.ts` (neve em 3 planos, rajadas, aurora que segue o cursor, modos nevasca e prisma). Pausa fora da tela.
 - **Rolagem:** `blizzard-jump.ts`, com túnel de neve com vento, cortinas de aurora descendo e fim num branco de nevasca com geada (`.hero-jump--niveora`).
-- **Segredos (5):** `paw-tracks`, `memory-capsule`, `whiteout`, `aurora-prism`, `snowdrift`. Os 9 do Star Wars saíram. O rádio agora conta 23 (1 + 6 + 5 + 11).
+- **Segredos (7):** `paw-tracks`, `memory-capsule`, `whiteout`, `aurora-prism`, `snowdrift`, `between-lines`, `borrowed-star`. A carta `curious-letter` é global. Catálogo atual: 26 (2 globais + 6 Home + 7 Sobre + 11 Projetos).
 - **Abaixo do hero:** Diário de expedição (retrato vivo + gelo que quebra + insígnias de cristal), Mapa da travessia (eras Primeira neve/Travessia/Cume, ids `foundation`/`advocacy`/`leadership`), Chamado da expedição (a nave da Galáxia decola).
 - **Removidos:** `EchoBaseScene`, `LeiaActor`, `EchoEggs`, `RebelDossier`, `Threepio`, `ice.ts`, `hit.ts`, `about.css`, `echo-base.ts`, `build-leia-layers.mjs`, `leia.test.ts`, `echo-base.browser.mjs` e a variante de abertura `echo`.
 - **Pipeline:** o script agora limpa a margem preta dos props (`keyDark`). Se a Home for regenerada, os props dela também passam por essa limpeza.
@@ -135,13 +204,13 @@ Create a production-ready 2D PIXEL ART DOG SPRITE SHEET of PRINCE, the EXACT sam
 - Os arquivos estão em CRLF no working tree (autocrlf). Ao editar por script, normalize `\r\n`.
 
 ## Pendências conhecidas
-- Contador de segredos com 23 no momento (global 1 + Home 6 + Sobre 5 + Projetos 11). Deve fechar perto de 27 com as páginas novas.
+- Catálogo atual com 26 segredos (2 globais + Home 6 + Sobre 7 + Projetos 11). O total final será recalculado ao substituir os segredos legados das próximas páginas; não perseguir a estimativa antiga como meta.
 - `tests/scene-lifecycle.browser.mjs` ainda espera o `SceneMotion` antigo na Home (`data-motion="running"`); a Sobre saiu da lista. Revisar na auditoria final.
-- Rodapé ainda diz "sem afiliação com Disney/Lucasfilm": trocar na auditoria final.
+- Aviso do rodapé atualizado em 2026-10-25: site pessoal independente e opiniões próprias (PT/EN/ES).
 - Nomes internos legados (`holonet`, `holo-card`, `stellar`, `jedi-effects.css`, `HeroScene`/`PageHero` com mapa por imagem) ficam para a auditoria final. A seção 7.1 do plano pede desacoplar `sceneByImage` → `sceneId` ao migrar Conteúdo, Eventos e Serviços.
 - Os testes de navegador da Home (`tests/holonet.browser.mjs`) foram atualizados, mas ainda não rodaram.
 
 ## Prompt para abrir a nova sessão
-> Continue a migração Galáxia Encantada na branch `feat/niveora-sobre` (há mudanças sem commit; não descarte nada). Leia `docs/galaxia-encantada/HANDOFF.md`, `AGENTS.md` e `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Vamos fazer a Etapa B de Nivéora (página Sobre): as três sheets novas do Grok (`GE-GL-02B-niveora.png`, `GE-DOG-02B-niveora.png`, `GE-DOG-02C-niveora.png`) já estão em `docs/art/galaxia-encantada/approved-source/`. Integre essas poses seguindo a seção "Artes pendentes (Etapa B)": normalizar a escala de cada sheet, nomear as poses, gerar a prévia composta para eu aprovar e depois animar (Glaucia com frio e protegendo o rosto do vento; Prince com vento, frio, sacudindo a neve, andando pela trilha, farejando, cavando e abanando o rabo). Comece pelo modo de planejamento.
+> Leia `AGENTS.md`, `docs/galaxia-encantada/HANDOFF.md` (comece por “Retomada — refinamento de Projetos/Marte”) e a seção 4.3 de `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Quero iniciar o refinamento de Projetos/Marte, o Vale das Invenções. A branch atual é `feat/niveora-sobre`, com alterações e arquivos novos sem commit: preserve tudo e não refaça a Sobre. Inspecione a página atual de Projetos, suas fontes de dados e as artes aprovadas de `mars-lab`; apresente uma proposta de narrativa, seções, rolagem e easter eggs distribuídos pelo conteúdo. A direção é encanto e conexão, usando registros reais, com experiências como “O projeto antes de ficar bonito” e “Um bug perdido no laboratório” para refinarmos. Não invente bastidores pessoais, não inicie servidor ou testes de navegador e não faça commit, push ou publicação. Comece em planejamento; a validação visual final da Sobre continua pendente.
 
-Depois da Etapa B aprovada (e do commit da Sobre), a próxima página é Projetos/Marte, numa branch nova, com variação própria do efeito de rolagem (poeira e telemetria).
+O refinamento de Marte pode começar agora; a implementação deve preservar o trabalho de Nivéora e usar uma base isolada, conforme combinado com a Glaucia.

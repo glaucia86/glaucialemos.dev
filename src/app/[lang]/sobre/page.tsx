@@ -15,7 +15,14 @@ import { NiveoraHotspots, NiveoraScene, niveoraScene } from "@/components/about/
 import { NiveoraMotion } from "@/components/about/NiveoraMotion";
 import { MemoryCapsule, type CapsuleRecord } from "@/components/about/MemoryCapsule";
 import { ExpeditionLog } from "@/components/about/ExpeditionLog";
+import { DiscoveryCount } from "@/components/about/DiscoveryCount";
 import { CareerMap } from "@/components/about/CareerMap";
+import { BorderlessAurora } from "@/components/about/BorderlessAurora";
+import { auroraRecords } from "@/lib/aurora";
+import { BetweenLines } from "@/components/about/BetweenLines";
+import { BorrowedStar } from "@/components/about/BorrowedStar";
+import { storySources } from "@/lib/niveora-stories";
+import { curiousLetter, niveoraStories } from "@/i18n/niveora-stories";
 import { AboutChoreography } from "@/components/about/AboutChoreography";
 import { SnowDrift } from "@/components/about/SnowDrift";
 import { FrozenCards } from "@/components/about/FrozenCards";
@@ -70,7 +77,7 @@ export default async function About({ params }: Props) {
   return <main id="main" className="home-page about-page" tabIndex={-1}>
     <script dangerouslySetInnerHTML={{ __html: bootScriptFor(NIVEORA_BOOT_KEY) }} />
     <BootSequence lines={n.boot.lines} granted={n.boot.granted} skip={n.boot.skip} label={n.boot.label} storageKey={NIVEORA_BOOT_KEY} brand={n.boot.brand} variant="niveora" armOnNavigation />
-    <ReadingProgress />
+    <ReadingProgress variant="niveora" />
 
     {/* Chapter 1 — Nivéora */}
     <div className="niveora-hero-wrap">
@@ -97,6 +104,7 @@ export default async function About({ params }: Props) {
         </div>
         <NiveoraHotspots labels={{ glaucia: n.hud.glaucia, prince: n.hud.prince, crystal: n.hud.crystal, station: n.hud.station, capsule: n.hud.capsule }} />
       </NiveoraMotion>
+      <DiscoveryCount label={n.discoveries} />
       <MemoryCapsule copy={n.capsule} records={capsuleRecords(roles, career.microsoftYears, n.capsule, lang)} art={niveoraScene.assets.props["memory-capsule-open"].src} />
       <div className="hero-bar" aria-hidden="true">
         <span className="hero-bar__caption"><span className="pixel-mark" />{n.hero.caption}</span>
@@ -117,8 +125,11 @@ export default async function About({ params }: Props) {
           <div><ChapterTag code={code(2)} label={n.chapters[2]} /><h2 id="ops-title" data-reveal="lines">{n.map.title}</h2><p data-reveal="up">{n.map.intro}</p></div>
         </div>
         <CareerMap roles={roles} copy={n.map} locale={lang} source={d.common.source} ship={observatory.assets.props["spacecraft-far"].src} />
+        <BetweenLines copy={niveoraStories[lang]} sources={storySources} />
       </div>
     </section>
+
+    <BorderlessAurora locale={lang} records={auroraRecords} />
 
     {/* Chapter 4 — Expedition call */}
     <section className="chapter chapter--credits chapter--expedition" aria-labelledby="expedition-title">
@@ -127,15 +138,17 @@ export default async function About({ params }: Props) {
         <span className="expedition-ground" />
       </div>
       <div className="chapter__inner credits">
+        <BorrowedStar copy={niveoraStories[lang]} />
         <ChapterTag code={code(3)} label={n.chapters[3]} />
-        <h2 id="expedition-title" data-reveal="lines">{n.credits.title}</h2>
-        <p data-reveal="up">{n.credits.body}</p>
+        <h2 id="expedition-title">{n.credits.title}</h2>
+        <p>{n.credits.body}</p>
         <div className="actions">
           <Link className="button primary" data-magnetic href={`/${lang}/servicos#contato`}>{n.credits.cta}</Link>
           <a className="hero-link" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{n.credits.secondary} <span aria-hidden="true">↗</span></a>
         </div>
         <p className="expedition-hint">{n.credits.hint}</p>
         <p className="expedition-end">{n.credits.end}</p>
+        <noscript><details className="story-letter-fallback"><summary>{curiousLetter[lang].title}</summary><p>{curiousLetter[lang].body}</p><p>{curiousLetter[lang].signature}</p></details></noscript>
       </div>
     </section>
 

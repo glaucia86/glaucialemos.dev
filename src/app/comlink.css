@@ -1,4 +1,15 @@
 /* Star radio — the secret channel that makes every Easter egg reachable on desktop, phone and tablet. Lives in the header. */
+.comlink__envelope { display: flex; align-items: center; gap: .7rem; width: 100%; min-height: 48px; margin: 1rem 0; padding: .8rem; border: 1px solid #ffd27a; background: #202137; color: #fff2c8; font: .65rem/1.8 var(--font-pixel); text-align: left; cursor: pointer; }
+.comlink__envelope > span { font: 1.8rem monospace; }
+.curious-letter { width: min(620px, calc(100% - 2rem)); max-height: calc(100dvh - 3rem); padding: 0; border: 2px solid #88cbe9; background: #0c1b2e; color: #e9f6ff; overflow: auto; box-shadow: 6px 6px 0 #233951; }
+.curious-letter::backdrop { background: #050d1bd9; }
+.curious-letter__paper { padding: clamp(1.25rem, 5vw, 3rem); background: repeating-linear-gradient(0deg, transparent 0 31px, #88cbe90c 31px 32px); }
+.curious-letter h2 { color: #fff2c8; font: clamp(1rem, 3vw, 1.4rem)/1.7 var(--font-pixel); }
+.curious-letter p { font-size: 1.05rem; line-height: 1.9; }
+.curious-letter__seal { display: block; color: #ffd27a; font-size: 2rem; }
+.curious-letter__signature { color: #88cbe9; }
+.curious-letter button { min-height: 44px; padding: .7rem 1rem; border: 1px solid #88cbe9; color: #e9f6ff; background: #142d44; cursor: pointer; }
+.curious-letter button:focus-visible, .comlink__envelope:focus-visible { outline: 3px solid #fff2c8; outline-offset: 4px; }
 .comlink-slot { display: contents; }
 .comlink-toggle {
   --focus: var(--focus-inverse);

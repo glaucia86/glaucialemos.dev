@@ -1,5 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { ambientPoses, trailSample, TRAIL_DURATION } from "@/components/about/niveora-acting";
+import { ambientPoses, trailSample, greetingSample, capsuleKnown, TRAIL_DURATION } from "@/components/about/niveora-acting";
+
+it("Prince cumprimenta por três segundos sem repetir a caminhada", () => {
+  expect(greetingSample(0)).toEqual({ pose: "shake-a", done: false });
+  expect(greetingSample(839).pose).toBe("shake-b");
+  expect(greetingSample(840)).toEqual({ pose: "wag-a", done: false });
+  expect(greetingSample(2999).done).toBe(false);
+  expect(greetingSample(3000)).toEqual({ pose: "stand", done: true });
+  expect(capsuleKnown("whiteout,paw-tracks")).toBe(true);
+  expect(capsuleKnown("memory-capsule")).toBe(true);
+  expect(capsuleKnown("")).toBe(false);
+});
 
 describe("atuação de Nivéora", () => {
   it("fareja, caminha, cava, revela, abana e retorna à posição aprovada", () => {

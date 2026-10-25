@@ -4,6 +4,12 @@ export const GLAUCIA_POSES = ["idle", "capsule", "cheer", "cold-a", "cold-b", "b
 export const PRINCE_POSES = ["stand", "sniff", "cold", "wind", "shake-a", "shake-b", "wag-a", "wag-b", "walk-1", "walk-2", "walk-3", "walk-4", "sniff-down-a", "sniff-down-b", "dig-a", "dig-b"] as const;
 export type GlauciaPose = typeof GLAUCIA_POSES[number];
 export type PrincePose = typeof PRINCE_POSES[number];
+export const capsuleKnown = (snapshot: string) => snapshot.split(",").some(id => id === "paw-tracks" || id === "memory-capsule");
+export function greetingSample(elapsed: number): { pose: PrincePose; done: boolean } {
+  if (elapsed >= 3000) return { pose: "stand", done: true };
+  if (elapsed < 840) return { pose: Math.floor(elapsed / 140) % 2 ? "shake-b" : "shake-a", done: false };
+  return { pose: Math.floor((elapsed - 840) / 180) % 2 ? "wag-b" : "wag-a", done: false };
+}
 export const TRAIL_DURATION = 8760;
 export const WALK_START = 840;
 export const STEP_MS = 480;

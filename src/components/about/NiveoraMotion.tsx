@@ -6,13 +6,13 @@ import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
 import { play } from "@/lib/sfx";
-import { bringIntoView, buzz, discover, emitEgg, matchTail, normalizePhrase, onEgg, type EggId } from "@/lib/eggs";
+import { bringIntoView, buzz, discover, emitEgg, matchTail, normalizePhrase, onEgg, getFoundSnapshot, subscribeFound, RESET_EVENT, type EggId } from "@/lib/eggs";
 import type { NiveoraCopy } from "@/i18n/niveora";
 import { createSnow, type UV } from "./snow-engine";
 import { createBlizzardJump } from "./blizzard-jump";
 import { HOTSPOTS, SPOTS, niveoraScene } from "./NiveoraScene";
 import { boxStyle, poseBox } from "@/lib/scenes";
-import { ambientPoses, trailSample, WALK_START, STEP_MS, type GlauciaPose, type PrincePose } from "./niveora-acting";
+import { ambientPoses, trailSample, greetingSample, capsuleKnown, WALK_START, STEP_MS, type GlauciaPose, type PrincePose } from "./niveora-acting";
 import { CAPSULE_CLOSED, CAPSULE_OPEN } from "./MemoryCapsule";
 import { FREEZE_EVENT, STORM_END_EVENT } from "./FrozenCards";
 
@@ -25,7 +25,7 @@ const WHITEOUT_MS = 8000;
 const TRACKS_FADE_MS = 16000;
 const TEMP = 32;
 const TEMP_STORM = 47;
-type Stage = "idle" | "tracks" | "capsule" | "prism";
+type Stage = "idle" | "tracks" | "greeting" | "capsule" | "prism";
 type Capsule = "hidden" | "found" | "open";
 export type NiveoraLabels = { jump: string; touch: string; calm: string; status: NiveoraCopy["status"] };
 
@@ -64,15 +64,18 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     const princeButton = hotspots.find((button) => button.dataset.hot === "prince")!;
     const calm = calmButton.current!;
 
+    capsuleFound.current = capsuleKnown(getFoundSnapshot());
+
     // Reduced motion still exposes every hero secret, with immediate results and no acting/particles.
     if (!motion) {
+      let pendingReset = false;
       const reveal = () => {
         capsuleFound.current = true; capsule.dataset.capsule = "found";
         if (capsuleButton) capsuleButton.hidden = false;
       };
       const run = (id: EggId) => {
         discover(id);
-        if (id === "paw-tracks") { reveal(); tracks.forEach((track) => { track.dataset.on = "true"; }); status.textContent = labels.status.found; }
+        if (id === "paw-tracks") { reveal(); status.textContent = labels.status.found; }
         if (id === "memory-capsule") { reveal(); dispatchEvent(new Event(CAPSULE_OPEN)); }
         if (id === "whiteout") status.textContent = labels.status.calm;
         if (id === "aurora-prism") status.textContent = labels.status.prism;
@@ -89,9 +92,18 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       section.dataset.stage = "idle";
       hotspots.forEach((button) => { button.hidden = button === capsuleButton && !capsuleFound.current; button.addEventListener("click", click); });
       if (capsuleFound.current) reveal();
+      const syncMemory = () => {
+        if (!capsuleKnown(getFoundSnapshot()) && document.querySelector("dialog.capsule[open]")) { pendingReset = true; return; }
+        capsuleFound.current = capsuleKnown(getFoundSnapshot());
+        capsule.dataset.capsule = capsuleFound.current ? "found" : "hidden";
+        if (capsuleButton) capsuleButton.hidden = !capsuleFound.current;
+      };
+      const afterClose = () => { if (pendingReset) { pendingReset = false; syncMemory(); } };
+      addEventListener(CAPSULE_CLOSED, afterClose);
+      const stopMemory = subscribeFound(syncMemory);
       const stop = onEgg(HERO_EGGS, run); addEventListener("keydown", typed);
       return () => {
-        disposed = true; stop(); removeEventListener("keydown", typed);
+        disposed = true; stop(); stopMemory(); removeEventListener(CAPSULE_CLOSED, afterClose); removeEventListener("keydown", typed);
         hotspots.forEach((button) => { button.hidden = true; button.removeEventListener("click", click); });
         tracks.forEach((track) => { delete track.dataset.on; });
         delete section.dataset.stage; delete capsule.dataset.capsule;
@@ -100,7 +112,9 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     }
 
     let actorTime = 0;
-    let gustUntil = 0;
+    let gustActive = false;
+    let greetingStarted: number | null = null;
+    let resetPending = false;
     let actorRaf = 0;
     let previousFrame = 0;
     let active = false;
@@ -111,11 +125,11 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     let revealed = false;
     let shakePending = false;
     let shakeStarted: number | null = null;
-    const onGust = () => { gustUntil = actorTime + 2200; };
+    const onGust = (on: boolean) => { gustActive = on; };
     const snow = createSnow({ back: q(".niveora-sky--back"), front: q(".niveora-sky--front"), onGust });
 
     let stage: Stage = "idle";
-    let timers: number[] = [];
+    let timers: { due: number; run: () => void }[] = [];
     let statusTimer: number | undefined;
     let fadeTracks: number | undefined;
     let stormTimers: number[] = [];
@@ -153,8 +167,8 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     };
     const setCapsule = (state: Capsule) => { capsule.dataset.capsule = state; if (capsuleButton) capsuleButton.hidden = state === "hidden"; };
     const busy = () => stage !== "idle";
-    const later = (callback: () => void, ms: number) => timers.push(window.setTimeout(callback, ms));
-    const clearTimers = () => { timers.forEach((timer) => clearTimeout(timer)); timers = []; };
+    const later = (run: () => void, ms: number) => timers.push({ due: actorTime + ms, run });
+    const clearTimers = () => { timers = []; };
     const toUV = (x: number, y: number): UV => { const box = plane.getBoundingClientRect(); return { u: (x - box.left) / box.width, v: (y - box.top) / box.height }; };
     const say = (text: string, ms = 2800) => {
       clearTimeout(statusTimer);
@@ -164,14 +178,28 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     };
     const settle = () => {
       clearTimers();
+      greetingStarted = null;
       snow.prism(false);
       delete section.dataset.aurora; delete crystal.dataset.on;
       trailStarted = null; placePrince(); setStage("idle");
-      const rest = ambientPoses(actorTime, { storm, gust: actorTime < gustUntil });
+      const rest = ambientPoses(actorTime, { storm, gust: gustActive });
       setPose(rest.glaucia); setPrince(rest.prince); placePrince();
+      if (resetPending) { resetPending = false; capsuleFound.current = false; setCapsule("hidden"); hideTracks(); }
     };
     const start = (next: Stage) => { if (busy()) return false; setStage(next); return true; };
     const hideTracks = () => { clearTimeout(fadeTracks); tracks.forEach((element) => { delete element.dataset.on; }); };
+
+    const resetMemory = () => {
+      if (busy()) { resetPending = true; return; }
+      capsuleFound.current = false; setCapsule("hidden"); hideTracks();
+    };
+    addEventListener(RESET_EVENT, resetMemory);
+    const stopMemory = subscribeFound(() => {
+      const known = capsuleKnown(getFoundSnapshot());
+      if (!known) { if (capsuleFound.current) resetMemory(); return; }
+      capsuleFound.current = known;
+      if (stage !== "capsule") setCapsule(known ? "found" : "hidden");
+    });
 
     // Intro: the copy rises once the boot overlay has gone, and the explorers materialise in the snow.
     setPose("idle"); setPrince("stand"); setStage("idle"); setCapsule(capsuleFound.current ? "found" : "hidden"); writeTemp();
@@ -184,9 +212,13 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
 
     // ——— Prince: sniffs, leaves a trail of paw prints and digs out the memory capsule ———
     const pawTracks = () => {
+      if (busy()) return;
+      if (capsuleFound.current) {
+        discover("paw-tracks");
+        setStage("greeting"); greetingStarted = actorTime; shakeStarted = null;
+        play("woof"); say(labels.status.found); return;
+      }
       if (!start("tracks")) return;
-      discover("paw-tracks");
-      capsuleFound.current = true;
       hideTracks();
       trailStarted = actorTime; stamped = 0; revealed = false; shakeStarted = null;
       setPrince("sniff-down-a"); placePrince(); play("woof"); buzz([20, 30, 20]);
@@ -234,7 +266,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     const calmDown = () => {
       if (!storm) return;
       storm = false; clearStorm();
-      gustUntil = 0; shakePending = true;
+      shakePending = true;
       snow.blizzard(false); tempTo(TEMP, 2.4);
       page.dataset.whiteout = "ending";
       calm.hidden = true;
@@ -262,7 +294,11 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       if (!active || disposed) return;
       actorTime += previousFrame ? Math.min(100, now - previousFrame) : 0;
       previousFrame = now;
-      const rest = ambientPoses(actorTime, { storm, gust: actorTime < gustUntil, wag: !busy() && (hovered || focused) });
+      for (const timer of [...timers]) {
+        if (timer.due > actorTime || !timers.includes(timer)) continue;
+        timers.splice(timers.indexOf(timer), 1); timer.run();
+      }
+      const rest = ambientPoses(actorTime, { storm, gust: gustActive, wag: !busy() && (hovered || focused) });
       if (stage !== "capsule") setPose(rest.glaucia);
       if (trailStarted !== null) {
         const frame = trailSample(actorTime - trailStarted);
@@ -282,13 +318,19 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
         }
         if (frame.phase === "dig" && changedPose) snow.puff(pct(SPOTS.capsuleTop), 3);
         if (frame.revealed && !revealed) {
-          revealed = true; setCapsule("found"); play("beacon"); buzz(40);
+          revealed = true; capsuleFound.current = true;
+          if (!resetPending) discover("paw-tracks");
+          setCapsule("found"); play("beacon"); buzz(40);
           snow.puff(pct(SPOTS.capsuleTop), 18); snow.burst(pct(SPOTS.capsuleTop), 26); say(labels.status.found);
         }
         if (frame.phase === "done") {
           delete section.dataset.trail; settle();
           fadeTracks = window.setTimeout(hideTracks, TRACKS_FADE_MS);
         }
+      } else if (greetingStarted !== null) {
+        const frame = greetingSample(actorTime - greetingStarted);
+        setPrince(storm ? rest.prince : frame.pose); placePrince();
+        if (frame.done) settle();
       } else {
         if (shakePending && !busy() && !storm) { shakePending = false; shakeStarted = actorTime; }
         if (shakeStarted !== null && !storm) {
@@ -388,7 +430,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     return () => {
       disposed = true; active = false; cancelAnimationFrame(actorRaf);
       cancelIntro(); stopActivity(); snow.destroy(); jump?.destroy();
-      clearTimers(); stopEggs(); clearTimeout(statusTimer); clearTimeout(fadeTracks); clearStorm(); storm = false;
+      clearTimers(); stopEggs(); stopMemory(); removeEventListener(RESET_EVENT, resetMemory); clearTimeout(statusTimer); clearTimeout(fadeTracks); clearStorm(); storm = false;
       clearInterval(breathing);
       const animated = [status, crew, prince, degrees];
       gsap.killTweensOf(animated);

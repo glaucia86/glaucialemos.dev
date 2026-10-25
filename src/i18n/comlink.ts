@@ -1,3 +1,4 @@
+import { curiousLetter } from "./niveora-stories";
 import type { EggId, EggPage } from "@/lib/eggs";
 
 type Entry = { name: string; hint: string };
@@ -7,16 +8,21 @@ export type ComlinkCopy = {
   reset: string; resetConfirm: string; resetDone: string;
   pages: Record<Exclude<EggPage, "global">, string>;
   eggs: Record<EggId, Entry>;
+  letter: typeof curiousLetter.pt;
 };
 
 export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   pt: {
+    letter: curiousLetter.pt,
     open: "Abrir o rádio estelar", title: "Rádio estelar", channel: "RÁDIO // GALÁXIA ENCANTADA", counter: "Segredos descobertos", master: "Guardiã das Estrelas",
     placeholder: "digite uma transmissão…", send: "Transmitir", sent: "Sinal enviado.", unknown: "Transmissão desconhecida. Tente uma das dicas abaixo.",
     elsewhere: "Sinal fora de alcance. Tente na página {page}.", play: "Reproduzir", close: "Fechar rádio", hidden: "Sinal criptografado", fresh: "Novo segredo descoberto!",
     reset: "Apagar memória", resetConfirm: "Confirmar: apagar {n} segredos?", resetDone: "Memória apagada. O céu voltou a ser um mistério, e a caçada recomeça.",
     pages: { home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", notfound: "Coordenadas perdidas" },
     eggs: {
+      "curious-letter": { name: "Carta aos curiosos", hint: "Três descobertas diferentes deixam uma carta no rádio. Transmissão: carta curiosa." },
+      "between-lines": { name: "Entre as linhas", hint: "Há um fio além das barras do mapa. Transmissão: entre linhas." },
+      "borrowed-star": { name: "A estrela emprestada", hint: "Uma pegada no diário aponta para o convite final. Transmissão: estrela emprestada." },
       "star-map": { name: "Mapa estelar secreto", hint: "Um código antigo: cima, cima, baixo, baixo… No celular, deslize o dedo e toque duas vezes." },
       "focus-lens": { name: "Telescópio de carreira", hint: "A Glaucia mostra pelo telescópio as estrelas da trajetória dela. É só pedir." },
       "launch-charge": { name: "Decolagem", hint: "Segure o céu do observatório até a ignição e veja o que a nave escreve." },
@@ -43,12 +49,16 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     },
   },
   en: {
+    letter: curiousLetter.en,
     open: "Open the star radio", title: "Star radio", channel: "RADIO // ENCHANTED GALAXY", counter: "Secrets discovered", master: "Keeper of the Stars",
     placeholder: "type a transmission…", send: "Transmit", sent: "Signal sent.", unknown: "Unknown transmission. Try one of the hints below.",
     elsewhere: "Signal out of range. Try it on the {page} page.", play: "Replay", close: "Close radio", hidden: "Encrypted signal", fresh: "New secret discovered!",
     reset: "Wipe memory", resetConfirm: "Confirm: wipe {n} secrets?", resetDone: "Memory wiped. The sky is a mystery again, and the hunt starts over.",
     pages: { home: "Home", about: "About", projects: "Projects", content: "Content", events: "Events", services: "Services", notfound: "Lost coordinates" },
     eggs: {
+      "curious-letter": { name: "Letter to the curious", hint: "Three different discoveries leave a letter in the radio. Transmission: curious letter." },
+      "between-lines": { name: "Between the lines", hint: "A thread runs beyond the map's bars. Transmission: between the lines." },
+      "borrowed-star": { name: "The borrowed star", hint: "A paw print in the log points to the final invitation. Transmission: borrowed star." },
       "star-map": { name: "Secret star map", hint: "An ancient code: up, up, down, down… On a phone, swipe and then tap twice." },
       "focus-lens": { name: "Career telescope", hint: "Glaucia shows the stars of her journey through the telescope. Just ask." },
       "launch-charge": { name: "Lift-off", hint: "Hold the observatory sky until ignition and see what the ship writes." },
@@ -75,12 +85,16 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     },
   },
   es: {
+    letter: curiousLetter.es,
     open: "Abrir la radio estelar", title: "Radio estelar", channel: "RADIO // GALAXIA ENCANTADA", counter: "Secretos descubiertos", master: "Guardiana de las Estrellas",
     placeholder: "escribe una transmisión…", send: "Transmitir", sent: "Señal enviada.", unknown: "Transmisión desconocida. Prueba una de las pistas.",
     elsewhere: "Señal fuera de alcance. Prueba en la página {page}.", play: "Reproducir", close: "Cerrar radio", hidden: "Señal cifrada", fresh: "¡Nuevo secreto descubierto!",
     reset: "Borrar memoria", resetConfirm: "¿Confirmas? Borrar {n} secretos", resetDone: "Memoria borrada. El cielo vuelve a ser un misterio y la búsqueda empieza de nuevo.",
     pages: { home: "Inicio", about: "Sobre mí", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Servicios", notfound: "Coordenadas perdidas" },
     eggs: {
+      "curious-letter": { name: "Carta para los curiosos", hint: "Tres descubrimientos diferentes dejan una carta en la radio. Transmisión: carta curiosa." },
+      "between-lines": { name: "Entre líneas", hint: "Un hilo continúa más allá de las barras del mapa. Transmisión: entre líneas." },
+      "borrowed-star": { name: "La estrella prestada", hint: "Una huella en el diario apunta a la invitación final. Transmisión: estrella prestada." },
       "star-map": { name: "Mapa estelar secreto", hint: "Un código antiguo: arriba, arriba, abajo, abajo… En el móvil, desliza y toca dos veces." },
       "focus-lens": { name: "Telescopio de carrera", hint: "Glaucia muestra por el telescopio las estrellas de su trayectoria. Solo pídelo." },
       "launch-charge": { name: "Despegue", hint: "Mantén pulsado el cielo del observatorio hasta la ignición y mira lo que escribe la nave." },

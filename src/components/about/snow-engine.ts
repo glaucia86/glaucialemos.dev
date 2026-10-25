@@ -25,7 +25,7 @@ const PLANES = [
   { count: 26, spare: 110, size: 2, fall: .14, drift: 1.6 },
 ] as const;
 
-export function createSnow({ back, front, onGust }: { back: HTMLCanvasElement; front: HTMLCanvasElement; onGust?: () => void }) {
+export function createSnow({ back, front, onGust }: { back: HTMLCanvasElement; front: HTMLCanvasElement; onGust?: (active: boolean) => void }) {
   const b = back.getContext("2d"); const f = front.getContext("2d");
   const next = random(2042);
   const planes: Flake[][] = PLANES.map((plane) => Array.from({ length: plane.count + plane.spare }, () => ({ u: next(), v: next(), speed: .7 + next() * .6, sway: .002 + next() * .006, phase: next() * Math.PI * 2 })));
@@ -35,6 +35,8 @@ export function createSnow({ back, front, onGust }: { back: HTMLCanvasElement; f
   let particles: Particle[] = []; let streaks: Streak[] = []; let beams: Beam[] = [];
   let pointer: UV | null = null; let gustIn = 6; let gustLeft = 0;
   let prismFrom: UV | null = null;
+  let gustActive = false;
+  const beginGust = () => { if (!gustActive) { gustActive = true; onGust?.(true); } };
   const level = { blizzard: 0, prism: 0, gust: 0 }; const target = { blizzard: 0, prism: 0, gust: 0 };
 
   const resize = () => {
@@ -165,9 +167,10 @@ export function createSnow({ back, front, onGust }: { back: HTMLCanvasElement; f
     if (!running) return;
     const delta = Math.min(.05, (now - (last || now)) / 1000); last = now; time += delta;
     gustIn -= delta;
-    if (gustIn <= 0 && !target.gust) { target.gust = 1; gustLeft = 2.2 + Math.random() * 1.2; onGust?.(); }
+    if (gustIn <= 0 && !target.gust) { target.gust = 1; gustLeft = 2.2 + Math.random() * 1.2; beginGust(); }
     if (target.gust) { gustLeft -= delta; if (gustLeft <= 0) { target.gust = 0; gustIn = 7 + Math.random() * 6; } }
     for (const key of ["blizzard", "prism", "gust"] as const) level[key] += (target[key] - level[key]) * Math.min(1, delta * (key === "gust" ? 1.2 : 1.8));
+    if (gustActive && !target.gust && level.gust < .12) { gustActive = false; onGust?.(false); }
     drawBack(delta); drawFront(delta);
     frame = requestAnimationFrame(draw);
   };
@@ -182,7 +185,7 @@ export function createSnow({ back, front, onGust }: { back: HTMLCanvasElement; f
     pointer(uv: UV | null) { pointer = uv; },
     blizzard(on: boolean) { target.blizzard = on ? 1 : 0; },
     prism(on: boolean, from?: UV) { target.prism = on ? 1 : 0; prismFrom = on ? from ?? prismFrom : null; },
-    gust() { target.gust = 1; gustLeft = 2.4; onGust?.(); },
+    gust() { target.gust = 1; gustLeft = 2.4; beginGust(); },
     // A small cloud of breath in the cold air, drifting off with the wind.
     breath(uv: UV) { emit(uv, 5, (x, y, index) => ({ x: x - index * .6, y: y + (Math.random() - .5) * 2, vx: -6 - Math.random() * 8 - wind() * 200, vy: -2 - Math.random() * 3, life: 0, max: 1 + Math.random() * .6, color: index % 2 ? "#e9f6ff" : "#ffffff", size: Math.random() > .5 ? 2 : 1, gravity: -1 })); },
     beam(from: UV, to: UV, duration = 2.4) { beams.push({ from, to, life: 0, max: duration, grow: .5 }); },

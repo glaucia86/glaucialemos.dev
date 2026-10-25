@@ -25,16 +25,16 @@ describe("easter eggs", () => {
     expect(pageOf("/en/servicos/")).toBe("services");
     expect(pageOf("/pt/rota-perdida")).toBe("notfound");
     expect(pageOf("/pt/projetos/qualquer-coisa")).toBe("notfound");
-    expect(eggsFor("home").map((egg) => egg.id)).toEqual(["star-map", "focus-lens", "launch-charge", "dog-signal", "hangar-check", "dark-sky", "wish"]);
-    expect(eggsFor("notfound").map((egg) => egg.id)).toEqual(["star-map"]);
-    expect(eggsFor("about").map((egg) => egg.id)).toEqual(["star-map", "paw-tracks", "memory-capsule", "whiteout", "aurora-prism", "snowdrift"]);
+    expect(eggsFor("home").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "focus-lens", "launch-charge", "dog-signal", "hangar-check", "dark-sky", "wish"]);
+    expect(eggsFor("notfound").map((egg) => egg.id)).toEqual(["star-map", "curious-letter"]);
+    expect(eggsFor("about").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "paw-tracks", "memory-capsule", "whiteout", "aurora-prism", "snowdrift", "between-lines", "borrowed-star"]);
     expect(new Set(EGGS.flatMap((egg) => egg.phrases)).size).toBe(EGGS.flatMap((egg) => egg.phrases).length);
   });
 
   it("reconhece os segredos de Tatooine na página de Projetos", () => {
     expect(pageOf("/pt/projetos")).toBe("projects");
     expect(pageOf("/en/projetos/")).toBe("projects");
-    expect(eggsFor("projects").map((egg) => egg.id)).toEqual(["star-map", "npx", "utinni", "plans", "sunset", "podrace", "mindtrick", "cantina", "artoo", "sand", "hellothere", "bb8"]);
+    expect(eggsFor("projects").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "npx", "utinni", "plans", "sunset", "podrace", "mindtrick", "cantina", "artoo", "sand", "hellothere", "bb8"]);
     expect(matchPhrase("npx glaucia_lemos86")).toBe("npx");
     expect(matchPhrase("Hello there!")).toBe("hellothere");
     expect(matchPhrase("Estrela da Morte")).toBe("plans");
