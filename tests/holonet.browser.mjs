@@ -103,6 +103,58 @@ await check("segurar o céu: contagem, a nave decola, passa pelo terraço e some
   await context.close();
 });
 
+await check("hotspots acompanham o zoom, a contagem e os tremores da decolagem", async () => {
+  const { context, page, errors } = await open();
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(2400);
+  await page.mouse.wheel(0, 180);
+  await page.waitForFunction(() => new DOMMatrix(getComputedStyle(document.querySelector(".hero-scene-layer")).transform).a > 1.03);
+  await page.waitForTimeout(1200);
+  const aligned = async () => {
+    const delta = await page.evaluate(() => {
+      const box = (selector) => document.querySelector(selector).getBoundingClientRect();
+      const art = box(".hero-scene-layer .observatory-plane");
+      const hot = box(".observatory-plane--hot");
+      return Math.max(...["x", "y", "width", "height"].map((key) => Math.abs(art[key] - hot[key])));
+    });
+    assert.ok(delta < 1, `planos da arte e dos hotspots alinhados (diferença: ${delta}px)`);
+  };
+  await aligned();
+  const lantern = await page.locator('[data-lantern="0"] .observatory-lantern__glass').boundingBox();
+  assert.ok(lantern);
+  await page.mouse.click(lantern.x + lantern.width / 2, lantern.y + lantern.height / 2);
+  assert.equal(await page.locator('[data-lantern="0"]').getAttribute("data-off"), "true");
+  await page.keyboard.type("launch");
+  await page.waitForFunction(() => document.querySelector(".observatory-hero")?.dataset.stage === "countdown");
+  await page.waitForTimeout(100);
+  await aligned();
+  const scales = await page.locator(".page-hero__image, .hero-scene-layer, .observatory-layer").evaluateAll((elements) => elements.map((element) => Number(getComputedStyle(element).scale)));
+  assert.equal(scales.length, 3);
+  assert.ok(scales.every((scale) => scale > 1 && Math.abs(scale - scales[0]) < .001), "zoom da contagem sincronizado com a placa");
+  await page.waitForFunction(() => document.querySelector(".observatory-hero")?.dataset.stage === "launch");
+  await page.waitForTimeout(100);
+  await aligned();
+  assert.deepEqual(errors, []);
+  await context.close();
+});
+
+await check("um desejo interrompe o voo sem deixar a nave congelada no céu", async () => {
+  const { context, page, errors } = await open();
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(2400);
+  await page.keyboard.type("launch");
+  await page.waitForFunction(() => document.querySelector(".observatory-hero")?.dataset.stage === "launch");
+  await page.waitForTimeout(600);
+  assert.ok(await visible(page, ".observatory-ship"));
+  await page.keyboard.type("wish");
+  await page.waitForFunction(() => document.querySelector(".observatory-hero")?.dataset.stage === "wish");
+  await page.waitForFunction(() => getComputedStyle(document.querySelector(".observatory-ship")).visibility === "hidden", null, { timeout: 1000 });
+  await page.waitForFunction(() => document.querySelector(".observatory-hero")?.dataset.stage === "idle", null, { timeout: 9000 });
+  assert.equal(await visible(page, ".observatory-ship"), false);
+  assert.deepEqual(errors, []);
+  await context.close();
+});
+
 await check("telescópio de carreira, Prince, hangar e lanternas que apagam de verdade", async () => {
   const { context, page, errors } = await open();
   await page.keyboard.press("Escape");

@@ -59,6 +59,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
     if (!section || !motion) return;
     const q = <T extends Element = HTMLElement>(selector: string) => section.querySelector<T>(selector)!;
     const layer = q(".hero-scene-layer");
+    const sceneLayers = [layer, q(".observatory-layer")];
     const plane = q(".hero-scene-layer .observatory-plane");
     const crew = q(".observatory-crew");
     const signalStar = q(".observatory-signal-star");
@@ -107,6 +108,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
     const settle = () => {
       clearTimers(); stopLoops();
       hide([signalStar, bubble, countdown]);
+      gsap.set(ship, { autoAlpha: 0, overwrite: true });
       gsap.to(meter, { scaleX: 0, duration: .3, overwrite: true });
       gsap.to([hangar, ...hangarLights], { opacity: 0, duration: .4, ease: "steps(3)", overwrite: true });
       delete consoleArt.dataset.on;
@@ -231,7 +233,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
       play("launch"); buzz(120);
       countdown.textContent = labels.countdown[3];
       gsap.to(countdown, { autoAlpha: 0, duration: .5, delay: .5, ease: "steps(3)" });
-      gsap.to(layer, { keyframes: { x: [-6, 6, -4, 4, -2, 0] }, duration: .5, ease: "none", overwrite: "auto" });
+      gsap.to(sceneLayers, { keyframes: { x: [-6, 6, -4, 4, -2, 0] }, duration: .5, ease: "none", overwrite: "auto" });
       const proxy = { t: 0 };
       let last = FLIGHT[0];
       const fly = () => {
@@ -264,7 +266,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
       labels.countdown.slice(0, 3).forEach((value, index) => later(() => {
         countdown.textContent = value;
         gsap.fromTo(countdown, { autoAlpha: 1, scale: 1.7 }, { scale: 1, duration: .3, ease: "steps(3)", overwrite: true });
-        gsap.to(layer, { keyframes: { x: [-(index + 1) * 1.5, (index + 1) * 1.5, 0] }, duration: .25, ease: "none", overwrite: "auto" });
+        gsap.to(sceneLayers, { keyframes: { x: [-(index + 1) * 1.5, (index + 1) * 1.5, 0] }, duration: .25, ease: "none", overwrite: "auto" });
         play("blip");
       }, index * COUNT_MS));
       later(() => { clearTimers(); launch(); }, COUNT_MS * 3);
@@ -334,7 +336,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
     if (desktop) {
       jump = createHyperspace(jumpCanvas.current!);
       const state = { progress: 0 };
-      const zoom = [section.querySelector(".page-hero__image"), layer];
+      const zoom = [q(".page-hero__image"), ...sceneLayers];
       gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: { trigger: section, start: "top top", end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 },
