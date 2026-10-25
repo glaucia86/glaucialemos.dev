@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 import type { ComlinkCopy } from "@/i18n/comlink";
-import { EGGS, FOUND_EVENT, emitEgg, eggsFor, forget, matchPhrase, pageOf, readFound, type EggId } from "@/lib/eggs";
+import { EGGS, FOUND_EVENT, discover, emitEgg, eggsFor, forget, getFoundSnapshot, matchPhrase, matchTail, normalizePhrase, onEgg, pageOf, remainingDiscoveries, subscribeReset, type EggId } from "@/lib/eggs";
+import { useDiscoveries } from "@/lib/use-discoveries";
 import { play } from "@/lib/sfx";
 
-const storage = () => { try { return window.localStorage; } catch { return undefined; } };
 
 // The secret channel: every Easter egg is reachable from here on any device, by typing or by tapping replay.
 // The toggle lives in the site header (slot); the dialog and the toast stay at the page root.
@@ -15,10 +15,42 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
   const list = eggsFor(page);
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
-  const [found, setFound] = useState<EggId[]>([]);
+  const letter = useRef<HTMLDialogElement>(null);
+  const letterOpener = useRef<HTMLElement | null>(null);
+  const replayTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const found = useDiscoveries();
   const [fresh, setFresh] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [confirming, setConfirming] = useState(false);
+  useEffect(() => {
+    if (remainingDiscoveries("curious-letter", found) > 0) letter.current?.close();
+  }, [found]);
+
+  useEffect(() => {
+    const openLetter = () => {
+      const missing = remainingDiscoveries("curious-letter", getFoundSnapshot().split(","));
+      if (missing) {
+        setFeedback(copy.letter.locked.replace("{n}", String(missing)));
+        if (!dialog.current?.open) dialog.current?.showModal();
+        return;
+      }
+      if (!letter.current || letter.current.open) return;
+      dialog.current?.close();
+      letterOpener.current = document.activeElement as HTMLElement;
+      letter.current.showModal(); discover("curious-letter");
+    };
+    const stop = onEgg("curious-letter", openLetter);
+    const reset = () => { clearTimeout(replayTimer.current); letter.current?.close(); };
+    let buffer = "";
+    const typed = (event: KeyboardEvent) => {
+      if (event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
+      buffer = (buffer + normalizePhrase(event.key)).slice(-32);
+      if (matchTail(buffer, ["curious-letter"])) { buffer = ""; openLetter(); }
+    };
+    const stopReset = subscribeReset(reset);
+    addEventListener("keydown", typed);
+    return () => { stop(); reset(); stopReset(); removeEventListener("keydown", typed); };
+  }, [copy.letter, pathname]);
 
   // Wiping takes two clicks; the confirmation expires on its own.
   useEffect(() => {
@@ -28,11 +60,8 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
   }, [confirming]);
 
   useEffect(() => {
-    setFound(readFound(storage()));
     let timer: ReturnType<typeof setTimeout> | undefined;
-    const onFound = (event: Event) => {
-      const id = (event as CustomEvent<EggId>).detail;
-      setFound((current) => current.includes(id) ? current : [...current, id]);
+    const onFound = () => {
       setFresh(true); play("success");
       clearTimeout(timer); timer = setTimeout(() => setFresh(false), 2600);
     };
@@ -51,10 +80,15 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
   function open() { setFeedback(""); setConfirming(false); dialog.current?.showModal(); play("blip"); }
   const wipe = () => {
     if (!confirming) { setConfirming(true); play("error"); return; }
-    forget(storage()); setFound([]); setConfirming(false); setFeedback(copy.resetDone); play("push");
+    forget(); setConfirming(false); setFeedback(copy.resetDone); play("push");
     input.current?.focus();
   };
-  const run = (id: EggId) => { dialog.current?.close(); setTimeout(() => emitEgg(id), 280); };
+  const run = (id: EggId) => {
+    const missing = remainingDiscoveries(id, getFoundSnapshot().split(","));
+    if (missing) { setFeedback(copy.letter.locked.replace("{n}", String(missing))); return; }
+    dialog.current?.close(); clearTimeout(replayTimer.current);
+    replayTimer.current = setTimeout(() => emitEgg(id), 280);
+  };
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const id = matchPhrase(input.current?.value ?? "");
@@ -89,6 +123,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <span>{copy.counter}: <b>{count}/{total}</b>{count === total && <em> · {copy.master}</em>}</span>
           <span className="comlink__bar" aria-hidden="true"><i style={{ transform: `scaleX(${count / total})` }} /></span>
         </p>
+        {remainingDiscoveries("curious-letter", found) === 0 && <button type="button" className="comlink__envelope" onClick={() => run("curious-letter")}><span aria-hidden="true">✉</span> {copy.letter.open}</button>}
         {count > 0 && <button type="button" className="comlink__reset" data-confirming={confirming || undefined} onClick={wipe}>
           <span aria-hidden="true">{confirming ? "!" : "⟲"}</span>{confirming ? copy.resetConfirm.replace("{n}", String(count)) : copy.reset}
         </button>}
@@ -107,6 +142,14 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
             {known && <button type="button" onClick={() => run(id)}>{copy.play}<span className="sr-only">: {copy.eggs[id].name}</span></button>}
           </li>;
         })}</ul>
+      </div>
+    </dialog>
+    <dialog ref={letter} className="curious-letter" aria-labelledby="curious-letter-title" onClose={() => { if (letterOpener.current?.isConnected) letterOpener.current.focus({ preventScroll: true }); }}>
+      <div className="curious-letter__paper">
+        <span className="curious-letter__seal" aria-hidden="true">✦</span>
+        <h2 id="curious-letter-title">{copy.letter.title}</h2>
+        <p>{copy.letter.body}</p><p className="curious-letter__signature">{copy.letter.signature}</p>
+        <button type="button" autoFocus onClick={() => letter.current?.close()}>{copy.letter.close}</button>
       </div>
     </dialog>
   </>;

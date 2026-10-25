@@ -28,10 +28,10 @@ describe('career', () => {
   });
 
   it('splits the journey in three eras', () => {
-    expect([eraOf(2013 * 12), eraOf(2019 * 12 + 2), eraOf(2025 * 12 + 8)]).toEqual(['padawan', 'knight', 'master']);
+    expect([eraOf(2013 * 12), eraOf(2019 * 12 + 2), eraOf(2025 * 12 + 8)]).toEqual(['foundation', 'advocacy', 'leadership']);
     const eras = groupEras(buildCareer(getCargos(), NOW));
-    expect(eras.map(group => group.era)).toEqual(['master', 'knight', 'padawan']);
-    expect(eras.find(group => group.era === 'knight')!.roles.every(role => role.empresa === 'Microsoft')).toBe(true);
+    expect(eras.map(group => group.era)).toEqual(['leadership', 'advocacy', 'foundation']);
+    expect(eras.find(group => group.era === 'advocacy')!.roles.every(role => role.empresa === 'Microsoft')).toBe(true);
     expect(eras.flatMap(group => group.roles)).toHaveLength(getCargos().length);
   });
 

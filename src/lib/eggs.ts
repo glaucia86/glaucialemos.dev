@@ -3,21 +3,20 @@
 export type EggPage = "global" | "home" | "about" | "projects" | "content" | "events" | "services" | "notfound";
 export const EGGS = [
   { id: "star-map", page: "global", phrases: ["konami", "uuddlrlrba", "mapaestelar", "starmap"] },
+  { id: "curious-letter", page: "global", phrases: ["cartacuriosa", "curiousletter", "cartaparaloscuriosos"] },
   { id: "focus-lens", page: "home", phrases: ["telescopio", "telescope", "foco", "focus", "enfocar"] },
   { id: "launch-charge", page: "home", phrases: ["decolar", "launch", "despegar", "ignicao", "ignition", "ignicion"] },
   { id: "dog-signal", page: "home", phrases: ["prince", "principe", "auau", "woof", "guau"] },
   { id: "hangar-check", page: "home", phrases: ["hangar", "nave", "ship"] },
   { id: "dark-sky", page: "home", phrases: ["escuro", "dark", "oscuro", "vialactea", "milkyway"] },
   { id: "wish", page: "home", phrases: ["desejo", "wish", "deseo", "estrelacadente", "shootingstar", "estrellafugaz"] },
-  { id: "ion", page: "about", phrases: ["ion", "ions", "iones", "canhao", "canon", "cannon"] },
-  { id: "holo", page: "about", phrases: ["helpme", "obiwan", "ajudame", "ayudame"] },
-  { id: "iknow", page: "about", phrases: ["euteamo", "iloveyou", "tequiero"] },
-  { id: "blizzard", page: "about", phrases: ["hoth", "nevasca", "blizzard", "ventisca"] },
-  { id: "ice", page: "about", phrases: ["degelo", "thaw", "deshielo"] },
-  { id: "probe", page: "about", phrases: ["sonda", "probe"] },
-  { id: "tauntaun", page: "about", phrases: ["tauntaun"] },
-  { id: "threepio-arm", page: "about", phrases: ["cpo", "threepio", "droide", "droid"] },
-  { id: "settle", page: "about", phrases: ["neve", "snow", "nieve"] },
+  { id: "paw-tracks", page: "about", phrases: ["pegadas", "pawprints", "huellas", "rastro", "tracks"] },
+  { id: "memory-capsule", page: "about", phrases: ["capsula", "capsule", "memoria", "memory"] },
+  { id: "whiteout", page: "about", phrases: ["nevasca", "whiteout", "ventisca", "blizzard", "tempestade", "storm"] },
+  { id: "aurora-prism", page: "about", phrases: ["aurora", "prisma", "prism", "cristal", "crystal"] },
+  { id: "snowdrift", page: "about", phrases: ["neve", "snow", "nieve"] },
+  { id: "between-lines", page: "about", phrases: ["entrelinhas", "betweenthelines", "entrelineas"] },
+  { id: "borrowed-star", page: "about", phrases: ["estrelaemprestada", "borrowedstar", "estrellaprestada"] },
   { id: "npx", page: "projects", phrases: ["npx", "npxglaucialemos", "glaucialemos"] },
   { id: "utinni", page: "projects", phrases: ["utinni", "jawa", "jawas"] },
   { id: "plans", page: "projects", phrases: ["planos", "plans", "planes", "estreladamorte", "deathstar", "estrelladelamuerte"] },
@@ -32,10 +31,17 @@ export const EGGS = [
 ] as const satisfies readonly { id: string; page: EggPage; phrases: readonly string[] }[];
 export type EggId = (typeof EGGS)[number]["id"];
 
+export function remainingDiscoveries(id: EggId, found: readonly string[]): number {
+  if (id !== "curious-letter") return 0;
+  const count = EGGS.filter(egg => egg.id !== "curious-letter" && found.includes(egg.id)).length;
+  return Math.max(0, 3 - count);
+}
+
 // v2: Galáxia Encantada. Discoveries from the previous theme are not carried over.
 export const FOUND_KEY = "galaxia-encantada:eggs:v2";
 export const PLAY_EVENT = "egg:play";
 export const FOUND_EVENT = "egg:found";
+export const RESET_EVENT = "egg:reset";
 
 // Letters only, accents removed: "Eu te amo!" → "euteamo", "Canhão" → "canhao".
 export const normalizePhrase = (text: string) => text.normalize("NFD").replace(/[^a-zA-Z]/g, "").toLowerCase();
@@ -70,17 +76,54 @@ export function readFound(storage: Pick<Storage, "getItem"> | undefined): EggId[
 
 function store() { try { return window.localStorage; } catch { return undefined; } }
 
+// In-memory fallback keeps this visit usable if reading/writing storage is denied.
+let volatileFound: EggId[] | undefined;
+export function getFoundSnapshot(): string {
+  if (typeof window === "undefined") return "";
+  return (volatileFound ?? readFound(store())).join(",");
+}
+
+export function subscribeFound(notify: () => void) {
+  const storage = (event: StorageEvent) => {
+    if (event.key !== null && event.key !== FOUND_KEY) return;
+    volatileFound = undefined; notify();
+  };
+  window.addEventListener(FOUND_EVENT, notify);
+  window.addEventListener(RESET_EVENT, notify);
+  window.addEventListener("storage", storage);
+  return () => {
+    window.removeEventListener(FOUND_EVENT, notify);
+    window.removeEventListener(RESET_EVENT, notify);
+    window.removeEventListener("storage", storage);
+  };
+}
+
+// A reset is explicit, never inferred from an unrelated discovery event.
+export function subscribeReset(run: () => void) {
+  const storage = (event: StorageEvent) => {
+    if (event.key === null || (event.key === FOUND_KEY && readFound({ getItem: () => event.newValue }).length === 0)) run();
+  };
+  window.addEventListener(RESET_EVENT, run); window.addEventListener("storage", storage);
+  return () => { window.removeEventListener(RESET_EVENT, run); window.removeEventListener("storage", storage); };
+}
+
 export function discover(id: EggId) {
   if (typeof window === "undefined") return;
-  const found = readFound(store());
-  if (found.includes(id)) return;
-  try { store()?.setItem(FOUND_KEY, JSON.stringify([...found, id])); } catch { /* The secret still counts for this visit. */ }
+  const found = getFoundSnapshot().split(",").filter(Boolean) as EggId[];
+  if (found.includes(id) || remainingDiscoveries(id, found) > 0) return;
+  const next = EGGS.map(egg => egg.id).filter(key => key === id || found.includes(key));
+  volatileFound = next;
+  try {
+    const storage = store();
+    if (storage) { storage.setItem(FOUND_KEY, JSON.stringify(next)); volatileFound = undefined; }
+  } catch { /* Keep the in-memory fallback. */ }
   window.dispatchEvent(new CustomEvent(FOUND_EVENT, { detail: id }));
 }
 
-// Wipes every discovered secret (the Comlink's "wipe memory"), so the hunt starts over.
 export function forget(storage: Pick<Storage, "removeItem"> | undefined = typeof window === "undefined" ? undefined : store()) {
-  try { storage?.removeItem(FOUND_KEY); } catch { /* Nothing stored, nothing to wipe. */ }
+  volatileFound = [];
+  try { if (storage) { storage.removeItem(FOUND_KEY); volatileFound = undefined; } } catch { /* Reset this visit even if storage is blocked. */ }
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(RESET_EVENT));
 }
 
 export const emitEgg = (id: EggId) => window.dispatchEvent(new CustomEvent(PLAY_EVENT, { detail: id }));

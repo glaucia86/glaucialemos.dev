@@ -1,0 +1,43 @@
+{
+  "earth-observatory": {
+    "grid": 1,
+    "plateGrid": 0,
+    "colors": { "actor": 160, "prop": 128 },
+    "stages": {
+      "glaucia": { "x": 82.5, "y": 93, "height": 52, "reference": "idle" }
+    },
+    "actorScale": { "prince": 0.33 },
+    "props": {
+      "launch-console-idle": 1.15,
+      "launch-console-activated": 1.15,
+      "receiver-cyan-pulse": 0.95,
+      "spacecraft-near": 0.5,
+      "spacecraft-far": 1,
+      "telescope-idle": 1,
+      "telescope-activated": 1
+    }
+  },
+  "niveora": {
+    "grid": 1,
+    "plateGrid": 0,
+    "colors": { "actor": 160, "prop": 128 },
+    "stages": {
+      "glaucia": { "x": 84, "y": 80, "height": 50, "reference": "idle" },
+      "prince": { "x": 76, "y": 80, "height": 14.5, "reference": "stand" }
+    },
+    "actorScale": {},
+    "props": {
+      "memory-capsule-sealed": 0.45,
+      "memory-capsule-open": 0.45,
+      "prismatic-ice-specimen": 0.55,
+      "aurora-beacon": 0.6,
+      "aurora-sensor": 0.6,
+      "snow-pawprint-01": 0.34,
+      "snow-pawprint-02": 0.34,
+      "snow-pawprint-03": 0.34,
+      "snow-pawprint-04": 0.34,
+      "snow-pawprint-05": 0.34,
+      "snow-pawprint-06": 0.34
+    }
+  }
+}

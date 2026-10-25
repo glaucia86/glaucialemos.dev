@@ -1,5 +1,4 @@
-// Ice shards shared by the frozen portrait (server) and the cards frozen by the blizzard (client):
-// a jittered grid split into triangles, in a viewBox of `width` × `height`.
+// Ice shards over the frozen portrait: a jittered grid split into triangles, in a viewBox of `width` × `height`.
 const jitter = (x: number, y: number) => ((Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1 + 1) % 1 - .5;
 
 export function iceShards(cols: number, rows: number, width: number, height: number) {
@@ -15,5 +14,3 @@ export function iceShards(cols: number, rows: number, width: number, height: num
 }
 
 export const PORTRAIT_CRACKS = "M50 0 47 22 56 38 44 61 52 84 46 130M47 22 18 30 0 26M56 38 82 44 100 40M44 61 20 72 6 96M52 84 78 92 100 118";
-// Two depths of cracks for the 100 × 100 card overlay: the first hit, then the second.
-export const CARD_CRACKS = ["M52 0 47 28 58 47 49 71 55 100M47 28 22 36", "M58 47 84 40 100 46M49 71 24 80 0 74M22 36 0 30M84 40 92 18"];

@@ -18,7 +18,7 @@ export const HOTSPOTS = {
   glaucia: { left: idle.left + idle.width * .22, top: idle.top, width: idle.width * .66, height: idle.height * .6 },
   prince: { left: idle.left - idle.width * .02, top: idle.top + idle.height * .64, width: idle.width * .56, height: idle.height * .36 },
   hangar: { left: 86.6, top: 32, width: 10.4, height: 8.6 },
-  console: propBox(observatory, "launch-console-idle", 93.5, 96.5, 1.15),
+  console: propBox(observatory, "launch-console-idle", 93.5, 96.5),
   ...Object.fromEntries(LANTERNS.map((lantern, index) => [`lantern-${index}`, lanternBox(lantern)])),
 } as Record<string, Box>;
 
@@ -29,8 +29,8 @@ export const SPOTS = {
   signal: { u: 94, v: 19 },
   hangarMouth: { u: 89.6, v: 40.5 },
 };
-const receiver = propBox(observatory, "receiver-cyan-pulse", 65.5, 89.5, .95);
-const ship = propBox(observatory, "spacecraft-near", 0, 0, .5);
+const receiver = propBox(observatory, "receiver-cyan-pulse", 65.5, 89.5);
+const ship = propBox(observatory, "spacecraft-near", 0, 0);
 const at = (x: number, y: number): CSSProperties => ({ left: `${x}%`, top: `${y}%` });
 const art = (src: string): CSSProperties => ({ backgroundImage: `url(${src})` });
 const FIREFLIES = [[52, 86], [56, 80], [60, 90], [66, 84], [97, 86], [54, 93]];

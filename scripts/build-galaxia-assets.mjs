@@ -14,6 +14,8 @@ const SOURCE = `${ART}/approved-source`;
 const OUT = "public/galaxia";
 const DATA = "src/data/galaxia";
 const DEBUG = process.argv.includes("--debug");
+// Stages, prop scales and the pixel grid per scene, shared with src/lib/scenes.ts.
+const LAYOUT = JSON.parse(fs.readFileSync(`${DATA}/layout.json`, "utf8"));
 
 export const SCENES = ["earth-observatory", "niveora", "mars-lab", "lumina", "earth-orbit", "aurelia", "red-tide"];
 // Pose names in reading order (rows top to bottom, then left to right). Unnamed poses become pose-N.
@@ -22,11 +24,38 @@ const POSES = {
     glaucia: ["idle", "blink", "telescope", "point"],
     prince: ["stand", "side", "paw", "look-up", "face-idle", "face-happy", "face-joy", "face-curious", "face-wink"],
   },
+  niveora: {
+    glaucia: ["idle", "blink", "capsule", "cheer"],
+    prince: ["stand", "sniff", "sensor", "face-idle", "face-happy", "face-wink", "face-curious"],
+    "glaucia:B": ["cold-a", "cold-b", "brace", "warm-hands"],
+    "prince:B": ["walk-1", "walk-2", "walk-3", "walk-4", "sniff-down-a", "sniff-down-b", "dig-a", "dig-b", "walk-slow-1", "walk-slow-2", "walk-slow-3", "walk-slow-4"],
+    "prince:C": ["cold", "shake-a", "shake-b", "wag-a", "wag-b", "sit-up", "wind"],
+  },
+};
+
+// One body-height ratio per extra sheet, before final cutting. Measurements exclude the two-pixel cut padding.
+// C has a touching tail between wag-b and sit-up; this source-space seam separates those two bodies only.
+const SHEET_NORMALIZATION = {
+  niveora: {
+    "glaucia:B": { pose: "cold-a", reference: "idle" },
+    "prince:B": { pose: "walk-1", reference: "sniff" },
+    "prince:C": { pose: "wag-a", reference: "stand", seams: [1302] },
+  },
 };
 
 // Horizontal anchor (source px) when the automatic feet centre is skewed by a companion or a prop: Glaucia's hips.
 const ANCHORS = {
   "earth-observatory": { glaucia: { idle: 165, telescope: 315, point: 165 } },
+  niveora: {
+    glaucia: { idle: 140, capsule: 230, cheer: 175, "cold-a": 139, "cold-b": 140, brace: 216, "warm-hands": 154 },
+    // Anatomical support centres in normalized crop pixels; flying snow / a lifted paw must not move the actor.
+    prince: {
+      "walk-1": 335, "walk-2": 342, "walk-3": 330, "walk-4": 358,
+      "sniff-down-a": 385, "sniff-down-b": 302, "dig-a": 318, "dig-b": 326,
+      "walk-slow-1": 341, "walk-slow-2": 332, "walk-slow-3": 328, "walk-slow-4": 314,
+      cold: 146, "shake-a": 154, "shake-b": 132, "wag-a": 247, "wag-b": 136, "sit-up": 161, wind: 183,
+    },
+  },
 };
 
 const num = (scene) => String(SCENES.indexOf(scene) + 1).padStart(2, "0");
@@ -64,8 +93,34 @@ function keyWhite(img) {
   return img;
 }
 
+// Props were cut from sheets on a black background and keep a dark margin. Flood from the transparent outside
+// through near-black pixels only, so the sprites' own dark navy outlines survive.
+function keyDark(img) {
+  const { data, w, h } = img;
+  const dark = (i) => data[i * 4 + 3] > 0 && Math.max(data[i * 4], data[i * 4 + 1]) < 20 && data[i * 4 + 2] < 36;
+  const seen = new Uint8Array(w * h);
+  const stack = [];
+  for (let i = 0; i < w * h; i++) {
+    const x = i % w; const y = (i / w) | 0;
+    const border = x === 0 || y === 0 || x === w - 1 || y === h - 1;
+    const outside = data[i * 4 + 3] === 0 || border;
+    if (outside) stack.push(i);
+  }
+  while (stack.length) {
+    const i = stack.pop();
+    if (seen[i]) continue;
+    seen[i] = 1;
+    if (data[i * 4 + 3] > 0 && !dark(i)) continue;
+    data[i * 4 + 3] = 0;
+    const x = i % w; const y = (i / w) | 0;
+    if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1);
+    if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w);
+  }
+  return img;
+}
+
 // Connected components on alpha; small specks (sparkles, dust) are dropped unless they sit inside a big component's box.
-function poses(img) {
+function poses(img, seams = []) {
   const { data, w, h } = img;
   const label = new Int32Array(w * h).fill(-1);
   const comps = [];
@@ -78,6 +133,7 @@ function poses(img) {
       c.area++; c.x0 = Math.min(c.x0, x); c.x1 = Math.max(c.x1, x); c.y0 = Math.min(c.y0, y); c.y1 = Math.max(c.y1, y);
       for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
         const nx = x + dx; const ny = y + dy; if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+        if (seams.some((seam) => (x < seam) !== (nx < seam))) continue;
         const j = ny * w + nx; if (label[j] < 0 && data[j * 4 + 3] >= 96) { label[j] = comps.length; stack.push(j); }
       }
     }
@@ -168,65 +224,169 @@ function blinkOverlay(idle, blink) {
   return { data: out, w: idle.w, h: idle.h, feetX: idle.feetX, shift: best, eyes: box };
 }
 
-async function actor(scene, name, file) {
-  if (!fs.existsSync(file)) return null;
-  const img = await loadRgba(file);
-  if (!img.alpha) keyWhite(img);
-  const { label, groups } = poses(img);
-  const names = POSES[scene]?.[name] ?? [];
-  const dir = `${OUT}/actors/${name}/${scene}`;
-  fs.mkdirSync(dir, { recursive: true });
-  const sprites = Object.fromEntries(groups.map((group, index) => [names[index] ?? `pose-${index + 1}`, cut(img, label, group)]));
+// True pixel art: shrink to the scene grid (1 art pixel = `grid` plate pixels at the size the sprite is shown), harden
+// the alpha and limit the palette without dithering. The browser scales it back up with image-rendering: pixelated.
+async function pixelate(img, factor, colors) {
+  const w = Math.max(1, Math.round(img.w * factor)); const h = Math.max(1, Math.round(img.h * factor));
+  const small = await sharp(img.data, { raw: { width: img.w, height: img.h, channels: 4 } }).resize(w, h, { kernel: "lanczos3" }).raw().toBuffer();
+  for (let i = 3; i < small.length; i += 4) small[i] = small[i] >= 128 ? 255 : 0;
+  const png = await sharp(small, { raw: { width: w, height: h, channels: 4 } }).png({ palette: true, colors, dither: 0 }).toBuffer();
+  const { data } = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  for (let i = 3; i < data.length; i += 4) if (small[i] === 0) data[i] = 0;
+  return { data, w, h };
+}
+const COLORS = { plate: 96, actor: 40, prop: 32 };
+// Palette sizes per scene (layout.json "colors"), on top of the defaults.
+const colorsOf = (scene) => ({ ...COLORS, ...LAYOUT[scene]?.colors });
+const lossless = (img) => sharp(img.data, { raw: { width: img.w, height: img.h, channels: 4 } }).webp({ lossless: true, effort: 6 });
+
+// Every pose sheet of an actor in the scene: GE-GL-02-niveora.png, then extras GE-GL-02B-niveora.png, GE-GL-02C-…
+const sheets = (scene, prefix) => fs.readdirSync(SOURCE).filter((file) => new RegExp(`^${prefix}-${num(scene)}[A-Z]?-${scene}\\.png$`).test(file)).sort().map((file) => ({ file: `${SOURCE}/${file}`, tag: file.match(/-\d{2}([A-Z]?)-/)[1] }));
+
+// Cuts every pose of an actor, at the source resolution.
+async function cutActor(scene, name, prefix) {
+  const sprites = {};
+  for (const { file, tag } of sheets(scene, prefix)) {
+    let img = await loadRgba(file);
+    if (!img.alpha) keyWhite(img);
+    const key = tag ? `${name}:${tag}` : name;
+    const names = POSES[scene]?.[key] ?? [];
+    const normalization = SHEET_NORMALIZATION[scene]?.[key];
+    let seams = normalization?.seams ?? [];
+    if (normalization) {
+      const measured = poses(img, seams).groups;
+      if (measured.length !== names.length) throw new Error(`${file}: expected ${names.length} poses, found ${measured.length}`);
+      const body = measured[names.indexOf(normalization.pose)];
+      const reference = sprites[normalization.reference];
+      if (!body || !reference) throw new Error(`${file}: missing scale reference ${normalization.reference}`);
+      const sourceHeight = body.y1 - body.y0 + 1;
+      const referenceHeight = reference.h - 4;
+      const factor = referenceHeight / sourceHeight;
+      const { data, info } = await sharp(img.data, { raw: { width: img.w, height: img.h, channels: 4 } })
+        .resize(Math.round(img.w * factor), Math.round(img.h * factor), { kernel: "nearest" }).raw().toBuffer({ resolveWithObject: true });
+      seams = seams.map((x) => Math.round(x * info.width / img.w));
+      img = { data, w: info.width, h: info.height, alpha: true };
+      if (DEBUG) console.log(`${key}: ${normalization.pose} ${sourceHeight}px → ${normalization.reference} ${referenceHeight}px; sheet scale ${factor.toFixed(6)}`);
+    }
+    const { label, groups } = poses(img, seams);
+    if (normalization && groups.length !== names.length) throw new Error(`${file}: normalization changed pose count to ${groups.length}`);
+    groups.forEach((group, index) => { sprites[names[index] ?? `pose-${tag}${index + 1}`] = cut(img, label, group); });
+  }
   if (sprites.idle && sprites.blink) {
     sprites.blink = blinkOverlay(sprites.idle, sprites.blink);
     if (DEBUG) console.log(`${name}/blink: shift ${JSON.stringify(sprites.blink.shift)}, eyes ${JSON.stringify(sprites.blink.eyes)}`);
   }
+  return Object.keys(sprites).length ? sprites : null;
+}
+
+// Plate pixels per source pixel for an actor: from its stage (height in % of the plate) or a fixed scale.
+function actorScale(scene, name, sprites, plateH) {
+  const stage = LAYOUT[scene]?.stages?.[name];
+  if (stage && sprites[stage.reference]) return stage.height / 100 * plateH / sprites[stage.reference].h;
+  return LAYOUT[scene]?.actorScale?.[name] ?? 1;
+}
+
+// Pixelates every pose with the same factor. The blink overlay is rebuilt on the pixel grid: idle with closed eyes is
+// pixelated as a whole and only the changed pixels around the eyes are kept, so it always lines up with idle.
+async function pixelActor(sprites, factor, colors = COLORS.actor) {
   const out = {};
-  for (const [pose, sprite] of Object.entries(sprites)) {
-    await webp(sprite.data, { width: sprite.w, height: sprite.h, channels: 4 }).toFile(`${dir}/${pose}.webp`);
-    const feetX = ANCHORS[scene]?.[name]?.[pose === "blink" ? "idle" : pose] ?? sprite.feetX;
-    out[pose] = { src: `/galaxia/actors/${name}/${scene}/${pose}.webp`, w: sprite.w, h: sprite.h, feetX };
-    if (DEBUG && sprite.x0 !== undefined) console.log(`${name}/${pose}: ${sprite.w}×${sprite.h} at ${sprite.x0},${sprite.y0}`);
-  }
-  if (DEBUG) {
-    const preview = path.join(os.tmpdir(), `galaxia-${scene}-${name}.png`);
-    const tiles = Object.entries(out).map(([pose, p]) => ({ pose, ...p }));
-    const width = tiles.reduce((s, t) => s + t.w + 8, 8); const height = Math.max(...tiles.map((t) => t.h)) + 16;
-    let left = 8;
-    const layers = tiles.map((t) => { const l = { input: `public${t.src}`, left, top: 8 }; left += t.w + 8; return l; });
-    await sharp({ create: { width, height, channels: 4, background: { r: 30, g: 24, b: 60, alpha: 1 } } }).composite(layers).png().toFile(preview);
-    console.log("preview:", preview);
+  for (const [pose, sprite] of Object.entries(sprites)) if (pose !== "blink") out[pose] = await pixelate(sprite, factor, colors);
+  if (sprites.blink && sprites.idle) {
+    const shut = Buffer.from(sprites.idle.data);
+    for (let i = 0; i < shut.length; i += 4) if (sprites.blink.data[i + 3]) sprites.blink.data.copy(shut, i, i, i + 4);
+    const closed = await pixelate({ ...sprites.idle, data: shut }, factor, colors);
+    const open = out.idle; const eyes = sprites.blink.eyes;
+    const box = { x0: Math.floor((eyes.x0 - 4) * factor), x1: Math.ceil((eyes.x1 + 4) * factor), y0: Math.floor((eyes.y0 - 4) * factor), y1: Math.ceil((eyes.y1 + 4) * factor) };
+    const data = Buffer.alloc(open.data.length);
+    for (let y = Math.max(0, box.y0); y <= Math.min(open.h - 1, box.y1); y++) for (let x = Math.max(0, box.x0); x <= Math.min(open.w - 1, box.x1); x++) {
+      const i = (y * open.w + x) * 4;
+      if (closed.data[i + 3] && Math.abs(closed.data[i] - open.data[i]) + Math.abs(closed.data[i + 1] - open.data[i + 1]) + Math.abs(closed.data[i + 2] - open.data[i + 2]) > 24) closed.data.copy(data, i, i, i + 4);
+    }
+    out.blink = { data, w: open.w, h: open.h };
   }
   return out;
 }
 
 async function scene(id) {
   const src = sources(id);
+  const grid = LAYOUT[id]?.grid ?? 0;
+  // plateGrid 0 keeps the approved plate as it is; actors and props still go on the grid.
+  const plateGrid = LAYOUT[id]?.plateGrid ?? grid;
+  const colors = colorsOf(id);
   const result = { scene: id };
+  let plateH = 941;
   if (fs.existsSync(src.plate)) {
     fs.mkdirSync(`${OUT}/scenes/${id}`, { recursive: true });
-    const meta = await sharp(src.plate).metadata();
-    await sharp(src.plate).webp({ quality: 90, smartSubsample: true, effort: 6 }).toFile(`${OUT}/scenes/${id}/background.webp`);
-    result.background = { src: `/galaxia/scenes/${id}/background.webp`, w: meta.width, h: meta.height };
+    const plate = await loadRgba(src.plate);
+    plateH = plate.h;
+    const file = `${OUT}/scenes/${id}/background.webp`;
+    const art = plateGrid ? await pixelate(plate, 1 / plateGrid, colors.plate) : null;
+    if (art) await lossless(art).toFile(file); else await sharp(src.plate).webp({ quality: 90, smartSubsample: true, effort: 6 }).toFile(file);
+    result.background = { src: `/galaxia/scenes/${id}/background.webp`, w: plate.w, h: plate.h, ...(art && { px: [art.w, art.h] }) };
   }
   result.actors = {};
-  for (const name of ["glaucia", "prince"]) {
-    const poses = await actor(id, name, src[name]);
-    if (poses) result.actors[name] = poses;
+  for (const [name, prefix] of [["glaucia", "GE-GL"], ["prince", "GE-DOG"]]) {
+    const sprites = await cutActor(id, name, prefix);
+    if (!sprites) continue;
+    const dir = `${OUT}/actors/${name}/${id}`;
+    fs.mkdirSync(dir, { recursive: true });
+    const factor = actorScale(id, name, sprites, plateH) / (grid || 1);
+    const art = grid ? await pixelActor(sprites, factor, colors.actor) : null;
+    result.actors[name] = {};
+    for (const [pose, sprite] of Object.entries(sprites)) {
+      const file = `${dir}/${pose}.webp`;
+      if (art) await lossless(art[pose]).toFile(file); else await webp(sprite.data, { width: sprite.w, height: sprite.h, channels: 4 }).toFile(file);
+      const feetX = ANCHORS[id]?.[name]?.[pose === "blink" ? "idle" : pose] ?? sprite.feetX;
+      result.actors[name][pose] = { src: `/galaxia/actors/${name}/${id}/${pose}.webp`, w: sprite.w, h: sprite.h, feetX, ...(art && { px: [art[pose].w, art[pose].h] }) };
+      if (DEBUG && sprite.x0 !== undefined) console.log(`${name}/${pose}: ${sprite.w}×${sprite.h} at ${sprite.x0},${sprite.y0}${art ? ` → ${art[pose].w}×${art[pose].h} px` : ""}`);
+    }
   }
   result.props = {};
   if (fs.existsSync(src.props)) {
     fs.mkdirSync(`${OUT}/props/${id}`, { recursive: true });
     for (const file of fs.readdirSync(src.props).filter((f) => f.endsWith(".png")).sort()) {
       const name = file.replace(/\.png$/, "");
-      const meta = await sharp(`${src.props}/${file}`).metadata();
-      await webp(`${src.props}/${file}`).toFile(`${OUT}/props/${id}/${name}.webp`);
-      result.props[name] = { src: `/galaxia/props/${id}/${name}.webp`, w: meta.width, h: meta.height };
+      const img = keyDark(await loadRgba(`${src.props}/${file}`));
+      const art = grid ? await pixelate(img, (LAYOUT[id]?.props?.[name] ?? 1) / grid, colors.prop) : null;
+      await (art ? lossless(art) : webp(img.data, { width: img.w, height: img.h, channels: 4 })).toFile(`${OUT}/props/${id}/${name}.webp`);
+      result.props[name] = { src: `/galaxia/props/${id}/${name}.webp`, w: img.w, h: img.h, ...(art && { px: [art.w, art.h] }) };
     }
   }
   fs.mkdirSync(DATA, { recursive: true });
   fs.writeFileSync(`${DATA}/${id}.json`, JSON.stringify(result, null, 2) + "\n");
-  console.log(`${id}: background ${result.background ? "ok" : "missing"}, actors ${Object.keys(result.actors).join(", ") || "none"}, ${Object.keys(result.props).length} props`);
+  console.log(`${id}: grid ${grid || "off"}, background ${result.background ? "ok" : "missing"}, actors ${Object.keys(result.actors).join(", ") || "none"}, ${Object.keys(result.props).length} props`);
+}
+
+// Previews for choosing the look: the plate and the actors' reference poses composed on their stages. A = layout.json
+// (approved: original plate, actors on the plate's own pixel), B = grid 1.5 everywhere, C = grid 2 everywhere.
+async function preview(id) {
+  const src = sources(id);
+  const plate = await loadRgba(src.plate);
+  const colors = colorsOf(id);
+  const variants = [["A", LAYOUT[id]?.grid ?? 1, LAYOUT[id]?.plateGrid ?? 0], ["B", 1.5, 1.5], ["C", 2, 2]];
+  for (const [variant, grid, plateGrid] of variants) {
+    const art = plateGrid ? await pixelate(plate, 1 / plateGrid, colors.plate) : plate;
+    const base = await sharp(art.data, { raw: { width: art.w, height: art.h, channels: 4 } }).resize(plate.w, plate.h, { kernel: "nearest" }).png().toBuffer();
+    const layers = [];
+    for (const [name, prefix] of [["glaucia", "GE-GL"], ["prince", "GE-DOG"]]) {
+      const stage = LAYOUT[id]?.stages?.[name];
+      if (!stage) continue;
+      const sprites = await cutActor(id, name, prefix);
+      if (!sprites) continue;
+      const scale = actorScale(id, name, sprites, plate.h);
+      const pose = await pixelate(sprites[stage.reference], scale / grid, colors.actor);
+      const w = Math.round(sprites[stage.reference].w * scale); const h = Math.round(sprites[stage.reference].h * scale);
+      const feetX = ANCHORS[id]?.[name]?.[stage.reference] ?? sprites[stage.reference].feetX;
+      const input = await sharp(pose.data, { raw: { width: pose.w, height: pose.h, channels: 4 } }).resize(w, h, { kernel: "nearest" }).png().toBuffer();
+      layers.push({ input, left: Math.round(stage.x / 100 * plate.w - feetX * scale), top: Math.round(stage.y / 100 * plate.h - h) });
+    }
+    const composed = await sharp(base).composite(layers).png().toBuffer();
+    const full = path.join(os.tmpdir(), `galaxia-${id}-${variant}.png`);
+    const close = path.join(os.tmpdir(), `galaxia-${id}-${variant}-close.png`);
+    await sharp(composed).toFile(full);
+    await sharp(composed).extract({ left: Math.round(plate.w * .55), top: Math.round(plate.h * .35), width: Math.round(plate.w * .45), height: Math.round(plate.h * .65) }).toFile(close);
+    console.log(`preview ${variant} (grid ${grid}, plate ${plateGrid || "original"}):`, full, close);
+  }
 }
 
 async function manifest() {
@@ -252,6 +412,7 @@ async function manifest() {
 
 const arg = process.argv.slice(2).find((a) => !a.startsWith("--"));
 if (process.argv.includes("--manifest")) await manifest();
+else if (SCENES.includes(arg) && process.argv.includes("--preview")) await preview(arg);
 else if (arg === "all") for (const id of SCENES) await scene(id);
 else if (SCENES.includes(arg)) await scene(arg);
-else { console.error(`Usage: node scripts/build-galaxia-assets.mjs <${SCENES.join("|")}|all> [--debug] | --manifest`); process.exit(1); }
+else { console.error(`Usage: node scripts/build-galaxia-assets.mjs <${SCENES.join("|")}|all> [--debug] [--preview] | --manifest`); process.exit(1); }

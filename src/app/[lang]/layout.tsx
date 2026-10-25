@@ -34,7 +34,7 @@ export default async function LangLayout({ children, params }: Props) {
 
   return (
     <html lang={lang === "pt" ? "pt-BR" : lang} className={`${geist.variable} ${geistMono.variable} ${departure.variable}`} suppressHydrationWarning>
-      <body><SiteChrome lang={lang} dictionary={getDictionary(lang)}>{children}</SiteChrome></body>
+      <body suppressHydrationWarning><SiteChrome lang={lang} dictionary={getDictionary(lang)}>{children}</SiteChrome></body>
     </html>
   );
 }

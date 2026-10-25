@@ -2,11 +2,10 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import { SceneMotion } from "./SceneMotion";
 
-type Scene = "dagobah" | "hoth" | "tatooine" | "kashyyyk" | "nevarro" | "bespin" | "death-star";
+type Scene = "dagobah" | "tatooine" | "kashyyyk" | "nevarro" | "bespin" | "death-star";
 
 const sceneByImage: Record<string, Scene> = {
   "/pixel/home-yoda.jpg": "dagobah",
-  "/pixel/sobre-leia.jpg": "hoth",
   "/pixel/projetos-r2d2.jpg": "tatooine",
   "/pixel/conteudo-chewbacca.jpg": "kashyyyk",
   "/pixel/eventos-grogu.jpg": "nevarro",
@@ -87,8 +86,6 @@ function Dagobah() {
   </div></>;
 }
 
-function Hoth() { return <>{particles("snowflake", 18)}</>; }
-
 function Tatooine() {
   return <>
     <div className="scene-image-plane">
@@ -114,7 +111,7 @@ function Bespin() {
 function DeathStar() { return <><span className="alarm-light alarm-light--left" /><span className="alarm-light alarm-light--right" /></>; }
 
 const scenes: Record<Scene, () => React.ReactNode> = {
-  dagobah: Dagobah, hoth: Hoth, tatooine: Tatooine, kashyyyk: Kashyyyk,
+  dagobah: Dagobah, tatooine: Tatooine, kashyyyk: Kashyyyk,
   nevarro: Nevarro, bespin: Bespin, "death-star": DeathStar,
 };
 

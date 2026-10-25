@@ -1,3 +1,4 @@
+import { curiousLetter } from "./niveora-stories";
 import type { EggId, EggPage } from "@/lib/eggs";
 
 type Entry = { name: string; hint: string };
@@ -7,16 +8,21 @@ export type ComlinkCopy = {
   reset: string; resetConfirm: string; resetDone: string;
   pages: Record<Exclude<EggPage, "global">, string>;
   eggs: Record<EggId, Entry>;
+  letter: typeof curiousLetter.pt;
 };
 
 export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   pt: {
+    letter: curiousLetter.pt,
     open: "Abrir o rádio estelar", title: "Rádio estelar", channel: "RÁDIO // GALÁXIA ENCANTADA", counter: "Segredos descobertos", master: "Guardiã das Estrelas",
     placeholder: "digite uma transmissão…", send: "Transmitir", sent: "Sinal enviado.", unknown: "Transmissão desconhecida. Tente uma das dicas abaixo.",
     elsewhere: "Sinal fora de alcance. Tente na página {page}.", play: "Reproduzir", close: "Fechar rádio", hidden: "Sinal criptografado", fresh: "Novo segredo descoberto!",
     reset: "Apagar memória", resetConfirm: "Confirmar: apagar {n} segredos?", resetDone: "Memória apagada. O céu voltou a ser um mistério, e a caçada recomeça.",
     pages: { home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", notfound: "Coordenadas perdidas" },
     eggs: {
+      "curious-letter": { name: "Carta aos curiosos", hint: "Três descobertas diferentes deixam uma carta no rádio. Transmissão: carta curiosa." },
+      "between-lines": { name: "Entre as linhas", hint: "Há um fio além das barras do mapa. Transmissão: entre linhas." },
+      "borrowed-star": { name: "A estrela emprestada", hint: "Uma pegada no diário aponta para o convite final. Transmissão: estrela emprestada." },
       "star-map": { name: "Mapa estelar secreto", hint: "Um código antigo: cima, cima, baixo, baixo… No celular, deslize o dedo e toque duas vezes." },
       "focus-lens": { name: "Telescópio de carreira", hint: "A Glaucia mostra pelo telescópio as estrelas da trajetória dela. É só pedir." },
       "launch-charge": { name: "Decolagem", hint: "Segure o céu do observatório até a ignição e veja o que a nave escreve." },
@@ -24,15 +30,11 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
       "hangar-check": { name: "Checagem do hangar", hint: "O hangar no alto da montanha (ou o console do terraço) gosta de ser lembrado." },
       "dark-sky": { name: "Céu escuro", hint: "Luz demais esconde as estrelas. Apague as lanternas do terraço, uma por uma." },
       wish: { name: "Pedido às estrelas", hint: "Estrelas cadentes cruzam o céu do observatório. Encoste o cursor (ou toque) em três." },
-      ion: { name: "Canhão de íons", hint: "O domo da Base Eco não está ali de enfeite." },
-      holo: { name: "Holomensagem", hint: "Uma princesa precisa de ajuda. Peça por ela… ou segure a Leia." },
-      iknow: { name: "“Eu sei.”", hint: "Declare seu amor e o Han responde. Ou toque duas vezes no título do dossiê." },
-      blizzard: { name: "Nevasca", hint: "Diga o nome do planeta, ou toque três vezes no termômetro." },
-      ice: { name: "Degelo total", hint: "Depois da nevasca, liberte tudo o que congelou." },
-      probe: { name: "Sonda imperial", hint: "Alguma coisa vigia a base lá do céu." },
-      tauntaun: { name: "Tauntaun", hint: "A neve esconde um amigo de duas patas." },
-      "threepio-arm": { name: "Braço do C-3PO", hint: "Insista um pouco com o droide de protocolo." },
-      settle: { name: "Neve acumulada", hint: "Fique paradinha e deixe Hoth trabalhar." },
+      "paw-tracks": { name: "Pegadas do Prince", hint: "O Prince farejou alguma coisa na neve. Dê atenção a ele e siga as pegadas." },
+      "memory-capsule": { name: "Cápsula de memória", hint: "Algo da trajetória ficou guardado no gelo. A Glaucia sabe abrir." },
+      whiteout: { name: "Nevasca", hint: "A estação meteorológica chama o vento. Ou toque três vezes no termômetro." },
+      "aurora-prism": { name: "Prisma da aurora", hint: "Um cristal na saliência de gelo guarda todas as cores da aurora." },
+      snowdrift: { name: "Neve acumulada", hint: "Fique paradinha e deixe Nivéora trabalhar." },
       npx: { name: "Holocron npx", hint: "Um cartão de visitas antigo ainda roda no terminal do R2." },
       utinni: { name: "Utinni!", hint: "Mercadores baixinhos de capuz rondam o horizonte. Toque no sandcrawler." },
       plans: { name: "Os planos", hint: "Os planos estão neste droide. Segure o R2 para projetá-los." },
@@ -47,12 +49,16 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     },
   },
   en: {
+    letter: curiousLetter.en,
     open: "Open the star radio", title: "Star radio", channel: "RADIO // ENCHANTED GALAXY", counter: "Secrets discovered", master: "Keeper of the Stars",
     placeholder: "type a transmission…", send: "Transmit", sent: "Signal sent.", unknown: "Unknown transmission. Try one of the hints below.",
     elsewhere: "Signal out of range. Try it on the {page} page.", play: "Replay", close: "Close radio", hidden: "Encrypted signal", fresh: "New secret discovered!",
     reset: "Wipe memory", resetConfirm: "Confirm: wipe {n} secrets?", resetDone: "Memory wiped. The sky is a mystery again, and the hunt starts over.",
     pages: { home: "Home", about: "About", projects: "Projects", content: "Content", events: "Events", services: "Services", notfound: "Lost coordinates" },
     eggs: {
+      "curious-letter": { name: "Letter to the curious", hint: "Three different discoveries leave a letter in the radio. Transmission: curious letter." },
+      "between-lines": { name: "Between the lines", hint: "A thread runs beyond the map's bars. Transmission: between the lines." },
+      "borrowed-star": { name: "The borrowed star", hint: "A paw print in the log points to the final invitation. Transmission: borrowed star." },
       "star-map": { name: "Secret star map", hint: "An ancient code: up, up, down, down… On a phone, swipe and then tap twice." },
       "focus-lens": { name: "Career telescope", hint: "Glaucia shows the stars of her journey through the telescope. Just ask." },
       "launch-charge": { name: "Lift-off", hint: "Hold the observatory sky until ignition and see what the ship writes." },
@@ -60,15 +66,11 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
       "hangar-check": { name: "Hangar check", hint: "The mountaintop hangar (or the terrace console) likes some attention." },
       "dark-sky": { name: "Dark sky", hint: "Too much light hides the stars. Switch off the terrace lanterns, one by one." },
       wish: { name: "Wish upon a star", hint: "Shooting stars cross the observatory sky. Touch three with the cursor (or tap them)." },
-      ion: { name: "Ion cannon", hint: "Echo Base's dome isn't just decoration." },
-      holo: { name: "Holomessage", hint: "A princess needs help. Ask for it… or hold Leia." },
-      iknow: { name: "“I know.”", hint: "Declare your love and Han will answer. Or double-tap the dossier title." },
-      blizzard: { name: "Blizzard", hint: "Say the planet's name, or tap the thermometer three times." },
-      ice: { name: "Total thaw", hint: "After the blizzard, free everything that froze." },
-      probe: { name: "Imperial probe", hint: "Something is watching the base from the sky." },
-      tauntaun: { name: "Tauntaun", hint: "The snow hides a two-legged friend." },
-      "threepio-arm": { name: "C-3PO's arm", hint: "Keep bothering the protocol droid." },
-      settle: { name: "Settling snow", hint: "Stay still and let Hoth do its thing." },
+      "paw-tracks": { name: "Prince's tracks", hint: "Prince sniffed something in the snow. Give him some attention and follow the tracks." },
+      "memory-capsule": { name: "Memory capsule", hint: "Something from the journey was kept in the ice. Glaucia knows how to open it." },
+      whiteout: { name: "Blizzard", hint: "The weather station calls the wind. Or tap the thermometer three times." },
+      "aurora-prism": { name: "Aurora prism", hint: "A crystal on the ice ledge holds every colour of the aurora." },
+      snowdrift: { name: "Settling snow", hint: "Stay still and let Nivéora do its thing." },
       npx: { name: "npx holocron", hint: "An old business card still runs on R2's terminal." },
       utinni: { name: "Utinni!", hint: "Small hooded traders roam the horizon. Tap the sandcrawler." },
       plans: { name: "The plans", hint: "The plans are in this droid. Hold R2 to project them." },
@@ -83,12 +85,16 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     },
   },
   es: {
+    letter: curiousLetter.es,
     open: "Abrir la radio estelar", title: "Radio estelar", channel: "RADIO // GALAXIA ENCANTADA", counter: "Secretos descubiertos", master: "Guardiana de las Estrellas",
     placeholder: "escribe una transmisión…", send: "Transmitir", sent: "Señal enviada.", unknown: "Transmisión desconocida. Prueba una de las pistas.",
     elsewhere: "Señal fuera de alcance. Prueba en la página {page}.", play: "Reproducir", close: "Cerrar radio", hidden: "Señal cifrada", fresh: "¡Nuevo secreto descubierto!",
     reset: "Borrar memoria", resetConfirm: "¿Confirmas? Borrar {n} secretos", resetDone: "Memoria borrada. El cielo vuelve a ser un misterio y la búsqueda empieza de nuevo.",
     pages: { home: "Inicio", about: "Sobre mí", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Servicios", notfound: "Coordenadas perdidas" },
     eggs: {
+      "curious-letter": { name: "Carta para los curiosos", hint: "Tres descubrimientos diferentes dejan una carta en la radio. Transmisión: carta curiosa." },
+      "between-lines": { name: "Entre líneas", hint: "Un hilo continúa más allá de las barras del mapa. Transmisión: entre líneas." },
+      "borrowed-star": { name: "La estrella prestada", hint: "Una huella en el diario apunta a la invitación final. Transmisión: estrella prestada." },
       "star-map": { name: "Mapa estelar secreto", hint: "Un código antiguo: arriba, arriba, abajo, abajo… En el móvil, desliza y toca dos veces." },
       "focus-lens": { name: "Telescopio de carrera", hint: "Glaucia muestra por el telescopio las estrellas de su trayectoria. Solo pídelo." },
       "launch-charge": { name: "Despegue", hint: "Mantén pulsado el cielo del observatorio hasta la ignición y mira lo que escribe la nave." },
@@ -96,15 +102,11 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
       "hangar-check": { name: "Revisión del hangar", hint: "El hangar en lo alto de la montaña (o la consola de la terraza) quiere atención." },
       "dark-sky": { name: "Cielo oscuro", hint: "Demasiada luz esconde las estrellas. Apaga los faroles de la terraza, uno por uno." },
       wish: { name: "Deseo a las estrellas", hint: "Estrellas fugaces cruzan el cielo del observatorio. Toca tres con el cursor (o con el dedo)." },
-      ion: { name: "Cañón de iones", hint: "La cúpula de la Base Eco no está de adorno." },
-      holo: { name: "Holomensaje", hint: "Una princesa necesita ayuda. Pídela… o mantén pulsada a Leia." },
-      iknow: { name: "“Lo sé.”", hint: "Declara tu amor y Han responde. O toca dos veces el título del expediente." },
-      blizzard: { name: "Ventisca", hint: "Di el nombre del planeta, o toca tres veces el termómetro." },
-      ice: { name: "Deshielo total", hint: "Después de la ventisca, libera todo lo que se congeló." },
-      probe: { name: "Sonda imperial", hint: "Algo vigila la base desde el cielo." },
-      tauntaun: { name: "Tauntaun", hint: "La nieve esconde un amigo de dos patas." },
-      "threepio-arm": { name: "Brazo de C-3PO", hint: "Insiste un poco con el droide de protocolo." },
-      settle: { name: "Nieve acumulada", hint: "Quédate quieta y deja que Hoth haga lo suyo." },
+      "paw-tracks": { name: "Huellas de Prince", hint: "Prince olfateó algo en la nieve. Préstale atención y sigue las huellas." },
+      "memory-capsule": { name: "Cápsula de memoria", hint: "Algo de la trayectoria quedó guardado en el hielo. Glaucia sabe abrirlo." },
+      whiteout: { name: "Ventisca", hint: "La estación meteorológica llama al viento. O toca tres veces el termómetro." },
+      "aurora-prism": { name: "Prisma de la aurora", hint: "Un cristal en la cornisa de hielo guarda todos los colores de la aurora." },
+      snowdrift: { name: "Nieve acumulada", hint: "Quédate quieta y deja que Nivéora haga lo suyo." },
       npx: { name: "Holocrón npx", hint: "Una vieja tarjeta de visita todavía corre en la terminal de R2." },
       utinni: { name: "¡Utinni!", hint: "Pequeños mercaderes encapuchados rondan el horizonte. Toca el reptador de arena." },
       plans: { name: "Los planos", hint: "Los planos están en este droide. Mantén a R2 para proyectarlos." },
