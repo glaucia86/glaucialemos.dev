@@ -1,6 +1,6 @@
 /* HoloNet pixel UI kit: dark space surfaces, pixel frames, HUD chrome and FX layers.
    Colors come from tokens.css; every effect has a static reduced-motion state. */
-@property --saber-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+@property --glow-angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
 
 html, body { background: var(--surface-dark); }
 body { color: var(--text-body); }

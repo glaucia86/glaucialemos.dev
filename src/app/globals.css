@@ -751,13 +751,29 @@ footer small {
   padding: .5rem 1rem;
 }
 
-.lightsaber {
-  width: min(600px,80vw);
-  height: 10px;
-  background: var(--color-accent-50);
-  box-shadow: 0 0 12px var(--color-accent),0 0 38px var(--color-secondary);
-  animation: saber 1s ease-out;
+.star-map {
+  justify-self: center;
+  width: min(520px, 80vw);
+  height: auto;
+  overflow: visible;
 }
+.star-map__line {
+  fill: none;
+  stroke: color-mix(in srgb, var(--energy-blue) 70%, transparent);
+  stroke-width: .35;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: star-map-draw 1.6s steps(24) .3s forwards;
+}
+.star-map__star {
+  fill: var(--color-white);
+  filter: drop-shadow(0 0 .6px var(--energy-blue));
+  opacity: 0;
+  animation: star-map-twinkle 2.4s steps(3) infinite;
+}
+.star-map__star--paw { fill: var(--energy-gold); filter: drop-shadow(0 0 .6px var(--energy-gold)); }
+@keyframes star-map-draw { to { stroke-dashoffset: 0; } }
+@keyframes star-map-twinkle { 0% { opacity: 0; } 15%, 70% { opacity: 1; } 85% { opacity: .45; } 100% { opacity: 1; } }
 
 @keyframes crawl {
   from {

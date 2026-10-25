@@ -1,22 +1,21 @@
-/* Comlink — the secret channel that makes every Easter egg reachable on desktop, phone and tablet. */
+/* Star radio — the secret channel that makes every Easter egg reachable on desktop, phone and tablet. Lives in the header. */
+.comlink-slot { display: contents; }
 .comlink-toggle {
   --focus: var(--focus-inverse);
-  position: fixed; z-index: 55; right: max(1rem, env(safe-area-inset-right)); bottom: max(1rem, env(safe-area-inset-bottom));
-  display: inline-flex; align-items: center; gap: .45rem; min-width: 48px; min-height: 48px; padding: .4rem .65rem .4rem .5rem;
-  border: 0; background: var(--color-space-1); color: var(--text-inverse-muted); cursor: pointer;
-  box-shadow: 0 -2px 0 0 var(--hud-line), 0 2px 0 0 var(--hud-line), -2px 0 0 0 var(--hud-line), 2px 0 0 0 var(--hud-line), 0 10px 30px color-mix(in srgb, var(--color-space-0) 70%, transparent);
-  font: 400 .58rem var(--font-pixel); letter-spacing: .06em; transition: box-shadow var(--duration-fast), color var(--duration-fast), translate var(--duration-fast);
+  display: inline-flex; align-items: center; gap: .4rem; min-width: 36px; min-height: 36px; padding: 0 .55rem 0 .45rem;
+  border: 1px solid var(--hud-line); background: var(--surface-glass); color: var(--text-inverse-muted); cursor: pointer;
+  font: 400 .58rem var(--font-pixel); letter-spacing: .06em; transition: box-shadow var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast);
 }
-.comlink-toggle svg { width: 18px; height: 30px; image-rendering: pixelated; }
-.comlink-toggle:hover, .comlink-toggle:focus-visible { color: var(--color-white); translate: 0 -2px; box-shadow: 0 -2px 0 0 var(--energy-green), 0 2px 0 0 var(--energy-green), -2px 0 0 0 var(--energy-green), 2px 0 0 0 var(--energy-green), 0 0 24px color-mix(in srgb, var(--energy-green) 35%, transparent); }
+.comlink-toggle svg { width: 11px; height: 18px; image-rendering: pixelated; }
+.comlink-toggle:hover, .comlink-toggle:focus-visible { color: var(--color-white); border-color: var(--energy-green); box-shadow: 0 -2px 0 0 var(--energy-green), 0 2px 0 0 var(--energy-green), -2px 0 0 0 var(--energy-green), 2px 0 0 0 var(--energy-green), 0 0 24px color-mix(in srgb, var(--energy-green) 35%, transparent); }
 .comlink-toggle__tip { animation: hud-blink 1.6s steps(1) infinite; }
 .comlink-toggle[data-fresh] { color: var(--color-white); animation: comlink-ring .18s steps(2) 8; box-shadow: 0 -2px 0 0 var(--color-accent), 0 2px 0 0 var(--color-accent), -2px 0 0 0 var(--color-accent), 2px 0 0 0 var(--color-accent), 0 0 30px color-mix(in srgb, var(--color-accent) 50%, transparent); }
 .comlink-toggle[data-fresh] .comlink-toggle__screen { fill: var(--color-accent-200); }
 @keyframes comlink-ring { 50% { translate: 2px 0; } }
-.comlink-fresh { position: fixed; z-index: 55; right: max(1rem, env(safe-area-inset-right)); bottom: calc(max(1rem, env(safe-area-inset-bottom)) + 58px); margin: 0; padding: .45rem .7rem; opacity: 0; translate: 0 6px; pointer-events: none; background: var(--color-accent); color: var(--text-on-accent); font: 400 .58rem var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; transition: opacity .2s, translate .2s; }
+.comlink-fresh { position: fixed; z-index: 55; right: max(1rem, env(safe-area-inset-right)); top: calc(72px + .75rem); margin: 0; padding: .45rem .7rem; opacity: 0; translate: 0 6px; pointer-events: none; background: var(--color-accent); color: var(--text-on-accent); font: 400 .58rem var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; transition: opacity .2s, translate .2s; }
 .comlink-fresh[data-show] { opacity: 1; translate: 0 0; }
 
-.comlink { --focus: var(--focus-inverse); width: min(460px, calc(100% - 2rem)); max-height: min(720px, calc(100dvh - 2rem)); margin: auto 1rem 1rem auto; padding: 0; border: 0; background: transparent; color: var(--text-inverse); overflow: visible; }
+.comlink { --focus: var(--focus-inverse); width: min(460px, calc(100% - 2rem)); max-height: min(720px, calc(100dvh - 6rem)); margin: 5rem 1rem auto auto; padding: 0; border: 0; background: transparent; color: var(--text-inverse); overflow: visible; }
 .comlink::backdrop { background: color-mix(in srgb, var(--color-space-0) 70%, transparent); backdrop-filter: blur(2px); }
 .comlink[open] .comlink__panel { animation: comlink-open .28s steps(4); }
 @keyframes comlink-open { from { opacity: 0; translate: 0 18px; } }

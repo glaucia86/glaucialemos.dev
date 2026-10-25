@@ -3,33 +3,8 @@
 import { gsap, ScrollTrigger, SplitText, useGSAP, FINE_POINTER, SCRAMBLE_CHARS } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { play } from "@/lib/sfx";
-import { bringIntoView, discover, onEgg } from "@/lib/eggs";
 
 const enter = (trigger: Element, start = "top 82%") => ({ trigger, start, once: true });
-
-// Saber line in the portrait's 864 × 1152 space, and where each bolt meets it.
-const HILT = { x: 211, y: 583 };
-const TIP = { x: 130, y: 123 };
-const HITS = [.32, .58, .82];
-const SVG_NS = "http://www.w3.org/2000/svg";
-
-function svgElement(tag: string, attributes: Record<string, string | number>) {
-  const element = document.createElementNS(SVG_NS, tag);
-  for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, String(value));
-  return element;
-}
-
-function spark(layer: SVGSVGElement, at: { x: number; y: number }) {
-  const flash = svgElement("circle", { class: "jedi-spark__flash", cx: at.x, cy: at.y, r: 8 });
-  layer.append(flash);
-  gsap.to(flash, { attr: { r: 110 }, autoAlpha: 0, duration: .35, ease: "power2.out", onComplete: () => flash.remove() });
-  for (let index = 0; index < 10; index++) {
-    const angle = Math.random() * Math.PI * 2; const distance = gsap.utils.random(60, 170);
-    const pixel = svgElement("rect", { class: index % 3 ? "jedi-spark" : "jedi-spark jedi-spark--hot", x: at.x - 9, y: at.y - 9, width: 18, height: 18 });
-    layer.append(pixel);
-    gsap.to(pixel, { attr: { x: at.x - 9 + Math.cos(angle) * distance, y: at.y - 9 + Math.sin(angle) * distance }, autoAlpha: 0, duration: gsap.utils.random(.3, .55), ease: "power2.out", onComplete: () => pixel.remove() });
-  }
-}
 
 // Declarative chapter choreography: server markup opts in with data attributes.
 export function HomeChoreography() {
@@ -63,56 +38,6 @@ export function HomeChoreography() {
       cleanups.push(() => { host.removeEventListener("pointerenter", run); element.removeEventListener("focus", run); gsap.killTweensOf(element); element.textContent = text; });
     });
 
-    // Episode II: the saber ignites from the hilt the first time the card is seen.
-    const blade = page.querySelector(".holo-card .jedi-blade");
-    const ignition = blade && gsap.timeline({ scrollTrigger: enter(blade, "top 70%"), onComplete: () => blade.classList.add("is-lit") })
-      .set(blade, { autoAlpha: 1 })
-      .call(() => play("saber"))
-      .fromTo(blade.querySelectorAll("path"), { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", duration: .55, ease: "power4.out", stagger: .03 });
-
-    // Episode II action: blaster bolts fly in and the saber deflects each one.
-    const card = page.querySelector<HTMLElement>(".holo-card");
-    const bolts = card?.querySelector<SVGSVGElement>(".jedi-bolts");
-    const deflectButton = card?.querySelector<HTMLButtonElement>(".jedi-deflect");
-    if (blade && ignition && card && bolts && deflectButton) {
-      const frame = card.querySelector(".holo-card__frame");
-      const halo = blade.querySelector(".jedi-blade__halo");
-      let volley: gsap.core.Timeline | null = null;
-      const deflect = () => {
-        if (volley?.isActive()) return;
-        discover("deflect");
-        if (ignition.progress() < 1) ignition.progress(1);
-        volley = gsap.timeline();
-        HITS.forEach((t, index) => {
-          const hit = { x: HILT.x + (TIP.x - HILT.x) * t, y: HILT.y + (TIP.y - HILT.y) * t };
-          const from = { x: 940, y: hit.y + gsap.utils.random(-140, 140) };
-          const to = { x: hit.x + gsap.utils.random(120, 420) * (Math.random() > .5 ? 1 : -1), y: hit.y - gsap.utils.random(260, 520) };
-          const bolt = svgElement("g", { class: "jedi-bolt" });
-          bolt.append(svgElement("rect", { x: -64, y: -12, width: 128, height: 24 }), svgElement("rect", { class: "jedi-bolt__core", x: -52, y: -5, width: 104, height: 10 }));
-          bolts.append(bolt);
-          const position = { ...from };
-          const place = (target: { x: number; y: number }) => () => bolt.setAttribute("transform", `translate(${position.x} ${position.y}) rotate(${Math.atan2(target.y - position.y, target.x - position.x) * 180 / Math.PI})`);
-          place(hit)();
-          const start = index * .3;
-          volley!
-            .set(bolt, { autoAlpha: 1 }, start)
-            .to(position, { ...hit, duration: .3, ease: "none", onUpdate: place(hit) }, start)
-            .call(() => spark(bolts, hit), undefined, start + .3)
-            .call(() => play("deflect"), undefined, start + .3)
-            .fromTo(halo, { strokeWidth: 90 }, { strokeWidth: 44, duration: .35, ease: "power2.out", immediateRender: false }, start + .3)
-            .fromTo(frame, { x: 0 }, { keyframes: { x: [-6, 3, 0] }, duration: .22, ease: "none", immediateRender: false }, start + .3)
-            .to(position, { ...to, duration: .45, ease: "power1.out", onUpdate: place(to) }, start + .3)
-            .to(bolt, { autoAlpha: 0, duration: .2 }, start + .55)
-            .call(() => bolt.remove(), undefined, start + .75);
-        });
-      };
-      const fromCard = (event: Event) => { if (!(event.target as Element).closest("a, button")) deflect(); };
-      deflectButton.hidden = false;
-      deflectButton.addEventListener("click", deflect);
-      frame?.addEventListener("click", fromCard);
-      const stopEgg = onEgg("deflect", () => void bringIntoView(card).then(deflect));
-      cleanups.push(() => { stopEgg(); deflectButton.hidden = true; deflectButton.removeEventListener("click", deflect); frame?.removeEventListener("click", fromCard); volley?.kill(); bolts.replaceChildren(); });
-    }
     const route = page.querySelector<HTMLElement>("[data-route]");
     if (route) {
       const stops = gsap.utils.toArray<HTMLElement>(".route__stop", route);
@@ -149,7 +74,7 @@ export function HomeChoreography() {
       });
       all(".mission").forEach((card) => {
         const move = (event: PointerEvent) => { const box = card.getBoundingClientRect(); card.style.setProperty("--mx", `${event.clientX - box.left}px`); card.style.setProperty("--my", `${event.clientY - box.top}px`); };
-        const ignite = () => play("saber");
+        const ignite = () => play("twinkle");
         card.addEventListener("pointermove", move); card.addEventListener("pointerenter", ignite);
         cleanups.push(() => { card.removeEventListener("pointermove", move); card.removeEventListener("pointerenter", ignite); });
       });

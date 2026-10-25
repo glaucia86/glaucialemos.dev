@@ -1,0 +1,129 @@
+{
+  "scene": "earth-observatory",
+  "background": {
+    "src": "/galaxia/scenes/earth-observatory/background.webp",
+    "w": 1672,
+    "h": 941
+  },
+  "actors": {
+    "glaucia": {
+      "idle": {
+        "src": "/galaxia/actors/glaucia/earth-observatory/idle.webp",
+        "w": 299,
+        "h": 749,
+        "feetX": 165
+      },
+      "blink": {
+        "src": "/galaxia/actors/glaucia/earth-observatory/blink.webp",
+        "w": 299,
+        "h": 749,
+        "feetX": 165
+      },
+      "telescope": {
+        "src": "/galaxia/actors/glaucia/earth-observatory/telescope.webp",
+        "w": 422,
+        "h": 738,
+        "feetX": 315
+      },
+      "point": {
+        "src": "/galaxia/actors/glaucia/earth-observatory/point.webp",
+        "w": 343,
+        "h": 765,
+        "feetX": 165
+      }
+    },
+    "prince": {
+      "stand": {
+        "src": "/galaxia/actors/prince/earth-observatory/stand.webp",
+        "w": 358,
+        "h": 454,
+        "feetX": 174
+      },
+      "side": {
+        "src": "/galaxia/actors/prince/earth-observatory/side.webp",
+        "w": 460,
+        "h": 440,
+        "feetX": 230
+      },
+      "paw": {
+        "src": "/galaxia/actors/prince/earth-observatory/paw.webp",
+        "w": 369,
+        "h": 450,
+        "feetX": 135
+      },
+      "look-up": {
+        "src": "/galaxia/actors/prince/earth-observatory/look-up.webp",
+        "w": 399,
+        "h": 458,
+        "feetX": 195
+      },
+      "face-idle": {
+        "src": "/galaxia/actors/prince/earth-observatory/face-idle.webp",
+        "w": 285,
+        "h": 279,
+        "feetX": 141
+      },
+      "face-happy": {
+        "src": "/galaxia/actors/prince/earth-observatory/face-happy.webp",
+        "w": 288,
+        "h": 283,
+        "feetX": 142
+      },
+      "face-joy": {
+        "src": "/galaxia/actors/prince/earth-observatory/face-joy.webp",
+        "w": 295,
+        "h": 282,
+        "feetX": 148
+      },
+      "face-curious": {
+        "src": "/galaxia/actors/prince/earth-observatory/face-curious.webp",
+        "w": 281,
+        "h": 280,
+        "feetX": 140
+      },
+      "face-wink": {
+        "src": "/galaxia/actors/prince/earth-observatory/face-wink.webp",
+        "w": 288,
+        "h": 280,
+        "feetX": 142
+      }
+    }
+  },
+  "props": {
+    "launch-console-activated": {
+      "src": "/galaxia/props/earth-observatory/launch-console-activated.webp",
+      "w": 140,
+      "h": 122
+    },
+    "launch-console-idle": {
+      "src": "/galaxia/props/earth-observatory/launch-console-idle.webp",
+      "w": 133,
+      "h": 122
+    },
+    "receiver-cyan-pulse": {
+      "src": "/galaxia/props/earth-observatory/receiver-cyan-pulse.webp",
+      "w": 113,
+      "h": 140
+    },
+    "spacecraft-far": {
+      "src": "/galaxia/props/earth-observatory/spacecraft-far.webp",
+      "w": 137,
+      "h": 70
+    },
+    "spacecraft-near": {
+      "src": "/galaxia/props/earth-observatory/spacecraft-near.webp",
+      "w": 169,
+      "h": 80
+    },
+    "telescope-activated": {
+      "src": "/galaxia/props/earth-observatory/telescope-activated.webp",
+      "w": 281,
+      "h": 285
+    },
+    "telescope-idle": {
+      "src": "/galaxia/props/earth-observatory/telescope-idle.webp",
+      "w": 210,
+      "h": 285
+    }
+  }
+}

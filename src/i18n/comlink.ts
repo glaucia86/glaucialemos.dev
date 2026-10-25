@@ -1,26 +1,29 @@
-import type { EggId } from "@/lib/eggs";
+import type { EggId, EggPage } from "@/lib/eggs";
 
 type Entry = { name: string; hint: string };
 export type ComlinkCopy = {
   open: string; title: string; channel: string; counter: string; master: string; placeholder: string; send: string;
   sent: string; unknown: string; elsewhere: string; play: string; close: string; hidden: string; fresh: string;
   reset: string; resetConfirm: string; resetDone: string;
-  pages: Record<"home" | "about" | "projects", string>;
+  pages: Record<Exclude<EggPage, "global">, string>;
   eggs: Record<EggId, Entry>;
 };
 
 export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   pt: {
-    open: "Abrir o canal secreto", title: "Canal secreto", channel: "COMLINK // ALIANÇA", counter: "Segredos descobertos", master: "Mestre dos Segredos",
+    open: "Abrir o rádio estelar", title: "Rádio estelar", channel: "RÁDIO // GALÁXIA ENCANTADA", counter: "Segredos descobertos", master: "Guardiã das Estrelas",
     placeholder: "digite uma transmissão…", send: "Transmitir", sent: "Sinal enviado.", unknown: "Transmissão desconhecida. Tente uma das dicas abaixo.",
-    elsewhere: "Sinal fora de alcance. Tente na página {page}.", play: "Reproduzir", close: "Fechar canal", hidden: "Sinal criptografado", fresh: "Novo segredo descoberto!",
-    reset: "Apagar memória", resetConfirm: "Confirmar: apagar {n} segredos?", resetDone: "Memória apagada, como a do C-3PO no fim do Episódio III. A caçada recomeça.",
-    pages: { home: "Início", about: "Sobre", projects: "Projetos" },
+    elsewhere: "Sinal fora de alcance. Tente na página {page}.", play: "Reproduzir", close: "Fechar rádio", hidden: "Sinal criptografado", fresh: "Novo segredo descoberto!",
+    reset: "Apagar memória", resetConfirm: "Confirmar: apagar {n} segredos?", resetDone: "Memória apagada. O céu voltou a ser um mistério, e a caçada recomeça.",
+    pages: { home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", notfound: "Coordenadas perdidas" },
     eggs: {
-      konami: { name: "Código Konami", hint: "Um código antigo: cima, cima, baixo, baixo… No celular, deslize o dedo e toque duas vezes." },
-      "force-push": { name: "Empurrão da Força", hint: "No pântano da página inicial, um toque rápido basta." },
-      "force-hold": { name: "X-wing do pântano", hint: "Na página inicial, segure a cena e não solte." },
-      deflect: { name: "Rebater disparos", hint: "Um card de Jedi sabe se defender." },
+      "star-map": { name: "Mapa estelar secreto", hint: "Um código antigo: cima, cima, baixo, baixo… No celular, deslize o dedo e toque duas vezes." },
+      "focus-lens": { name: "Telescópio de carreira", hint: "A Glaucia mostra pelo telescópio as estrelas da trajetória dela. É só pedir." },
+      "launch-charge": { name: "Decolagem", hint: "Segure o céu do observatório até a ignição e veja o que a nave escreve." },
+      "dog-signal": { name: "Sinal do Prince", hint: "O Prince farejou alguma coisa lá em cima. Dê atenção a ele." },
+      "hangar-check": { name: "Checagem do hangar", hint: "O hangar no alto da montanha (ou o console do terraço) gosta de ser lembrado." },
+      "dark-sky": { name: "Céu escuro", hint: "Luz demais esconde as estrelas. Apague as lanternas do terraço, uma por uma." },
+      wish: { name: "Pedido às estrelas", hint: "Estrelas cadentes cruzam o céu do observatório. Encoste o cursor (ou toque) em três." },
       ion: { name: "Canhão de íons", hint: "O domo da Base Eco não está ali de enfeite." },
       holo: { name: "Holomensagem", hint: "Uma princesa precisa de ajuda. Peça por ela… ou segure a Leia." },
       iknow: { name: "“Eu sei.”", hint: "Declare seu amor e o Han responde. Ou toque duas vezes no título do dossiê." },
@@ -44,16 +47,19 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     },
   },
   en: {
-    open: "Open the secret channel", title: "Secret channel", channel: "COMLINK // ALLIANCE", counter: "Secrets discovered", master: "Master of Secrets",
+    open: "Open the star radio", title: "Star radio", channel: "RADIO // ENCHANTED GALAXY", counter: "Secrets discovered", master: "Keeper of the Stars",
     placeholder: "type a transmission…", send: "Transmit", sent: "Signal sent.", unknown: "Unknown transmission. Try one of the hints below.",
-    elsewhere: "Signal out of range. Try it on the {page} page.", play: "Replay", close: "Close channel", hidden: "Encrypted signal", fresh: "New secret discovered!",
-    reset: "Wipe memory", resetConfirm: "Confirm: wipe {n} secrets?", resetDone: "Memory wiped, just like C-3PO's at the end of Episode III. The hunt starts over.",
-    pages: { home: "Home", about: "About", projects: "Projects" },
+    elsewhere: "Signal out of range. Try it on the {page} page.", play: "Replay", close: "Close radio", hidden: "Encrypted signal", fresh: "New secret discovered!",
+    reset: "Wipe memory", resetConfirm: "Confirm: wipe {n} secrets?", resetDone: "Memory wiped. The sky is a mystery again, and the hunt starts over.",
+    pages: { home: "Home", about: "About", projects: "Projects", content: "Content", events: "Events", services: "Services", notfound: "Lost coordinates" },
     eggs: {
-      konami: { name: "Konami Code", hint: "An ancient code: up, up, down, down… On a phone, swipe and then tap twice." },
-      "force-push": { name: "Force push", hint: "In the swamp on the home page, a quick tap is enough." },
-      "force-hold": { name: "Swamp X-wing", hint: "On the home page, hold the scene and don't let go." },
-      deflect: { name: "Deflect the bolts", hint: "A Jedi card knows how to defend itself." },
+      "star-map": { name: "Secret star map", hint: "An ancient code: up, up, down, down… On a phone, swipe and then tap twice." },
+      "focus-lens": { name: "Career telescope", hint: "Glaucia shows the stars of her journey through the telescope. Just ask." },
+      "launch-charge": { name: "Lift-off", hint: "Hold the observatory sky until ignition and see what the ship writes." },
+      "dog-signal": { name: "Prince's signal", hint: "Prince sniffed something up there. Give him some attention." },
+      "hangar-check": { name: "Hangar check", hint: "The mountaintop hangar (or the terrace console) likes some attention." },
+      "dark-sky": { name: "Dark sky", hint: "Too much light hides the stars. Switch off the terrace lanterns, one by one." },
+      wish: { name: "Wish upon a star", hint: "Shooting stars cross the observatory sky. Touch three with the cursor (or tap them)." },
       ion: { name: "Ion cannon", hint: "Echo Base's dome isn't just decoration." },
       holo: { name: "Holomessage", hint: "A princess needs help. Ask for it… or hold Leia." },
       iknow: { name: "“I know.”", hint: "Declare your love and Han will answer. Or double-tap the dossier title." },
@@ -77,16 +83,19 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     },
   },
   es: {
-    open: "Abrir el canal secreto", title: "Canal secreto", channel: "COMLINK // ALIANZA", counter: "Secretos descubiertos", master: "Maestra de los Secretos",
+    open: "Abrir la radio estelar", title: "Radio estelar", channel: "RADIO // GALAXIA ENCANTADA", counter: "Secretos descubiertos", master: "Guardiana de las Estrellas",
     placeholder: "escribe una transmisión…", send: "Transmitir", sent: "Señal enviada.", unknown: "Transmisión desconocida. Prueba una de las pistas.",
-    elsewhere: "Señal fuera de alcance. Prueba en la página {page}.", play: "Reproducir", close: "Cerrar canal", hidden: "Señal cifrada", fresh: "¡Nuevo secreto descubierto!",
-    reset: "Borrar memoria", resetConfirm: "¿Confirmas? Borrar {n} secretos", resetDone: "Memoria borrada, como la de C-3PO al final del Episodio III. La búsqueda vuelve a empezar.",
-    pages: { home: "Inicio", about: "Sobre mí", projects: "Proyectos" },
+    elsewhere: "Señal fuera de alcance. Prueba en la página {page}.", play: "Reproducir", close: "Cerrar radio", hidden: "Señal cifrada", fresh: "¡Nuevo secreto descubierto!",
+    reset: "Borrar memoria", resetConfirm: "¿Confirmas? Borrar {n} secretos", resetDone: "Memoria borrada. El cielo vuelve a ser un misterio y la búsqueda empieza de nuevo.",
+    pages: { home: "Inicio", about: "Sobre mí", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Servicios", notfound: "Coordenadas perdidas" },
     eggs: {
-      konami: { name: "Código Konami", hint: "Un código antiguo: arriba, arriba, abajo, abajo… En el móvil, desliza y toca dos veces." },
-      "force-push": { name: "Empujón de la Fuerza", hint: "En el pantano de la página de inicio basta un toque rápido." },
-      "force-hold": { name: "X-wing del pantano", hint: "En la página de inicio, mantén pulsada la escena." },
-      deflect: { name: "Desviar disparos", hint: "Una tarjeta Jedi sabe defenderse." },
+      "star-map": { name: "Mapa estelar secreto", hint: "Un código antiguo: arriba, arriba, abajo, abajo… En el móvil, desliza y toca dos veces." },
+      "focus-lens": { name: "Telescopio de carrera", hint: "Glaucia muestra por el telescopio las estrellas de su trayectoria. Solo pídelo." },
+      "launch-charge": { name: "Despegue", hint: "Mantén pulsado el cielo del observatorio hasta la ignición y mira lo que escribe la nave." },
+      "dog-signal": { name: "Señal de Prince", hint: "Prince olfateó algo allá arriba. Préstale atención." },
+      "hangar-check": { name: "Revisión del hangar", hint: "El hangar en lo alto de la montaña (o la consola de la terraza) quiere atención." },
+      "dark-sky": { name: "Cielo oscuro", hint: "Demasiada luz esconde las estrellas. Apaga los faroles de la terraza, uno por uno." },
+      wish: { name: "Deseo a las estrellas", hint: "Estrellas fugaces cruzan el cielo del observatorio. Toca tres con el cursor (o con el dedo)." },
       ion: { name: "Cañón de iones", hint: "La cúpula de la Base Eco no está de adorno." },
       holo: { name: "Holomensaje", hint: "Una princesa necesita ayuda. Pídela… o mantén pulsada a Leia." },
       iknow: { name: "“Lo sé.”", hint: "Declara tu amor y Han responde. O toca dos veces el título del expediente." },

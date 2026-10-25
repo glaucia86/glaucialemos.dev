@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { createPortal } from "react-dom";
 import type { ComlinkCopy } from "@/i18n/comlink";
 import { EGGS, FOUND_EVENT, emitEgg, eggsFor, forget, matchPhrase, pageOf, readFound, type EggId } from "@/lib/eggs";
 import { play } from "@/lib/sfx";
@@ -8,7 +9,8 @@ import { play } from "@/lib/sfx";
 const storage = () => { try { return window.localStorage; } catch { return undefined; } };
 
 // The secret channel: every Easter egg is reachable from here on any device, by typing or by tapping replay.
-export function Comlink({ copy, pathname }: { copy: ComlinkCopy; pathname: string }) {
+// The toggle lives in the site header (slot); the dialog and the toast stay at the page root.
+export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname: string; slot: HTMLElement | null }) {
   const page = pageOf(pathname);
   const list = eggsFor(page);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -67,14 +69,14 @@ export function Comlink({ copy, pathname }: { copy: ComlinkCopy; pathname: strin
   const count = found.length;
 
   return <>
-    <button type="button" className="comlink-toggle" aria-label={copy.open} aria-haspopup="dialog" title={`${copy.open} (\`)`} data-fresh={fresh || undefined} onClick={open}>
+    {slot && createPortal(<button type="button" className="comlink-toggle" aria-label={copy.open} aria-haspopup="dialog" title={`${copy.open} (\`)`} data-fresh={fresh || undefined} onClick={open}>
       <svg viewBox="0 0 12 20" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
         <path fill="#5b6478" d="M8 0h1v6H8z" /><path className="comlink-toggle__tip" fill="#ff4d5e" d="M8 0h1v1H8z" />
         <path fill="#2b3142" d="M2 6h8v13H2z" /><path fill="#8d96ab" d="M3 7h6v4H3z" /><path className="comlink-toggle__screen" fill="#7cf29a" d="M4 8h4v2H4z" />
         <path fill="#c9cfdb" d="M3 12h2v1H3zM7 12h2v1H7zM3 14h2v1H3zM7 14h2v1H7zM3 16h6v1H3z" />
       </svg>
       <span className="comlink-toggle__count" aria-hidden="true">{count}/{total}</span>
-    </button>
+    </button>, slot)}
     <p className="comlink-fresh" role="status" aria-live="polite" data-show={fresh || undefined}>{fresh ? copy.fresh : ""}</p>
     <dialog ref={dialog} className="comlink" aria-labelledby="comlink-title" onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="comlink__panel">

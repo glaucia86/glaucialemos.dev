@@ -31,29 +31,18 @@ try {
       for (const error of Object.values(alignment)) assert.ok(Math.abs(error) < 0.1, JSON.stringify(alignment));
 
       if (route === "/pt") {
-        assert.equal(await page.locator(".x-wing").count(), 0);
-        assert.equal(await page.locator(".force-rock").count(), 10);
-        assert.equal(await page.locator(".force-rock:visible").count(), width <= 900 ? 6 : 10);
-        assert.equal(await page.locator(".force-depth").count(), 3);
-        // Sample every layer's motion, including its independent delay, for overlap.
-        for (const time of [0, 1500, 3000, 6000, 10000]) {
-          const safe = await plane.evaluate((element, time) => {
-            for (const animation of element.getAnimations({ subtree: true })) {
-              animation.pause();
-              animation.currentTime = time;
-            }
-            const image = element.getBoundingClientRect();
+        assert.equal(await page.locator(".observatory-crew__pose--idle").count(), 1);
+        assert.equal(await page.locator(".observatory-hot").count(), 3);
+        // Glaucia and Prince never cover the copy, in any pose.
+        for (const pose of ["idle", "telescope", "point"]) {
+          const safe = await plane.evaluate((element, pose) => {
+            const crew = element.querySelector(`.observatory-crew__pose--${pose}`).getBoundingClientRect();
             const content = element.closest(".page-hero").querySelector(".page-hero__content");
-            const text = [...content.children].map((child) => child.getBoundingClientRect());
-            return [...element.querySelectorAll(".force-rock")].filter((rock) => getComputedStyle(rock).display !== "none").every((rock) => {
-              const rect = rock.querySelector("svg").getBoundingClientRect();
-              return (rect.left - image.left) / image.width * 1024 > 430 && text.every((box) =>
-                rect.right <= box.left || rect.left >= box.right || rect.bottom <= box.top || rect.top >= box.bottom);
-            });
-          }, time);
-          assert.ok(safe, `${route}, ${width}px: stones overlap text or cross x=430 at ${time}ms`);
+            return [...content.children].map((child) => child.getBoundingClientRect()).every((box) =>
+              crew.right <= box.left || crew.left >= box.right || crew.bottom <= box.top || crew.top >= box.bottom);
+          }, pose);
+          assert.ok(safe, `${route}, ${width}px: ${pose} overlaps the copy`);
         }
-        assert.equal(await page.locator(".dagobah-character").count(), 1);
       } else {
         assert.equal(await page.locator(".saber-hilt").count(), 0, "Use the image's single hilt");
         const saber = await plane.evaluate((element) => {

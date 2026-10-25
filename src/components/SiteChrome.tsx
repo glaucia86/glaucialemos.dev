@@ -12,16 +12,26 @@ import { isSoundEnabled, setSoundEnabled } from "@/lib/sfx";
 import { KONAMI_GESTURES, discover, emitEgg, gestureOf, konamiStep, onEgg } from "@/lib/eggs";
 import { Comlink } from "./Comlink";
 
+// Secret star map: the stars draw "GL" and, beside it, Prince's paw.
+const MAP_STARS = [[6, 6], [2, 10], [2, 18], [6, 22], [11, 20], [11, 15], [8, 15], [17, 6], [17, 22], [24, 22], [33, 14], [30, 9], [33, 7], [36, 9], [39, 12], [32, 18], [38, 18]] as const;
+const MAP_LINES = "M6 6 2 10V18L6 22 11 20V15H8M17 6V22H24";
+function StarMap() {
+  return <svg className="star-map" viewBox="0 0 42 28" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
+    <path className="star-map__line" d={MAP_LINES} pathLength={1} />
+    {MAP_STARS.map(([x, y], index) => <rect className={index > 9 ? "star-map__star star-map__star--paw" : "star-map__star"} key={index} x={x - .5} y={y - .5} width="1" height="1" style={{ animationDelay: `${index * 60}ms` }} />)}
+  </svg>;
+}
+
 const routes = [["home", ""], ["about", "sobre"], ["projects", "projetos"], ["content", "conteudo"], ["events", "eventos"], ["services", "servicos"]] as const;
 
 export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dictionary: Dictionary; children: ReactNode }) {
   const pathname = usePathname(); const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [reduced, setReduced] = useState<boolean | null>(null); const [egg, setEgg] = useState(false); const [menuOpen, setMenuOpen] = useState(false);
-  const [sound, setSound] = useState(false); const [scrolled, setScrolled] = useState(false);
+  const [sound, setSound] = useState(false); const [scrolled, setScrolled] = useState(false); const [comlinkSlot, setComlinkSlot] = useState<HTMLSpanElement | null>(null);
   useEffect(() => { try { setReduced(localStorage.getItem("reduce-motion") === "true"); } catch { setReduced(false); } setSound(isSoundEnabled()); }, []);
   useEffect(() => { if (reduced === null) return; document.documentElement.classList.toggle("reduce-motion", reduced); try { localStorage.setItem("reduce-motion", String(reduced)); } catch { /* Browsing without storage still supports the control. */ } }, [reduced]);
-  useEffect(() => { const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]; let position = 0; const onKey = (event: KeyboardEvent) => { position = event.key.toLowerCase() === code[position]?.toLowerCase() ? position + 1 : 0; if (position === code.length) { emitEgg("konami"); position = 0; } }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
+  useEffect(() => { const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]; let position = 0; const onKey = (event: KeyboardEvent) => { position = event.key.toLowerCase() === code[position]?.toLowerCase() ? position + 1 : 0; if (position === code.length) { emitEgg("star-map"); position = 0; } }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
   // Konami on touch screens: swipe ↑ ↑ ↓ ↓ ← → ← → and tap twice.
   useEffect(() => {
     let position = 0; let start: { x: number; y: number; t: number } | null = null;
@@ -31,10 +41,10 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
       const gesture = gestureOf(touch.clientX - start.x, touch.clientY - start.y, performance.now() - start.t); start = null;
       if (!gesture) return;
       position = konamiStep(position, gesture);
-      if (position === KONAMI_GESTURES.length) { position = 0; emitEgg("konami"); }
+      if (position === KONAMI_GESTURES.length) { position = 0; emitEgg("star-map"); }
     };
     addEventListener("touchstart", down, { passive: true }); addEventListener("touchend", up, { passive: true });
-    const stop = onEgg("konami", () => { discover("konami"); setEgg(true); });
+    const stop = onEgg("star-map", () => { discover("star-map"); setEgg(true); });
     return () => { removeEventListener("touchstart", down); removeEventListener("touchend", up); stop(); };
   }, []);
   useEffect(() => { const dialog = dialogRef.current; if (!dialog) return; if (egg && !reduced && !matchMedia("(prefers-reduced-motion: reduce)").matches && !dialog.open) dialog.showModal(); if ((!egg || reduced) && dialog.open) dialog.close(); }, [egg, reduced]);
@@ -51,6 +61,7 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
       <nav id="primary-navigation" className={menuOpen ? "is-open" : ""} aria-label={dictionary.accessibility.primaryNav}>{routes.map(([key, slug], index) => { const href = `/${lang}${slug ? `/${slug}` : ""}`; return <Link className={pathname === href ? "active" : ""} aria-current={pathname === href ? "page" : undefined} href={href} key={key} onClick={(event) => { if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); go(href); }}><span className="nav-index" aria-hidden="true">0{index}</span>{dictionary.nav[key]}</Link>; })}</nav>
       <div className="header-tools">
         <label className="sr-only" htmlFor="locale">{dictionary.nav.language}</label><select id="locale" value={lang} onChange={(event) => go(localizePath(pathname, event.target.value as Locale))}>{locales.map((locale) => <option value={locale} key={locale}>{locale.toUpperCase()}</option>)}</select>
+        <span className="comlink-slot" ref={setComlinkSlot} />
         <button className="sound-toggle" type="button" aria-pressed={sound} aria-label={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} title={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} onClick={toggleSound}>
           <svg viewBox="0 0 16 16" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false"><path fill="currentColor" d="M2 6h3V5h1V4h1V3h1v10H7v-1H6v-1H5v-1H2z" />{sound ? <path fill="currentColor" d="M10 6h1v4h-1zM12 4h1v8h-1zM14 2h1v12h-1z" /> : <path fill="currentColor" d="M10 5h1v1h1v1h1V6h1V5h1v1h-1v1h-1v2h1v1h1v1h-1v-1h-1V9h-1v1h-1v1h-1v-1h1V9h1V7h-1V6h-1z" />}</svg>
         </button>
@@ -63,12 +74,12 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
     <SmoothScroll />
     <FxLayer />
     <footer>
-      <div className="footer-hud" aria-hidden="true"><span>GL-OS // HOLONET</span><span className="footer-hud__signal"><i /><i /><i /><i /></span><span>{dictionary.holonet.credits.end}</span></div>
+      <div className="footer-hud" aria-hidden="true"><span>GL-OS // GALÁXIA ENCANTADA</span><span className="footer-hud__signal"><i /><i /><i /><i /></span><span>{dictionary.holonet.credits.end}</span></div>
       <div><strong>Glaucia Lemos</strong><p>{dictionary.footer.tagline}</p></div><SocialLinks labels={dictionary.footer.socialLabels} />
       <small>© {new Date().getFullYear()} · {dictionary.footer.rights}<button type="button" className="footer-top" onClick={top}>{dictionary.holonet.credits.top} <span aria-hidden="true">↑</span></button></small>
       <p className="footer-notice">{dictionary.footer.independenceNotice}</p>
     </footer>
-    <Comlink copy={dictionary.comlink} pathname={pathname} />
-    <dialog ref={dialogRef} className="egg-overlay" aria-label={dictionary.easterEgg.message} onCancel={() => setEgg(false)}><div className="lightsaber" /><p>{dictionary.easterEgg.message}</p><button autoFocus onClick={() => setEgg(false)}>{dictionary.easterEgg.close}</button></dialog>
+    <Comlink copy={dictionary.comlink} pathname={pathname} slot={comlinkSlot} />
+    <dialog ref={dialogRef} className="egg-overlay" aria-label={dictionary.easterEgg.message} onCancel={() => setEgg(false)}><StarMap /><p>{dictionary.easterEgg.message}</p><button autoFocus onClick={() => setEgg(false)}>{dictionary.easterEgg.close}</button></dialog>
   </>;
 }

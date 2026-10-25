@@ -19,14 +19,19 @@ const R2_CREST = pixels([
   "....#######....", "..###########..", ".####...######.", ".####.#.######.", "###############", "#.#.#.#.#.#.#.#", "###############", ".#############.",
   ".##.#######.##.", ".##.#.....#.##.", ".##.#.###.#.##.", ".##.#.....#.##.", ".##.#######.##.", ".###.......###.", "###.........###",
 ]);
-const CRESTS: Partial<Record<BootVariant, number[][]>> = { echo: CREST, astromech: R2_CREST };
+// Observatory dome under a four-point star, 15 × 15 pixels.
+const OBSERVATORY_CREST = pixels([
+  ".......#.......", "......###......", "....#######....", "......###......", ".......#.......", "...............", ".....#####.....", "...#########...",
+  "..##.####..##..", ".###.#####.###.", ".#############.", ".#############.", ".##.##...##.##.", ".##.##...##.##.", "###############",
+]);
+const CRESTS: Partial<Record<BootVariant, number[][]>> = { echo: CREST, astromech: R2_CREST, observatory: OBSERVATORY_CREST };
 
-type BootVariant = "holonet" | "echo" | "astromech";
+type BootVariant = "echo" | "astromech" | "observatory";
 type BootProps = { lines: string[]; granted: string; skip: string; label: string; storageKey?: string; brand?: string; variant?: BootVariant; armOnNavigation?: boolean };
 
 // Visible only when the inline boot script marked <html data-boot="pending">.
 // armOnNavigation also opens it after a client-side navigation, when inline scripts do not run.
-export function BootSequence({ lines, granted, skip, label, storageKey = BOOT_KEY, brand = "// HOLONET TERMINAL", variant = "holonet", armOnNavigation = false }: BootProps) {
+export function BootSequence({ lines, granted, skip, label, storageKey = BOOT_KEY, brand = "// GALÁXIA ENCANTADA", variant = "observatory", armOnNavigation = false }: BootProps) {
   const root = useRef<HTMLDivElement>(null);
   const skipNow = useRef<() => void>(() => {});
   useEffect(() => {

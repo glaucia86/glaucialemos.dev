@@ -157,6 +157,7 @@
   --hero-overlay-strong: linear-gradient(90deg, var(--hero-shade), color-mix(in srgb, var(--hero-shade) 96%, transparent) 38%, color-mix(in srgb, var(--hero-shade) 86%, transparent) 64%, transparent);
   --hero-overlay-mobile: linear-gradient(90deg, var(--hero-shade), color-mix(in srgb, var(--hero-shade) 88%, transparent));
   --hero-overlay-scene: linear-gradient(to bottom, var(--surface-dark), transparent 28%);
+  --hero-overlay-left: linear-gradient(90deg, var(--hero-shade), color-mix(in srgb, var(--hero-shade) 92%, transparent) 45%, color-mix(in srgb, var(--hero-shade) 32%, transparent) 60%, transparent 78%);
   --hero-overlay-dagobah: linear-gradient(90deg, var(--hero-shade), color-mix(in srgb, var(--hero-shade) 92%, transparent) 45%, color-mix(in srgb, var(--hero-shade) 32%, transparent) 60%, transparent 78%);
   --overlay-dialog: color-mix(in srgb, var(--color-primary-950) 95%, transparent);
   --space-1: var(--spacing);

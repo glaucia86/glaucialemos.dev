@@ -1,5 +1,6 @@
-/* Home — HoloNet transmission in five episodes. Shared tokens live in tokens.css,
-   the pixel kit in pixel-ui.css, and the Dagobah plane geometry in hero-scenes.css. */
+/* Home — Galáxia Encantada: the First Light Observatory and five chapters. Shared tokens live in tokens.css,
+   the pixel kit in pixel-ui.css; scene data comes from src/lib/scenes.ts. */
+.home-page { --aurora-teal: #6ff2d0; --aurora-mint: #b8fff0; --aurora-pink: #ff8fd8; --aurora-violet: #b49bff; --aurora-gold: #ffd98a; --lantern: #ffc46b; }
 
 /* ——— 0. Boot terminal ——— */
 .boot { display: none; }
@@ -26,9 +27,16 @@ html[data-boot="pending"] .boot {
 .boot__granted { margin: 0; min-height: 1.6em; color: var(--color-accent-200); font-size: 1.35em; letter-spacing: .3em; text-shadow: 0 0 14px var(--color-accent); }
 .boot__skip { position: absolute; right: 0; bottom: -3.75rem; display: inline-flex; gap: .6rem; align-items: center; min-height: 44px; padding: 0 1rem; border: 1px solid var(--hud-line); background: transparent; color: var(--text-inverse-muted); font: .7rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; }
 .boot__skip kbd { padding: .15rem .35rem; border: 1px solid currentColor; font: inherit; }
+html[data-boot="pending"] .boot--observatory { background: radial-gradient(ellipse at 50% 45%, #22155a, var(--color-space-0) 70%); }
+.boot--observatory .boot__frame { --frame: color-mix(in srgb, var(--aurora-teal) 55%, transparent); background: color-mix(in srgb, var(--color-space-0) 82%, #120a2e); color: var(--aurora-teal); text-shadow: 0 0 8px color-mix(in srgb, var(--aurora-teal) 60%, transparent); box-shadow: 0 -3px 0 0 var(--frame), 0 3px 0 0 var(--frame), -3px 0 0 0 var(--frame), 3px 0 0 0 var(--frame), 0 0 80px color-mix(in srgb, var(--aurora-pink) 16%, transparent), inset 0 0 60px color-mix(in srgb, var(--aurora-teal) 8%, transparent); }
+.boot--observatory .boot__brand span { color: var(--aurora-pink); }
+.boot--observatory .boot__block { background: var(--aurora-teal); }
+.boot--observatory .boot__granted { color: var(--color-white); text-shadow: 0 0 14px var(--aurora-pink); }
+.boot--observatory .boot__crest { display: block; width: 56px; height: 56px; margin: 0 0 1.25rem; filter: drop-shadow(0 0 10px color-mix(in srgb, var(--aurora-pink) 60%, transparent)); }
+.boot--observatory .boot__crest-px { fill: var(--aurora-mint); opacity: 0; }
 .boot__flash { position: fixed; inset: 0; background: radial-gradient(circle, var(--color-white), color-mix(in srgb, var(--energy-blue) 40%, transparent) 60%, transparent); opacity: 0; visibility: hidden; pointer-events: none; }
 
-/* ——— I. Dagobah hero ——— */
+/* ——— 1. Observatory hero ——— */
 .home-page { overflow: clip; }
 .home-hero { background: var(--color-space-0); }
 .home-page .home-hero-v2 { min-height: max(640px, calc(100svh - 72px)); cursor: crosshair; }
@@ -38,10 +46,10 @@ html[data-boot="pending"] .boot {
   max-width: none; margin: 0; display: grid;
   font: 400 clamp(3.4rem, 7.2vw, 7.4rem)/.92 var(--font-pixel); letter-spacing: -.02em; text-transform: none;
 }
-.home-page .hero-name .hero-name__line { display: block; color: var(--color-white); text-shadow: .06em .06em 0 var(--color-primary-800), 0 0 40px color-mix(in srgb, var(--energy-green) 25%, transparent); white-space: nowrap; }
+.home-page .hero-name .hero-name__line { display: block; color: var(--color-white); text-shadow: .06em .06em 0 var(--color-primary-800), 0 0 40px color-mix(in srgb, var(--aurora-teal) 25%, transparent); white-space: nowrap; }
 .home-page .hero-name .hero-name__line--alt {
   color: transparent; text-shadow: none;
-  background: linear-gradient(180deg, var(--rock-highlight) 0 20%, var(--energy-green) 20% 55%, var(--force-mid) 55% 78%, var(--energy-blue) 78%);
+  background: linear-gradient(180deg, var(--aurora-gold) 0 20%, var(--aurora-teal) 20% 55%, var(--aurora-pink) 55% 78%, var(--aurora-violet) 78%);
   -webkit-background-clip: text; background-clip: text;
   filter: drop-shadow(.06em .06em 0 var(--color-primary-800));
 }
@@ -51,28 +59,144 @@ html[data-boot="pending"] .boot {
 .home-hero-v2 .hero-link { color: var(--text-heading); text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; }
 .home-hero-v2 .hero-link:hover { color: var(--color-accent-200); }
 
-.home-hero-v2 .force-rock { animation: none; }
-.home-hero-v2 .force-rock__push { display: block; width: 100%; height: 100%; }
-.home-hero-v2 .force-rock svg { animation: force-bob var(--float-duration) ease-in-out var(--float-delay) infinite; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--force-light) 35%, transparent)); }
-@keyframes force-bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-28%) rotate(5deg); } }
-.dagobah-firefly { position: absolute; width: 3px; height: 3px; background: var(--color-accent-secondary); box-shadow: 0 0 6px var(--color-accent-secondary), 0 0 14px color-mix(in srgb, var(--color-accent-secondary) 50%, transparent); animation: firefly-blink 2.8s steps(2) var(--blink-delay) infinite, firefly-drift 6s ease-in-out var(--blink-delay) infinite alternate; }
+/* Observatory plane: the 16:9 plate's cover projection, anchored on the terrace (the crop eats sky, never the floor). */
+.observatory-hero { --scene-x: 78%; --scene-y: 100%; }
+.observatory-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); transition: filter 1.6s steps(8); }
+.hero-scene-layer--observatory, .observatory-layer { container-type: size; }
+.observatory-layer { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.observatory-plane { position: absolute; width: max(100cqw, 177.777778cqh); height: max(100cqh, 56.25cqw); left: var(--scene-x); top: var(--scene-y); transform: translate(calc(-1 * var(--scene-x)), calc(-1 * var(--scene-y))); will-change: auto; }
+.observatory-plane > * { position: absolute; display: block; }
+@media (min-width: 901px) { .page-hero.observatory-hero .page-hero__shade { background: var(--hero-overlay-left); } }
+
+/* Sky canvases: behind the crew (stars, aurora, meteors) and above it (trails, sparks, hearts, smoke). */
+.observatory-sky { inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.observatory-sky--back { mix-blend-mode: screen; }
+.observatory-flash { inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(circle at var(--flash-x, 50%) var(--flash-y, 30%), var(--color-white) 0 1%, color-mix(in srgb, var(--aurora-mint) 55%, transparent) 4%, transparent 18%); }
+
+/* Dark sky: lanterns off, the plate dims, the crew keeps a little moonlight. */
+.observatory-hero[data-sky="dark"] .page-hero__image { filter: brightness(.55) saturate(1.25) hue-rotate(-8deg); }
+.observatory-hero[data-sky="dark"] .observatory-crew { filter: brightness(.82) saturate(1.1); }
+.observatory-hero[data-sky="dark"] .observatory-firefly { animation-duration: 1.4s, 4s; }
+
+/* Terrace life: lantern flicker (and their off state), fireflies, the receiver's idle pulse. */
+/* Each lantern: a warm halo over the painted flame, and a dark pixel glass that covers the flame when switched off. */
+.observatory-lantern { width: 3.4%; aspect-ratio: 1; translate: -50% -50%; }
+.observatory-lantern > i { position: absolute; left: 50%; top: 50%; translate: -50% -50%; }
+.observatory-lantern__glow { width: 100%; height: 100%; border-radius: 50%; mix-blend-mode: screen; background: radial-gradient(circle, color-mix(in srgb, var(--lantern) 60%, transparent), transparent 70%); animation: lantern-flicker 2.6s steps(3) var(--flicker-delay) infinite; transition: opacity .4s steps(4); }
+.observatory-lantern__glass { opacity: 0; transition: opacity .35s steps(4); image-rendering: pixelated;
+  background: linear-gradient(90deg, transparent 0 18%, color-mix(in srgb, #9fb4ff 35%, transparent) 18% 28%, transparent 28%), linear-gradient(180deg, #2a2550, #15122e 60%, #0d0b22); box-shadow: inset 0 0 0 1px #0b0a24; }
+.observatory-lantern[data-off="true"] .observatory-lantern__glow { animation: none; opacity: 0; }
+.observatory-lantern[data-off="true"] .observatory-lantern__glass { opacity: .94; }
+@keyframes lantern-flicker { 0%, 100% { opacity: .5; } 40% { opacity: .95; } 70% { opacity: .7; } }
+.observatory-firefly { width: .2%; aspect-ratio: 1; background: var(--aurora-gold); box-shadow: 0 0 6px var(--aurora-gold), 0 0 14px color-mix(in srgb, var(--aurora-gold) 50%, transparent); animation: firefly-blink 2.8s steps(2) var(--blink-delay) infinite, firefly-drift 6s ease-in-out var(--blink-delay) infinite alternate; }
 @keyframes firefly-blink { 50% { opacity: .15; } }
 @keyframes firefly-drift { to { translate: 10px -14px; } }
-.force-particles { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; }
-/* Force stages: charging → force → xwing. The copy steps back and the camera leans in. */
-.force-vignette { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .6s var(--ease-out); background: radial-gradient(ellipse at 62% 52%, transparent 30%, color-mix(in srgb, var(--color-space-0) 78%, transparent) 100%); }
-.home-hero-v2:is([data-force-stage="charging"], [data-force-stage="force"], [data-force-stage="xwing"]) .force-vignette { opacity: .55; }
-.home-hero-v2:is([data-force-stage="force"], [data-force-stage="xwing"]) .force-vignette { opacity: 1; }
-.home-hero-v2 :is(.page-hero__image, .hero-scene-layer) { transform-origin: 64% 56%; transition: scale 1.4s var(--ease-out); }
-.home-hero-v2:is([data-force-stage="force"], [data-force-stage="xwing"]) :is(.page-hero__image, .hero-scene-layer) { scale: 1.05; }
-.home-hero-v2 .hero-copy > * { transition: filter .5s var(--ease-out); }
-.home-hero-v2:is([data-force-stage="force"], [data-force-stage="xwing"]) .hero-copy > * { filter: blur(1.5px) brightness(.32) saturate(.6); }
-.force-meter { position: absolute; z-index: 1; right: calc(max(var(--gutter), (100vw - var(--content-width)) / 2 - 1.5rem) + 1.75rem); bottom: 4.4rem; display: flex; align-items: center; gap: .7rem; margin: 0; color: var(--force-light); font: 400 .62rem/1 var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; pointer-events: none; opacity: 0; transition: opacity .3s; }
-.home-hero-v2:is([data-force-stage="charging"], [data-force-stage="force"], [data-force-stage="xwing"]) .force-meter { opacity: 1; }
-.force-meter__bar { display: block; width: 96px; height: 10px; padding: 2px; border: 1px solid currentColor; }
-.force-meter__bar i { display: block; height: 100%; background: repeating-linear-gradient(90deg, currentColor 0 7px, transparent 7px 9px); transform: scaleX(0); transform-origin: left; }
-.home-hero-v2[data-force-stage="xwing"] .force-meter { color: var(--color-white); text-shadow: 0 0 10px var(--force-light); animation: hud-blink .5s steps(1) infinite; }
-.force-wave { position: absolute; z-index: 2; width: 90px; height: 90px; margin: -45px 0 0 -45px; border-radius: 50%; pointer-events: none; border: 3px solid var(--force-light); box-shadow: 0 0 0 3px color-mix(in srgb, var(--force-mid) 45%, transparent), 0 0 30px var(--force-light), inset 0 0 20px color-mix(in srgb, var(--force-light) 50%, transparent); }
+:is(.observatory-receiver__art, .observatory-console > i, .observatory-crew > i, .observatory-ship, .observatory-bubble__face) { background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; }
+.observatory-receiver__art { position: absolute; inset: 0; animation: receiver-glow 2.4s steps(3) infinite; }
+@keyframes receiver-glow { 50% { filter: drop-shadow(0 0 6px var(--aurora-teal)); } }
+.observatory-receiver__ring { position: absolute; left: 50%; top: 20%; width: 130%; aspect-ratio: 1; translate: -50% -50%; border: 2px solid var(--aurora-teal); border-radius: 50%; opacity: 0; box-shadow: 0 0 12px var(--aurora-teal); }
+.observatory-console > i { position: absolute; inset: 0; }
+.observatory-console__on, .observatory-console[data-on] .observatory-console__idle { opacity: 0; }
+.observatory-console[data-on] .observatory-console__on { opacity: 1; filter: drop-shadow(0 0 8px var(--aurora-teal)); }
+
+/* Glaucia and Prince: idle is always visible (server, no JS, reduced motion); other poses replace it. */
+.observatory-crew { inset: 0; }
+.observatory-crew > .observatory-crew__pose { position: absolute; opacity: 0; }
+.observatory-crew > .observatory-crew__pose--idle,
+.observatory-hero[data-pose="telescope"] .observatory-crew > .observatory-crew__pose--telescope,
+.observatory-hero[data-pose="point"] .observatory-crew > .observatory-crew__pose--point { opacity: 1; }
+.observatory-hero[data-pose="telescope"] .observatory-crew > .observatory-crew__pose--idle,
+.observatory-hero[data-pose="point"] .observatory-crew > .observatory-crew__pose--idle { opacity: 0; }
+.observatory-crew > .observatory-crew__blink { position: absolute; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .observatory-hero:not([data-pose="telescope"]):not([data-pose="point"]) .observatory-crew > .observatory-crew__blink { animation: crew-blink 4.6s steps(1) 1.2s infinite; }
+}
+@keyframes crew-blink { 0%, 93%, 100% { opacity: 0; } 94%, 96% { opacity: 1; } }
+
+/* Prince's bubble, the signal star, the hangar check, the launch. */
+.observatory-signal-star { width: 1.8%; aspect-ratio: 1; translate: -50% -50%; opacity: 0; visibility: hidden; }
+.observatory-signal-star::before, .observatory-signal-star::after { content: ""; position: absolute; inset: 0; }
+.observatory-signal-star::before { inset: -150%; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--aurora-teal) 45%, transparent), transparent 65%); }
+.observatory-signal-star::after { background: var(--color-white); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
+.observatory-signal-star__label { position: absolute; right: calc(100% + 1rem); top: 50%; translate: 0 -50%; white-space: nowrap; color: var(--aurora-mint); font: 400 clamp(.5rem, .8vw, .68rem) var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; text-shadow: 0 0 10px var(--aurora-teal), .1em .1em 0 #0b0a24; }
+.observatory-bubble { width: 5.6%; aspect-ratio: 1; translate: -100% -100%; transform-origin: 100% 100%; opacity: 0; visibility: hidden; background: #fff8ee; box-shadow: 0 -3px 0 #2a1d3f, 0 3px 0 #2a1d3f, -3px 0 0 #2a1d3f, 3px 0 0 #2a1d3f; }
+.observatory-bubble::after { content: ""; position: absolute; right: 6%; bottom: -16%; width: 20%; height: 16%; background: #fff8ee; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.observatory-bubble__face { position: absolute; inset: 8%; background-size: contain; background-position: center; }
+.observatory-hangar { width: 12%; height: 8%; translate: -50% -50%; opacity: 0; mix-blend-mode: screen; background: radial-gradient(ellipse, color-mix(in srgb, var(--aurora-mint) 60%, transparent), transparent 70%); }
+.observatory-hangar i { position: absolute; left: 12%; width: 76%; height: 8%; opacity: 0; background: repeating-linear-gradient(90deg, var(--aurora-mint) 0 6px, transparent 6px 10px); box-shadow: 0 0 8px var(--aurora-teal); }
+.observatory-hangar i:nth-child(1) { top: 26%; } .observatory-hangar i:nth-child(2) { top: 46%; } .observatory-hangar i:nth-child(3) { top: 66%; }
+.observatory-ship { opacity: 0; visibility: hidden; translate: -50% -50%; transform-origin: 50% 50%; filter: drop-shadow(0 0 6px color-mix(in srgb, var(--aurora-pink) 70%, transparent)); }
+.observatory-countdown { translate: -50% -50%; opacity: 0; visibility: hidden; color: var(--color-white); font: 400 clamp(1.6rem, 3.4vw, 3.2rem)/1 var(--font-pixel); white-space: nowrap; text-shadow: .08em .08em 0 #3b1c5a, 0 0 24px var(--aurora-pink); }
+
+/* Hotspots: invisible pixel brackets until hovered or focused; Prince and a lantern wink to be noticed. */
+.observatory-plane--hot { pointer-events: none; }
+.observatory-hot { position: absolute; padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.observatory-hot[hidden] { display: none; }
+.observatory-hot::after { content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity var(--duration-fast); background:
+  linear-gradient(var(--aurora-mint) 0 0) 0 0 / 10px 2px no-repeat, linear-gradient(var(--aurora-mint) 0 0) 0 0 / 2px 10px no-repeat,
+  linear-gradient(var(--aurora-mint) 0 0) 100% 0 / 10px 2px no-repeat, linear-gradient(var(--aurora-mint) 0 0) 100% 0 / 2px 10px no-repeat,
+  linear-gradient(var(--aurora-mint) 0 0) 0 100% / 10px 2px no-repeat, linear-gradient(var(--aurora-mint) 0 0) 0 100% / 2px 10px no-repeat,
+  linear-gradient(var(--aurora-mint) 0 0) 100% 100% / 10px 2px no-repeat, linear-gradient(var(--aurora-mint) 0 0) 100% 100% / 2px 10px no-repeat; }
+.observatory-hot:hover::after, .observatory-hot:focus-visible::after { opacity: 1; }
+.observatory-hot:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 4px; }
+:is(.observatory-hot--prince, .observatory-hot--glaucia)::before { content: ""; position: absolute; left: 50%; top: -4%; width: 6px; height: 6px; background: var(--aurora-gold); box-shadow: 0 0 8px var(--aurora-gold); animation: hud-blink 1.6s steps(1) infinite; }
+.observatory-hot--glaucia::before { animation-delay: .8s; }
+.observatory-hot--lantern::after { opacity: .35; animation: hud-blink 2.4s steps(1) infinite; }
+.observatory-hot--lantern:hover::after, .observatory-hot--lantern:focus-visible::after { opacity: 1; animation: none; }
+.observatory-hero:not([data-stage="idle"]) :is(.observatory-hot--prince, .observatory-hot--glaucia)::before { display: none; }
+
+/* Sky counters: caught meteors and lanterns switched off, shown only while a hunt is under way. */
+.sky-counters { position: absolute; z-index: 1; right: calc(max(var(--gutter), (100vw - var(--content-width)) / 2 - 1.5rem) + 1.75rem); top: 3.2rem; display: grid; justify-items: end; gap: .5rem; pointer-events: none; }
+.sky-counter { margin: 0; padding: .35rem .55rem; background: color-mix(in srgb, #0b0a24 70%, transparent); color: var(--aurora-gold); font: 400 .66rem/1 var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; text-shadow: 0 0 10px var(--aurora-gold); }
+.sky-counter--lights { color: var(--lantern); }
+.sky-counter:empty { display: none; }
+
+/* Ignition: charging → countdown → launch. The copy steps back and the camera leans in. */
+.sky-vignette { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0; transition: opacity .6s var(--ease-out); background: radial-gradient(ellipse at 76% 40%, transparent 30%, color-mix(in srgb, var(--color-space-0) 78%, transparent) 100%); }
+.observatory-hero:is([data-stage="charging"], [data-stage="countdown"]) .sky-vignette { opacity: .55; }
+.observatory-hero:is([data-stage="launch"], [data-stage="wish"]) .sky-vignette { opacity: .9; }
+.observatory-hero :is(.page-hero__image, .hero-scene-layer) { transform-origin: 78% 62%; transition: scale 1.4s var(--ease-out); }
+.observatory-hero:is([data-stage="countdown"], [data-stage="launch"]) :is(.page-hero__image, .hero-scene-layer) { scale: 1.04; }
+.observatory-hero .hero-copy > * { transition: filter .5s var(--ease-out); }
+.observatory-hero:is([data-stage="countdown"], [data-stage="launch"]) .hero-copy > * { filter: blur(1.5px) brightness(.32) saturate(.6); }
+.ignition-meter { position: absolute; z-index: 1; right: calc(max(var(--gutter), (100vw - var(--content-width)) / 2 - 1.5rem) + 1.75rem); bottom: 4.4rem; display: flex; align-items: center; gap: .7rem; margin: 0; color: var(--aurora-mint); font: 400 .62rem/1 var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; pointer-events: none; opacity: 0; transition: opacity .3s; }
+.observatory-hero:is([data-stage="charging"], [data-stage="countdown"], [data-stage="launch"]) .ignition-meter { opacity: 1; }
+.ignition-meter__bar { display: block; width: 96px; height: 10px; padding: 2px; border: 1px solid currentColor; }
+.ignition-meter__bar i { display: block; height: 100%; background: repeating-linear-gradient(90deg, currentColor 0 7px, transparent 7px 9px); transform: scaleX(0); transform-origin: left; }
+.observatory-hero[data-stage="launch"] .ignition-meter { color: var(--color-white); text-shadow: 0 0 10px var(--aurora-pink); animation: hud-blink .5s steps(1) infinite; }
+
+/* Career telescope: a round eyepiece with the career constellation, and a reading panel. */
+.telescope { --focus: var(--focus-inverse); width: min(1040px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); margin: auto; padding: 0; border: 0; background: transparent; color: var(--text-inverse); overflow: visible; }
+.telescope[open] { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(1.25rem, 3vw, 2.5rem); align-items: center; }
+.telescope::backdrop { background: radial-gradient(circle at 35% 50%, color-mix(in srgb, #0b0a24 75%, transparent), #05040f 70%); }
+.telescope__eyepiece { position: relative; width: min(100%, 72vmin); aspect-ratio: 1; margin-inline: auto; overflow: hidden; border-radius: 50%; image-rendering: pixelated;
+  background: radial-gradient(circle at 50% 50%, color-mix(in srgb, #2a1d6a 70%, transparent), #0b0a24 70%), radial-gradient(circle, #fff 0 1px, transparent 1.5px) 0 0 / 23px 29px, radial-gradient(circle, #b8fff0 0 1px, transparent 1.5px) 11px 7px / 37px 31px, #0b0a24;
+  box-shadow: 0 0 0 6px #0b0a24, 0 0 0 10px var(--aurora-teal), 0 0 0 16px #0b0a24, 0 0 80px color-mix(in srgb, var(--aurora-teal) 45%, transparent), inset 0 0 60px #05040f; }
+.telescope[open] .telescope__eyepiece { animation: telescope-iris .7s steps(7) both; }
+@keyframes telescope-iris { from { clip-path: circle(0 at 50% 50%); } to { clip-path: circle(50% at 50% 50%); } }
+.telescope__lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.telescope__lines polyline { fill: none; stroke: color-mix(in srgb, var(--aurora-mint) 80%, transparent); stroke-width: .5; stroke-dasharray: 1; stroke-dashoffset: 1; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 4px var(--aurora-teal)); }
+.telescope[open] .telescope__lines polyline { animation: star-map-draw 1.4s steps(20) .6s forwards; stroke-width: 2; }
+.telescope__reticle { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(var(--hud-line) 0 0) 50% 0 / 1px 100% no-repeat, linear-gradient(var(--hud-line) 0 0) 0 50% / 100% 1px no-repeat; opacity: .5; }
+.telescope__stars { position: absolute; inset: 0; margin: 0; padding: 0; list-style: none; }
+.telescope__star { position: absolute; width: 34px; height: 34px; translate: -50% -50%; padding: 0; border: 0; background: transparent; cursor: pointer; opacity: 0; animation: telescope-star .4s steps(4) both; }
+.telescope__star::before { content: ""; position: absolute; inset: 9px; background: var(--color-white); clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); filter: drop-shadow(0 0 6px var(--aurora-teal)); transition: inset .2s steps(2); }
+.telescope__star[aria-pressed="true"]::before { inset: 3px; background: var(--aurora-gold); }
+.telescope__star:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 2px; }
+@keyframes telescope-star { from { opacity: 0; scale: .2; } to { opacity: 1; scale: 1; } }
+.telescope__panel { display: grid; gap: 1rem; padding: clamp(1.25rem, 3vw, 2rem); background: color-mix(in srgb, #0b0a24 88%, transparent); box-shadow: 0 -3px 0 0 var(--hud-line), 0 3px 0 0 var(--hud-line), -3px 0 0 0 var(--hud-line), 3px 0 0 0 var(--hud-line); }
+.telescope__panel h2 { margin: 0; color: var(--aurora-mint); font: 400 clamp(1.3rem, 2.4vw, 2rem)/1.1 var(--font-pixel); }
+.telescope__intro, .telescope__hint { margin: 0; color: var(--text-muted); line-height: 1.6; }
+.telescope__hint { font: 400 .6rem/1.6 var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; }
+.telescope__reading { display: grid; gap: .4rem; min-height: 6.5em; margin: 0; padding: 1rem; border: 1px solid color-mix(in srgb, var(--aurora-teal) 50%, transparent); }
+.telescope__reading b { color: var(--text-heading); font: 400 1rem/1.35 var(--font-pixel); }
+.telescope__reading span { color: var(--aurora-gold); font: 400 .66rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; }
+.telescope__reading a { justify-self: start; display: inline-flex; align-items: center; min-height: 32px; color: var(--color-primary-200); text-decoration: underline; text-underline-offset: 3px; }
+.telescope__close { justify-self: start; min-height: 44px; padding: .6rem 1rem; border: 1px solid var(--aurora-teal); background: transparent; color: var(--color-white); font: 400 .66rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
+.telescope__close:hover, .telescope__close:focus-visible { background: color-mix(in srgb, var(--aurora-teal) 18%, transparent); }
+@media (max-width: 760px) { .telescope[open] { grid-template-columns: 1fr; overflow: auto; } .telescope__eyepiece { width: min(100%, 60vh); } }
+html.reduce-motion .telescope[open] :is(.telescope__eyepiece, .telescope__star, .telescope__lines polyline) { animation: none; opacity: 1; stroke-dashoffset: 0; clip-path: none; }
+@media (prefers-reduced-motion: reduce) { .telescope[open] :is(.telescope__eyepiece, .telescope__star, .telescope__lines polyline) { animation: none; opacity: 1; stroke-dashoffset: 0; clip-path: none; } }
 
 .hero-jump { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .hero-jump__canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; visibility: hidden; image-rendering: pixelated; background: radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--color-space-0) 40%, transparent), var(--color-space-0) 85%); }
@@ -88,13 +212,13 @@ html[data-boot="pending"] .boot {
 .hud-rec { width: 8px; height: 8px; background: var(--energy-red); box-shadow: 0 0 8px var(--energy-red); animation: hud-blink 1.2s steps(1) infinite; }
 .hud-sep { color: var(--color-neutral-500); }
 .hud-clock { color: var(--color-white); font-variant-numeric: tabular-nums; }
-.hud-location { right: 1.75rem; top: 1rem; color: var(--energy-green); }
+.hud-location { right: 1.75rem; top: 1rem; color: var(--aurora-teal); }
 .hud-signal { right: 1.75rem; top: 50%; writing-mode: vertical-rl; }
 .hud-bars { display: inline-flex; flex-direction: column; gap: 3px; }
 .hud-bars i { width: 10px; height: 3px; background: var(--energy-green); }
 .hud-bars i:nth-child(1) { animation: hud-blink 1.8s steps(1) infinite; }
-.hud-hint { right: 1.75rem; bottom: 1rem; color: var(--force-light); }
-.hud-hint::before { content: ""; width: 6px; height: 6px; background: var(--force-light); animation: hud-blink 1s steps(1) infinite; }
+.hud-hint { right: 1.75rem; bottom: 1rem; color: var(--aurora-mint); }
+.hud-hint::before { content: ""; width: 6px; height: 6px; background: var(--aurora-mint); animation: hud-blink 1s steps(1) infinite; }
 
 .hero-bar { position: relative; z-index: 2; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2rem; width: min(var(--content-width), calc(100% - 2 * var(--gutter))); margin-inline: auto; padding-block: 1.1rem; border-top: 1px solid var(--hud-line); color: var(--text-inverse-muted); font: 400 .64rem/1.4 var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
 .hero-bar__caption { display: inline-flex; align-items: center; gap: .8rem; white-space: nowrap; }
@@ -128,8 +252,8 @@ html[data-boot="pending"] .boot {
 .home-page .text-link:hover { color: var(--color-accent-200); }
 
 /* ——— II. The Jedi ——— */
-.chapter--jedi { padding-top: calc(var(--section-space) * 1.1); }
-.jedi-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2.5rem, 7vw, 7rem); align-items: center; }
+.chapter--crew { padding-top: calc(var(--section-space) * 1.1); }
+.crew-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(2.5rem, 7vw, 7rem); align-items: center; }
 .holo-card { position: relative; transform-style: preserve-3d; --mx: 50%; --my: 30%; }
 .home-page .holo-card__frame {
   --frame: color-mix(in srgb, var(--energy-blue) 55%, var(--color-space-line));
@@ -138,10 +262,22 @@ html[data-boot="pending"] .boot {
   box-shadow: 0 -3px 0 0 var(--frame), 0 3px 0 0 var(--frame), -3px 0 0 0 var(--frame), 3px 0 0 0 var(--frame), 0 30px 80px color-mix(in srgb, var(--energy-blue) 18%, transparent);
 }
 .holo-card .portrait-viewport { border-radius: 0; }
-.holo-card .portrait-image-plane img { image-rendering: pixelated; }
-.holo-card .jedi-blade { opacity: 0; }
-.holo-card .jedi-blade.is-lit .jedi-blade__halo { animation: blade-hum 2.2s steps(4) infinite; }
-@keyframes blade-hum { 50% { opacity: calc(var(--jedi-halo-opacity) * 1.6); } }
+/* Living portrait: a window onto the observatory sky, Glaucia blinking and Prince winking from a bubble. */
+.crew-portrait { position: absolute; inset: 0; overflow: hidden; image-rendering: pixelated; }
+.crew-portrait > i, .crew-portrait > span { position: absolute; display: block; }
+.crew-portrait__sky { inset: 0; background: no-repeat 64% 12% / auto 175%; }
+.crew-portrait__sky::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, color-mix(in srgb, var(--color-space-0) 75%, transparent)); }
+.crew-portrait__aurora { inset: 0 0 45%; mix-blend-mode: screen; }
+.crew-portrait__aurora i { position: absolute; inset: 0; background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--aurora-teal) 26%, transparent) 0 6px, transparent 6px 9px, color-mix(in srgb, var(--aurora-pink) 18%, transparent) 9px 14px, transparent 14px 20px); mask: linear-gradient(180deg, transparent, #000 30%, #000 60%, transparent); opacity: .5; animation: portrait-aurora 7s steps(14) infinite alternate; }
+.crew-portrait__aurora i + i { animation-duration: 11s; animation-delay: -4s; opacity: .35; }
+@keyframes portrait-aurora { from { transform: translateX(-12px) skewX(-6deg); opacity: .2; } to { transform: translateX(12px) skewX(6deg); opacity: .6; } }
+.crew-portrait__star { width: 3px; height: 3px; background: var(--color-white); box-shadow: 0 0 6px var(--aurora-mint); animation: star-twinkle 3s steps(3) var(--twinkle-delay) infinite; }
+@keyframes star-twinkle { 0%, 100% { opacity: .2; } 50% { opacity: 1; } }
+.crew-portrait__meteor { left: 78%; top: 6%; width: 60px; height: 2px; rotate: -27deg; transform-origin: 0 50%; opacity: 0; background: linear-gradient(90deg, var(--color-white), color-mix(in srgb, var(--aurora-mint) 60%, transparent) 30%, transparent); animation: portrait-meteor 9s steps(12) 2s infinite; }
+@keyframes portrait-meteor { 0%, 86% { opacity: 0; translate: 0 0; } 88% { opacity: 1; } 100% { opacity: 0; translate: -160px 80px; } }
+.crew-portrait__glaucia { left: 50%; bottom: 0; height: 90%; aspect-ratio: 299 / 749; translate: -50% 0; background: no-repeat 0 0 / 100% 100%; filter: drop-shadow(0 0 18px color-mix(in srgb, var(--aurora-teal) 30%, transparent)); }
+.crew-portrait__blink { position: absolute; inset: 0; opacity: 0; background: no-repeat 0 0 / 100% 100%; }
+.crew-portrait__firefly { width: 3px; height: 3px; background: var(--aurora-gold); box-shadow: 0 0 8px var(--aurora-gold); animation: firefly-blink 2.6s steps(2) var(--blink-delay) infinite, firefly-drift 5s ease-in-out var(--blink-delay) infinite alternate; }
 .holo-card__sheen { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: color-dodge; opacity: .35; transition: opacity var(--duration-normal);
   background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--color-white) 45%, transparent), transparent 45%), conic-gradient(from 200deg at var(--mx) var(--my), #ff4d5e33, #f8e83833, #7cf29a33, #08a9fa33, #c58bff33, #ff4d5e33); }
 .holo-card:hover .holo-card__sheen { opacity: .8; }
@@ -151,22 +287,12 @@ html[data-boot="pending"] .boot {
 .holo-card__name { color: var(--text-heading); font: 400 1rem var(--font-pixel); }
 .holo-card__class { padding: .25rem .5rem; border: 1px solid var(--energy-blue); color: var(--energy-blue); font: 400 .6rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
 .holo-card__id { display: block; margin-top: 1rem; color: var(--color-neutral-400); font: 400 .58rem var(--font-pixel); letter-spacing: .16em; text-align: center; }
-.holo-card:has(.jedi-deflect:not([hidden])) .holo-card__frame { cursor: crosshair; }
-.jedi-bolts { pointer-events: none; overflow: visible; }
-.jedi-bolt { visibility: hidden; opacity: 0; fill: var(--energy-red); filter: drop-shadow(0 0 10px var(--energy-red)); }
-.jedi-bolt__core { fill: #ffd6da; }
-.jedi-spark { fill: var(--jedi-core); }
-.jedi-spark--hot { fill: var(--color-accent-200); }
-.jedi-spark__flash { fill: color-mix(in srgb, var(--jedi-core) 70%, transparent); }
-.jedi-deflect { display: flex; align-items: center; justify-content: center; gap: .7rem; width: 100%; min-height: 44px; margin-top: 1rem; padding: .6rem 1rem; border: 1px solid var(--energy-red); border-radius: 0; background: transparent; color: var(--text-inverse); font: 400 .66rem var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast); }
-.jedi-deflect[hidden] { display: none; }
-.jedi-deflect:hover, .jedi-deflect:focus-visible { background: color-mix(in srgb, var(--energy-red) 18%, transparent); color: var(--color-white); }
-.jedi-deflect__icon { width: 18px; height: 4px; background: var(--energy-red); box-shadow: 0 0 8px var(--energy-red); }
 @media (prefers-reduced-motion: no-preference) {
-  html:not(.reduce-motion) .holo-card .portrait-image-plane { animation: jedi-breathe 3.6s steps(3) infinite; }
+  html:not(.reduce-motion) .crew-portrait__blink { animation: crew-blink 4.2s steps(1) .8s infinite; }
 }
-@keyframes jedi-breathe { 50% { translate: 0 -4px; } }
-.jedi-copy > p:not(.chapter-tag) { max-width: 58ch; font-size: 1rem; }
+html.reduce-motion .crew-portrait *, html.reduce-motion .crew-portrait__aurora i { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .crew-portrait *, .crew-portrait__aurora i { animation: none !important; } }
+.crew-copy > p:not(.chapter-tag) { max-width: 58ch; font-size: 1rem; }
 .char-sheet { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 2.25rem 0 1.5rem; background: var(--hud-line); border: 1px solid var(--hud-line); }
 .char-sheet > div { padding: 1rem 1.1rem; background: var(--color-space-1); }
 .char-sheet dt { margin-bottom: .45rem; color: var(--color-accent-200); font: 400 .6rem var(--font-pixel); letter-spacing: .16em; text-transform: uppercase; }
@@ -195,8 +321,8 @@ html[data-boot="pending"] .boot {
 .chapter-jump__label { position: relative; padding: .6rem 1rem; background: var(--color-space-0); color: var(--text-inverse-muted); font: 400 .66rem var(--font-pixel); letter-spacing: .3em; text-transform: uppercase; white-space: nowrap; }
 .chapter-jump__label b { color: var(--text-heading); font-weight: 400; }
 
-/* ——— III. The holocron ——— */
-.holocron-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 2.5rem); align-items: stretch; }
+/* ——— III. The stellar ——— */
+.stellar-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 2.5rem); align-items: stretch; }
 .home-page .rag-demo {
   --frame: color-mix(in srgb, var(--energy-blue) 45%, var(--color-space-line)); --terminal-glow: 0;
   position: relative; min-width: 0; margin: 3px; overflow: hidden; color: var(--text-inverse); --focus: var(--focus-inverse);
@@ -237,7 +363,7 @@ html[data-boot="pending"] .boot {
 .rag-demo[data-glitch="true"] pre { animation: glitch .35s steps(2) 1; text-shadow: -2px 0 var(--energy-red), 2px 0 var(--energy-blue); }
 @keyframes glitch { 0% { clip-path: inset(10% 0 60% 0); transform: translateX(-4px); } 25% { clip-path: inset(50% 0 20% 0); transform: translateX(4px); } 50% { clip-path: inset(30% 0 40% 0); } 75% { clip-path: inset(70% 0 5% 0); transform: translateX(-2px); } 100% { clip-path: inset(0); transform: none; } }
 
-.holocron {
+.stellar {
   --frame: var(--color-space-line);
   position: relative; display: flex; flex-direction: column; gap: .8rem; margin: 3px; padding: clamp(1.4rem, 2.6vw, 2.2rem); overflow: hidden; isolation: isolate;
   background: linear-gradient(155deg, var(--color-space-3), var(--color-space-1) 65%);
@@ -245,28 +371,28 @@ html[data-boot="pending"] .boot {
   transition: box-shadow var(--duration-normal);
   --mx: 50%; --my: 50%;
 }
-.holocron::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity var(--duration-normal); background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--energy-blue) 22%, transparent), transparent 55%); }
-.holocron::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--energy-blue), transparent); opacity: 0; }
-.holocron:hover { --frame: color-mix(in srgb, var(--energy-blue) 60%, var(--color-space-line)); }
-.holocron:hover::before { opacity: 1; }
-.holocron:hover::after { opacity: 1; animation: holo-sweep 1.6s steps(12) infinite; }
+.stellar::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity var(--duration-normal); background: radial-gradient(circle at var(--mx) var(--my), color-mix(in srgb, var(--energy-blue) 22%, transparent), transparent 55%); }
+.stellar::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--energy-blue), transparent); opacity: 0; }
+.stellar:hover { --frame: color-mix(in srgb, var(--energy-blue) 60%, var(--color-space-line)); }
+.stellar:hover::before { opacity: 1; }
+.stellar:hover::after { opacity: 1; animation: holo-sweep 1.6s steps(12) infinite; }
 @keyframes holo-sweep { from { transform: translateY(0); } to { transform: translateY(600px); } }
-.holocron h3 { margin: 0; color: var(--text-heading); font-size: clamp(1.3rem, 2.2vw, 1.9rem); line-height: 1.2; }
-.holocron p { margin: 0; font-size: .92rem; }
-.holocron__label { color: var(--energy-blue) !important; font: 400 .64rem var(--font-pixel) !important; letter-spacing: .14em; text-transform: uppercase; }
-.holocron__repo { overflow-wrap: anywhere; color: var(--color-primary-200) !important; font: 400 .9rem var(--font-pixel) !important; }
-.holocron__stars { margin-top: auto !important; color: var(--color-accent-200) !important; font: 400 .75rem var(--font-pixel) !important; letter-spacing: .06em; }
-.holocron--featured .button { align-self: start; margin-top: .6rem; }
-.holocron-cube { position: absolute; right: clamp(1rem, 2.5vw, 2rem); top: clamp(1rem, 2.5vw, 2rem); width: 64px; height: 64px; image-rendering: pixelated; filter: drop-shadow(0 0 14px color-mix(in srgb, var(--energy-blue) 70%, transparent)); animation: holocron-float 4s ease-in-out infinite; }
-.holocron-cube__glow { animation: hud-blink 1.8s steps(2) infinite; }
-.holocron--featured :is(h3, .holocron__label) { padding-right: 76px; }
-@keyframes holocron-float { 50% { transform: translateY(-8px) rotate(3deg); } }
-.holocron-archive { margin: 3.5rem 0 1rem; color: var(--text-inverse-muted) !important; font: 400 .66rem var(--font-pixel); letter-spacing: .16em; text-transform: uppercase; }
-.holocron-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
-.holocron__index { color: var(--color-neutral-400); font: 400 .66rem var(--font-pixel); }
-.holocron-list h3 { font: 400 clamp(1.1rem, 1.8vw, 1.45rem) var(--font-pixel); overflow-wrap: anywhere; }
-.holocron-list h3 a:hover { color: var(--energy-blue); }
-.holocron-list h3 > span { color: var(--energy-blue); }
+.stellar h3 { margin: 0; color: var(--text-heading); font-size: clamp(1.3rem, 2.2vw, 1.9rem); line-height: 1.2; }
+.stellar p { margin: 0; font-size: .92rem; }
+.stellar__label { color: var(--energy-blue) !important; font: 400 .64rem var(--font-pixel) !important; letter-spacing: .14em; text-transform: uppercase; }
+.stellar__repo { overflow-wrap: anywhere; color: var(--color-primary-200) !important; font: 400 .9rem var(--font-pixel) !important; }
+.stellar__stars { margin-top: auto !important; color: var(--color-accent-200) !important; font: 400 .75rem var(--font-pixel) !important; letter-spacing: .06em; }
+.stellar--featured .button { align-self: start; margin-top: .6rem; }
+.stellar-cube { position: absolute; right: clamp(1rem, 2.5vw, 2rem); top: clamp(1rem, 2.5vw, 2rem); width: 64px; height: 64px; image-rendering: pixelated; filter: drop-shadow(0 0 14px color-mix(in srgb, var(--energy-blue) 70%, transparent)); animation: stellar-float 4s ease-in-out infinite; }
+.stellar-cube__glow { animation: hud-blink 1.8s steps(2) infinite; }
+.stellar--featured :is(h3, .stellar__label) { padding-right: 76px; }
+@keyframes stellar-float { 50% { transform: translateY(-8px) rotate(3deg); } }
+.stellar-heading { margin: 3.5rem 0 1rem; color: var(--text-inverse-muted) !important; font: 400 .66rem var(--font-pixel); letter-spacing: .16em; text-transform: uppercase; }
+.stellar-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+.stellar__index { color: var(--color-neutral-400); font: 400 .66rem var(--font-pixel); }
+.stellar-list h3 { font: 400 clamp(1.1rem, 1.8vw, 1.45rem) var(--font-pixel); overflow-wrap: anywhere; }
+.stellar-list h3 a:hover { color: var(--energy-blue); }
+.stellar-list h3 > span { color: var(--energy-blue); }
 
 /* ——— IV. Galactic map ——— */
 .galaxy-stats { display: flex; gap: clamp(1.5rem, 4vw, 3.5rem); margin: 0; }
@@ -314,30 +440,30 @@ html[data-boot="pending"] .boot {
 }
 .mission::before {
   content: ""; position: absolute; inset: 0; z-index: 1; padding: 2px; pointer-events: none; opacity: 0; transition: opacity var(--duration-normal);
-  background: conic-gradient(from var(--saber-angle), transparent 0 55%, var(--saber) 75%, var(--color-white) 85%, var(--saber) 92%, transparent);
+  background: conic-gradient(from var(--glow-angle), transparent 0 55%, var(--glow) 75%, var(--color-white) 85%, var(--glow) 92%, transparent);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
-.mission::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity var(--duration-normal); background: radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, var(--saber) 18%, transparent), transparent 60%); }
-.mission:is(:hover, :focus-within)::before { opacity: 1; animation: saber-spin 2.6s linear infinite; }
+.mission::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity var(--duration-normal); background: radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, var(--glow) 18%, transparent), transparent 60%); }
+.mission:is(:hover, :focus-within)::before { opacity: 1; animation: glow-spin 2.6s linear infinite; }
 .mission:is(:hover, :focus-within)::after { opacity: 1; }
-@keyframes saber-spin { to { --saber-angle: 360deg; } }
-.mission__saber { position: absolute; left: 2rem; right: 2rem; top: 0; height: 4px; background: var(--color-white); box-shadow: 0 0 6px var(--saber), 0 0 16px var(--saber), 0 0 32px var(--saber); transform: scaleX(.12); transform-origin: left; transition: transform 500ms var(--ease-out); }
-.mission__saber::before { content: ""; position: absolute; left: -14px; top: -3px; width: 14px; height: 10px; background: linear-gradient(90deg, var(--color-neutral-400), var(--color-neutral-200) 50%, var(--color-neutral-500)); }
-.mission:is(:hover, :focus-within) .mission__saber { transform: scaleX(1); }
-.mission__icon { width: 56px; height: 56px; fill: var(--saber); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--saber) 55%, transparent)); }
-.mission__label { margin: .5rem 0 0 !important; color: var(--saber) !important; font: 400 .62rem var(--font-pixel) !important; letter-spacing: .14em; text-transform: uppercase; }
+@keyframes glow-spin { to { --glow-angle: 360deg; } }
+.mission__glow { position: absolute; left: 2rem; right: 2rem; top: 0; height: 4px; background: var(--color-white); box-shadow: 0 0 6px var(--glow), 0 0 16px var(--glow), 0 0 32px var(--glow); transform: scaleX(.12); transform-origin: left; transition: transform 500ms var(--ease-out); }
+.mission__glow::before { content: ""; position: absolute; left: -14px; top: -3px; width: 14px; height: 10px; background: linear-gradient(90deg, var(--color-neutral-400), var(--color-neutral-200) 50%, var(--color-neutral-500)); }
+.mission:is(:hover, :focus-within) .mission__glow { transform: scaleX(1); }
+.mission__icon { width: 56px; height: 56px; fill: var(--glow); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--glow) 55%, transparent)); }
+.mission__label { margin: .5rem 0 0 !important; color: var(--glow) !important; font: 400 .62rem var(--font-pixel) !important; letter-spacing: .14em; text-transform: uppercase; }
 .mission h3 { margin: 0; font-size: 1.25rem; line-height: 1.35; }
 .mission p:not(.mission__label) { margin: 0; flex: 1; font-size: .9rem; }
 .mission__cta { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: .5rem; align-self: start; min-height: 44px; margin-top: .5rem; color: var(--text-heading); font: 400 .74rem var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; }
-.mission__cta:hover { color: var(--saber); }
+.mission__cta:hover { color: var(--glow); }
 
 /* ——— Credits ——— */
 .chapter--credits { min-height: 80svh; display: grid; place-items: center; padding-block: calc(var(--section-space) * 1.2); overflow: hidden; text-align: center; }
 .chapter--credits::before { content: ""; position: absolute; left: -20%; right: -20%; bottom: -70%; height: 110%; border-radius: 50%; background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--color-primary-500) 45%, transparent), color-mix(in srgb, var(--color-primary-900) 60%, transparent) 25%, transparent 60%); box-shadow: 0 -2px 0 color-mix(in srgb, var(--energy-blue) 40%, transparent); }
 .credits-sky { position: absolute; inset: 0; pointer-events: none; }
-.xwing { position: absolute; left: -10%; top: 30%; width: 72px; image-rendering: pixelated; filter: drop-shadow(-6px 0 6px var(--energy-blue)); animation: xwing-fly 16s linear infinite; }
-@keyframes xwing-fly { 0% { transform: translate(0, 0); } 60%, 100% { transform: translate(130vw, -18vh); } }
+.credits-ship { position: absolute; left: 110%; top: 30%; width: 96px; aspect-ratio: 137 / 70; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; filter: drop-shadow(8px 0 8px var(--aurora-pink)); animation: credits-ship-fly 18s linear infinite; }
+@keyframes credits-ship-fly { 0% { transform: translate(0, 0); } 60%, 100% { transform: translate(-135vw, -16vh); } }
 .credits { position: relative; max-width: 900px; }
 .credits .chapter-tag { justify-content: center; }
 .home-page .credits h2 { font-size: clamp(2.6rem, 7vw, 6.4rem); line-height: 1; filter: drop-shadow(0 0 36px color-mix(in srgb, var(--energy-blue) 45%, transparent)); }
@@ -352,13 +478,19 @@ html[data-boot="pending"] .boot {
   .home-hero-v2 :is(.chapter-tag, .hero-name, .hero-role, .page-hero__subtitle, .actions) { max-width: 100%; }
   .home-hero-v2 .page-hero__content { padding-block: 4.5rem 2rem; }
   .home-page .home-hero-v2 .hero-name { font-size: clamp(3.2rem, 14vw, 6rem); }
-  .force-particles { top: auto; height: var(--scene-height); }
+  .observatory-hero { --scene-height: clamp(360px, 72vw, 540px); --scene-x: 80%; --scene-y: 100%; display: block; min-height: 0; padding-bottom: var(--scene-height); }
+  .observatory-hero .page-hero__image { top: auto !important; height: var(--scene-height) !important; }
+  .observatory-hero :is(.hero-scene-layer--observatory, .observatory-layer, .sky-particles) { top: auto; height: var(--scene-height); }
+  .observatory-hero .page-hero__shade { top: auto; height: var(--scene-height); background: var(--hero-overlay-scene); }
+  .observatory-signal-star__label { font-size: .5rem; }
+  .sky-counters { top: auto; bottom: calc(var(--scene-height) - 3.4rem); }
+  .ignition-meter { bottom: calc(var(--scene-height) - 2.5rem); }
   .hero-hud { inset: 1rem var(--gutter) auto; height: 3rem; }
   .hero-hud :is(.hud-location, .hud-hint, .hud-signal, .hud-corner) { display: none; }
   .hud-top { left: 0; top: 0; }
   .hero-bar { grid-template-columns: minmax(0, 1fr) auto; gap: 1rem; }
   .hero-bar__caption { display: none; }
-  .jedi-grid, .holocron-grid { grid-template-columns: 1fr; }
+  .crew-grid, .stellar-grid { grid-template-columns: 1fr; }
   .holo-card { width: min(420px, 100%); margin-inline: auto; }
   .chapter-head { flex-direction: column; align-items: start; }
   .chapter-head--center { align-items: center; }
@@ -366,7 +498,7 @@ html[data-boot="pending"] .boot {
   .route__stops { grid-template-columns: 1fr; gap: 0; border-left: 2px dashed var(--hud-line); margin-left: 8px; }
   .route__stop { position: relative; padding: 0 0 2rem 2rem; }
   .route__planet { position: absolute; left: -11px; top: 0; margin: 0; }
-  .home-page .event-explorer, .missions, .holocron-list { grid-template-columns: 1fr; }
+  .home-page .event-explorer, .missions, .stellar-list { grid-template-columns: 1fr; }
   .home-page .event-explorer .event-country ul { max-height: 360px; }
 }
 @media (max-width: 600px) {
@@ -382,20 +514,20 @@ html[data-boot="pending"] .boot {
 }
 
 /* ——— Reduced motion: the composition stays, effects stop ——— */
-html.reduce-motion :is(.force-particles, .hero-jump), html.reduce-motion .xwing { display: none; }
-@media (prefers-reduced-motion: reduce) { :is(.force-particles, .hero-jump), .xwing { display: none; } }
+html.reduce-motion :is(.sky-particles, .hero-jump, .credits-ship) { display: none; }
+@media (prefers-reduced-motion: reduce) { :is(.sky-particles, .hero-jump, .credits-ship) { display: none; } }
 html.reduce-motion .home-page .home-hero-v2 { cursor: auto; }
 .home-hero-v2[data-motion="false"] .hud-hint { display: none; }
 
-/* ——— Touch: the Force hint lives under the scene; a long press never opens the system menu ——— */
-.force-touch-hint { display: none; }
+/* ——— Touch: the launch hint lives under the scene; a long press never opens the system menu ——— */
+.sky-touch-hint { display: none; }
 @media (max-width: 900px), (pointer: coarse) {
-  .home-hero-v2[data-motion="true"] .force-touch-hint {
+  .home-hero-v2[data-motion="true"] .sky-touch-hint {
     position: absolute; z-index: 2; left: 50%; bottom: 1rem; translate: -50% 0; display: inline-flex; align-items: center; gap: .6rem; margin: 0; padding: .45rem .8rem;
-    background: color-mix(in srgb, var(--color-space-0) 72%, transparent); color: var(--force-light); font: 400 .58rem/1.4 var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; pointer-events: none;
+    background: color-mix(in srgb, var(--color-space-0) 72%, transparent); color: var(--aurora-mint); font: 400 .58rem/1.4 var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; pointer-events: none;
   }
-  .force-touch-hint span { width: 6px; height: 6px; background: var(--force-light); animation: hud-blink 1s steps(1) infinite; }
-  .home-hero-v2[data-force-stage]:not([data-force-stage="idle"]) .force-touch-hint { opacity: 0; }
+  .sky-touch-hint span { width: 6px; height: 6px; background: var(--aurora-mint); animation: hud-blink 1s steps(1) infinite; }
+  .home-hero-v2[data-stage]:not([data-stage="idle"]) .sky-touch-hint { opacity: 0; }
   .home-hero-v2 { -webkit-touch-callout: none; touch-action: pan-y; }
-  .home-hero-v2 :is(.hero-scene-layer, .force-particles) { -webkit-user-select: none; user-select: none; }
+  .home-hero-v2 :is(.hero-scene-layer, .sky-particles) { -webkit-user-select: none; user-select: none; }
 }
