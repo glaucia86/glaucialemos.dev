@@ -39,6 +39,10 @@ Estado em 25/10/2026. Leia este arquivo, depois o `AGENTS.md` e o `docs/galaxia-
 - **Personagem fixo** como era no Star Wars: só piscar. Troca de pose apenas quando faz sentido numa interação (ex.: telescópio).
 - Segredos precisam dar **retorno visual claro** e ser **fáceis de acionar**. Lanternas e estrelas cadentes falharam na 1ª versão por falta disso.
 - **Efeito de rolagem da Home** (hero fixado + zoom + salto com rastros, `hyperspace.ts` + `.hero-jump`): ela quer **o mesmo tipo de efeito em cada página, mas com visual próprio do mundo**. Ideias já sugeridas: nevasca e aurora (Nivéora), poeira e telemetria (Marte), túnel de cristais (Lúmina), rotas orbitais (Atlas), pétalas e esporos (Aurélia), plasma (404).
+- **Abertura (intro card) por página:** cada página terá o seu `BootSequence` (`src/components/home/BootSequence.tsx`), como no Star Wars. A Home já usa `variant="observatory"` (brasão de cúpula com estrela, cores da aurora, chave `galaxia-boot`). Para cada mundo novo:
+  - criar uma variante com brasão em pixel 15×15 próprio, cores do mundo e frase final (ex.: Nivéora: cristal de gelo e "AURORA ESTÁVEL"; Marte: rover e "SOLO FIRME");
+  - textos PT/EN/ES e chave de sessão própria em `src/lib/boot.ts`;
+  - aposentar as variantes `echo` e `astromech` quando Sobre e Projetos forem migradas.
 - **Sem "gratuito/free/gratis"** nos textos dela. Ficaram de fora, de propósito, os títulos de artigos publicados (`artigos.json`) e as descrições do GitHub (`projetos.json`).
 - Migração **página a página**, com revisão dela antes de seguir. Escreva para ela em PT-BR.
 
