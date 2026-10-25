@@ -5,7 +5,7 @@
 <br />
 
 <pre>
-   ██████╗ ██╗         ·  HOLONET v4.2 // estabelecendo conexão segura
+   ██████╗ ██╗         ·  GALÁXIA ENCANTADA // abrindo o observatório
   ██╔════╝ ██║         ·  carregando perfil: GLAUCIA_LEMOS
   ██║  ███╗██║         ·  classe: principal software engineer
   ██║   ██║██║         ·          ai transformation lead · microsoft mvp
@@ -15,10 +15,10 @@
 
 # glaucialemos.dev
 
-### *Um site pessoal contado como uma transmissão da HoloNet, em pixel art, direto de uma galáxia muito, muito distante.*
+### *Engenharia, IA e curiosidade em uma expedição por um universo autoral em pixel art.*
 
 [![CI](https://github.com/glaucia86/glaucialemos.dev/actions/workflows/ci.yml/badge.svg)](https://github.com/glaucia86/glaucialemos.dev/actions/workflows/ci.yml)
-![Último commit](https://img.shields.io/github/last-commit/glaucia86/glaucialemos.dev?color=e07828&label=%C3%BAltima%20transmiss%C3%A3o)
+![Último commit](https://img.shields.io/github/last-commit/glaucia86/glaucialemos.dev?color=e07828&label=%C3%BAltima%20atualiza%C3%A7%C3%A3o)
 ![Tamanho](https://img.shields.io/github/repo-size/glaucia86/glaucialemos.dev?color=5a3d7e&label=carga)
 [![Stars](https://img.shields.io/github/stars/glaucia86/glaucialemos.dev?style=flat&color=893866&label=estrelas)](https://github.com/glaucia86/glaucialemos.dev/stargazers)
 
@@ -34,26 +34,31 @@
 
 ![i18n](https://img.shields.io/badge/i18n-pt_·_en_·_es-5a3d7e)
 ![a11y](https://img.shields.io/badge/a11y-respeita_movimento_reduzido-893866)
-![Segredos](https://img.shields.io/badge/easter_eggs-24_escondidos-e07828)
-![A Força](https://img.shields.io/badge/feito_com-a_For%C3%A7a-2ea44f)
+![Pixel art](https://img.shields.io/badge/arte-pixel_art_em_camadas-e07828)
+![Migração](https://img.shields.io/badge/Galáxia_Encantada-migração_em_andamento-2ea44f)
 
 <br />
 
-<img src="docs/screenshots/holonet/hero-1440.png" alt="Página inicial: Yoda levitando pedras no pântano de Dagobah, ao lado do nome Glaucia Lemos em letras pixeladas" width="900" />
+<img src="public/galaxia/scenes/earth-observatory/background.webp" alt="Fundo aprovado em pixel art do Observatório das Primeiras Luzes, com auroras, montanhas e um terraço iluminado por lanternas" width="900" />
 
-<sub>Episódio I — A Origem. Clique para empurrar as pedras, segure para usar a Força.</sub>
+<sub>Observatório das Primeiras Luzes — fundo aprovado da Home. Glaucia, Prince e os objetos interativos são renderizados em camadas separadas.</sub>
 
 </div>
 
 ---
 
-> **Há muito tempo, em um repositório muito, muito distante...**
+> **Uma expedição por engenharia, conhecimento e imaginação.**
 >
-> Uma desenvolvedora que virou educadora global precisava de uma casa na HoloNet. Nada de
-> template ou currículo engessado: ela queria um lugar onde **engenharia, liderança e IA**
-> fossem contadas como uma história. Armada com Next.js, uma paleta pixelada e um amor
-> teimoso por acessibilidade, partiu para construir um site com cara de filme e leitura
-> de documentação bem escrita...
+> **Galáxia Encantada** é a nova identidade criativa do portfólio de Glaucia Lemos:
+> um universo espacial autoral em pixel art, com Glaucia e seu cachorro, Prince, como
+> exploradores. Cada destino conecta o trabalho real em **engenharia, liderança e IA**
+> a um mundo para descobrir, mantendo o conteúdo profissional acessível.
+
+> [!IMPORTANT]
+> **Migração em andamento:** a Home já foi migrada e aprovada. Sobre, Projetos, Conteúdo,
+> Eventos, Serviços e a página 404 ainda usam a identidade anterior e serão migradas a seguir.
+> Os destinos abaixo representam o plano de migração, não uma reformulação concluída de
+> todas as rotas. O modo história opcional também está planejado.
 
 ---
 
@@ -61,7 +66,7 @@
 
 - [Sobre o projeto](#sobre-o-projeto)
 - [Destaques](#destaques)
-- [Galeria](#galeria)
+- [Pipeline de arte](#pipeline-de-arte)
 - [Stack](#stack)
 - [Arquitetura](#arquitetura)
 - [Como executar](#como-executar)
@@ -75,7 +80,7 @@
 - [Estrutura do projeto](#estrutura-do-projeto)
 - [Caça aos easter eggs](#caça-aos-easter-eggs)
 - [Para saber mais](#para-saber-mais)
-- [Créditos e aviso legal](#créditos-e-aviso-legal)
+- [Créditos e direção criativa](#créditos-e-direção-criativa)
 - [Sobre mim](#sobre-mim)
 
 ---
@@ -83,19 +88,23 @@
 ## Sobre o projeto
 
 **glaucialemos.dev** é o site pessoal e portfólio de **Glaucia Lemos**, Principal Software
-Engineer e AI Transformation Lead. Cada página é uma cena em um planeta diferente, e a Home
-é narrada como uma **transmissão da HoloNet** em cinco episódios:
+Engineer e AI Transformation Lead. **Galáxia Encantada** transforma o portfólio em uma
+expedição por observatórios, mundos imaginários e estações orbitais. A migração preserva
+as rotas existentes, os dados profissionais e os três idiomas.
 
-| Rota | Cena | O que você encontra |
-| --- | --- | --- |
-| `/` | — | Escolhe `/pt`, `/en` ou `/es` pelo cabeçalho `Accept-Language` |
-| `/[lang]` | Dagobah, com Yoda | A história da HoloNet em cinco episódios, números, projetos e contato |
-| `/[lang]/sobre` | Base Eco, em Hoth | Trajetória com faixas paralelas, Leia e C-3PO |
-| `/[lang]/projetos` | Tatooine, com R2-D2 | Telemetria ao vivo do GitHub, arquivo com filtros e o Esquadrão Microsoft de contribuições |
-| `/[lang]/conteudo` | Chewbacca | Artigos e conteúdos com filtros |
-| `/[lang]/eventos` | Grogu | Um globo arrastável e o histórico pesquisável de mais de 130 palestras |
-| `/[lang]/servicos` | Darth Vader | Workshops, mentorias, palestras e formulário de contato |
-| `404` | Stormtrooper | Uma rota perdida, vigiada pelo Império |
+| Rota | Destino da Galáxia Encantada | Conteúdo | Estado da migração |
+| --- | --- | --- | --- |
+| `/` | Entrada por idioma | Escolhe `/pt`, `/en` ou `/es` pelo `Accept-Language` | Preservada |
+| `/[lang]` | Observatório das Primeiras Luzes (Terra) | Apresentação, telescópio de carreira, projetos e contato | Migrada e aprovada |
+| `/[lang]/sobre` | Nivéora, o Mundo Nevado das Auroras | Trajetória profissional e marcos da carreira | Próxima |
+| `/[lang]/projetos` | Marte, Vale das Invenções | Dados do GitHub ao vivo, repositórios e contribuições | Planejada |
+| `/[lang]/conteudo` | Lúmina, a Biblioteca Viva | Artigos e recursos de aprendizagem | Planejada |
+| `/[lang]/eventos` | Atlas das Conexões (órbita da Terra) | Globo interativo e histórico de palestras | Planejada |
+| `/[lang]/servicos` | Aurélia, os Jardins Suspensos | Workshops, mentorias, palestras e contato | Planejada |
+| `404` | Maré Rubra, Coordenadas Perdidas | Uma rota perdida e um caminho de volta | Planejada |
+
+A implementação segue o [plano de migração](docs/galaxia-encantada/PLANO-MIGRACAO.md)
+página a página, com aprovação visual antes de continuar.
 
 ## Destaques
 
@@ -111,31 +120,28 @@ Engineer e AI Transformation Lead. Cada página é uma cena em um planeta difere
   carregar. Um registro inválido quebra o build em vez de chegar à produção.
 - **GitHub ao vivo.** `getTopRepos` ordena os repositórios por estrelas e revalida a cada
   30 dias. Se a API falhar ou demorar, entra a cópia local.
-- **Pixel art em camadas.** Scripts Node separam Leia e Yoda em camadas, para que pisquem,
-  tremam de frio, saquem o blaster ou canalizem a Força.
-- **24 segredos.** Um registro único de easter eggs, com gatilhos por teclado, gestos de toque
-  e terminal (Comlink). Todos podem ser encontrados no celular.
+- **Pixel art em camadas.** Scripts Node processam fundos, poses e objetos aprovados.
+  Glaucia fica ancorada na cena, pisca e muda de pose durante as interações.
+- **Um céu para explorar.** A nova Home tem auroras, estrelas cadentes que podem ser
+  capturadas, lanternas, um telescópio de carreira e a decolagem de uma nave, com Prince nas descobertas.
+- **Segredos acessíveis.** Um registro único de easter eggs permite interação por teclado,
+  toque e rádio estelar. Os segredos são substituídos à medida que cada mundo é migrado.
 
-## Galeria
+## Pipeline de arte
 
-<table>
-  <tr>
-    <td width="50%"><img src="docs/screenshots/holonet/xwing-1440.png" alt="Yoda erguendo um X-wing do pântano" /></td>
-    <td width="50%"><img src="docs/screenshots/sobre/hero-1440.png" alt="Página Sobre: Leia na Base Eco em Hoth, com um droide sonda no céu" /></td>
-  </tr>
-  <tr>
-    <td align="center"><sub><b>Dagobah</b>: segure por tempo suficiente e um X-wing se ergue.</sub></td>
-    <td align="center"><sub><b>Base Eco</b>: a página Sobre, no planeta gelado Hoth.</sub></td>
-  </tr>
-  <tr>
-    <td width="50%"><img src="docs/screenshots/holonet/jedi-deflect-1440.png" alt="Card Jedi em pixel art de Glaucia segurando um sabre de luz azul, ao lado da ficha de personagem" /></td>
-    <td width="50%"><img src="docs/screenshots/holonet/hero-390.png" alt="Página inicial em uma tela de celular de 390px" /></td>
-  </tr>
-  <tr>
-    <td align="center"><sub><b>Jedi da Comunidade</b>: uma ficha de personagem que rebate disparos.</sub></td>
-    <td align="center"><sub><b>Celular</b>: todas as cenas e segredos, também pelo toque.</sub></td>
-  </tr>
-</table>
+As artes-fonte aprovadas ficam em [`docs/art/galaxia-encantada/approved-source`](docs/art/galaxia-encantada/approved-source).
+Cada cena separa a placa de fundo, as poses de Glaucia e Prince e os objetos interativos.
+O script recorta as poses, extrai a camada de piscar, registra as âncoras e exporta os assets
+em WebP com os metadados da cena.
+
+```bash
+node scripts/build-galaxia-assets.mjs earth-observatory --debug
+node scripts/build-galaxia-assets.mjs --manifest
+```
+
+Os arquivos gerados ficam em `public/galaxia/` e `src/data/galaxia/`. O manifesto registra
+os hashes das fontes e as aprovações. A composição e os hotspots são definidos em
+`src/lib/scenes.ts` e `src/components/home/ObservatoryScene.tsx`.
 
 ## Stack
 
@@ -144,7 +150,7 @@ Engineer e AI Transformation Lead. Cada página é uma cena em um planeta difere
 | Framework | [Next.js 15](https://nextjs.org/) (App Router) | Páginas server-first, rotas por idioma, ISR para os dados do GitHub |
 | UI | [React 19](https://react.dev/) | Client Components só onde há interação |
 | Linguagem | [TypeScript](https://www.typescriptlang.org/) (strict) | Dados, dicionários e ids de easter eggs tipados |
-| Estilo | [Tailwind CSS 4](https://tailwindcss.com/) + tokens semânticos | Uma paleta: roxo `#5a3d7e`, magenta `#893866`, laranja `#e07828` |
+| Estilo | [Tailwind CSS 4](https://tailwindcss.com/) + tokens semânticos | Tokens de marca compartilhados e paletas próprias para cada mundo |
 | Movimento | [GSAP 3](https://gsap.com/) + [Lenis](https://lenis.darkroom.engineering/) | Scroll pinado, scrub e efeitos de texto que funcionam em todos os navegadores |
 | Globo | [cobe](https://github.com/shuding/cobe) | Globo WebGL leve para a página de Eventos |
 | Validação | [Zod 4](https://zod.dev/) | Schemas para todos os dados |
@@ -157,7 +163,7 @@ Engineer e AI Transformation Lead. Cada página é uma cena em um planeta difere
 ```mermaid
 flowchart LR
     V([Visitante]) --> M{{src/middleware.ts<br/>Accept-Language}}
-    M -->|/pt · /en · /es| L["app/[lang]/layout.tsx<br/>SiteChrome + Comlink"]
+    M -->|/pt · /en · /es| L["app/[lang]/layout.tsx<br/>SiteChrome + rádio estelar"]
     L --> P["Páginas no servidor<br/>Home · Sobre · Projetos<br/>Conteúdo · Eventos · Serviços"]
     P --> D[("src/data/*.json<br/>validado pelo Zod")]
     P --> G["lib/github.ts<br/>getTopRepos (ISR de 30 dias)"]
@@ -312,7 +318,8 @@ As mesmas verificações rodam no [GitHub Actions](.github/workflows/ci.yml) a c
 npm run lint && npm run typecheck && npm test && npm run build
 ```
 
-As suítes de navegador cobrem os CTAs do hero, as cenas, o ciclo de vida das cenas, a página de Eventos e a Base Eco:
+As suítes de navegador cobrem os CTAs do hero, as cenas, o ciclo de vida, os eventos e as
+interações das páginas. Algumas suítes ainda descrevem páginas que serão migradas.
 
 ```bash
 npx playwright install chromium   # só na primeira vez
@@ -324,12 +331,13 @@ Para reaproveitar um servidor que já está rodando, aponte as suítes para ele:
 
 ```bash
 # macOS / Linux
-BASE_URL=http://127.0.0.1:3100 node tests/holonet.browser.mjs
+BASE_URL=http://127.0.0.1:3100 npm run test:browser
 ```
 
 ```powershell
 # Windows (PowerShell)
-$env:BASE_URL = "http://127.0.0.1:3100"; node tests/holonet.browser.mjs
+$env:BASE_URL = "http://127.0.0.1:3100"
+npm run test:browser
 ```
 
 ## Estrutura do projeto
@@ -338,18 +346,21 @@ $env:BASE_URL = "http://127.0.0.1:3100"; node tests/holonet.browser.mjs
 glaucialemos.dev/
 ├── .github/workflows/ci.yml   # lint · typecheck · testes · build
 ├── docs/                      # notas de design, briefings de arte, screenshots
-├── public/pixel/              # cenas em pixel art e personagens em camadas
-├── scripts/                   # build-leia-layers, build-yoda-force, build-home-map
+│   └── galaxia-encantada/      # plano de migração e handoff
+├── public/galaxia/            # fundos, personagens e objetos gerados
+├── public/pixel/              # assets antigos, substituídos página a página
+├── scripts/                   # build-galaxia-assets e ferramentas de arte
 ├── src/
 │   ├── app/
 │   │   ├── [lang]/            # home, sobre, projetos, conteudo, eventos, servicos
-│   │   └── *.css              # tokens, UI pixel, cenas, efeitos Jedi
+│   │   └── *.css              # tokens, UI pixel, estilos e efeitos das cenas
 │   ├── components/
-│   │   ├── home/              # Dagobah, BootSequence, partículas da Força, hiperespaço
-│   │   ├── about/             # Base Eco, Leia, C-3PO, CareerMap, EchoEggs
-│   │   ├── projects/          # Tatooine: R2Telemetry, RepoArchive, AllianceSquadrons, TatooineEggs
+│   │   ├── home/              # Observatório, céu, telescópio de carreira, hiperespaço
+│   │   ├── about/             # componentes de carreira; próximo mundo a migrar
+│   │   ├── projects/          # arquivo de repositórios e telemetria do GitHub
 │   │   └── motion/            # FxLayer, SmoothScroll
 │   ├── data/                  # eventos, projetos, carreira, serviços (JSON + Zod)
+│   │   └── galaxia/           # metadados gerados das cenas
 │   ├── i18n/                  # dicionários pt · en · es
 │   ├── lib/                   # github, career, eggs, sfx, gsap, use-motion
 │   └── middleware.ts          # detecção de idioma
@@ -358,51 +369,53 @@ glaucialemos.dev/
 
 ## Caça aos easter eggs
 
-O site esconde **24 segredos**. Abra o **Comlink** (o terminal no canto da tela) para
-acompanhar seu progresso. Digite uma palavra-código nele ou direto na página.
+Abra o **rádio estelar** no cabeçalho para descobrir dicas, repetir os segredos e acompanhar
+seu progresso. Você também pode digitar uma palavra-código direto na página. A nova Home
+tem seis segredos locais e o mapa estelar global; as outras páginas mantêm seus segredos
+atuais até serem migradas.
 
 <details>
-<summary><b>Spoilers: algumas dicas, se a Força não estiver com você</b></summary>
+<summary><b>Spoilers: algumas dicas para o Observatório</b></summary>
 
 <br />
 
 | Onde | Dica |
 | --- | --- |
 | Qualquer página | Um código clássico da era 8 bits, digitado ou com gestos: ↑ ↑ ↓ ↓ ← → ← → B A |
-| Home | Clique no pântano. Depois tente segurar por bastante tempo... |
-| Home | O sabre de luz de uma Jedi não é só enfeite |
-| Base Eco | A princesa tem uma mensagem para um velho general |
-| Base Eco | *"Eu te amo."* O que o Han responderia? |
-| Base Eco | Algo observa do céu. A Leia tem um blaster. |
-| Base Eco | Insista um pouco com o droide de protocolo |
-| Base Eco | Fique parada alguns segundos e sinta o frio |
-| Tatooine | Um comando antigo, de 2018, ainda responde no terminal do R2 |
-| Tatooine | Dois sóis, um depois do outro |
-| Tatooine | Segure o R2. Os planos estão neste droide. |
-| Tatooine | Procure droides no mercado. Circulando. |
-| Tatooine | Mercadores baixinhos de capuz rondam o horizonte: *Utinni!* |
-| Tatooine | Um certo Skywalker odeia areia. Um certo BB-8 adora dunas. |
+| Home | Glaucia tem um telescópio com marcos reais da carreira para explorar |
+| Home | Siga o faro de Prince para encontrar um sinal |
+| Home | O hangar da montanha e seu console estão conectados |
+| Home | Segure o céu durante a contagem para a nave decolar |
+| Home | Apague as quatro lanternas e olhe para cima |
+| Home | Capture três estrelas cadentes e faça um pedido |
 
 </details>
 
-<sub>No celular, cada segredo tem um gesto de toque equivalente. "Apagar memória" no Comlink zera o progresso.</sub>
+<sub>No celular, cada segredo tem um gesto de toque equivalente. "Apagar memória" no rádio estelar zera o progresso.</sub>
 
 ## Para saber mais
 
 | Documento | Assunto |
 | --- | --- |
+| [`PLANO-MIGRACAO.md`](docs/galaxia-encantada/PLANO-MIGRACAO.md) | Direção criativa, mundos e plano de migração da Galáxia Encantada |
+| [`HANDOFF.md`](docs/galaxia-encantada/HANDOFF.md) | Orientações de implementação, preferências e passagem de contexto |
+| [`AGENTS.md`](AGENTS.md) | Convenções de engenharia e comandos de verificação atuais |
 | [`DESIGN-SYSTEM.md`](DESIGN-SYSTEM.md) | Paleta, tipografia, componentes, cenas |
 | [`DECISOES.md`](DECISOES.md) | Registro de decisões de arquitetura e seus motivos |
-| [`docs/cinematic-home.md`](docs/cinematic-home.md) | Direção de movimento da Home e acessibilidade |
-| [`docs/dagobah-art.md`](docs/dagobah-art.md) | Como a cena de Dagobah foi reconstruída |
-| [`docs/leia-art.md`](docs/leia-art.md) | Briefing e montagem da Leia em camadas |
 
-## Créditos e aviso legal
+Documentos antigos de design ainda podem descrever a identidade anterior; o plano de
+migração e o código atual definem a nova direção.
 
-Este é um **tributo de fã, sem fins comerciais**. *Star Wars* e todos os personagens e nomes
-relacionados são marcas registradas da Lucasfilm Ltd. Este projeto não tem afiliação nem
-endosso da Lucasfilm ou da Disney. A pixel art, o código e os textos são da autora. Peça
-autorização antes de reutilizá-los.
+## Créditos e direção criativa
+
+**Galáxia Encantada** é a direção criativa autoral do portfólio, definida e aprovada por
+Glaucia Lemos. Os novos mundos têm Glaucia, Prince e uma nave concebida para esse universo.
+As artes-fonte são produzidas com auxílio de IA no Grok Image e revisadas antes da integração;
+a procedência e as aprovações ficam registradas no manifesto dos assets.
+
+A migração implanta a nova identidade página a página. Os assets e as referências restantes
+da versão anterior serão removidos conforme cada página for migrada e revisada.
+Peça autorização antes de reutilizar as artes ou os textos do projeto.
 
 ---
 
@@ -413,9 +426,7 @@ autorização antes de reutilizá-los.
     <td align="center" width="200">
       <img src="https://github.com/glaucia86.png" alt="Foto de Glaucia Lemos" width="150" />
       <br />
-      <img src="public/pixel/jedi-glaucia.jpg" alt="Glaucia como Jedi em pixel art" width="150" />
-      <br />
-      <sub>Na vida real · numa galáxia muito, muito distante</sub>
+      <sub>Engenheira, educadora e exploradora da Galáxia Encantada</sub>
     </td>
     <td>
       <h3>Glaucia Lemos</h3>
@@ -444,8 +455,8 @@ autorização antes de reutilizá-los.
 
 <br />
 
-**Se esta transmissão te inspirou, [deixe uma estrela](https://github.com/glaucia86/glaucialemos.dev/stargazers). Ajuda a Rebelião.**
+**Se esta expedição te inspirou, [deixe uma estrela](https://github.com/glaucia86/glaucialemos.dev/stargazers).**
 
-<sub>Fim da transmissão // Que a Força esteja com você</sub>
+<sub>Galáxia Encantada · Continue explorando.</sub>
 
 </div>

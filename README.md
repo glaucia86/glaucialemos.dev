@@ -99,8 +99,7 @@ The migration preserves the existing routes, professional data and three languag
 | `404` | Maré Rubra, Coordenadas Perdidas | A lost route and a way back | Planned |
 
 Implementation follows the [migration plan](docs/galaxia-encantada/PLANO-MIGRACAO.md)
-page by page, with visual approval before continuing. The former Star Wars version
-is preserved on [`archive/star-wars`](https://github.com/glaucia86/glaucialemos.dev/tree/archive/star-wars).
+page by page, with visual approval before continuing.
 
 ## Highlights
 
@@ -121,7 +120,7 @@ is preserved on [`archive/star-wars`](https://github.com/glaucia86/glaucialemos.
 - **A sky to explore.** The new Home includes auroras, catchable shooting stars, lanterns,
   a career telescope and a spacecraft launch, with Prince joining the discoveries.
 - **Accessible secrets.** A shared easter egg registry supports keyboard, touch and the star
-  radio (Comlink). Secrets are replaced page by page as each world is migrated.
+  radio. Secrets are replaced page by page as each world is migrated.
 
 ## Art pipeline
 
@@ -159,7 +158,7 @@ hashes and approval information. Scene composition and hotspot placement are def
 ```mermaid
 flowchart LR
     V([Visitor]) --> M{{src/middleware.ts<br/>Accept-Language}}
-    M -->|/pt · /en · /es| L["app/[lang]/layout.tsx<br/>SiteChrome + Comlink"]
+    M -->|/pt · /en · /es| L["app/[lang]/layout.tsx<br/>SiteChrome + star radio"]
     L --> P["Server pages<br/>Home · About · Projects<br/>Content · Events · Services"]
     P --> D[("src/data/*.json<br/>validated by Zod")]
     P --> G["lib/github.ts<br/>getTopRepos (30-day ISR)"]
@@ -314,27 +313,26 @@ The same checks run in [GitHub Actions](.github/workflows/ci.yml) on every push 
 npm run lint && npm run typecheck && npm test && npm run build
 ```
 
-Browser suites cover hero CTAs, scenes, lifecycle, events and page interactions. The dedicated
-Galáxia Encantada Home suite keeps its existing filename, `holonet.browser.mjs`.
+Browser suites cover hero CTAs, scenes, lifecycle, events and page interactions.
 Some suites still describe pages awaiting migration.
 
 ```bash
 npx playwright install chromium   # first time only
 npm run build
 npm run test:browser              # starts a server on port 3100 for you
-npm run test:browser -- holonet   # dedicated Observatory Home suite
 ```
 
 To reuse a server that is already running, point the suites at it:
 
 ```bash
 # macOS / Linux
-BASE_URL=http://127.0.0.1:3100 node tests/holonet.browser.mjs
+BASE_URL=http://127.0.0.1:3100 npm run test:browser
 ```
 
 ```powershell
 # Windows (PowerShell)
-$env:BASE_URL = "http://127.0.0.1:3100"; node tests/holonet.browser.mjs
+$env:BASE_URL = "http://127.0.0.1:3100"
+npm run test:browser
 ```
 
 ## Project structure
@@ -366,7 +364,7 @@ glaucialemos.dev/
 
 ## Easter egg hunt
 
-Open the **star radio (Comlink)** in the header to discover hints, replay secrets and track
+Open the **star radio** in the header to discover hints, replay secrets and track
 your progress. You can also type a code word straight onto the page. The new Home has six
 local secrets, alongside the global star map; other pages retain their existing secrets
 until their migration.
@@ -388,7 +386,7 @@ until their migration.
 
 </details>
 
-<sub>On mobile, every secret has an equivalent touch gesture. "Wipe memory" in the Comlink resets your progress.</sub>
+<sub>On mobile, every secret has an equivalent touch gesture. "Wipe memory" in the star radio resets your progress.</sub>
 
 ## Further reading
 
