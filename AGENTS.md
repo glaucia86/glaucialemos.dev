@@ -1,5 +1,6 @@
 # AGENTS.md
 
+- Handoff da migração: `docs/galaxia-encantada/HANDOFF.md`.
 - Migração Galáxia Encantada (em andamento na branch `feat/galaxia-encantada`; o tema Star Wars está congelado em
   `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração página a página:
   Home (Observatório) já migrada; Sobre, Projetos, Conteúdo, Eventos, Serviços e 404 ainda usam Star Wars.
