@@ -110,7 +110,7 @@ página a página, com aprovação visual antes de continuar.
 - **Dados validados.** Todo JSON (eventos, projetos, carreira, serviços) passa pelo Zod ao
   carregar. Um registro inválido quebra o build em vez de chegar à produção.
 - **GitHub ao vivo.** `getTopRepos` ordena os repositórios por estrelas e revalida a cada
-  30 dias. Se a API falhar ou demorar, entra a cópia local.
+  24 horas. Se a API falhar ou demorar, entra a cópia local.
 - **Pixel art em camadas.** Scripts Node processam fundos, poses e objetos aprovados.
   Glaucia fica ancorada na cena, pisca e muda de pose durante as interações.
 - **Um céu para explorar.** A nova Home tem auroras, estrelas cadentes que podem ser
@@ -157,7 +157,7 @@ flowchart LR
     M -->|/pt · /en · /es| L["app/[lang]/layout.tsx<br/>SiteChrome + rádio estelar"]
     L --> P["Páginas no servidor<br/>Home · Sobre · Projetos<br/>Conteúdo · Eventos · Serviços"]
     P --> D[("src/data/*.json<br/>validado pelo Zod")]
-    P --> G["lib/github.ts<br/>getTopRepos (ISR de 30 dias)"]
+    P --> G["lib/github.ts<br/>getTopRepos (ISR de 24 h)"]
     G -.se falhar.-> D
     P --> C["Ilhas client<br/>cenas · globo · formulário"]
     C --> MO["lib/gsap.ts + use-motion.ts<br/>useMotionEnabled()"]

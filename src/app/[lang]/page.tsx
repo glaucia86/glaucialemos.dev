@@ -23,7 +23,7 @@ import { getEventStats, getServicos, getCargos, getEventos } from "@/lib/data";
 import { getContribuicoesComEstrelas, getTopRepos } from "@/lib/github";
 import { socialLinks } from "@/data/social";
 
-export const revalidate = 2592000;
+export const revalidate = 86400;
 
 const glows = ["var(--energy-blue)", "var(--energy-green)", "var(--energy-purple)", "var(--energy-gold)"];
 const code = (index: number) => `✦ ${String(index + 1).padStart(2, "0")}`;
@@ -50,7 +50,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const bootLines = h.boot.lines.map(line => line.replace("{events}", format.format(stats.eventos)).replace("{countries}", format.format(stats.paises)));
   const ticker = [...h.hud.ticker, ...h.hud.ticker];
 
-  return <main id="main" className="home-page" tabIndex={-1}>
+  return <main id="main" className="home-page" data-sound-world="observatory" tabIndex={-1}>
     <script dangerouslySetInnerHTML={{ __html: bootScript }} />
     <BootSequence lines={bootLines} granted={h.boot.granted} skip={h.boot.skip} label={h.boot.label} />
     <ReadingProgress />

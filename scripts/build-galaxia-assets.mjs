@@ -31,6 +31,12 @@ const POSES = {
     "prince:B": ["walk-1", "walk-2", "walk-3", "walk-4", "sniff-down-a", "sniff-down-b", "dig-a", "dig-b", "walk-slow-1", "walk-slow-2", "walk-slow-3", "walk-slow-4"],
     "prince:C": ["cold", "shake-a", "shake-b", "wag-a", "wag-b", "sit-up", "wind"],
   },
+  // The front pose has no helmet (unlike the rest of the sheet): kept as an asset, not used on stage.
+  "mars-lab": {
+    glaucia: ["idle", "blink", "point", "cheer"],
+    prince: ["front", "side", "look", "face-idle", "face-happy", "face-joy", "face-curious"],
+    "prince:B": ["stand", "gaze", "watch", "sniff"],
+  },
 };
 
 // One body-height ratio per extra sheet, before final cutting. Measurements exclude the two-pixel cut padding.
@@ -41,7 +47,71 @@ const SHEET_NORMALIZATION = {
     "prince:B": { pose: "walk-1", reference: "sniff" },
     "prince:C": { pose: "wag-a", reference: "stand", seams: [1302] },
   },
+  // B: watch's tail tip shares columns with the sprout in front of sniff.
+  "mars-lab": { "prince:B": { pose: "stand", reference: "side", seams: [1274] } },
 };
+
+// Source-space seams for sheets whose poses touch: mars-lab's pointing finger reaches the blink pose's backpack.
+const SEAMS = { "mars-lab": { glaucia: [702] } };
+
+// Props cut out of a pose sheet by colour: the glowing sprout Prince sniffs in GE-DOG-03B. `exclude` drops the bubble
+// helmet's rim (a circle), except for the leaf tip in front of it; small gaps and holes inside the leaves are closed.
+const DERIVED_PROPS = {
+  "mars-lab": {
+    sprout: {
+      sheet: "GE-DOG-03B-mars-lab.png", box: [1255, 660, 1440, 800],
+      seed: (r, g, b) => g > r + 12 && g > b + 40,
+      exclude: (x, y) => Math.hypot(x - 1420, y - 556) < 155 && ((x - 1360) / 11) ** 2 + ((y - 700) / 16) ** 2 > 1,
+    },
+  },
+};
+
+// Extra prop sheets with several objects, cut by connected components in reading order (GE-PROP-03B: the old terminal).
+const PROP_SHEETS = {
+  "mars-lab": [{ sheet: "GE-PROP-03B-mars-lab.png", names: ["retro-computer-off", "retro-computer-on", "floppy-flat", "floppy-upright"] }],
+};
+
+// Translucent areas enclosed by an object (a glowing CRT screen) become opaque: flood the outside from the borders through
+// see-through pixels; whatever see-through pixel the flood cannot reach is inside the object.
+function fillHoles(img) {
+  const { data, w, h } = img;
+  const outside = new Uint8Array(w * h);
+  const stack = [];
+  for (let x = 0; x < w; x++) stack.push(x, (h - 1) * w + x);
+  for (let y = 0; y < h; y++) stack.push(y * w, y * w + w - 1);
+  while (stack.length) {
+    const i = stack.pop();
+    if (outside[i] || data[i * 4 + 3] >= 128) continue;
+    outside[i] = 1;
+    const x = i % w; const y = (i / w) | 0;
+    if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1);
+    if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w);
+  }
+  for (let i = 0; i < w * h; i++) if (!outside[i] && data[i * 4 + 3] < 128) data[i * 4 + 3] = 255;
+  return img;
+}
+
+function cutDerived({ sheet, box: [X0, Y0, X1, Y1], seed, exclude }, img) {
+  const w = X1 - X0; const h = Y1 - Y0;
+  const at = (x, y) => ((y + Y0) * img.w + x + X0) * 4;
+  const keep = (x, y) => img.data[at(x, y) + 3] > 40 && !exclude(x + X0, y + Y0);
+  const mask = new Uint8Array(w * h);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = at(x, y); if (keep(x, y) && seed(img.data[i], img.data[i + 1], img.data[i + 2])) mask[y * w + x] = 1; }
+  const morph = (src, dilate) => src.map((_, j) => {
+    const x = j % w; const y = (j / w) | 0;
+    for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) { const v = src[(y + dy) * w + x + dx] ?? 0; if (dilate ? v : !v) return dilate ? 1 : 0; }
+    return dilate ? 0 : 1;
+  });
+  const closed = morph(morph(mask, true), false);
+  const ray = (x, y, dx, dy) => { for (let s = 1; s <= 8; s++) if (closed[(y + dy * s) * w + x + dx * s]) return true; return false; };
+  const out = Buffer.alloc(w * h * 4);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
+    const inside = closed[y * w + x] || mask[y * w + x] || (ray(x, y, 1, 0) && ray(x, y, -1, 0) && ray(x, y, 0, 1) && ray(x, y, 0, -1));
+    if (inside && keep(x, y)) img.data.copy(out, (y * w + x) * 4, at(x, y), at(x, y) + 4);
+  }
+  if (!out.some((value, i) => i % 4 === 3 && value)) throw new Error(`${sheet}: derived prop is empty`);
+  return { data: out, w, h };
+}
 
 // Horizontal anchor (source px) when the automatic feet centre is skewed by a companion or a prop: Glaucia's hips.
 const ANCHORS = {
@@ -146,7 +216,8 @@ function poses(img, seams = []) {
     merged = false;
     for (let a = 0; a < big.length && !merged; a++) for (let b = a + 1; b < big.length && !merged; b++) {
       const A = big[a]; const B = big[b];
-      if (A.x0 <= B.x1 && B.x0 <= A.x1 && A.y0 <= B.y1 && B.y0 <= A.y1) {
+      const split = seams.some((seam) => ((A.x0 + A.x1) / 2 < seam) !== ((B.x0 + B.x1) / 2 < seam));
+      if (!split && A.x0 <= B.x1 && B.x0 <= A.x1 && A.y0 <= B.y1 && B.y0 <= A.y1) {
         Object.assign(A, { x0: Math.min(A.x0, B.x0), y0: Math.min(A.y0, B.y0), x1: Math.max(A.x1, B.x1), y1: Math.max(A.y1, B.y1), area: A.area + B.area, ids: [...A.ids, ...B.ids] });
         big.splice(b, 1); merged = true;
       }
@@ -252,7 +323,7 @@ async function cutActor(scene, name, prefix) {
     const key = tag ? `${name}:${tag}` : name;
     const names = POSES[scene]?.[key] ?? [];
     const normalization = SHEET_NORMALIZATION[scene]?.[key];
-    let seams = normalization?.seams ?? [];
+    let seams = normalization?.seams ?? SEAMS[scene]?.[key] ?? [];
     if (normalization) {
       const measured = poses(img, seams).groups;
       if (measured.length !== names.length) throw new Error(`${file}: expected ${names.length} poses, found ${measured.length}`);
@@ -307,6 +378,31 @@ async function pixelActor(sprites, factor, colors = COLORS.actor) {
   return out;
 }
 
+// "Before it was pretty" (Projects): Glaucia's idle pose as it came out of Grok (source resolution, not pixelated), the
+// stretch of plate she stands on, and the rejected first version (3 × 3 grid, 40 colours). The approved one is the regular
+// idle asset. `crop` is the plate window in percent [left, top, right, bottom].
+const BENCH = { "mars-lab": { pose: "idle", crop: [74, 38, 99, 97], grids: [3] } };
+async function bench(id, plateFile, sprites, scale, colors) {
+  const { pose, crop, grids } = BENCH[id];
+  const dir = `${OUT}/bench/${id}`;
+  fs.mkdirSync(dir, { recursive: true });
+  const source = sprites[pose];
+  await webp(source.data, { width: source.w, height: source.h, channels: 4 }).toFile(`${dir}/raw-${pose}.webp`);
+  const meta = await sharp(plateFile).metadata();
+  const [left, top, right, bottom] = crop.map((value, index) => Math.round(value / 100 * (index % 2 ? meta.height : meta.width)));
+  await sharp(plateFile).extract({ left, top, width: right - left, height: bottom - top }).webp({ quality: 90, effort: 6 }).toFile(`${dir}/plate.webp`);
+  const out = {
+    raw: { src: `/galaxia/bench/${id}/raw-${pose}.webp`, w: source.w, h: source.h },
+    plate: { src: `/galaxia/bench/${id}/plate.webp`, w: right - left, h: bottom - top, crop },
+  };
+  for (const grid of grids) {
+    const art = await pixelate(source, scale / grid, colors);
+    await lossless(art).toFile(`${dir}/grid-${grid}.webp`);
+    out[`grid-${grid}`] = { src: `/galaxia/bench/${id}/grid-${grid}.webp`, w: art.w * grid, h: art.h * grid, px: [art.w, art.h] };
+  }
+  return out;
+}
+
 async function scene(id) {
   const src = sources(id);
   const grid = LAYOUT[id]?.grid ?? 0;
@@ -340,6 +436,7 @@ async function scene(id) {
       result.actors[name][pose] = { src: `/galaxia/actors/${name}/${id}/${pose}.webp`, w: sprite.w, h: sprite.h, feetX, ...(art && { px: [art[pose].w, art[pose].h] }) };
       if (DEBUG && sprite.x0 !== undefined) console.log(`${name}/${pose}: ${sprite.w}×${sprite.h} at ${sprite.x0},${sprite.y0}${art ? ` → ${art[pose].w}×${art[pose].h} px` : ""}`);
     }
+    if (name === "glaucia" && BENCH[id]) result.bench = await bench(id, src.plate, sprites, factor * (grid || 1), COLORS.actor);
   }
   result.props = {};
   if (fs.existsSync(src.props)) {
@@ -350,6 +447,27 @@ async function scene(id) {
       const art = grid ? await pixelate(img, (LAYOUT[id]?.props?.[name] ?? 1) / grid, colors.prop) : null;
       await (art ? lossless(art) : webp(img.data, { width: img.w, height: img.h, channels: 4 })).toFile(`${OUT}/props/${id}/${name}.webp`);
       result.props[name] = { src: `/galaxia/props/${id}/${name}.webp`, w: img.w, h: img.h, ...(art && { px: [art.w, art.h] }) };
+    }
+  }
+  for (const [name, spec] of Object.entries(DERIVED_PROPS[id] ?? {})) {
+    fs.mkdirSync(`${OUT}/props/${id}`, { recursive: true });
+    const img = cutDerived(spec, await loadRgba(`${SOURCE}/${spec.sheet}`));
+    const art = grid ? await pixelate(img, (LAYOUT[id]?.props?.[name] ?? 1) / grid, colors.prop) : null;
+    await (art ? lossless(art) : webp(img.data, { width: img.w, height: img.h, channels: 4 })).toFile(`${OUT}/props/${id}/${name}.webp`);
+    result.props[name] = { src: `/galaxia/props/${id}/${name}.webp`, w: img.w, h: img.h, ...(art && { px: [art.w, art.h] }) };
+  }
+  for (const { sheet, names } of PROP_SHEETS[id] ?? []) {
+    fs.mkdirSync(`${OUT}/props/${id}`, { recursive: true });
+    const img = fillHoles(await loadRgba(`${SOURCE}/${sheet}`));
+    if (!img.alpha) keyWhite(img);
+    const { label, groups } = poses(img);
+    if (groups.length !== names.length) throw new Error(`${sheet}: expected ${names.length} props, found ${groups.length}`);
+    for (const [index, name] of names.entries()) {
+      const sprite = cut(img, label, groups[index]);
+      const art = grid ? await pixelate(sprite, (LAYOUT[id]?.props?.[name] ?? 1) / grid, colors.prop) : null;
+      await (art ? lossless(art) : webp(sprite.data, { width: sprite.w, height: sprite.h, channels: 4 })).toFile(`${OUT}/props/${id}/${name}.webp`);
+      result.props[name] = { src: `/galaxia/props/${id}/${name}.webp`, w: sprite.w, h: sprite.h, ...(art && { px: [art.w, art.h] }) };
+      if (DEBUG) console.log(`${name}: ${sprite.w}×${sprite.h} at ${sprite.x0},${sprite.y0}${art ? ` → ${art.w}×${art.h} px` : ""}`);
     }
   }
   fs.mkdirSync(DATA, { recursive: true });

@@ -36,10 +36,11 @@
 - No Windows, encerrar o `npm run start` pode deixar o processo `node` do Next escutando
   na porta. Confira com `netstat -ano` antes de reiniciar.
 - Motion: GSAP/Lenis via `src/lib/gsap.ts` e `src/lib/use-motion.ts`. Respeite `useMotionEnabled()`.
-- Sons: `src/lib/sfx.ts`, sempre opt-in.
+- Sons: `src/lib/sfx.ts`, sempre opt-in, curtos (≤ 0,6 s) e sem loops; ruído filtrado (`wave: "noise"`), `play(kind, { detune, gain })` e `MIN_GAP`.
+  Hover/clique por mundo via `data-sound-world` no `<main>` (`observatory`, `niveora`, `mars`), lido pelo `FxLayer`.
 - Middleware fica em `src/middleware.ts`: com `src/app`, o Next ignora um `middleware.ts` na raiz.
   Confira que o build lista `ƒ Middleware`.
-- Repositórios: `getTopRepos` (`src/lib/github.ts`) busca o ranking por estrelas no GitHub, revalidado a cada 30 dias;
+- Repositórios: `getTopRepos` (`src/lib/github.ts`) busca o ranking por estrelas no GitHub, revalidado a cada 24 h (sem custo extra; `GITHUB_TOKEN` opcional);
   `src/data/projetos.json` é só a reserva. `GITHUB_TOKEN` (opcional, só servidor) aumenta o limite da API.
 - CI: `.github/workflows/ci.yml` roda lint, typecheck, testes e build em push/PR.
 - Execução: não suba o servidor nem rode testes de navegador por conta própria; peça para a usuária executar e compartilhar o resultado.
@@ -68,14 +69,21 @@
   todo segredo acessível no celular. "Apagar memória" no Comlink (dois cliques) chama `forget()` e zera o progresso.
   Janelas `showModal()` ficam acima da mira (`.fx-cursor`): enquanto há uma aberta, o `pixel-ui.css` devolve o cursor nativo.
   Ao criar um segredo novo: registre em `EGGS`, adicione nome/dica nos 3 idiomas e um gesto de toque equivalente.
-- Projetos (Tatooine/R2-D2): `src/app/[lang]/projetos/page.tsx` + `src/app/tatooine.css` (reusa `home.css` e `HomeChoreography`
-  via `className="home-page projects-page"`). Textos em `src/i18n/tatooine.ts`. Componentes em `src/components/projects/`
-  (`R2Telemetry`, `RepoArchive`, `AllianceSquadrons`, `TatooineEggs`). Intro usa `BootSequence variant="astromech"` com a chave `r2-boot`.
-  Dados: `getAllRepos`, `getGithubTelemetry` e `getMergedPrs` (`src/lib/github.ts`), categorias e ordenação em `src/lib/repos.ts`.
-  Reservas offline: `src/data/projetos.json` e `src/data/github-stats.json`, regeneradas por `node scripts/snapshot-github.mjs` (Node 23.6+).
-  Contribuições (Microsoft, Azure, Node.js, comunidade) em `src/data/contribuicoes.json`, agrupadas em esquadrões pelo dono do repo.
-  Os hotspots do hero (R2, sóis, sandcrawler) ficam em `.tatooine-plane`, com a mesma projeção cover da arte (`--scene-x: 72%`).
-  Easter eggs (página `projects`): npx, utinni, plans, sunset, podrace, mindtrick, cantina, artoo, sand, hellothere, bb8. Teste: `tests/tatooine.browser.mjs`.
+- Projetos (Marte, Vale das Invenções): `src/app/[lang]/projetos/page.tsx` + `src/app/marte.css` (reusa `home.css` e
+  `HomeChoreography` via `className="home-page projects-page"`). Textos em `src/i18n/marte.ts` (`d.marte`). Hero: `MarsScene.tsx`
+  (camadas, `HOTSPOTS` glaucia/rover/prince/console, `SPOTS`; Glaucia (87; 93), Prince de três quartos (75,5; 93) pela sheet
+  `GE-DOG-03B`) e `MarsMotion.tsx` (`data-stage`/`data-pose`/`data-prince`/`data-gust`, leitura `.mars-readout`). Poeira em pixel:
+  `dust-engine.ts`; salto da rolagem: `dust-jump.ts` (rajada lateral + varredura/grade/osciloscópio + estática âmbar, com os números
+  reais em `.hero-jump__readouts`). Mesmo breakpoint de Nivéora (`OVERLAY` 1200×680). Seções: `LabTelemetry` (amostras minerais,
+  `RetroTerminal` com Prince + disquete + tela CRT, `ColonyGrowth`), `RepoArchive` (filtros/busca/ordenação; `marte:find-repo` limpa filtros e destaca o card),
+  `Bench`/`BenchDetails` (carcaça em `<details>`; bancada do site com `BeforeAfter`), `PartnerStations` + `LostBug`, `DustPanel`, `MarsEggs` (frases digitadas). Intro `BootSequence variant="mars"`, chave `marte-boot`; `ReadingProgress variant="mars"`.
+  Segredos (7): `rover-scan` (repositório real do top 5), `sample-cache` (original mais antigo), `terminal-launch` (cartão npx 2018 →
+  hoje, com início da carreira de `experiencia.json`), `first-sprout` (estufa da colônia = original criado mais recentemente),
+  `before-pretty` (primeiro commit real + estado atual; bancada do próprio site com a folha do Grok e a versão 3 × 3 recusada),
+  `lost-bug` (circuito do PR #555 do SWA CLI: `npm dev`→`npm run dev`, `.`→`.next`), `dust-fall` (último push do arquivo).
+  Registros em `src/lib/mars-records.ts`; primeiros commits em `src/data/marte-registros.json`, regenerados por
+  `node scripts/snapshot-first-commits.mjs`. O script de assets também gera `public/galaxia/bench/mars-lab/` e o prop `sprout`
+  (recortado da pose `sniff` por `DERIVED_PROPS`). Testes: `tests/mars.test.ts`, `tests/marte.browser.mjs`.
   O teste `social.test.ts` proíbe menções à Twitch em `src`. Tons do `sfx.ts` têm no máximo 0,6 s cada.
 - Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
   `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).

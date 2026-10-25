@@ -105,7 +105,7 @@ page by page, with visual approval before continuing.
 - **Validated data.** Every JSON dataset (events, projects, career, services) is parsed by Zod
   at load time. An invalid record breaks the build instead of sneaking into production.
 - **Live GitHub data.** `getTopRepos` ranks repositories by stars and revalidates every
-  30 days, falling back to a local snapshot if the API fails or times out.
+  24 hours, falling back to a local snapshot if the API fails or times out.
 - **Layered pixel art.** Approved background plates, character poses and props are processed
   by Node scripts. Glaucia stays anchored in the scene, blinks and changes pose during interactions.
 - **A sky to explore.** The new Home includes auroras, catchable shooting stars, lanterns,
@@ -152,7 +152,7 @@ flowchart LR
     M -->|/pt · /en · /es| L["app/[lang]/layout.tsx<br/>SiteChrome + star radio"]
     L --> P["Server pages<br/>Home · About · Projects<br/>Content · Events · Services"]
     P --> D[("src/data/*.json<br/>validated by Zod")]
-    P --> G["lib/github.ts<br/>getTopRepos (30-day ISR)"]
+    P --> G["lib/github.ts<br/>getTopRepos (24-hour ISR)"]
     G -.on failure.-> D
     P --> C["Client islands<br/>scenes · globe · form"]
     C --> MO["lib/gsap.ts + use-motion.ts<br/>useMotionEnabled()"]

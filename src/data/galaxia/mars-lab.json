@@ -1,0 +1,310 @@
+{
+  "scene": "mars-lab",
+  "background": {
+    "src": "/galaxia/scenes/mars-lab/background.webp",
+    "w": 1672,
+    "h": 941
+  },
+  "actors": {
+    "glaucia": {
+      "idle": {
+        "src": "/galaxia/actors/glaucia/mars-lab/idle.webp",
+        "w": 326,
+        "h": 872,
+        "feetX": 197,
+        "px": [
+          165,
+          442
+        ]
+      },
+      "blink": {
+        "src": "/galaxia/actors/glaucia/mars-lab/blink.webp",
+        "w": 326,
+        "h": 872,
+        "feetX": 197,
+        "px": [
+          165,
+          442
+        ]
+      },
+      "point": {
+        "src": "/galaxia/actors/glaucia/mars-lab/point.webp",
+        "w": 397,
+        "h": 867,
+        "feetX": 186,
+        "px": [
+          201,
+          440
+        ]
+      },
+      "cheer": {
+        "src": "/galaxia/actors/glaucia/mars-lab/cheer.webp",
+        "w": 318,
+        "h": 871,
+        "feetX": 157,
+        "px": [
+          161,
+          442
+        ]
+      }
+    },
+    "prince": {
+      "front": {
+        "src": "/galaxia/actors/prince/mars-lab/front.webp",
+        "w": 273,
+        "h": 453,
+        "feetX": 133,
+        "px": [
+          77,
+          128
+        ]
+      },
+      "side": {
+        "src": "/galaxia/actors/prince/mars-lab/side.webp",
+        "w": 552,
+        "h": 465,
+        "feetX": 313,
+        "px": [
+          156,
+          132
+        ]
+      },
+      "look": {
+        "src": "/galaxia/actors/prince/mars-lab/look.webp",
+        "w": 496,
+        "h": 464,
+        "feetX": 268,
+        "px": [
+          141,
+          131
+        ]
+      },
+      "face-idle": {
+        "src": "/galaxia/actors/prince/mars-lab/face-idle.webp",
+        "w": 329,
+        "h": 362,
+        "feetX": 170,
+        "px": [
+          93,
+          103
+        ]
+      },
+      "face-happy": {
+        "src": "/galaxia/actors/prince/mars-lab/face-happy.webp",
+        "w": 335,
+        "h": 359,
+        "feetX": 169,
+        "px": [
+          95,
+          102
+        ]
+      },
+      "face-joy": {
+        "src": "/galaxia/actors/prince/mars-lab/face-joy.webp",
+        "w": 334,
+        "h": 358,
+        "feetX": 170,
+        "px": [
+          95,
+          101
+        ]
+      },
+      "face-curious": {
+        "src": "/galaxia/actors/prince/mars-lab/face-curious.webp",
+        "w": 345,
+        "h": 370,
+        "feetX": 150,
+        "px": [
+          98,
+          105
+        ]
+      },
+      "stand": {
+        "src": "/galaxia/actors/prince/mars-lab/stand.webp",
+        "w": 440,
+        "h": 465,
+        "feetX": 192,
+        "px": [
+          125,
+          132
+        ]
+      },
+      "gaze": {
+        "src": "/galaxia/actors/prince/mars-lab/gaze.webp",
+        "w": 432,
+        "h": 463,
+        "feetX": 150,
+        "px": [
+          122,
+          131
+        ]
+      },
+      "watch": {
+        "src": "/galaxia/actors/prince/mars-lab/watch.webp",
+        "w": 415,
+        "h": 454,
+        "feetX": 175,
+        "px": [
+          118,
+          129
+        ]
+      },
+      "sniff": {
+        "src": "/galaxia/actors/prince/mars-lab/sniff.webp",
+        "w": 498,
+        "h": 451,
+        "feetX": 74,
+        "px": [
+          141,
+          128
+        ]
+      }
+    }
+  },
+  "bench": {
+    "raw": {
+      "src": "/galaxia/bench/mars-lab/raw-idle.webp",
+      "w": 326,
+      "h": 872
+    },
+    "plate": {
+      "src": "/galaxia/bench/mars-lab/plate.webp",
+      "w": 418,
+      "h": 555,
+      "crop": [
+        74,
+        38,
+        99,
+        97
+      ]
+    },
+    "grid-3": {
+      "src": "/galaxia/bench/mars-lab/grid-3.webp",
+      "w": 165,
+      "h": 441,
+      "px": [
+        55,
+        147
+      ]
+    }
+  },
+  "props": {
+    "analysis-console-activated": {
+      "src": "/galaxia/props/mars-lab/analysis-console-activated.webp",
+      "w": 130,
+      "h": 120,
+      "px": [
+        94,
+        86
+      ]
+    },
+    "analysis-console-idle": {
+      "src": "/galaxia/props/mars-lab/analysis-console-idle.webp",
+      "w": 156,
+      "h": 116,
+      "px": [
+        112,
+        84
+      ]
+    },
+    "data-beacon": {
+      "src": "/galaxia/props/mars-lab/data-beacon.webp",
+      "w": 121,
+      "h": 226,
+      "px": [
+        75,
+        140
+      ]
+    },
+    "mineral-sample-large": {
+      "src": "/galaxia/props/mars-lab/mineral-sample-large.webp",
+      "w": 156,
+      "h": 111,
+      "px": [
+        94,
+        67
+      ]
+    },
+    "mineral-sample-small": {
+      "src": "/galaxia/props/mars-lab/mineral-sample-small.webp",
+      "w": 88,
+      "h": 75,
+      "px": [
+        53,
+        45
+      ]
+    },
+    "rover-idle": {
+      "src": "/galaxia/props/mars-lab/rover-idle.webp",
+      "w": 247,
+      "h": 165,
+      "px": [
+        193,
+        129
+      ]
+    },
+    "rover-scanning": {
+      "src": "/galaxia/props/mars-lab/rover-scanning.webp",
+      "w": 370,
+      "h": 159,
+      "px": [
+        289,
+        124
+      ]
+    },
+    "sample-case-sealed": {
+      "src": "/galaxia/props/mars-lab/sample-case-sealed.webp",
+      "w": 150,
+      "h": 87,
+      "px": [
+        90,
+        52
+      ]
+    },
+    "sprout": {
+      "src": "/galaxia/props/mars-lab/sprout.webp",
+      "w": 185,
+      "h": 140,
+      "px": [
+        56,
+        42
+      ]
+    },
+    "retro-computer-off": {
+      "src": "/galaxia/props/mars-lab/retro-computer-off.webp",
+      "w": 476,
+      "h": 516,
+      "px": [
+        286,
+        310
+      ]
+    },
+    "retro-computer-on": {
+      "src": "/galaxia/props/mars-lab/retro-computer-on.webp",
+      "w": 448,
+      "h": 513,
+      "px": [
+        269,
+        308
+      ]
+    },
+    "floppy-flat": {
+      "src": "/galaxia/props/mars-lab/floppy-flat.webp",
+      "w": 372,
+      "h": 225,
+      "px": [
+        74,
+        45
+      ]
+    },
+    "floppy-upright": {
+      "src": "/galaxia/props/mars-lab/floppy-upright.webp",
+      "w": 276,
+      "h": 262,
+      "px": [
+        55,
+        52
+      ]
+    }
+  }
+}

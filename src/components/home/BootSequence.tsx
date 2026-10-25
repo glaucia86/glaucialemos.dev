@@ -14,19 +14,19 @@ const ICE_CREST = pixels([
   ".......#.......", "....#..#..#....", ".....#.#.#.....", "..#...###...#..", "...#..###..#...", "....#.###.#....", ".#...#####...#.", "#######.#######",
   ".#...#####...#.", "....#.###.#....", "...#..###..#...", "..#...###...#..", ".....#.#.#.....", "....#..#..#....", ".......#.......",
 ]);
-// R2-D2's dome and body, 15 × 15 pixels.
-const R2_CREST = pixels([
-  "....#######....", "..###########..", ".####...######.", ".####.#.######.", "###############", "#.#.#.#.#.#.#.#", "###############", ".#############.",
-  ".##.#######.##.", ".##.#.....#.##.", ".##.#.###.#.##.", ".##.#.....#.##.", ".##.#######.##.", ".###.......###.", "###.........###",
+// Marte's six-wheeled rover with its sensor mast, 15 × 15 pixels.
+const ROVER_CREST = pixels([
+  "..........###..", "..........#.#..", "..........###..", "...........#...", ".#.........#...", ".#############.", ".#...#...#...#.", ".#############.",
+  "..###########..", "...#...#...#...", "..###.###.###..", "..#.#.#.#.#.#..", "..###.###.###..", "...............", "###############",
 ]);
 // Observatory dome under a four-point star, 15 × 15 pixels.
 const OBSERVATORY_CREST = pixels([
   ".......#.......", "......###......", "....#######....", "......###......", ".......#.......", "...............", ".....#####.....", "...#########...",
   "..##.####..##..", ".###.#####.###.", ".#############.", ".#############.", ".##.##...##.##.", ".##.##...##.##.", "###############",
 ]);
-const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, astromech: R2_CREST, observatory: OBSERVATORY_CREST };
+const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, mars: ROVER_CREST, observatory: OBSERVATORY_CREST };
 
-type BootVariant = "niveora" | "astromech" | "observatory";
+type BootVariant = "niveora" | "mars" | "observatory";
 type BootProps = { lines: string[]; granted: string; skip: string; label: string; storageKey?: string; brand?: string; variant?: BootVariant; armOnNavigation?: boolean };
 
 // Visible only when the inline boot script marked <html data-boot="pending">.
@@ -42,18 +42,24 @@ export function BootSequence({ lines, granted, skip, label, storageKey = BOOT_KE
     if (armOnNavigation && document.documentElement.dataset.boot !== "pending" && !bootSeen(storageKey) && motionAllowed()) document.documentElement.dataset.boot = "pending";
     if (!overlay || document.documentElement.dataset.boot !== "pending") return release;
     window.__lenis?.stop();
+    // SmoothScroll turns lag smoothing off for Lenis. While the intro plays (Lenis is stopped), keep it on, so a heavy page
+    // mounting underneath cannot make GSAP jump to the end of the intro; restore it when the intro closes.
+    gsap.ticker.lagSmoothing(500, 33);
+    const restoreLag = () => gsap.ticker.lagSmoothing(0);
     const q = gsap.utils.selector(overlay);
     let closing = false;
     const close = (fast = false) => {
       if (closing) return; closing = true;
       main.kill();
-      gsap.timeline({ onComplete: () => { finish(); window.__lenis?.start(); } })
+      gsap.timeline({ onComplete: () => { restoreLag(); finish(); window.__lenis?.start(); } })
         .to(q(".boot__screen"), { scaleY: .006, duration: fast ? .12 : .2, ease: "power4.in" })
         .to(q(".boot__screen"), { scaleX: 0, duration: fast ? .1 : .16, ease: "power4.in" })
         .to(q(".boot__flash"), { autoAlpha: 1, duration: .05 }, "<")
         .to(overlay, { autoAlpha: 0, duration: .25, ease: "power2.out" });
     };
-    const main = gsap.timeline({ delay: .15, onComplete: () => close() });
+    // Paused until the page underneath has mounted (two frames), then it plays from the start.
+    const main = gsap.timeline({ paused: true, delay: .15, onComplete: () => close() });
+    let frame = requestAnimationFrame(() => { frame = requestAnimationFrame(() => main.play()); });
     main.call(() => play("boot"));
     if (CRESTS[variant]) main.to(q(".boot__crest-px"), { autoAlpha: 1, duration: .01, stagger: { each: .006, from: "random" } }, 0);
     q(".boot__line").forEach((line, index) => {
@@ -67,7 +73,7 @@ export function BootSequence({ lines, granted, skip, label, storageKey = BOOT_KE
     skipNow.current = () => close(true);
     const onKey = (event: KeyboardEvent) => { if (event.key !== "Tab") close(true); };
     addEventListener("keydown", onKey);
-    return () => { removeEventListener("keydown", onKey); main.kill(); gsap.set([overlay, ...q(".boot__screen, .boot__line, .boot__block, .boot__granted, .boot__flash, .boot__crest-px")], { clearProps: "all" }); release(); };
+    return () => { cancelAnimationFrame(frame); removeEventListener("keydown", onKey); main.kill(); restoreLag(); gsap.set([overlay, ...q(".boot__screen, .boot__line, .boot__block, .boot__granted, .boot__flash, .boot__crest-px")], { clearProps: "all" }); release(); };
   }, [lines, granted, storageKey, armOnNavigation, variant]);
 
   return <div ref={root} className={`boot boot--${variant}`} role="presentation" onClick={() => skipNow.current()}>

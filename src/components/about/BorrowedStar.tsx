@@ -5,6 +5,7 @@ import { discover, getFoundSnapshot, subscribeReset, subscribeFound } from "@/li
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { observeMotionActivity } from "@/lib/motion";
 import { useMotionEnabled } from "@/lib/use-motion";
+import { play } from "@/lib/sfx";
 import { useStoryTrigger } from "./use-story-trigger";
 import art from "@/data/galaxia/niveora.json";
 
@@ -48,6 +49,8 @@ export function PrinceFootprint({ copy }: { copy: NiveoraStoriesCopy }) {
   const begin = () => {
     if (busy.current) return;
     setStarted(true); dispatchEvent(new Event(STAR_AVAILABLE));
+    // Little paws on the snow while Prince fetches the star.
+    play("woof"); [200, 520, 840, 1160, 1480].forEach((delay, index) => window.setTimeout(() => play("pawstep", { detune: index % 2 ? 120 : -80 }), motion ? delay : 0));
     if (motion) { busy.current = true; setWalking(true); setPulse(value => value + 1); }
   };
   return <div ref={root} className="prince-trail" hidden={!ready} data-walking={walking}>
@@ -100,7 +103,7 @@ export function BorrowedStar({ copy }: { copy: NiveoraStoriesCopy }) {
   }, [available, opened, request]);
   return <div id="borrowed-star" ref={root} className="borrowed-star" hidden={ready && !available}>
     <span className="borrowed-star__tracks" aria-hidden="true">· ∴ · ∴ ·</span>
-    <details ref={detail} onToggle={event => { setOpened(event.currentTarget.open); if (event.currentTarget.open) discover("borrowed-star"); }}>
+    <details ref={detail} onToggle={event => { setOpened(event.currentTarget.open); if (event.currentTarget.open) { discover("borrowed-star"); play("twinkle"); } }}>
       <summary><StoryStar />{copy.star}</summary>
       <div className="borrowed-star__note"><h3>{copy.noteTitle}</h3><p>{copy.note}</p><p>{copy.signature}</p>
         {ready && <button type="button" className="story-close" onClick={() => { if (detail.current) { detail.current.open = false; detail.current.querySelector("summary")?.focus(); } }}>{copy.returnStar}</button>}

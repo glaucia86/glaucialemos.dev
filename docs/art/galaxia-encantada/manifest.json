@@ -68,6 +68,19 @@
       "notes": ""
     },
     {
+      "id": "GE-DOG-03B",
+      "file": "approved-source/GE-DOG-03B-mars-lab.png",
+      "sceneId": "mars-lab",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "d21537c64febca46f2af60c6a4fb1c351f6c25babdcabc9a664be3d6263d98e5",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
       "id": "GE-DOG-04",
       "file": "approved-source/GE-DOG-04-lumina.png",
       "sceneId": "lumina",
@@ -363,6 +376,19 @@
       "nativeHeight": 941,
       "alpha": false,
       "sha256": "96efd61fe808a849c29e867da75e2645625349473405705df9bf0d3eb5af08f8",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
+      "id": "GE-PROP-03B",
+      "file": "approved-source/GE-PROP-03B-mars-lab.png",
+      "sceneId": "mars-lab",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "c74ab429a9bafb8b928552a2771e80a73d56c146f7567d09fa37bad4a371a0b2",
       "reviewer": "Glaucia Lemos",
       "notes": ""
     },

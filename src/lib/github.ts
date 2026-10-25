@@ -4,7 +4,7 @@ import { languageShare, reposByYear, totals } from "./repos";
 import type { Contribuicao, GithubStats, Projeto } from "./types";
 
 const TIMEOUT_MS = 5_000;
-export const REVALIDATE_SECONDS = 2_592_000; // 30 days
+export const REVALIDATE_SECONDS = 86_400; // 24 hours
 export const GITHUB_USER = "glaucia86";
 const REPO_QUERY = encodeURIComponent(`user:${GITHUB_USER} fork:false`);
 export const TOP_REPOS_URL = `https://api.github.com/search/repositories?q=${REPO_QUERY}&sort=stars&order=desc&per_page=30`;

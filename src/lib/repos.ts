@@ -57,6 +57,3 @@ export function matchesQuery(repo: Pick<Projeto, "nome" | "descricao" | "topicos
   const needle = normalize(query.trim());
   return !needle || normalize([repo.nome, repo.descricao, repo.linguagem ?? "", ...repo.topicos].join(" ")).includes(needle);
 }
-
-// "These aren't the droids you're looking for": searching for droids triggers Obi-Wan's mind trick.
-export const isDroidQuery = (query: string) => /^(the\s+)?(droids?|droides?|droid[eo]s?)$/.test(normalize(query.trim()));

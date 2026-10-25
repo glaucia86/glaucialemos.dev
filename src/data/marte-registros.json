@@ -1,0 +1,42 @@
+[
+  {
+    "repo": "curso-typescript-zero-to-hero",
+    "commits": 171,
+    "sha": "0bd658c7514a38f91d05299cbdacd3bf6b121dbb",
+    "date": "2021-02-01",
+    "message": "Initial commit",
+    "url": "https://github.com/glaucia86/curso-typescript-zero-to-hero/commit/0bd658c7514a38f91d05299cbdacd3bf6b121dbb"
+  },
+  {
+    "repo": "glaucia_lemos86",
+    "commits": 62,
+    "sha": "2f49e18a5f8bbf963a098997faa1cc6e3e0bb4cc",
+    "date": "2018-12-21",
+    "message": "Initial commit",
+    "url": "https://github.com/glaucia86/glaucia_lemos86/commit/2f49e18a5f8bbf963a098997faa1cc6e3e0bb4cc"
+  },
+  {
+    "repo": "repocheckai",
+    "commits": 211,
+    "sha": "b47b6394df0b248234178e4cbf1119f46b5736bb",
+    "date": "2026-01-22",
+    "message": "Initial commit",
+    "url": "https://github.com/glaucia86/repocheckai/commit/b47b6394df0b248234178e4cbf1119f46b5736bb"
+  },
+  {
+    "repo": "ai-js-course",
+    "commits": 44,
+    "sha": "bcc6d80942506d27ccf973153e2bd6170d4b7010",
+    "date": "2025-02-23",
+    "message": "Initial commit",
+    "url": "https://github.com/glaucia86/ai-js-course/commit/bcc6d80942506d27ccf973153e2bd6170d4b7010"
+  },
+  {
+    "repo": "glaucialemos.dev",
+    "commits": 39,
+    "sha": "657aa21e83eef17fadd6b5a27c6472e479dddfa4",
+    "date": "2026-10-21",
+    "message": "chore: initial README and .gitignore",
+    "url": "https://github.com/glaucia86/glaucialemos.dev/commit/657aa21e83eef17fadd6b5a27c6472e479dddfa4"
+  }
+]

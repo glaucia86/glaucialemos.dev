@@ -44,7 +44,7 @@ describe("cena do Observatório das Primeiras Luzes", () => {
 });
 
 describe("pixel art de verdade", () => {
-  for (const id of ["earth-observatory", "niveora"] as const) it(`${id}: placa original, atores e props na grade da cena`, () => {
+  for (const id of ["earth-observatory", "niveora", "mars-lab"] as const) it(`${id}: placa original, atores e props na grade da cena`, () => {
     const scene = SCENES[id];
     const { grid, plateGrid } = layout[id];
     const { background, actors, props } = scene.assets as typeof scene.assets & { background: { px?: number[] } };
