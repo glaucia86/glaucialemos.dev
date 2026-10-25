@@ -1,6 +1,6 @@
 // Scroll drives every frame: no loop runs while the progress is unchanged.
 const PIXEL = 2;
-const COLORS = ["#ffffff", "#dff6ff", "#9fdcff", "#08a9fa", "#c58bff"];
+const COLORS = ["#ffffff", "#b8fff0", "#6ff2d0", "#ff8fd8", "#c9b8ff"];
 
 export function createHyperspace(canvas: HTMLCanvasElement, count = 280) {
   const context = canvas.getContext("2d");

@@ -7,12 +7,14 @@ import { RagDemo } from "@/components/RagDemo";
 import { EventMap } from "@/components/EventMap";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { BootSequence } from "@/components/home/BootSequence";
-import { DagobahScene } from "@/components/home/DagobahScene";
-import { HeroMotion } from "@/components/home/HeroMotion";
+import { ObservatoryHotspots, ObservatoryScene, observatory } from "@/components/home/ObservatoryScene";
+import { ObservatoryMotion } from "@/components/home/ObservatoryMotion";
+import { CareerTelescope } from "@/components/home/CareerTelescope";
+import { CrewPortrait } from "@/components/home/CrewPortrait";
 import { HudClock } from "@/components/home/HudClock";
 import { HomeChoreography } from "@/components/home/HomeChoreography";
 import { MissionIcon } from "@/components/home/MissionIcon";
-import { ChapterTag as Tag, ChapterJump as Jump, numerals } from "@/components/home/Chapter";
+import { ChapterTag as Tag, ChapterJump as Jump } from "@/components/home/Chapter";
 import { curateMilestones, homeServiceSubjects, formatExperiencePeriod, featuredContribution, HOME_ARCHIVE_SIZE } from "@/lib/home-curation";
 import { bootScript } from "@/lib/boot";
 import { isLocale } from "@/i18n/config";
@@ -23,14 +25,15 @@ import { socialLinks } from "@/data/social";
 
 export const revalidate = 2592000;
 
-const sabers = ["var(--energy-blue)", "var(--energy-green)", "var(--energy-purple)", "var(--energy-gold)"];
+const glows = ["var(--energy-blue)", "var(--energy-green)", "var(--energy-purple)", "var(--energy-gold)"];
+const code = (index: number) => `✦ ${String(index + 1).padStart(2, "0")}`;
 
 function ChapterTag({ index, label }: { index: number; label: string }) {
-  return <Tag code={`EP.${numerals[index]}`} label={label} />;
+  return <Tag code={code(index)} label={label} />;
 }
 
 function ChapterJump({ label, index }: { label: string; index: number }) {
-  return <Jump code={`EP.${numerals[index]}`} label={label} />;
+  return <Jump code={code(index)} label={label} />;
 }
 
 export default async function Home({ params }: { params: Promise<{ lang: string }> }) {
@@ -52,11 +55,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     <BootSequence lines={bootLines} granted={h.boot.granted} skip={h.boot.skip} label={h.boot.label} />
     <ReadingProgress />
 
-    {/* Episode I — Dagobah */}
+    {/* Chapter 1 — First Light Observatory */}
     <div className="home-hero">
-      <HeroMotion jumpLabel={h.episodes[1]} forceLabel={h.hud.force} touchLabel={h.hud.touch} labelledBy="hero-title">
-        <Image className="page-hero__image" src="/pixel/dagobah-background.webp" alt={d.home.heroImageAlt} fill priority fetchPriority="high" sizes="100vw" />
-        <DagobahScene />
+      <ObservatoryMotion labelledBy="hero-title" labels={{ jump: h.episodes[1], ignition: h.hud.force, touch: h.hud.touch, coordinates: h.hud.coordinates, countdown: h.hud.countdown, wish: h.hud.wish, lights: h.hud.lights }}>
+        <Image className="page-hero__image" src={observatory.assets.background.src} alt={d.home.heroImageAlt} fill priority fetchPriority="high" sizes="100vw" />
+        <ObservatoryScene />
         <div className="page-hero__shade" aria-hidden="true" />
         <div className="hero-hud" aria-hidden="true">
           <span className="hud-corner hud-corner--tl" /><span className="hud-corner hud-corner--tr" /><span className="hud-corner hud-corner--bl" /><span className="hud-corner hud-corner--br" />
@@ -75,7 +78,9 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
             <Link className="hero-link" href="#projetos">{d.home.secondaryCta} <span aria-hidden="true">↓</span></Link>
           </div>
         </div>
-      </HeroMotion>
+        <ObservatoryHotspots labels={{ glaucia: h.hud.glaucia, prince: h.hud.prince, console: h.hud.console, hangar: h.hud.hangar, lantern: h.hud.lantern }} />
+      </ObservatoryMotion>
+      <CareerTelescope copy={h.telescope} stars={milestones.map((milestone, index) => ({ title: d.journey.milestones[index] ?? milestone.cargo, company: milestone.empresa, period: formatExperiencePeriod(milestone.periodo, lang), source: milestone.fonte }))} />
       <div className="hero-bar" aria-hidden="true">
         <span className="hero-bar__caption"><span className="pixel-mark" />{d.home.sceneCaption}</span>
         <span className="hero-bar__ticker"><span className="hero-bar__track">{ticker.map((item, index) => <span key={index}>{item}<b>✦</b></span>)}</span></span>
@@ -83,45 +88,36 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       </div>
     </div>
 
-    {/* Episode II — The Jedi */}
-    <section className="chapter chapter--jedi" id="jedi" aria-labelledby="jedi-title">
-      <div className="chapter__inner jedi-grid">
+    {/* Chapter 2 — The crew member */}
+    <section className="chapter chapter--crew" id="tripulante" aria-labelledby="crew-title">
+      <div className="chapter__inner crew-grid">
         <div className="holo-card" data-tilt>
           <figure className="holo-card__frame portrait-frame">
-            <div className="portrait-viewport"><div className="portrait-image-plane">
-              <Image src="/pixel/jedi-glaucia.jpg" alt={d.home.aboutImageAlt} width={720} height={960} sizes="(max-width: 900px) 85vw, 34vw" />
-              <svg className="jedi-blade" viewBox="0 0 864 1152" aria-hidden="true" focusable="false">
-                <path className="jedi-blade__halo" d="M211 583 130 123" />
-                <path className="jedi-blade__edge" d="M211 583 130 123" />
-                <path className="jedi-blade__core" d="M211 583 130 123" />
-              </svg>
-              <svg className="jedi-bolts" viewBox="0 0 864 1152" aria-hidden="true" focusable="false" />
-            </div></div>
+            <div className="portrait-viewport"><CrewPortrait label={d.home.aboutImageAlt} /></div>
             <span className="holo-card__sheen" aria-hidden="true" />
             <span className="holo-card__scan" aria-hidden="true" />
-            <figcaption><span className="holo-card__name">Glaucia Lemos</span><span className="holo-card__class">{h.jedi.card}</span></figcaption>
+            <figcaption><span className="holo-card__name">Glaucia Lemos</span><span className="holo-card__class">{h.crew.card}</span></figcaption>
           </figure>
           <span className="holo-card__id" aria-hidden="true">ID · GL-0001 · PRINCIPAL SWE · AI LEAD · MVP</span>
-          <button type="button" className="jedi-deflect" hidden><span className="jedi-deflect__icon" aria-hidden="true" />{h.jedi.deflect}</button>
         </div>
-        <div className="jedi-copy">
+        <div className="crew-copy">
           <ChapterTag index={1} label={h.episodes[1]} />
-          <h2 id="jedi-title" data-reveal="lines">{h.jedi.title}</h2>
+          <h2 id="crew-title" data-reveal="lines">{h.crew.title}</h2>
           <p data-reveal="up">{d.journey.intro}</p>
-          <dl className="char-sheet" aria-label={h.jedi.sheetLabel} data-reveal="stagger">
-            {h.jedi.sheet.map(([term, value]) => <div key={term}><dt>{term}</dt><dd data-scramble>{value}</dd></div>)}
+          <dl className="char-sheet" aria-label={h.crew.sheetLabel} data-reveal="stagger">
+            {h.crew.sheet.map(([term, value]) => <div key={term}><dt>{term}</dt><dd data-scramble>{value}</dd></div>)}
           </dl>
           <Link className="text-link trajectory-link" href={`/${lang}/sobre`}>{d.home.aboutLink}<span aria-hidden="true">↗</span></Link>
         </div>
       </div>
       <div className="chapter__inner route" data-route>
-        <h3 className="route__title">{h.jedi.route}</h3>
+        <h3 className="route__title">{h.crew.route}</h3>
         <svg className="route__line" viewBox="0 0 1000 40" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           <path className="route__track" d="M0 20H1000" />
           <path className="route__trail" d="M0 20H1000" />
         </svg>
         <ol className="route__stops">{milestones.map((milestone, index) => <li key={milestone.cargo + milestone.empresa} className="route__stop">
-          <span className="route__planet" aria-hidden="true" style={{ "--planet": sabers[index] } as CSSProperties} />
+          <span className="route__planet" aria-hidden="true" style={{ "--planet": glows[index] } as CSSProperties} />
           <span className="route__period">{formatExperiencePeriod(milestone.periodo, lang)}</span>
           <h4>{d.journey.milestones[index]}</h4>
           <p>{milestone.empresa} · <a href={milestone.fonte}>{d.common.source}<span aria-hidden="true"> ↗</span></a></p>
@@ -131,43 +127,43 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
     <ChapterJump index={2} label={h.episodes[2]} />
 
-    {/* Episode III — The holocron */}
-    <section className="chapter chapter--holocron" id="projetos" aria-labelledby="holocron-title">
+    {/* Chapter 3 — The star archive */}
+    <section className="chapter chapter--stellar" id="projetos" aria-labelledby="stellar-title">
       <div className="chapter__inner">
         <div className="chapter-head">
-          <div><ChapterTag index={2} label={h.episodes[2]} /><h2 id="holocron-title" data-reveal="lines">{d.journey.demo.title}</h2></div>
+          <div><ChapterTag index={2} label={h.episodes[2]} /><h2 id="stellar-title" data-reveal="lines">{d.journey.demo.title}</h2></div>
           <Link className="text-link" href={`/${lang}/projetos`}>{d.home.projectsLink}<span aria-hidden="true">↗</span></Link>
         </div>
-        <div className="holocron-grid">
+        <div className="stellar-grid">
           <RagDemo copy={d.journey.demo} terminal={h.holocron} />
-          {featured && <article className="holocron holocron--featured" data-tilt data-reveal="up">
-            <svg className="holocron-cube" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
+          {featured && <article className="stellar stellar--featured" data-tilt data-reveal="up">
+            <svg className="stellar-cube" viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
               <path fill="#9fdcff" d="M7 1h2v1h2v1h2v1h1v1h-2v1h-2v1H8V6H6V5H4V4H2V3h2V2h3z" />
               <path fill="#08a9fa" d="M2 4h2v1h2v1h2v8H7v-1H5v-1H3v-1H2z" />
               <path fill="#0a5f8f" d="M8 7h2V6h2V5h2v7h-1v1h-2v1H8z" />
-              <path className="holocron-cube__glow" fill="#efffff" d="M7 3h2v1H7zM4 7h1v3H4zM11 8h1v3h-1z" />
+              <path className="stellar-cube__glow" fill="#efffff" d="M7 3h2v1H7zM4 7h1v3H4zM11 8h1v3h-1z" />
             </svg>
-            <p className="holocron__label">{h.holocron.featured} · {featured.papel[lang]}</p>
+            <p className="stellar__label">{h.holocron.featured} · {featured.papel[lang]}</p>
             <h3>{d.home.projectsTitle}</h3>
             <p>{d.journey.demo.explanation}</p>
-            <p className="holocron__repo" data-scramble-hover>{featured.repo}</p>
-            <p className="holocron__stars"><span aria-hidden="true">★</span> <span data-count={featured.estrelas}>{format.format(featured.estrelas)}</span> {d.common.stars}</p>
+            <p className="stellar__repo" data-scramble-hover>{featured.repo}</p>
+            <p className="stellar__stars"><span aria-hidden="true">★</span> <span data-count={featured.estrelas}>{format.format(featured.estrelas)}</span> {d.common.stars}</p>
             <a className="button primary" data-magnetic href={featured.url}>{d.journey.demo.cta}<span aria-hidden="true">↗</span></a>
           </article>}
         </div>
-        <p className="holocron-archive">{h.holocron.archive}</p>
-        <div className="holocron-list" data-reveal="stagger">{projects.map((project, index) => <article className="holocron" key={project.nome} data-tilt>
-          <span className="holocron__index" aria-hidden="true">0{index + 2}</span>
+        <p className="stellar-heading">{h.holocron.archive}</p>
+        <div className="stellar-list" data-reveal="stagger">{projects.map((project, index) => <article className="stellar" key={project.nome} data-tilt>
+          <span className="stellar__index" aria-hidden="true">0{index + 2}</span>
           <h3><a href={project.url} data-scramble-hover>{project.nome}</a><span aria-hidden="true"> ↗</span></h3>
           <p>{d.journey.projects[project.nome] ?? project.descricao}</p>
-          <p className="holocron__stars"><span aria-hidden="true">★</span> <span data-count={project.estrelas}>{format.format(project.estrelas)}</span> {d.common.stars}</p>
+          <p className="stellar__stars"><span aria-hidden="true">★</span> <span data-count={project.estrelas}>{format.format(project.estrelas)}</span> {d.common.stars}</p>
         </article>)}</div>
       </div>
     </section>
 
     <ChapterJump index={3} label={h.episodes[3]} />
 
-    {/* Episode IV — The galactic map */}
+    {/* Chapter 4 — The constellation map */}
     <section className="chapter chapter--galaxy" id="mapa" aria-labelledby="galaxy-title">
       <div className="chapter__inner">
         <div className="chapter-head">
@@ -182,14 +178,14 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
     <ChapterJump index={4} label={h.episodes[4]} />
 
-    {/* Episode V — Your mission */}
+    {/* Chapter 5 — Your mission */}
     <section className="chapter chapter--missions" id="missoes" aria-labelledby="missions-title">
       <div className="chapter__inner">
         <div className="chapter-head chapter-head--center">
           <div><ChapterTag index={4} label={h.episodes[4]} /><h2 id="missions-title" data-reveal="lines">{h.missions.title}</h2><p data-reveal="up">{h.missions.intro}</p></div>
         </div>
-        <div className="missions" data-reveal="stagger">{getServicos().map((service, index) => <article className="mission" key={service.id} style={{ "--saber": sabers[index] } as CSSProperties}>
-          <span className="mission__saber" aria-hidden="true" />
+        <div className="missions" data-reveal="stagger">{getServicos().map((service, index) => <article className="mission" key={service.id} style={{ "--glow": glows[index] } as CSSProperties}>
+          <span className="mission__glow" aria-hidden="true" />
           <MissionIcon kind={homeServiceSubjects[service.id]} />
           <p className="mission__label">{h.missions.labels[index]}</p>
           <h3>{service.titulo[lang]}</h3>
@@ -202,7 +198,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
     {/* Credits */}
     <section className="chapter chapter--credits" aria-labelledby="credits-title">
       <div className="credits-sky" aria-hidden="true">
-        <svg className="xwing" viewBox="0 0 24 12" shapeRendering="crispEdges" focusable="false"><path fill="#c9bed4" d="M2 1h6v1H2zM2 10h6v1H2zM6 2h3v1H6zM6 9h3v1H6zM8 3h12v2h3v2h-3v2H8z" /><path fill="#ff4d5e" d="M2 1h2v1H2zM2 10h2v1H2zM12 5h5v2h-5z" /><path fill="#08a9fa" d="M0 5h2v2H0z" /></svg>
+        <span className="credits-ship" style={{ backgroundImage: `url(${observatory.assets.props["spacecraft-far"].src})` }} />
       </div>
       <div className="chapter__inner credits">
         <p className="chapter-tag"><span className="chapter-tag__ep" aria-hidden="true">END</span>{h.credits.end}</p>

@@ -29,7 +29,7 @@ await check("transmissão toca uma vez por sessão, ESC pula e não afeta a home
   await page.keyboard.press("Escape");
   await page.waitForFunction(() => document.documentElement.dataset.boot === "done", null, { timeout: 3000 });
   assert.equal(await page.evaluate(() => sessionStorage.getItem("echo-boot")), "done");
-  assert.equal(await page.evaluate(() => sessionStorage.getItem("holonet-boot")), null);
+  assert.equal(await page.evaluate(() => sessionStorage.getItem("galaxia-boot")), null);
   await page.reload({ waitUntil: "networkidle" });
   assert.notEqual(await page.evaluate(() => document.documentElement.dataset.boot), "pending");
   assert.deepEqual(errors, []);
@@ -258,7 +258,7 @@ await check("créditos: o transporte decola e o CTA leva ao contato", async () =
 await check("comlink: terminal dispara segredos, contador persiste e avisa sinais de outra página", async () => {
   const { context, page, errors } = await open();
   await skipIntro(page);
-  await page.getByRole("button", { name: "Abrir o canal secreto" }).click();
+  await page.getByRole("button", { name: "Abrir o rádio estelar" }).click();
   const dialog = page.locator("dialog.comlink");
   assert.ok(await dialog.evaluate((element) => element.open));
   await page.locator("#comlink-input").fill("forca");
@@ -268,21 +268,21 @@ await check("comlink: terminal dispara segredos, contador persiste e avisa sinai
   await page.keyboard.press("Enter");
   await page.waitForFunction(() => document.querySelector("dialog.echo-holo")?.open, null, { timeout: 2000 });
   await page.keyboard.press("Escape");
-  assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem("holonet-secrets") ?? "[]")), ["holo"]);
-  await page.getByRole("button", { name: "Abrir o canal secreto" }).click();
+  assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem("galaxia-encantada:eggs:v2") ?? "[]")), ["holo"]);
+  await page.getByRole("button", { name: "Abrir o rádio estelar" }).click();
   assert.equal(await page.locator(".comlink__list li[data-found]").count(), 1);
   await page.screenshot({ path: `${shots}/comlink-1440.png` });
   await page.locator(".comlink__list li[data-found] button").click();
   await page.waitForFunction(() => document.querySelector("dialog.echo-holo")?.open, null, { timeout: 2000 });
   await page.keyboard.press("Escape");
-  await page.getByRole("button", { name: "Abrir o canal secreto" }).click();
+  await page.getByRole("button", { name: "Abrir o rádio estelar" }).click();
   const wipe = page.locator(".comlink__reset");
   await wipe.click();
   assert.equal(await wipe.getAttribute("data-confirming"), "true", "o primeiro clique só pede confirmação");
   assert.equal(await page.locator(".comlink__list li[data-found]").count(), 1);
   await wipe.click();
   assert.equal(await page.locator(".comlink__list li[data-found]").count(), 0);
-  assert.equal(await page.evaluate(() => localStorage.getItem("holonet-secrets")), null);
+  assert.equal(await page.evaluate(() => localStorage.getItem("galaxia-encantada:eggs:v2")), null);
   assert.equal(await page.locator(".comlink__reset").count(), 0);
   assert.match(await page.locator(".comlink-toggle__count").innerText(), /^0\//);
   assert.equal(await page.locator(".comlink").evaluate(() => getComputedStyle(document.body).cursor), "auto", "cursor nativo volta com a janela aberta");

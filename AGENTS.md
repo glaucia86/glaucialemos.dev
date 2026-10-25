@@ -1,5 +1,28 @@
 # AGENTS.md
 
+- Handoff da migração: `docs/galaxia-encantada/HANDOFF.md`.
+- Migração Galáxia Encantada (em andamento na branch `feat/galaxia-encantada`; o tema Star Wars está congelado em
+  `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração página a página:
+  Home (Observatório) já migrada; Sobre, Projetos, Conteúdo, Eventos, Serviços e 404 ainda usam Star Wars.
+- Arte-fonte aprovada (Grok) em `docs/art/galaxia-encantada/approved-source` (`GE-PL-0X` placas, `GE-GL-0X` Glaucia,
+  `GE-DOG-0X` Prince, `GE-MASTER-*`, `props/<cena>`). `manifest.json` com sha256: `node scripts/build-galaxia-assets.mjs --manifest`.
+  Assets web por cena: `node scripts/build-galaxia-assets.mjs <scene-id> [--debug]` gera `public/galaxia/**` e
+  `src/data/galaxia/<cena>.json` (poses recortadas, piscar como camada sobre `idle`, âncora dos quadris em `ANCHORS`).
+- Cenas: `src/lib/scenes.ts` (`SceneId`, `poseBox`, `propBox`, palco do ator em % da placa). Home: `ObservatoryScene.tsx`
+  (camadas, `HOTSPOTS`, `SPOTS`, `LANTERNS`), `ObservatoryMotion.tsx` (ações em `data-stage`/`data-pose`/`data-sky`/`data-dawn`,
+  personagem fixo: só respiração e piscar), `sky-engine.ts` (dois canvas em pixel na coordenada da placa: estrelas, aurora, meteoros
+  caçáveis, Via Láctea, rastro da nave, partículas) e `CareerTelescope.tsx` (dialog com os marcos reais da carreira).
+  Enquadramento ancorado no chão (`--scene-y: 100%`). Testes: `tests/scenes.test.ts`, `tests/sky-engine.test.ts`.
+- Segredos da Home: `focus-lens` (Glaucia → telescópio de carreira), `dog-signal` (Prince), `hangar-check` (hangar/console),
+  `launch-charge` (segurar o céu → voo sobre o terraço até o horizonte), `dark-sky` (apagar as 4 lanternas; vidro escuro cobre a chama),
+  `wish` (pegar 3 estrelas cadentes encostando o cursor, clicando ou tocando); card do capítulo 2 = `CrewPortrait` (retrato vivo, CSS); global `star-map` (Konami). Frases dos segredos da Home
+  também funcionam digitadas direto na página. Memória em `localStorage["galaxia-encantada:eggs:v2"]`; boot na chave `galaxia-boot`.
+- O rádio estelar (Comlink) fica no cabeçalho: `SiteChrome` passa um slot e o botão entra por portal (`createPortal`).
+- Home aprovada pela Glaucia. Pedido para as próximas páginas: repetir o efeito de rolagem da Home (hero fixado, zoom na cena e
+  salto com rastros brilhantes via `hyperspace.ts` + `.hero-jump`), mas com uma variação própria por mundo
+  (ex.: nevasca em Nivéora, poeira em Marte, cristais em Lúmina), sem copiar o mesmo visual.
+- Não rode `npm run build` com o `npm run dev` aberto: os dois usam `.next` e geram erro de hidratação.
+
 - Verificação: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`.
 - Navegador: `npm run start -- --hostname 127.0.0.1 --port 3100` e depois
   `node tests/holonet.browser.mjs` (use `BASE_URL=http://127.0.0.1:<porta>` se a 3100 estiver ocupada).
@@ -19,7 +42,7 @@
   Easter eggs em `src/components/about/EchoEggs.tsx`: "help me"/"obiwan" (holomensagem), "eu te amo"/"i love you"
   ("Eu sei."), "hoth" (nevasca), clique na sonda (autodestruição), clique na neve (tauntaun), neve acumulando após 6 s parado.
 - Segredos (easter eggs): registro único em `src/lib/eggs.ts` (`emitEgg`/`onEgg`/`discover`, salvo em
-  `localStorage["holonet-secrets"]`). Gatilhos (teclado, gestos, Comlink) só emitem o id; quem executa o efeito chama
+  `localStorage["galaxia-encantada:eggs:v2"]`). Gatilhos (teclado, gestos, Comlink) só emitem o id; quem executa o efeito chama
   `discover`. O Comlink (`src/components/Comlink.tsx`, textos em `src/i18n/comlink.ts`) fica no `SiteChrome` e torna
   todo segredo acessível no celular. "Apagar memória" no Comlink (dois cliques) chama `forget()` e zera o progresso.
   Janelas `showModal()` ficam acima da mira (`.fx-cursor`): enquanto há uma aberta, o `pixel-ui.css` devolve o cursor nativo.

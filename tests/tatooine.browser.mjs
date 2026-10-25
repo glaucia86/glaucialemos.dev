@@ -21,7 +21,7 @@ const open = async (options = {}, locale = "pt") => {
 };
 const visible = (page, selector) => page.locator(selector).first().isVisible();
 const skipIntro = async (page) => { await page.keyboard.press("Escape"); await page.waitForFunction(() => document.documentElement.dataset.boot !== "pending", null, { timeout: 4000 }); await page.waitForTimeout(1200); };
-const found = (page) => page.evaluate(() => JSON.parse(localStorage.getItem("holonet-secrets") ?? "[]"));
+const found = (page) => page.evaluate(() => JSON.parse(localStorage.getItem("galaxia-encantada:eggs:v2") ?? "[]"));
 const comlink = async (page, phrase) => {
   await page.locator(".comlink-toggle").click();
   await page.locator("#comlink-input").fill(phrase);

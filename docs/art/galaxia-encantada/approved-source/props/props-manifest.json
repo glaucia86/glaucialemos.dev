@@ -1,0 +1,735 @@
+{
+  "format": "PNG",
+  "pixel_art": true,
+  "notes": "Coordinates and sizes describe extracted assets from the approved seven GE-PROP RGBA sheets; visual alpha/edge validation is recommended before shipping. No UI strings are embedded.",
+  "scenes": {
+    "earth-observatory": [
+      {
+        "name": "telescope-idle",
+        "file": "earth-observatory/telescope-idle.png",
+        "website_path": "/galaxia/props/earth-observatory/telescope-idle.png",
+        "width": 210,
+        "height": 285,
+        "source_sheet": "GE-PROP-01-earth-observatory.png",
+        "source_crop": [
+          15,
+          9,
+          216,
+          299
+        ]
+      },
+      {
+        "name": "telescope-activated",
+        "file": "earth-observatory/telescope-activated.png",
+        "website_path": "/galaxia/props/earth-observatory/telescope-activated.png",
+        "width": 281,
+        "height": 285,
+        "source_sheet": "GE-PROP-01-earth-observatory.png",
+        "source_crop": [
+          213,
+          9,
+          478,
+          299
+        ]
+      },
+      {
+        "name": "receiver-cyan-pulse",
+        "file": "earth-observatory/receiver-cyan-pulse.png",
+        "website_path": "/galaxia/props/earth-observatory/receiver-cyan-pulse.png",
+        "width": 113,
+        "height": 140,
+        "source_sheet": "GE-PROP-01-earth-observatory.png",
+        "source_crop": [
+          478,
+          48,
+          591,
+          180
+        ]
+      },
+      {
+        "name": "launch-console-idle",
+        "file": "earth-observatory/launch-console-idle.png",
+        "website_path": "/galaxia/props/earth-observatory/launch-console-idle.png",
+        "width": 133,
+        "height": 122,
+        "source_sheet": "GE-PROP-01-earth-observatory.png",
+        "source_crop": [
+          379,
+          175,
+          510,
+          298
+        ]
+      },
+      {
+        "name": "launch-console-activated",
+        "file": "earth-observatory/launch-console-activated.png",
+        "website_path": "/galaxia/props/earth-observatory/launch-console-activated.png",
+        "width": 140,
+        "height": 122,
+        "source_sheet": "GE-PROP-01-earth-observatory.png",
+        "source_crop": [
+          514,
+          175,
+          648,
+          299
+        ]
+      },
+      {
+        "name": "spacecraft-near",
+        "file": "earth-observatory/spacecraft-near.png",
+        "website_path": "/galaxia/props/earth-observatory/spacecraft-near.png",
+        "width": 169,
+        "height": 80,
+        "source_sheet": "GE-PROP-01-earth-observatory.png",
+        "source_crop": [
+          593,
+          34,
+          766,
+          124
+        ]
+      },
+      {
+        "name": "spacecraft-far",
+        "file": "earth-observatory/spacecraft-far.png",
+        "website_path": "/galaxia/props/earth-observatory/spacecraft-far.png",
+        "width": 137,
+        "height": 70,
+        "source_sheet": "GE-PROP-01-earth-observatory.png",
+        "source_crop": [
+          631,
+          139,
+          771,
+          206
+        ]
+      }
+    ],
+    "niveora": [
+      {
+        "name": "memory-capsule-sealed",
+        "file": "niveora/memory-capsule-sealed.png",
+        "website_path": "/galaxia/props/niveora/memory-capsule-sealed.png",
+        "width": 188,
+        "height": 185,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          15,
+          20,
+          195,
+          208
+        ]
+      },
+      {
+        "name": "memory-capsule-open",
+        "file": "niveora/memory-capsule-open.png",
+        "website_path": "/galaxia/props/niveora/memory-capsule-open.png",
+        "width": 181,
+        "height": 205,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          191,
+          12,
+          369,
+          209
+        ]
+      },
+      {
+        "name": "prismatic-ice-specimen",
+        "file": "niveora/prismatic-ice-specimen.png",
+        "website_path": "/galaxia/props/niveora/prismatic-ice-specimen.png",
+        "width": 124,
+        "height": 164,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          366,
+          34,
+          488,
+          204
+        ]
+      },
+      {
+        "name": "aurora-sensor",
+        "file": "niveora/aurora-sensor.png",
+        "website_path": "/galaxia/props/niveora/aurora-sensor.png",
+        "width": 98,
+        "height": 187,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          504,
+          12,
+          602,
+          206
+        ]
+      },
+      {
+        "name": "aurora-beacon",
+        "file": "niveora/aurora-beacon.png",
+        "website_path": "/galaxia/props/niveora/aurora-beacon.png",
+        "width": 144,
+        "height": 190,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          614,
+          10,
+          755,
+          207
+        ]
+      },
+      {
+        "name": "snow-pawprint-01",
+        "file": "niveora/snow-pawprint-01.png",
+        "website_path": "/galaxia/props/niveora/snow-pawprint-01.png",
+        "width": 91,
+        "height": 93,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          19,
+          206,
+          118,
+          305
+        ]
+      },
+      {
+        "name": "snow-pawprint-02",
+        "file": "niveora/snow-pawprint-02.png",
+        "website_path": "/galaxia/props/niveora/snow-pawprint-02.png",
+        "width": 99,
+        "height": 90,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          139,
+          203,
+          249,
+          305
+        ]
+      },
+      {
+        "name": "snow-pawprint-03",
+        "file": "niveora/snow-pawprint-03.png",
+        "website_path": "/galaxia/props/niveora/snow-pawprint-03.png",
+        "width": 90,
+        "height": 93,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          265,
+          202,
+          362,
+          304
+        ]
+      },
+      {
+        "name": "snow-pawprint-04",
+        "file": "niveora/snow-pawprint-04.png",
+        "website_path": "/galaxia/props/niveora/snow-pawprint-04.png",
+        "width": 96,
+        "height": 90,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          375,
+          201,
+          485,
+          304
+        ]
+      },
+      {
+        "name": "snow-pawprint-05",
+        "file": "niveora/snow-pawprint-05.png",
+        "website_path": "/galaxia/props/niveora/snow-pawprint-05.png",
+        "width": 102,
+        "height": 90,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          493,
+          202,
+          607,
+          303
+        ]
+      },
+      {
+        "name": "snow-pawprint-06",
+        "file": "niveora/snow-pawprint-06.png",
+        "website_path": "/galaxia/props/niveora/snow-pawprint-06.png",
+        "width": 105,
+        "height": 89,
+        "source_sheet": "GE-PROP-02-niveora.png",
+        "source_crop": [
+          619,
+          202,
+          746,
+          304
+        ]
+      }
+    ],
+    "mars-lab": [
+      {
+        "name": "rover-idle",
+        "file": "mars-lab/rover-idle.png",
+        "website_path": "/galaxia/props/mars-lab/rover-idle.png",
+        "width": 247,
+        "height": 165,
+        "source_sheet": "GE-PROP-03-mars-lab.png",
+        "source_crop": [
+          15,
+          16,
+          272,
+          174
+        ]
+      },
+      {
+        "name": "rover-scanning",
+        "file": "mars-lab/rover-scanning.png",
+        "website_path": "/galaxia/props/mars-lab/rover-scanning.png",
+        "width": 370,
+        "height": 159,
+        "source_sheet": "GE-PROP-03-mars-lab.png",
+        "source_crop": [
+          290,
+          15,
+          646,
+          171
+        ]
+      },
+      {
+        "name": "sample-case-sealed",
+        "file": "mars-lab/sample-case-sealed.png",
+        "website_path": "/galaxia/props/mars-lab/sample-case-sealed.png",
+        "width": 150,
+        "height": 87,
+        "source_sheet": "GE-PROP-03-mars-lab.png",
+        "source_crop": [
+          26,
+          184,
+          169,
+          277
+        ]
+      },
+      {
+        "name": "mineral-sample-large",
+        "file": "mars-lab/mineral-sample-large.png",
+        "website_path": "/galaxia/props/mars-lab/mineral-sample-large.png",
+        "width": 156,
+        "height": 111,
+        "source_sheet": "GE-PROP-03-mars-lab.png",
+        "source_crop": [
+          171,
+          171,
+          311,
+          279
+        ]
+      },
+      {
+        "name": "mineral-sample-small",
+        "file": "mars-lab/mineral-sample-small.png",
+        "website_path": "/galaxia/props/mars-lab/mineral-sample-small.png",
+        "width": 88,
+        "height": 75,
+        "source_sheet": "GE-PROP-03-mars-lab.png",
+        "source_crop": [
+          295,
+          166,
+          374,
+          238
+        ]
+      },
+      {
+        "name": "analysis-console-idle",
+        "file": "mars-lab/analysis-console-idle.png",
+        "website_path": "/galaxia/props/mars-lab/analysis-console-idle.png",
+        "width": 156,
+        "height": 116,
+        "source_sheet": "GE-PROP-03-mars-lab.png",
+        "source_crop": [
+          387,
+          164,
+          531,
+          274
+        ]
+      },
+      {
+        "name": "analysis-console-activated",
+        "file": "mars-lab/analysis-console-activated.png",
+        "website_path": "/galaxia/props/mars-lab/analysis-console-activated.png",
+        "width": 130,
+        "height": 120,
+        "source_sheet": "GE-PROP-03-mars-lab.png",
+        "source_crop": [
+          528,
+          167,
+          656,
+          283
+        ]
+      },
+      {
+        "name": "data-beacon",
+        "file": "mars-lab/data-beacon.png",
+        "website_path": "/galaxia/props/mars-lab/data-beacon.png",
+        "width": 121,
+        "height": 226,
+        "source_sheet": "GE-PROP-03-mars-lab.png",
+        "source_crop": [
+          651,
+          10,
+          772,
+          245
+        ]
+      }
+    ],
+    "lumina": [
+      {
+        "name": "archive-books-closed",
+        "file": "lumina/archive-books-closed.png",
+        "website_path": "/galaxia/props/lumina/archive-books-closed.png",
+        "width": 179,
+        "height": 174,
+        "source_sheet": "GE-PROP-04-lumina.png",
+        "source_crop": [
+          18,
+          13,
+          190,
+          184
+        ]
+      },
+      {
+        "name": "archive-book-open",
+        "file": "lumina/archive-book-open.png",
+        "website_path": "/galaxia/props/lumina/archive-book-open.png",
+        "width": 181,
+        "height": 193,
+        "source_sheet": "GE-PROP-04-lumina.png",
+        "source_crop": [
+          189,
+          8,
+          354,
+          197
+        ]
+      },
+      {
+        "name": "crystal-monolith",
+        "file": "lumina/crystal-monolith.png",
+        "website_path": "/galaxia/props/lumina/crystal-monolith.png",
+        "width": 92,
+        "height": 152,
+        "source_sheet": "GE-PROP-04-lumina.png",
+        "source_crop": [
+          368,
+          7,
+          458,
+          158
+        ]
+      },
+      {
+        "name": "crystal-archive-platform",
+        "file": "lumina/crystal-archive-platform.png",
+        "website_path": "/galaxia/props/lumina/crystal-archive-platform.png",
+        "width": 303,
+        "height": 157,
+        "source_sheet": "GE-PROP-04-lumina.png",
+        "source_crop": [
+          20,
+          144,
+          309,
+          295
+        ]
+      },
+      {
+        "name": "crystal-display-pedestal",
+        "file": "lumina/crystal-display-pedestal.png",
+        "website_path": "/galaxia/props/lumina/crystal-display-pedestal.png",
+        "width": 127,
+        "height": 144,
+        "source_sheet": "GE-PROP-04-lumina.png",
+        "source_crop": [
+          310,
+          143,
+          442,
+          285
+        ]
+      },
+      {
+        "name": "prismatic-gate-closed",
+        "file": "lumina/prismatic-gate-closed.png",
+        "website_path": "/galaxia/props/lumina/prismatic-gate-closed.png",
+        "width": 184,
+        "height": 281,
+        "source_sheet": "GE-PROP-04-lumina.png",
+        "source_crop": [
+          444,
+          5,
+          612,
+          291
+        ]
+      },
+      {
+        "name": "prismatic-gate-open",
+        "file": "lumina/prismatic-gate-open.png",
+        "website_path": "/galaxia/props/lumina/prismatic-gate-open.png",
+        "width": 165,
+        "height": 281,
+        "source_sheet": "GE-PROP-04-lumina.png",
+        "source_crop": [
+          606,
+          4,
+          774,
+          288
+        ]
+      }
+    ],
+    "earth-orbit": [
+      {
+        "name": "globe-pedestal-off",
+        "file": "earth-orbit/globe-pedestal-off.png",
+        "website_path": "/galaxia/props/earth-orbit/globe-pedestal-off.png",
+        "width": 166,
+        "height": 122,
+        "source_sheet": "GE-PROP-05-earth-orbit.png",
+        "source_crop": [
+          11,
+          202,
+          173,
+          324
+        ]
+      },
+      {
+        "name": "globe-pedestal-activated",
+        "file": "earth-orbit/globe-pedestal-activated.png",
+        "website_path": "/galaxia/props/earth-orbit/globe-pedestal-activated.png",
+        "width": 172,
+        "height": 125,
+        "source_sheet": "GE-PROP-05-earth-orbit.png",
+        "source_crop": [
+          167,
+          202,
+          329,
+          321
+        ]
+      },
+      {
+        "name": "radar-dish-large",
+        "file": "earth-orbit/radar-dish-large.png",
+        "website_path": "/galaxia/props/earth-orbit/radar-dish-large.png",
+        "width": 129,
+        "height": 134,
+        "source_sheet": "GE-PROP-05-earth-orbit.png",
+        "source_crop": [
+          362,
+          10,
+          481,
+          139
+        ]
+      },
+      {
+        "name": "radar-dish-small",
+        "file": "earth-orbit/radar-dish-small.png",
+        "website_path": "/galaxia/props/earth-orbit/radar-dish-small.png",
+        "width": 115,
+        "height": 140,
+        "source_sheet": "GE-PROP-05-earth-orbit.png",
+        "source_crop": [
+          470,
+          9,
+          575,
+          143
+        ]
+      },
+      {
+        "name": "orb-navigation-idle",
+        "file": "earth-orbit/orb-navigation-idle.png",
+        "website_path": "/galaxia/props/earth-orbit/orb-navigation-idle.png",
+        "width": 102,
+        "height": 97,
+        "source_sheet": "GE-PROP-05-earth-orbit.png",
+        "source_crop": [
+          330,
+          141,
+          430,
+          239
+        ]
+      },
+      {
+        "name": "orb-navigation-active",
+        "file": "earth-orbit/orb-navigation-active.png",
+        "website_path": "/galaxia/props/earth-orbit/orb-navigation-active.png",
+        "width": 152,
+        "height": 186,
+        "source_sheet": "GE-PROP-05-earth-orbit.png",
+        "source_crop": [
+          432,
+          140,
+          569,
+          319
+        ]
+      }
+    ],
+    "aurelia": [
+      {
+        "name": "garden-dome-idle",
+        "file": "aurelia/garden-dome-idle.png",
+        "website_path": "/galaxia/props/aurelia/garden-dome-idle.png",
+        "width": 175,
+        "height": 147,
+        "source_sheet": "GE-PROP-06-aurelia.png",
+        "source_crop": [
+          9,
+          13,
+          179,
+          158
+        ]
+      },
+      {
+        "name": "garden-dome-blooming",
+        "file": "aurelia/garden-dome-blooming.png",
+        "website_path": "/galaxia/props/aurelia/garden-dome-blooming.png",
+        "width": 181,
+        "height": 193,
+        "source_sheet": "GE-PROP-06-aurelia.png",
+        "source_crop": [
+          180,
+          9,
+          348,
+          196
+        ]
+      },
+      {
+        "name": "suspended-garden-waterfall",
+        "file": "aurelia/suspended-garden-waterfall.png",
+        "website_path": "/galaxia/props/aurelia/suspended-garden-waterfall.png",
+        "width": 166,
+        "height": 184,
+        "source_sheet": "GE-PROP-06-aurelia.png",
+        "source_crop": [
+          16,
+          157,
+          178,
+          339
+        ]
+      },
+      {
+        "name": "hanging-botanical-waterfall",
+        "file": "aurelia/hanging-botanical-waterfall.png",
+        "website_path": "/galaxia/props/aurelia/hanging-botanical-waterfall.png",
+        "width": 108,
+        "height": 282,
+        "source_sheet": "GE-PROP-06-aurelia.png",
+        "source_crop": [
+          347,
+          11,
+          459,
+          297
+        ]
+      },
+      {
+        "name": "communication-beacon-idle",
+        "file": "aurelia/communication-beacon-idle.png",
+        "website_path": "/galaxia/props/aurelia/communication-beacon-idle.png",
+        "width": 91,
+        "height": 161,
+        "source_sheet": "GE-PROP-06-aurelia.png",
+        "source_crop": [
+          185,
+          180,
+          269,
+          337
+        ]
+      },
+      {
+        "name": "communication-beacon-active",
+        "file": "aurelia/communication-beacon-active.png",
+        "website_path": "/galaxia/props/aurelia/communication-beacon-active.png",
+        "width": 80,
+        "height": 155,
+        "source_sheet": "GE-PROP-06-aurelia.png",
+        "source_crop": [
+          273,
+          186,
+          349,
+          337
+        ]
+      }
+    ],
+    "red-tide": [
+      {
+        "name": "navigation-portal-off",
+        "file": "red-tide/navigation-portal-off.png",
+        "website_path": "/galaxia/props/red-tide/navigation-portal-off.png",
+        "width": 168,
+        "height": 148,
+        "source_sheet": "GE-PROP-07-red-tide.png",
+        "source_crop": [
+          23,
+          10,
+          186,
+          161
+        ]
+      },
+      {
+        "name": "navigation-portal-restored",
+        "file": "red-tide/navigation-portal-restored.png",
+        "website_path": "/galaxia/props/red-tide/navigation-portal-restored.png",
+        "width": 217,
+        "height": 158,
+        "source_sheet": "GE-PROP-07-red-tide.png",
+        "source_crop": [
+          188,
+          9,
+          396,
+          161
+        ]
+      },
+      {
+        "name": "coordinate-crystal",
+        "file": "red-tide/coordinate-crystal.png",
+        "website_path": "/galaxia/props/red-tide/coordinate-crystal.png",
+        "width": 119,
+        "height": 136,
+        "source_sheet": "GE-PROP-07-red-tide.png",
+        "source_crop": [
+          398,
+          9,
+          515,
+          143
+        ]
+      },
+      {
+        "name": "navigation-console-off",
+        "file": "red-tide/navigation-console-off.png",
+        "website_path": "/galaxia/props/red-tide/navigation-console-off.png",
+        "width": 176,
+        "height": 165,
+        "source_sheet": "GE-PROP-07-red-tide.png",
+        "source_crop": [
+          23,
+          162,
+          190,
+          337
+        ]
+      },
+      {
+        "name": "navigation-console-restored",
+        "file": "red-tide/navigation-console-restored.png",
+        "website_path": "/galaxia/props/red-tide/navigation-console-restored.png",
+        "width": 200,
+        "height": 169,
+        "source_sheet": "GE-PROP-07-red-tide.png",
+        "source_crop": [
+          182,
+          162,
+          378,
+          337
+        ]
+      },
+      {
+        "name": "lost-signal-beacon",
+        "file": "red-tide/lost-signal-beacon.png",
+        "website_path": "/galaxia/props/red-tide/lost-signal-beacon.png",
+        "width": 147,
+        "height": 191,
+        "source_sheet": "GE-PROP-07-red-tide.png",
+        "source_crop": [
+          375,
+          139,
+          515,
+          331
+        ]
+      }
+    ]
+  }
+}

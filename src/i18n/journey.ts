@@ -27,8 +27,8 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       cta: 'Veja o projeto no GitHub',
     },
     projects: {
-      'curso-typescript-zero-to-hero': 'Curso gratuito de TypeScript do zero ao avançado: a base para construir com IA.',
-      'ai-js-course': 'Curso gratuito de IA com JavaScript e TypeScript: dos fundamentos às aplicações.',
+      'curso-typescript-zero-to-hero': 'Curso de TypeScript do zero ao avançado: a base para construir com IA.',
+      'ai-js-course': 'Curso de IA com JavaScript e TypeScript: dos fundamentos às aplicações.',
       repocheckai: 'Uma CLI com agentes para analisar a saúde de repositórios GitHub.',
       'js-101-beginners-ms': 'Todos os códigos da série da Microsoft de JavaScript para iniciantes.',
       'frontend-bootcamp-online': 'Bootcamp online de Front-End: HTML, CSS e JavaScript na prática.',
@@ -39,7 +39,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       'jwt-node-vue': 'Autenticação com JWT em Node.js e Vue, da série Coding Stuff.',
     },
     map: { title: 'Código que virou encontro.', intro: 'De uma dúvida no código a uma conversa com a comunidade. Explore os encontros registrados por país.', history: 'Histórico registrado: 2017–2026', label: 'Mapa esquemático dos locais de eventos', countries: 'Explore por país', unlocated: 'Online / sem localização', all: 'Veja todos os eventos', count: 'eventos neste grupo', countryNames: { Brasil: 'Brasil', Grécia: 'Grécia', México: 'México', França: 'França', 'Estados Unidos': 'Estados Unidos', Canadá: 'Canadá', 'República Dominicana': 'República Dominicana', Argentina: 'Argentina', 'África do Sul': 'África do Sul' } },
-    closing: { title: 'O próximo encontro pode ser com o seu time.', intro: 'Conte o que seu time precisa aprender ou decidir. Vamos escolher o formato a partir desse desafio.', actions: ['Planeje um workshop gratuito', 'Converse sobre mentoria gratuita', 'Convide para palestrar'] },
+    closing: { title: 'O próximo encontro pode ser com o seu time.', intro: 'Conte o que seu time precisa aprender ou decidir. Vamos escolher o formato a partir desse desafio.', actions: ['Planeje um workshop', 'Converse sobre mentoria', 'Convide para palestrar'] },
   },
   en: {
     intro: 'I started as a developer and shared what I learned with communities. At Microsoft, I spent more than six years in Developer Advocacy, bringing JavaScript, TypeScript and AI to developers worldwide. Today, as AI Transformation Lead at Itaú, I lead the adoption of generative and agentic AI across engineering squads through code, practice and context.',
@@ -56,8 +56,8 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       cta: 'See the project on GitHub',
     },
     projects: {
-      'curso-typescript-zero-to-hero': 'A free TypeScript course from zero to advanced: the foundation for building with AI.',
-      'ai-js-course': 'A free AI course with JavaScript and TypeScript: from fundamentals to applications.',
+      'curso-typescript-zero-to-hero': 'A TypeScript course from zero to advanced: the foundation for building with AI.',
+      'ai-js-course': 'An AI course with JavaScript and TypeScript: from fundamentals to applications.',
       repocheckai: 'An agentic CLI for analyzing the health of GitHub repositories.',
       'js-101-beginners-ms': 'All the code from Microsoft’s JavaScript for Beginners series.',
       'frontend-bootcamp-online': 'An online Front-End bootcamp: hands-on HTML, CSS and JavaScript.',
@@ -68,7 +68,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       'jwt-node-vue': 'JWT authentication with Node.js and Vue, from the Coding Stuff series.',
     },
     map: { title: 'Code that brought us together.', intro: 'From a question about code to a conversation with the community. Explore recorded events by country.', history: 'Recorded history: 2017–2026', label: 'Schematic map of event locations', countries: 'Explore by country', unlocated: 'Online / no location', all: 'View all events', count: 'events in this group', countryNames: { Brasil: 'Brazil', Grécia: 'Greece', México: 'Mexico', França: 'France', 'Estados Unidos': 'United States', Canadá: 'Canada', 'República Dominicana': 'Dominican Republic', Argentina: 'Argentina', 'África do Sul': 'South Africa' } },
-    closing: { title: 'Your team could be the next stop.', intro: 'Tell me what your team needs to learn or decide. We will choose a format around that challenge.', actions: ['Plan a free workshop', 'Discuss free mentoring', 'Invite me to speak'] },
+    closing: { title: 'Your team could be the next stop.', intro: 'Tell me what your team needs to learn or decide. We will choose a format around that challenge.', actions: ['Plan a workshop', 'Discuss mentoring', 'Invite me to speak'] },
   },
   es: {
     intro: 'Empecé como desarrolladora y compartí lo que aprendía con las comunidades. En Microsoft pasé más de seis años en Developer Advocacy, llevando JavaScript, TypeScript e IA a desarrolladores de todo el mundo. Hoy, como AI Transformation Lead en Itaú, lidero la adopción de IA generativa y agéntica en squads de ingeniería, con código, práctica y contexto.',
@@ -85,8 +85,8 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       cta: 'Mira el proyecto en GitHub',
     },
     projects: {
-      'curso-typescript-zero-to-hero': 'Curso gratuito de TypeScript desde cero hasta avanzado: la base para construir con IA.',
-      'ai-js-course': 'Curso gratuito de IA con JavaScript y TypeScript: de los fundamentos a las aplicaciones.',
+      'curso-typescript-zero-to-hero': 'Curso de TypeScript desde cero hasta avanzado: la base para construir con IA.',
+      'ai-js-course': 'Curso de IA con JavaScript y TypeScript: de los fundamentos a las aplicaciones.',
       repocheckai: 'Una CLI con agentes para analizar la salud de repositorios GitHub.',
       'js-101-beginners-ms': 'Todo el código de la serie de Microsoft de JavaScript para principiantes.',
       'frontend-bootcamp-online': 'Bootcamp online de Front-End: HTML, CSS y JavaScript en la práctica.',
@@ -97,6 +97,6 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       'jwt-node-vue': 'Autenticación con JWT en Node.js y Vue, de la serie Coding Stuff.',
     },
     map: { title: 'Código que nos reunió.', intro: 'De una duda sobre código a una conversación con la comunidad. Explora los encuentros registrados por país.', history: 'Historial registrado: 2017–2026', label: 'Mapa esquemático de los lugares de eventos', countries: 'Explora por país', unlocated: 'Online / sin ubicación', all: 'Ver todos los eventos', count: 'eventos en este grupo', countryNames: { Brasil: 'Brasil', Grécia: 'Grecia', México: 'México', França: 'Francia', 'Estados Unidos': 'Estados Unidos', Canadá: 'Canadá', 'República Dominicana': 'República Dominicana', Argentina: 'Argentina', 'África do Sul': 'Sudáfrica' } },
-    closing: { title: 'El próximo encuentro puede ser con tu equipo.', intro: 'Cuéntame qué necesita aprender o decidir tu equipo. Elegiremos el formato a partir de ese desafío.', actions: ['Planea un taller gratuito', 'Conversemos sobre mentoría gratuita', 'Invítame a dar una charla'] },
+    closing: { title: 'El próximo encuentro puede ser con tu equipo.', intro: 'Cuéntame qué necesita aprender o decidir tu equipo. Elegiremos el formato a partir de ese desafío.', actions: ['Planea un taller', 'Conversemos sobre mentoría', 'Invítame a dar una charla'] },
   },
 };

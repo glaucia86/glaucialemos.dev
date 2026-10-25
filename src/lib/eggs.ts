@@ -1,11 +1,14 @@
 // Easter egg registry shared by every page. Triggers (keyboard, touch gestures, the Comlink) only emit an id;
 // the component that owns the effect listens, plays it and marks it as discovered.
-export type EggPage = "global" | "home" | "about" | "projects";
+export type EggPage = "global" | "home" | "about" | "projects" | "content" | "events" | "services" | "notfound";
 export const EGGS = [
-  { id: "konami", page: "global", phrases: ["konami", "uuddlrlrba"] },
-  { id: "force-push", page: "home", phrases: ["push", "empurrar", "empujar"] },
-  { id: "force-hold", page: "home", phrases: ["forca", "force", "fuerza", "xwing"] },
-  { id: "deflect", page: "home", phrases: ["deflect", "rebater", "desviar"] },
+  { id: "star-map", page: "global", phrases: ["konami", "uuddlrlrba", "mapaestelar", "starmap"] },
+  { id: "focus-lens", page: "home", phrases: ["telescopio", "telescope", "foco", "focus", "enfocar"] },
+  { id: "launch-charge", page: "home", phrases: ["decolar", "launch", "despegar", "ignicao", "ignition", "ignicion"] },
+  { id: "dog-signal", page: "home", phrases: ["prince", "principe", "auau", "woof", "guau"] },
+  { id: "hangar-check", page: "home", phrases: ["hangar", "nave", "ship"] },
+  { id: "dark-sky", page: "home", phrases: ["escuro", "dark", "oscuro", "vialactea", "milkyway"] },
+  { id: "wish", page: "home", phrases: ["desejo", "wish", "deseo", "estrelacadente", "shootingstar", "estrellafugaz"] },
   { id: "ion", page: "about", phrases: ["ion", "ions", "iones", "canhao", "canon", "cannon"] },
   { id: "holo", page: "about", phrases: ["helpme", "obiwan", "ajudame", "ayudame"] },
   { id: "iknow", page: "about", phrases: ["euteamo", "iloveyou", "tequiero"] },
@@ -29,17 +32,20 @@ export const EGGS = [
 ] as const satisfies readonly { id: string; page: EggPage; phrases: readonly string[] }[];
 export type EggId = (typeof EGGS)[number]["id"];
 
-export const FOUND_KEY = "holonet-secrets";
+// v2: Galáxia Encantada. Discoveries from the previous theme are not carried over.
+export const FOUND_KEY = "galaxia-encantada:eggs:v2";
 export const PLAY_EVENT = "egg:play";
 export const FOUND_EVENT = "egg:found";
 
 // Letters only, accents removed: "Eu te amo!" → "euteamo", "Canhão" → "canhao".
 export const normalizePhrase = (text: string) => text.normalize("NFD").replace(/[^a-zA-Z]/g, "").toLowerCase();
 
+const PAGES: Record<string, EggPage> = { sobre: "about", projetos: "projects", conteudo: "content", eventos: "events", servicos: "services" };
+
 export function pageOf(pathname: string): EggPage {
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length <= 1) return "home";
-  return parts[1] === "sobre" ? "about" : parts[1] === "projetos" ? "projects" : "global";
+  return parts.length === 2 ? PAGES[parts[1]] ?? "notfound" : "notfound";
 }
 
 export const eggsFor = (page: EggPage) => EGGS.filter((egg) => egg.page === "global" || egg.page === page);
