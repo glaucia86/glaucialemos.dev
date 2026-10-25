@@ -6,15 +6,15 @@ describe("easter eggs", () => {
     expect(normalizePhrase("Eu te amo!")).toBe("euteamo");
     expect(normalizePhrase("Canhão de íons")).toBe("canhaodeions");
     expect(normalizePhrase("C-3PO")).toBe("cpo");
-    expect(matchPhrase("  HELP me ")).toBe("holo");
-    expect(matchPhrase("cañón")).toBe("ion");
-    expect(matchPhrase("help me", ["iknow"])).toBeNull();
+    expect(matchPhrase("  CÁPSULA ")).toBe("memory-capsule");
+    expect(matchPhrase("Ventisca!")).toBe("whiteout");
+    expect(matchPhrase("cápsula", ["whiteout"])).toBeNull();
     expect(matchPhrase("transmissão desconhecida")).toBeNull();
   });
 
   it("encontra a frase no fim do buffer do teclado", () => {
-    expect(matchTail("abchoth", ["blizzard"])).toBe("blizzard");
-    expect(matchTail("iloveyo", ["iknow"])).toBeNull();
+    expect(matchTail("abcnevasca", ["whiteout"])).toBe("whiteout");
+    expect(matchTail("pegada", ["paw-tracks"])).toBeNull();
   });
 
   it("separa os segredos por página, com os globais em todas", () => {
@@ -27,7 +27,7 @@ describe("easter eggs", () => {
     expect(pageOf("/pt/projetos/qualquer-coisa")).toBe("notfound");
     expect(eggsFor("home").map((egg) => egg.id)).toEqual(["star-map", "focus-lens", "launch-charge", "dog-signal", "hangar-check", "dark-sky", "wish"]);
     expect(eggsFor("notfound").map((egg) => egg.id)).toEqual(["star-map"]);
-    expect(eggsFor("about").every((egg) => egg.page !== "home")).toBe(true);
+    expect(eggsFor("about").map((egg) => egg.id)).toEqual(["star-map", "paw-tracks", "memory-capsule", "whiteout", "aurora-prism", "snowdrift"]);
     expect(new Set(EGGS.flatMap((egg) => egg.phrases)).size).toBe(EGGS.flatMap((egg) => egg.phrases).length);
   });
 
@@ -46,11 +46,11 @@ describe("easter eggs", () => {
     expect(readFound({ getItem: () => null })).toEqual([]);
     expect(readFound({ getItem: () => "{" })).toEqual([]);
     expect(readFound({ getItem: () => { throw new Error("blocked"); } })).toEqual([]);
-    expect(readFound({ getItem: (key) => key === FOUND_KEY ? '["probe","nope","holo"]' : null })).toEqual(["holo", "probe"]);
+    expect(readFound({ getItem: (key) => key === FOUND_KEY ? '["whiteout","nope","paw-tracks"]' : null })).toEqual(["paw-tracks", "whiteout"]);
   });
 
   it("apaga a memória de segredos, mesmo com storage bloqueado", () => {
-    const store = new Map([[FOUND_KEY, '["holo"]']]);
+    const store = new Map([[FOUND_KEY, '["whiteout"]']]);
     forget({ removeItem: (key) => store.delete(key) });
     expect(readFound({ getItem: (key) => store.get(key) ?? null })).toEqual([]);
     expect(() => forget({ removeItem: () => { throw new Error("blocked"); } })).not.toThrow();
@@ -68,6 +68,14 @@ describe("easter eggs", () => {
     expect(matchPhrase("estrela cadente")).toBe("wish");
     expect(matchTail("vamosdesejo", ["wish"])).toBe("wish");
     expect(matchPhrase("amanhecer")).toBeNull();
+  });
+
+  it("reconhece os segredos de Nivéora na página Sobre", () => {
+    expect(matchPhrase("pegadas")).toBe("paw-tracks");
+    expect(matchPhrase("Memória")).toBe("memory-capsule");
+    expect(matchPhrase("aurora")).toBe("aurora-prism");
+    expect(matchPhrase("neve")).toBe("snowdrift");
+    expect(matchPhrase("hoth")).toBeNull();
   });
 
   it("usa uma memória nova, sem herdar segredos do tema anterior", () => {

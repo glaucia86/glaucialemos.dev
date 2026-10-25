@@ -1,12 +1,12 @@
 import type { CSSProperties } from "react";
-import type { EchoCopy } from "@/i18n/echo-base";
+import type { NiveoraCopy } from "@/i18n/niveora";
 import { groupEras, yearOf, type CareerRole } from "@/lib/career";
 import { formatExperiencePeriod } from "@/lib/home-curation";
 
 const vars = (values: Record<string, string | number>) => values as CSSProperties;
 
-// One markup, two layouts: parallel hyperspace lanes on desktop, an era-grouped list on mobile and without CSS.
-export function CareerMap({ roles, copy, locale, source }: { roles: CareerRole[]; copy: EchoCopy["ops"]; locale: string; source: string }) {
+// One markup, two layouts: parallel trails on desktop, an era-grouped list on mobile and without CSS.
+export function CareerMap({ roles, copy, locale, source, ship }: { roles: CareerRole[]; copy: NiveoraCopy["map"]; ship: string; locale: string; source: string }) {
   const min = Math.min(...roles.map(role => role.start));
   const max = Math.max(...roles.map(role => role.end)) + 1;
   const span = max - min;
@@ -28,7 +28,7 @@ export function CareerMap({ roles, copy, locale, source }: { roles: CareerRole[]
       </div>
       <span className="ops-trail" aria-hidden="true"><span className="ops-trail__beam" /></span>
       <span className="ops-ship" aria-hidden="true">
-        <svg viewBox="0 0 24 12" shapeRendering="crispEdges" focusable="false"><path fill="#c9bed4" d="M2 1h6v1H2zM2 10h6v1H2zM6 2h3v1H6zM6 9h3v1H6zM8 3h12v2h3v2h-3v2H8z" /><path fill="#ff4d5e" d="M2 1h2v1H2zM2 10h2v1H2zM12 5h5v2h-5z" /><path fill="#08a9fa" d="M0 5h2v2H0z" /></svg>
+        <i className="ops-ship__art" style={{ backgroundImage: `url(${ship})` }} />
         <b className="ops-ship__year">{yearOf(min)}</b>
       </span>
       {eras.map(({ era, roles: items, from, to }) => <section className="ops-era" data-era={era} key={era} aria-labelledby={`era-${era}`} style={vars({ "--x": ratio(from), "--w": ((to + 1 - from) / span).toFixed(5) })}>

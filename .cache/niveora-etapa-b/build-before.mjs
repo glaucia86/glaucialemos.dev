@@ -1,0 +1,376 @@
+// Builds the Galáxia Encantada web assets from the approved Grok sources in docs/art/galaxia-encantada/approved-source.
+// Run: node scripts/build-galaxia-assets.mjs <scene-id|all> [--debug]   (writes public/galaxia/** and src/data/galaxia/<scene>.json)
+//      node scripts/build-galaxia-assets.mjs --manifest                  (refreshes docs/art/galaxia-encantada/manifest.json)
+// Pose sheets come either with a real alpha channel or on a flat white background; white is keyed by flood fill from
+// the borders, so whites inside the characters (eyes, highlights) survive. Each pose is cut by connected components.
+import crypto from "node:crypto";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import sharp from "sharp";
+
+const ART = "docs/art/galaxia-encantada";
+const SOURCE = `${ART}/approved-source`;
+const OUT = "public/galaxia";
+const DATA = "src/data/galaxia";
+const DEBUG = process.argv.includes("--debug");
+// Stages, prop scales and the pixel grid per scene, shared with src/lib/scenes.ts.
+const LAYOUT = JSON.parse(fs.readFileSync(`${DATA}/layout.json`, "utf8"));
+
+export const SCENES = ["earth-observatory", "niveora", "mars-lab", "lumina", "earth-orbit", "aurelia", "red-tide"];
+// Pose names in reading order (rows top to bottom, then left to right). Unnamed poses become pose-N.
+const POSES = {
+  "earth-observatory": {
+    glaucia: ["idle", "blink", "telescope", "point"],
+    prince: ["stand", "side", "paw", "look-up", "face-idle", "face-happy", "face-joy", "face-curious", "face-wink"],
+  },
+  niveora: {
+    glaucia: ["idle", "blink", "capsule", "cheer"],
+    prince: ["stand", "sniff", "sensor", "face-idle", "face-happy", "face-wink", "face-curious"],
+  },
+};
+
+// Horizontal anchor (source px) when the automatic feet centre is skewed by a companion or a prop: Glaucia's hips.
+const ANCHORS = {
+  "earth-observatory": { glaucia: { idle: 165, telescope: 315, point: 165 } },
+  niveora: { glaucia: { idle: 140, capsule: 230, cheer: 175 } },
+};
+
+const num = (scene) => String(SCENES.indexOf(scene) + 1).padStart(2, "0");
+const sources = (scene) => ({
+  plate: `${SOURCE}/GE-PL-${num(scene)}-${scene}.png`,
+  glaucia: `${SOURCE}/GE-GL-${num(scene)}-${scene}.png`,
+  prince: `${SOURCE}/GE-DOG-${num(scene)}-${scene}.png`,
+  props: `${SOURCE}/props/${scene}`,
+});
+const webp = (input, raw) => sharp(input, raw && { raw }).webp({ quality: 92, alphaQuality: 100, smartSubsample: true, effort: 6 });
+
+async function loadRgba(file) {
+  const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const meta = await sharp(file).metadata();
+  return { data, w: info.width, h: info.height, alpha: meta.hasAlpha };
+}
+
+// Flat white background → transparent, flooding only from the borders. Anti-aliased edges fade with their whiteness.
+function keyWhite(img) {
+  const { data, w, h } = img;
+  const white = (i) => Math.min(data[i * 4], data[i * 4 + 1], data[i * 4 + 2]);
+  const seen = new Uint8Array(w * h);
+  const stack = [];
+  for (let x = 0; x < w; x++) stack.push(x, (h - 1) * w + x);
+  for (let y = 0; y < h; y++) stack.push(y * w, y * w + w - 1);
+  while (stack.length) {
+    const i = stack.pop();
+    if (seen[i] || white(i) < 200) continue;
+    seen[i] = 1;
+    const x = i % w; const y = (i / w) | 0;
+    if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1);
+    if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w);
+  }
+  for (let i = 0; i < w * h; i++) if (seen[i]) data[i * 4 + 3] = Math.round(255 * Math.min(1, Math.max(0, (255 - white(i)) / 40)));
+  return img;
+}
+
+// Props were cut from sheets on a black background and keep a dark margin. Flood from the transparent outside
+// through near-black pixels only, so the sprites' own dark navy outlines survive.
+function keyDark(img) {
+  const { data, w, h } = img;
+  const dark = (i) => data[i * 4 + 3] > 0 && Math.max(data[i * 4], data[i * 4 + 1]) < 20 && data[i * 4 + 2] < 36;
+  const seen = new Uint8Array(w * h);
+  const stack = [];
+  for (let i = 0; i < w * h; i++) {
+    const x = i % w; const y = (i / w) | 0;
+    const border = x === 0 || y === 0 || x === w - 1 || y === h - 1;
+    const outside = data[i * 4 + 3] === 0 || border;
+    if (outside) stack.push(i);
+  }
+  while (stack.length) {
+    const i = stack.pop();
+    if (seen[i]) continue;
+    seen[i] = 1;
+    if (data[i * 4 + 3] > 0 && !dark(i)) continue;
+    data[i * 4 + 3] = 0;
+    const x = i % w; const y = (i / w) | 0;
+    if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1);
+    if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w);
+  }
+  return img;
+}
+
+// Connected components on alpha; small specks (sparkles, dust) are dropped unless they sit inside a big component's box.
+function poses(img) {
+  const { data, w, h } = img;
+  const label = new Int32Array(w * h).fill(-1);
+  const comps = [];
+  for (let start = 0; start < w * h; start++) {
+    if (label[start] >= 0 || data[start * 4 + 3] < 96) continue;
+    const c = { x0: w, y0: h, x1: 0, y1: 0, area: 0 };
+    const stack = [start]; label[start] = comps.length;
+    while (stack.length) {
+      const i = stack.pop(); const x = i % w; const y = (i / w) | 0;
+      c.area++; c.x0 = Math.min(c.x0, x); c.x1 = Math.max(c.x1, x); c.y0 = Math.min(c.y0, y); c.y1 = Math.max(c.y1, y);
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+        const nx = x + dx; const ny = y + dy; if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
+        const j = ny * w + nx; if (label[j] < 0 && data[j * 4 + 3] >= 96) { label[j] = comps.length; stack.push(j); }
+      }
+    }
+    comps.push(c);
+  }
+  const largest = Math.max(...comps.map((c) => c.area));
+  const big = comps.map((c, id) => ({ ...c, ids: [id] })).filter((c) => c.area > largest * .05);
+  // Merge big components whose boxes overlap (a dog in front of the legs, a tripod beside a person).
+  for (let merged = true; merged;) {
+    merged = false;
+    for (let a = 0; a < big.length && !merged; a++) for (let b = a + 1; b < big.length && !merged; b++) {
+      const A = big[a]; const B = big[b];
+      if (A.x0 <= B.x1 && B.x0 <= A.x1 && A.y0 <= B.y1 && B.y0 <= A.y1) {
+        Object.assign(A, { x0: Math.min(A.x0, B.x0), y0: Math.min(A.y0, B.y0), x1: Math.max(A.x1, B.x1), y1: Math.max(A.y1, B.y1), area: A.area + B.area, ids: [...A.ids, ...B.ids] });
+        big.splice(b, 1); merged = true;
+      }
+    }
+  }
+  comps.forEach((c, id) => {
+    if (c.area > largest * .05) return;
+    const host = big.find((g) => c.x0 >= g.x0 && c.x1 <= g.x1 && c.y0 >= g.y0 && c.y1 <= g.y1);
+    if (host) host.ids.push(id);
+  });
+  // Reading order: group into rows by vertical overlap, then left to right.
+  big.sort((a, b) => a.y0 - b.y0);
+  const rows = [];
+  for (const g of big) {
+    const row = rows.find((r) => g.y0 < r.y1 && r.y0 < g.y1);
+    if (row) { row.items.push(g); row.y0 = Math.min(row.y0, g.y0); row.y1 = Math.max(row.y1, g.y1); } else rows.push({ y0: g.y0, y1: g.y1, items: [g] });
+  }
+  return { label, groups: rows.flatMap((r) => r.items.sort((a, b) => a.x0 - b.x0)) };
+}
+
+function cut(img, label, group, pad = 2) {
+  const keep = new Set(group.ids);
+  const x0 = Math.max(0, group.x0 - pad); const y0 = Math.max(0, group.y0 - pad);
+  const W = Math.min(img.w, group.x1 + pad + 1) - x0; const H = Math.min(img.h, group.y1 + pad + 1) - y0;
+  const out = Buffer.alloc(W * H * 4);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const i = (y0 + y) * img.w + x0 + x;
+    // Keep the pose's own pixels plus the soft fringe (alpha < 96) touching them.
+    let own = keep.has(label[i]);
+    if (!own && label[i] < 0 && img.data[i * 4 + 3] > 0) for (let d = -2; d <= 2 && !own; d++) own = keep.has(label[i + d]) || keep.has(label[i + d * img.w]);
+    if (own) img.data.copy(out, (y * W + x) * 4, i * 4, i * 4 + 4);
+  }
+  // Feet: centre of the opaque pixels in the bottom 4 % of the pose.
+  let sum = 0; let count = 0;
+  for (let y = Math.floor(H * .96); y < H; y++) for (let x = 0; x < W; x++) if (out[(y * W + x) * 4 + 3] > 128) { sum += x; count++; }
+  return { data: out, w: W, h: H, feetX: count ? Math.round(sum / count) : W >> 1, x0, y0 };
+}
+
+// Blink drawn as a separate pose never lines up with idle. Register it on the head, then keep only the pixels that
+// changed around the eyes, so the blink is an overlay on top of idle.
+function blinkOverlay(idle, blink) {
+  const head = { y0: 0, y1: Math.round(idle.h * .22) };
+  const at = (img, x, y) => (y * img.w + x) * 4;
+  let best = { score: Infinity, dx: 0, dy: 0 };
+  for (let dy = -24; dy <= 24; dy += 2) for (let dx = -40; dx <= 40; dx += 2) {
+    let sum = 0; let count = 0;
+    for (let y = head.y0; y < head.y1; y += 3) for (let x = 0; x < idle.w; x += 3) {
+      const bx = x + dx; const by = y + dy;
+      if (bx < 0 || by < 0 || bx >= blink.w || by >= blink.h) continue;
+      const p = at(idle, x, y); const q = at(blink, bx, by);
+      if (idle.data[p + 3] < 200 || blink.data[q + 3] < 200) continue;
+      sum += Math.abs(idle.data[p] - blink.data[q]) + Math.abs(idle.data[p + 1] - blink.data[q + 1]) + Math.abs(idle.data[p + 2] - blink.data[q + 2]); count++;
+    }
+    if (count > 200 && sum / count < best.score) best = { score: sum / count, dx, dy };
+  }
+  const changed = [];
+  for (let y = head.y0; y < head.y1; y++) for (let x = 0; x < idle.w; x++) {
+    const bx = x + best.dx; const by = y + best.dy;
+    if (bx < 0 || by < 0 || bx >= blink.w || by >= blink.h) continue;
+    const p = at(idle, x, y); const q = at(blink, bx, by);
+    if (idle.data[p + 3] < 250 || blink.data[q + 3] < 250) continue;
+    if (Math.abs(idle.data[p] - blink.data[q]) + Math.abs(idle.data[p + 1] - blink.data[q + 1]) + Math.abs(idle.data[p + 2] - blink.data[q + 2]) > 110) changed.push([x, y]);
+  }
+  const median = (values) => values.sort((a, b) => a - b)[values.length >> 1];
+  const mx = median(changed.map(([x]) => x)); const my = median(changed.map(([, y]) => y));
+  const box = { x0: Infinity, y0: Infinity, x1: -1, y1: -1 };
+  for (const [x, y] of changed) if (Math.abs(x - mx) < idle.w * .2 && Math.abs(y - my) < idle.h * .03) {
+    box.x0 = Math.min(box.x0, x); box.x1 = Math.max(box.x1, x); box.y0 = Math.min(box.y0, y); box.y1 = Math.max(box.y1, y);
+  }
+  const out = Buffer.alloc(idle.data.length);
+  for (let y = box.y0 - 3; y <= box.y1 + 3; y++) for (let x = box.x0 - 3; x <= box.x1 + 3; x++) {
+    const q = at(blink, x + best.dx, y + best.dy);
+    if (idle.data[at(idle, x, y) + 3] > 200) blink.data.copy(out, at(idle, x, y), q, q + 4);
+  }
+  return { data: out, w: idle.w, h: idle.h, feetX: idle.feetX, shift: best, eyes: box };
+}
+
+// True pixel art: shrink to the scene grid (1 art pixel = `grid` plate pixels at the size the sprite is shown), harden
+// the alpha and limit the palette without dithering. The browser scales it back up with image-rendering: pixelated.
+async function pixelate(img, factor, colors) {
+  const w = Math.max(1, Math.round(img.w * factor)); const h = Math.max(1, Math.round(img.h * factor));
+  const small = await sharp(img.data, { raw: { width: img.w, height: img.h, channels: 4 } }).resize(w, h, { kernel: "lanczos3" }).raw().toBuffer();
+  for (let i = 3; i < small.length; i += 4) small[i] = small[i] >= 128 ? 255 : 0;
+  const png = await sharp(small, { raw: { width: w, height: h, channels: 4 } }).png({ palette: true, colors, dither: 0 }).toBuffer();
+  const { data } = await sharp(png).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  for (let i = 3; i < data.length; i += 4) if (small[i] === 0) data[i] = 0;
+  return { data, w, h };
+}
+const COLORS = { plate: 96, actor: 40, prop: 32 };
+// Palette sizes per scene (layout.json "colors"), on top of the defaults.
+const colorsOf = (scene) => ({ ...COLORS, ...LAYOUT[scene]?.colors });
+const lossless = (img) => sharp(img.data, { raw: { width: img.w, height: img.h, channels: 4 } }).webp({ lossless: true, effort: 6 });
+
+// Every pose sheet of an actor in the scene: GE-GL-02-niveora.png, then extras GE-GL-02B-niveora.png, GE-GL-02C-…
+const sheets = (scene, prefix) => fs.readdirSync(SOURCE).filter((file) => new RegExp(`^${prefix}-${num(scene)}[A-Z]?-${scene}\\.png$`).test(file)).sort().map((file) => ({ file: `${SOURCE}/${file}`, tag: file.match(/-\d{2}([A-Z]?)-/)[1] }));
+
+// Cuts every pose of an actor, at the source resolution.
+async function cutActor(scene, name, prefix) {
+  const sprites = {};
+  for (const { file, tag } of sheets(scene, prefix)) {
+    const img = await loadRgba(file);
+    if (!img.alpha) keyWhite(img);
+    const { label, groups } = poses(img);
+    const names = POSES[scene]?.[tag ? `${name}:${tag}` : name] ?? [];
+    groups.forEach((group, index) => { sprites[names[index] ?? `pose-${tag}${index + 1}`] = cut(img, label, group); });
+  }
+  if (sprites.idle && sprites.blink) {
+    sprites.blink = blinkOverlay(sprites.idle, sprites.blink);
+    if (DEBUG) console.log(`${name}/blink: shift ${JSON.stringify(sprites.blink.shift)}, eyes ${JSON.stringify(sprites.blink.eyes)}`);
+  }
+  return Object.keys(sprites).length ? sprites : null;
+}
+
+// Plate pixels per source pixel for an actor: from its stage (height in % of the plate) or a fixed scale.
+function actorScale(scene, name, sprites, plateH) {
+  const stage = LAYOUT[scene]?.stages?.[name];
+  if (stage && sprites[stage.reference]) return stage.height / 100 * plateH / sprites[stage.reference].h;
+  return LAYOUT[scene]?.actorScale?.[name] ?? 1;
+}
+
+// Pixelates every pose with the same factor. The blink overlay is rebuilt on the pixel grid: idle with closed eyes is
+// pixelated as a whole and only the changed pixels around the eyes are kept, so it always lines up with idle.
+async function pixelActor(sprites, factor, colors = COLORS.actor) {
+  const out = {};
+  for (const [pose, sprite] of Object.entries(sprites)) if (pose !== "blink") out[pose] = await pixelate(sprite, factor, colors);
+  if (sprites.blink && sprites.idle) {
+    const shut = Buffer.from(sprites.idle.data);
+    for (let i = 0; i < shut.length; i += 4) if (sprites.blink.data[i + 3]) sprites.blink.data.copy(shut, i, i, i + 4);
+    const closed = await pixelate({ ...sprites.idle, data: shut }, factor, colors);
+    const open = out.idle; const eyes = sprites.blink.eyes;
+    const box = { x0: Math.floor((eyes.x0 - 4) * factor), x1: Math.ceil((eyes.x1 + 4) * factor), y0: Math.floor((eyes.y0 - 4) * factor), y1: Math.ceil((eyes.y1 + 4) * factor) };
+    const data = Buffer.alloc(open.data.length);
+    for (let y = Math.max(0, box.y0); y <= Math.min(open.h - 1, box.y1); y++) for (let x = Math.max(0, box.x0); x <= Math.min(open.w - 1, box.x1); x++) {
+      const i = (y * open.w + x) * 4;
+      if (closed.data[i + 3] && Math.abs(closed.data[i] - open.data[i]) + Math.abs(closed.data[i + 1] - open.data[i + 1]) + Math.abs(closed.data[i + 2] - open.data[i + 2]) > 24) closed.data.copy(data, i, i, i + 4);
+    }
+    out.blink = { data, w: open.w, h: open.h };
+  }
+  return out;
+}
+
+async function scene(id) {
+  const src = sources(id);
+  const grid = LAYOUT[id]?.grid ?? 0;
+  // plateGrid 0 keeps the approved plate as it is; actors and props still go on the grid.
+  const plateGrid = LAYOUT[id]?.plateGrid ?? grid;
+  const colors = colorsOf(id);
+  const result = { scene: id };
+  let plateH = 941;
+  if (fs.existsSync(src.plate)) {
+    fs.mkdirSync(`${OUT}/scenes/${id}`, { recursive: true });
+    const plate = await loadRgba(src.plate);
+    plateH = plate.h;
+    const file = `${OUT}/scenes/${id}/background.webp`;
+    const art = plateGrid ? await pixelate(plate, 1 / plateGrid, colors.plate) : null;
+    if (art) await lossless(art).toFile(file); else await sharp(src.plate).webp({ quality: 90, smartSubsample: true, effort: 6 }).toFile(file);
+    result.background = { src: `/galaxia/scenes/${id}/background.webp`, w: plate.w, h: plate.h, ...(art && { px: [art.w, art.h] }) };
+  }
+  result.actors = {};
+  for (const [name, prefix] of [["glaucia", "GE-GL"], ["prince", "GE-DOG"]]) {
+    const sprites = await cutActor(id, name, prefix);
+    if (!sprites) continue;
+    const dir = `${OUT}/actors/${name}/${id}`;
+    fs.mkdirSync(dir, { recursive: true });
+    const factor = actorScale(id, name, sprites, plateH) / (grid || 1);
+    const art = grid ? await pixelActor(sprites, factor, colors.actor) : null;
+    result.actors[name] = {};
+    for (const [pose, sprite] of Object.entries(sprites)) {
+      const file = `${dir}/${pose}.webp`;
+      if (art) await lossless(art[pose]).toFile(file); else await webp(sprite.data, { width: sprite.w, height: sprite.h, channels: 4 }).toFile(file);
+      const feetX = ANCHORS[id]?.[name]?.[pose === "blink" ? "idle" : pose] ?? sprite.feetX;
+      result.actors[name][pose] = { src: `/galaxia/actors/${name}/${id}/${pose}.webp`, w: sprite.w, h: sprite.h, feetX, ...(art && { px: [art[pose].w, art[pose].h] }) };
+      if (DEBUG && sprite.x0 !== undefined) console.log(`${name}/${pose}: ${sprite.w}×${sprite.h} at ${sprite.x0},${sprite.y0}${art ? ` → ${art[pose].w}×${art[pose].h} px` : ""}`);
+    }
+  }
+  result.props = {};
+  if (fs.existsSync(src.props)) {
+    fs.mkdirSync(`${OUT}/props/${id}`, { recursive: true });
+    for (const file of fs.readdirSync(src.props).filter((f) => f.endsWith(".png")).sort()) {
+      const name = file.replace(/\.png$/, "");
+      const img = keyDark(await loadRgba(`${src.props}/${file}`));
+      const art = grid ? await pixelate(img, (LAYOUT[id]?.props?.[name] ?? 1) / grid, colors.prop) : null;
+      await (art ? lossless(art) : webp(img.data, { width: img.w, height: img.h, channels: 4 })).toFile(`${OUT}/props/${id}/${name}.webp`);
+      result.props[name] = { src: `/galaxia/props/${id}/${name}.webp`, w: img.w, h: img.h, ...(art && { px: [art.w, art.h] }) };
+    }
+  }
+  fs.mkdirSync(DATA, { recursive: true });
+  fs.writeFileSync(`${DATA}/${id}.json`, JSON.stringify(result, null, 2) + "\n");
+  console.log(`${id}: grid ${grid || "off"}, background ${result.background ? "ok" : "missing"}, actors ${Object.keys(result.actors).join(", ") || "none"}, ${Object.keys(result.props).length} props`);
+}
+
+// Previews for choosing the look: the plate and the actors' reference poses composed on their stages. A = layout.json
+// (approved: original plate, actors on the plate's own pixel), B = grid 1.5 everywhere, C = grid 2 everywhere.
+async function preview(id) {
+  const src = sources(id);
+  const plate = await loadRgba(src.plate);
+  const colors = colorsOf(id);
+  const variants = [["A", LAYOUT[id]?.grid ?? 1, LAYOUT[id]?.plateGrid ?? 0], ["B", 1.5, 1.5], ["C", 2, 2]];
+  for (const [variant, grid, plateGrid] of variants) {
+    const art = plateGrid ? await pixelate(plate, 1 / plateGrid, colors.plate) : plate;
+    const base = await sharp(art.data, { raw: { width: art.w, height: art.h, channels: 4 } }).resize(plate.w, plate.h, { kernel: "nearest" }).png().toBuffer();
+    const layers = [];
+    for (const [name, prefix] of [["glaucia", "GE-GL"], ["prince", "GE-DOG"]]) {
+      const stage = LAYOUT[id]?.stages?.[name];
+      if (!stage) continue;
+      const sprites = await cutActor(id, name, prefix);
+      if (!sprites) continue;
+      const scale = actorScale(id, name, sprites, plate.h);
+      const pose = await pixelate(sprites[stage.reference], scale / grid, colors.actor);
+      const w = Math.round(sprites[stage.reference].w * scale); const h = Math.round(sprites[stage.reference].h * scale);
+      const feetX = ANCHORS[id]?.[name]?.[stage.reference] ?? sprites[stage.reference].feetX;
+      const input = await sharp(pose.data, { raw: { width: pose.w, height: pose.h, channels: 4 } }).resize(w, h, { kernel: "nearest" }).png().toBuffer();
+      layers.push({ input, left: Math.round(stage.x / 100 * plate.w - feetX * scale), top: Math.round(stage.y / 100 * plate.h - h) });
+    }
+    const composed = await sharp(base).composite(layers).png().toBuffer();
+    const full = path.join(os.tmpdir(), `galaxia-${id}-${variant}.png`);
+    const close = path.join(os.tmpdir(), `galaxia-${id}-${variant}-close.png`);
+    await sharp(composed).toFile(full);
+    await sharp(composed).extract({ left: Math.round(plate.w * .55), top: Math.round(plate.h * .35), width: Math.round(plate.w * .45), height: Math.round(plate.h * .65) }).toFile(close);
+    console.log(`preview ${variant} (grid ${grid}, plate ${plateGrid || "original"}):`, full, close);
+  }
+}
+
+async function manifest() {
+  const previous = fs.existsSync(`${ART}/manifest.json`) ? JSON.parse(fs.readFileSync(`${ART}/manifest.json`, "utf8")) : { assets: [] };
+  const byFile = new Map(previous.assets.map((a) => [a.file, a]));
+  const files = [];
+  const walk = (dir) => { for (const entry of fs.readdirSync(dir, { withFileTypes: true })) { const p = `${dir}/${entry.name}`; if (entry.isDirectory()) walk(p); else if (p.endsWith(".png")) files.push(p); } };
+  walk(SOURCE);
+  const assets = [];
+  for (const file of files.sort()) {
+    const rel = path.relative(ART, file).split(path.sep).join("/");
+    const base = path.basename(file, ".png");
+    const sceneId = SCENES.find((s) => rel.includes(`/${s}/`) || base.endsWith(s)) ?? null;
+    const id = base.startsWith("GE-") ? base.replace(new RegExp(`-${sceneId}$`), "") : `GE-PROP-${num(sceneId)}:${base}`;
+    const meta = await sharp(file).metadata();
+    const sha256 = crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+    const old = byFile.get(rel) ?? {};
+    assets.push({ id, file: rel, sceneId, status: old.status ?? "approved", tool: "Grok Image", nativeWidth: meta.width, nativeHeight: meta.height, alpha: !!meta.hasAlpha, sha256, reviewer: old.reviewer ?? "Glaucia Lemos", notes: old.notes ?? "" });
+  }
+  fs.writeFileSync(`${ART}/manifest.json`, JSON.stringify({ project: "Galáxia Encantada", prompts: "docs/galaxia-encantada/PLANO-MIGRACAO.md (seção 19)", assets }, null, 2) + "\n");
+  console.log(`manifest: ${assets.length} assets`);
+}
+
+const arg = process.argv.slice(2).find((a) => !a.startsWith("--"));
+if (process.argv.includes("--manifest")) await manifest();
+else if (SCENES.includes(arg) && process.argv.includes("--preview")) await preview(arg);
+else if (arg === "all") for (const id of SCENES) await scene(id);
+else if (SCENES.includes(arg)) await scene(arg);
+else { console.error(`Usage: node scripts/build-galaxia-assets.mjs <${SCENES.join("|")}|all> [--debug] [--preview] | --manifest`); process.exit(1); }

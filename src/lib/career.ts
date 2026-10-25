@@ -1,13 +1,13 @@
 import type { Cargo } from './types';
 
 // Career maths for the About page. Months are counted as year * 12 + monthIndex.
-export type Era = 'padawan' | 'knight' | 'master';
+export type Era = 'foundation' | 'advocacy' | 'leadership';
 export type CareerRole = Cargo & { start: number; end: number; current: boolean; era: Era; lane: number };
 
 const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
-export const ERAS: Era[] = ['padawan', 'knight', 'master'];
-const KNIGHT_FROM = 2019 * 12 + 2;
-const MASTER_FROM = 2025 * 12 + 8;
+export const ERAS: Era[] = ['foundation', 'advocacy', 'leadership'];
+const ADVOCACY_FROM = 2019 * 12 + 2;
+const LEADERSHIP_FROM = 2025 * 12 + 8;
 
 export const monthOf = (date: Date) => date.getUTCFullYear() * 12 + date.getUTCMonth();
 
@@ -25,12 +25,12 @@ export function parsePeriod(period: string, now = monthOf(new Date())) {
 }
 
 export function eraOf(start: number): Era {
-  return start >= MASTER_FROM ? 'master' : start >= KNIGHT_FROM ? 'knight' : 'padawan';
+  return start >= LEADERSHIP_FROM ? 'leadership' : start >= ADVOCACY_FROM ? 'advocacy' : 'foundation';
 }
 
 // Newest first. Overlapping roles get the first free lane, assigned in start order.
 export function buildCareer(cargos: Cargo[], now = monthOf(new Date())): CareerRole[] {
-  const roles = cargos.map(cargo => ({ ...cargo, ...parsePeriod(cargo.periodo, now), era: 'padawan' as Era, lane: 0 }));
+  const roles = cargos.map(cargo => ({ ...cargo, ...parsePeriod(cargo.periodo, now), era: 'foundation' as Era, lane: 0 }));
   const laneEnds: number[] = [];
   for (const role of [...roles].sort((a, b) => a.start - b.start || b.end - a.end)) {
     role.era = eraOf(role.start);

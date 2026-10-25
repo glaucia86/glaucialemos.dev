@@ -1,0 +1,455 @@
+{
+  "scene": "niveora",
+  "background": {
+    "src": "/galaxia/scenes/niveora/background.webp",
+    "w": 1672,
+    "h": 941
+  },
+  "actors": {
+    "glaucia": {
+      "idle": {
+        "src": "/galaxia/actors/glaucia/niveora/idle.webp",
+        "w": 305,
+        "h": 834,
+        "feetX": 140,
+        "px": [
+          172,
+          471
+        ]
+      },
+      "blink": {
+        "src": "/galaxia/actors/glaucia/niveora/blink.webp",
+        "w": 305,
+        "h": 834,
+        "feetX": 140,
+        "px": [
+          172,
+          471
+        ]
+      },
+      "capsule": {
+        "src": "/galaxia/actors/glaucia/niveora/capsule.webp",
+        "w": 377,
+        "h": 593,
+        "feetX": 230,
+        "px": [
+          213,
+          335
+        ]
+      },
+      "cheer": {
+        "src": "/galaxia/actors/glaucia/niveora/cheer.webp",
+        "w": 342,
+        "h": 852,
+        "feetX": 175,
+        "px": [
+          193,
+          481
+        ]
+      },
+      "cold-a": {
+        "src": "/galaxia/actors/glaucia/niveora/cold-a.webp",
+        "w": 285,
+        "h": 834,
+        "feetX": 139,
+        "px": [
+          161,
+          471
+        ]
+      },
+      "cold-b": {
+        "src": "/galaxia/actors/glaucia/niveora/cold-b.webp",
+        "w": 288,
+        "h": 826,
+        "feetX": 140,
+        "px": [
+          162,
+          466
+        ]
+      },
+      "brace": {
+        "src": "/galaxia/actors/glaucia/niveora/brace.webp",
+        "w": 386,
+        "h": 829,
+        "feetX": 216,
+        "px": [
+          218,
+          468
+        ]
+      },
+      "warm-hands": {
+        "src": "/galaxia/actors/glaucia/niveora/warm-hands.webp",
+        "w": 307,
+        "h": 834,
+        "feetX": 154,
+        "px": [
+          173,
+          471
+        ]
+      }
+    },
+    "prince": {
+      "stand": {
+        "src": "/galaxia/actors/prince/niveora/stand.webp",
+        "w": 318,
+        "h": 477,
+        "feetX": 163,
+        "px": [
+          91,
+          136
+        ]
+      },
+      "sniff": {
+        "src": "/galaxia/actors/prince/niveora/sniff.webp",
+        "w": 528,
+        "h": 472,
+        "feetX": 297,
+        "px": [
+          151,
+          135
+        ]
+      },
+      "sensor": {
+        "src": "/galaxia/actors/prince/niveora/sensor.webp",
+        "w": 516,
+        "h": 464,
+        "feetX": 274,
+        "px": [
+          148,
+          133
+        ]
+      },
+      "face-idle": {
+        "src": "/galaxia/actors/prince/niveora/face-idle.webp",
+        "w": 316,
+        "h": 340,
+        "feetX": 159,
+        "px": [
+          90,
+          97
+        ]
+      },
+      "face-happy": {
+        "src": "/galaxia/actors/prince/niveora/face-happy.webp",
+        "w": 338,
+        "h": 348,
+        "feetX": 160,
+        "px": [
+          97,
+          100
+        ]
+      },
+      "face-wink": {
+        "src": "/galaxia/actors/prince/niveora/face-wink.webp",
+        "w": 318,
+        "h": 344,
+        "feetX": 157,
+        "px": [
+          91,
+          98
+        ]
+      },
+      "face-curious": {
+        "src": "/galaxia/actors/prince/niveora/face-curious.webp",
+        "w": 328,
+        "h": 346,
+        "feetX": 156,
+        "px": [
+          94,
+          99
+        ]
+      },
+      "walk-1": {
+        "src": "/galaxia/actors/prince/niveora/walk-1.webp",
+        "w": 612,
+        "h": 472,
+        "feetX": 335,
+        "px": [
+          175,
+          135
+        ]
+      },
+      "walk-2": {
+        "src": "/galaxia/actors/prince/niveora/walk-2.webp",
+        "w": 630,
+        "h": 469,
+        "feetX": 342,
+        "px": [
+          180,
+          134
+        ]
+      },
+      "walk-3": {
+        "src": "/galaxia/actors/prince/niveora/walk-3.webp",
+        "w": 628,
+        "h": 470,
+        "feetX": 330,
+        "px": [
+          180,
+          134
+        ]
+      },
+      "walk-4": {
+        "src": "/galaxia/actors/prince/niveora/walk-4.webp",
+        "w": 646,
+        "h": 477,
+        "feetX": 358,
+        "px": [
+          185,
+          136
+        ]
+      },
+      "sniff-down-a": {
+        "src": "/galaxia/actors/prince/niveora/sniff-down-a.webp",
+        "w": 617,
+        "h": 435,
+        "feetX": 385,
+        "px": [
+          176,
+          124
+        ]
+      },
+      "sniff-down-b": {
+        "src": "/galaxia/actors/prince/niveora/sniff-down-b.webp",
+        "w": 589,
+        "h": 432,
+        "feetX": 302,
+        "px": [
+          168,
+          124
+        ]
+      },
+      "dig-a": {
+        "src": "/galaxia/actors/prince/niveora/dig-a.webp",
+        "w": 585,
+        "h": 435,
+        "feetX": 318,
+        "px": [
+          167,
+          124
+        ]
+      },
+      "dig-b": {
+        "src": "/galaxia/actors/prince/niveora/dig-b.webp",
+        "w": 603,
+        "h": 454,
+        "feetX": 326,
+        "px": [
+          172,
+          130
+        ]
+      },
+      "walk-slow-1": {
+        "src": "/galaxia/actors/prince/niveora/walk-slow-1.webp",
+        "w": 617,
+        "h": 501,
+        "feetX": 341,
+        "px": [
+          176,
+          143
+        ]
+      },
+      "walk-slow-2": {
+        "src": "/galaxia/actors/prince/niveora/walk-slow-2.webp",
+        "w": 609,
+        "h": 501,
+        "feetX": 332,
+        "px": [
+          174,
+          143
+        ]
+      },
+      "walk-slow-3": {
+        "src": "/galaxia/actors/prince/niveora/walk-slow-3.webp",
+        "w": 602,
+        "h": 491,
+        "feetX": 328,
+        "px": [
+          172,
+          140
+        ]
+      },
+      "walk-slow-4": {
+        "src": "/galaxia/actors/prince/niveora/walk-slow-4.webp",
+        "w": 601,
+        "h": 491,
+        "feetX": 314,
+        "px": [
+          172,
+          140
+        ]
+      },
+      "cold": {
+        "src": "/galaxia/actors/prince/niveora/cold.webp",
+        "w": 356,
+        "h": 390,
+        "feetX": 146,
+        "px": [
+          102,
+          112
+        ]
+      },
+      "shake-a": {
+        "src": "/galaxia/actors/prince/niveora/shake-a.webp",
+        "w": 330,
+        "h": 475,
+        "feetX": 154,
+        "px": [
+          94,
+          136
+        ]
+      },
+      "shake-b": {
+        "src": "/galaxia/actors/prince/niveora/shake-b.webp",
+        "w": 286,
+        "h": 475,
+        "feetX": 132,
+        "px": [
+          82,
+          136
+        ]
+      },
+      "wag-a": {
+        "src": "/galaxia/actors/prince/niveora/wag-a.webp",
+        "w": 357,
+        "h": 477,
+        "feetX": 247,
+        "px": [
+          102,
+          136
+        ]
+      },
+      "wag-b": {
+        "src": "/galaxia/actors/prince/niveora/wag-b.webp",
+        "w": 367,
+        "h": 473,
+        "feetX": 136,
+        "px": [
+          105,
+          135
+        ]
+      },
+      "sit-up": {
+        "src": "/galaxia/actors/prince/niveora/sit-up.webp",
+        "w": 286,
+        "h": 456,
+        "feetX": 161,
+        "px": [
+          82,
+          130
+        ]
+      },
+      "wind": {
+        "src": "/galaxia/actors/prince/niveora/wind.webp",
+        "w": 321,
+        "h": 466,
+        "feetX": 183,
+        "px": [
+          92,
+          133
+        ]
+      }
+    }
+  },
+  "props": {
+    "aurora-beacon": {
+      "src": "/galaxia/props/niveora/aurora-beacon.webp",
+      "w": 144,
+      "h": 190,
+      "px": [
+        86,
+        114
+      ]
+    },
+    "aurora-sensor": {
+      "src": "/galaxia/props/niveora/aurora-sensor.webp",
+      "w": 98,
+      "h": 187,
+      "px": [
+        59,
+        112
+      ]
+    },
+    "memory-capsule-open": {
+      "src": "/galaxia/props/niveora/memory-capsule-open.webp",
+      "w": 181,
+      "h": 205,
+      "px": [
+        81,
+        92
+      ]
+    },
+    "memory-capsule-sealed": {
+      "src": "/galaxia/props/niveora/memory-capsule-sealed.webp",
+      "w": 188,
+      "h": 185,
+      "px": [
+        85,
+        83
+      ]
+    },
+    "prismatic-ice-specimen": {
+      "src": "/galaxia/props/niveora/prismatic-ice-specimen.webp",
+      "w": 124,
+      "h": 164,
+      "px": [
+        68,
+        90
+      ]
+    },
+    "snow-pawprint-01": {
+      "src": "/galaxia/props/niveora/snow-pawprint-01.webp",
+      "w": 91,
+      "h": 93,
+      "px": [
+        31,
+        32
+      ]
+    },
+    "snow-pawprint-02": {
+      "src": "/galaxia/props/niveora/snow-pawprint-02.webp",
+      "w": 99,
+      "h": 90,
+      "px": [
+        34,
+        31
+      ]
+    },
+    "snow-pawprint-03": {
+      "src": "/galaxia/props/niveora/snow-pawprint-03.webp",
+      "w": 90,
+      "h": 93,
+      "px": [
+        31,
+        32
+      ]
+    },
+    "snow-pawprint-04": {
+      "src": "/galaxia/props/niveora/snow-pawprint-04.webp",
+      "w": 96,
+      "h": 90,
+      "px": [
+        33,
+        31
+      ]
+    },
+    "snow-pawprint-05": {
+      "src": "/galaxia/props/niveora/snow-pawprint-05.webp",
+      "w": 102,
+      "h": 90,
+      "px": [
+        35,
+        31
+      ]
+    },
+    "snow-pawprint-06": {
+      "src": "/galaxia/props/niveora/snow-pawprint-06.webp",
+      "w": 105,
+      "h": 89,
+      "px": [
+        36,
+        30
+      ]
+    }
+  }
+}

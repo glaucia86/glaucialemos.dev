@@ -102,7 +102,7 @@ try {
     });
     await page.goto(`${baseURL}/pt`);
     await expect(page.locator(".hero-scene-layer")).toHaveAttribute("data-motion", "running");
-    for (const slug of ["sobre", "projetos", "conteudo"]) {
+    for (const slug of ["projetos", "conteudo"]) {
       await page.locator(`nav a[href="/pt/${slug}"]`).click();
       await expect(page).toHaveURL(`${baseURL}/pt/${slug}`);
       await expect(page.locator(".hero-scene-layer")).toHaveAttribute("data-motion", "running");

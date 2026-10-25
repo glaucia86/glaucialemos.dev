@@ -1,0 +1,394 @@
+/* About — Nivéora, the snow world of the auroras. Chapter chrome, HUD, hero jump and boot come from home.css;
+   scene data comes from src/lib/scenes.ts. */
+.about-page {
+  --niv-night: #0d2342; --niv-glacier: #88cbe9; --niv-cyan: #55e9e8; --niv-lilac: #b89dfc; --niv-pink: #f3a5d8; --niv-snow: #f2f8ff; --niv-ember: #ffb36b;
+  --era-foundation: var(--niv-glacier); --era-advocacy: var(--niv-cyan); --era-leadership: var(--niv-lilac);
+}
+
+/* ——— 0. Intro ——— */
+html[data-boot="pending"] .boot--niveora { background: radial-gradient(ellipse at 50% 45%, #13305a, var(--color-space-0) 70%); }
+.boot--niveora .boot__frame {
+  --frame: color-mix(in srgb, var(--niv-glacier) 60%, transparent);
+  background: color-mix(in srgb, var(--color-space-0) 80%, #071a33); color: var(--niv-glacier); text-shadow: 0 0 8px color-mix(in srgb, var(--niv-cyan) 55%, transparent);
+  box-shadow: 0 -3px 0 0 var(--frame), 0 3px 0 0 var(--frame), -3px 0 0 0 var(--frame), 3px 0 0 0 var(--frame), 0 0 80px color-mix(in srgb, var(--niv-lilac) 18%, transparent), inset 0 0 60px color-mix(in srgb, var(--niv-cyan) 8%, transparent);
+}
+.boot--niveora .boot__brand span { color: var(--niv-lilac); }
+.boot--niveora .boot__block { background: var(--niv-cyan); }
+.boot--niveora .boot__granted { color: var(--color-white); text-shadow: 0 0 14px var(--niv-cyan), 0 0 28px var(--niv-lilac); }
+.boot--niveora .boot__crest { display: block; width: 56px; height: 56px; margin: 0 0 1.25rem; filter: drop-shadow(0 0 10px color-mix(in srgb, var(--niv-cyan) 70%, transparent)); }
+.boot--niveora .boot__crest-px { fill: var(--niv-snow); opacity: 0; }
+
+/* ——— 1. Nivéora hero ——— */
+.niveora-hero-wrap { background: var(--color-space-0); }
+/* The plate is always a whole 16:9 picture. Wide and tall screens: the hero is exactly the plate's height (capped by the
+   viewport) and the copy sits over its quiet left side. Everything else: copy on top, the full 16:9 scene below it. */
+.niveora-hero { --scene-x: 80%; --scene-y: 100%; }
+.niveora-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
+.about-page .niveora-hero { min-height: min(calc(100svh - 72px), 56.25vw); }
+.about-page .niveora-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
+.niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 580px); }
+.about-page .niveora-hero h1 { max-width: min(44%, 580px); margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--color-primary-900) 80%, transparent); }
+/* Each line of the highlighted half gets the whole aurora gradient, so a wrap never splits the colours. */
+.about-page .niveora-hero h1 span { display: inline; color: transparent; background: linear-gradient(90deg, var(--niv-cyan), var(--niv-glacier) 45%, var(--niv-lilac) 80%, var(--niv-pink)); -webkit-background-clip: text; background-clip: text; -webkit-box-decoration-break: clone; box-decoration-break: clone; text-shadow: none; }
+.niveora-hero .page-hero__subtitle { margin-top: 1.1rem; font-size: clamp(1rem, 1.25vw, 1.12rem); }
+.niveora-hero .page-hero__extra { margin-top: .9rem; font-size: .92rem; }
+.niveora-hero .actions { margin-top: 1.6rem; }
+@media (min-width: 1200px) and (min-height: 680px) { .page-hero.niveora-hero .page-hero__shade { background: var(--hero-overlay-left); } }
+
+/* Scene plane: the 16:9 plate's cover projection, anchored on the snowfield (the crop eats sky, never the feet). */
+.hero-scene-layer--niveora, .niveora-layer { container-type: size; }
+.niveora-layer { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.niveora-plane { position: absolute; width: max(100cqw, 177.777778cqh); height: max(100cqh, 56.25cqw); left: var(--scene-x); top: var(--scene-y); transform: translate(calc(-1 * var(--scene-x)), calc(-1 * var(--scene-y))); will-change: auto; }
+.niveora-plane > * { position: absolute; display: block; }
+.niveora-plane i, .niveora-plane span > i { display: block; }
+.niveora-sky { inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.niveora-sky--back { mix-blend-mode: screen; }
+.niveora-hero :is(.page-hero__image, .hero-scene-layer, .niveora-layer) { transform-origin: 80% 66%; }
+
+:is(.niveora-crystal__art, .niveora-station__art, .niveora-track, .niveora-capsule > i, .niveora-crew > i, .niveora-prince > i) { background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; }
+.niveora-crystal__art, .niveora-station__art { position: absolute; inset: 0; }
+.niveora-crystal__art { animation: crystal-glint 3.2s steps(3) infinite; }
+@keyframes crystal-glint { 50% { filter: drop-shadow(0 0 5px color-mix(in srgb, var(--niv-lilac) 80%, transparent)); } }
+.niveora-crystal[data-on] .niveora-crystal__art { animation: none; filter: drop-shadow(0 0 10px var(--niv-pink)) drop-shadow(0 0 22px var(--niv-cyan)) brightness(1.3); }
+.niveora-station__lamp { position: absolute; left: 50%; top: 4%; width: 18%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: radial-gradient(circle, var(--color-white) 0 20%, color-mix(in srgb, var(--niv-cyan) 70%, transparent) 40%, transparent 70%); mix-blend-mode: screen; animation: hud-blink 2.2s steps(1) infinite; }
+.niveora-station[data-on] .niveora-station__lamp { width: 70%; animation: hud-blink .18s steps(1) infinite; }
+
+/* Paw prints: stamped one by one, then they melt back into the snow. */
+.niveora-track { opacity: 0; rotate: var(--tilt); scale: .4; transition: opacity 1.6s steps(6), scale .25s steps(3); }
+.niveora-track[data-on] { opacity: .95; scale: 1; transition: opacity .15s steps(2), scale .2s steps(3); }
+
+/* The memory capsule: buried (hidden), dug out (found, glowing) and open (warm light). */
+.niveora-capsule { inset: 0; pointer-events: none; }
+.niveora-capsule > i { position: absolute; opacity: 0; transform-origin: 50% 100%; }
+.niveora-capsule__glow { background: radial-gradient(ellipse at 50% 55%, color-mix(in srgb, var(--niv-ember) 70%, transparent), transparent 65%) !important; mix-blend-mode: screen; scale: 2.2; }
+.niveora-capsule[data-capsule="found"] .niveora-capsule__sealed { opacity: 1; animation: capsule-rise .5s steps(5) both, capsule-pulse 1.8s steps(3) .5s infinite; }
+.niveora-capsule[data-capsule="open"] .niveora-capsule__open { opacity: 1; animation: capsule-open .3s steps(3) both; }
+.niveora-capsule[data-capsule="open"] .niveora-capsule__glow { opacity: .9; animation: capsule-glow 1.2s steps(4) infinite alternate; }
+@keyframes capsule-rise { from { scale: 1 0; } to { scale: 1 1; } }
+@keyframes capsule-pulse { 50% { filter: drop-shadow(0 0 6px var(--niv-cyan)) brightness(1.15); } }
+@keyframes capsule-open { from { scale: 1 .7; filter: brightness(2); } to { scale: 1 1; filter: brightness(1); } }
+@keyframes capsule-glow { from { opacity: .55; } to { opacity: 1; } }
+
+/* Glaucia and Prince: idle and stand are always visible (server, no JS, reduced motion); other poses replace them. */
+.niveora-crew, .niveora-prince { inset: 0; }
+.niveora-crew > i, .niveora-prince > i { position: absolute; opacity: 0; }
+.niveora-crew:not([data-acting]) > .niveora-crew__pose--idle,
+.niveora-prince:not([data-acting]) > .niveora-prince__pose--stand,
+.niveora-crew > [data-active], .niveora-prince > [data-active] { opacity: 1; }
+.niveora-prince { transform: translateX(var(--prince-shift, 0%)); }
+.niveora-prince[data-facing="right"] > [data-actor-pose] { transform: scaleX(-1); }
+.hero-scene-layer--niveora[data-paused="true"] * { animation-play-state: paused !important; }
+.niveora-hero[data-motion="false"] .niveora-plane *,
+.niveora-hero[data-motion="false"] .niveora-hot::before,
+.niveora-hero[data-motion="false"] .niveora-hot::after { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .niveora-hero[data-pose="idle"] .niveora-crew > .niveora-crew__blink { animation: crew-blink 4.8s steps(1) 1.4s infinite; }
+}
+/* Wind uses brace/wind artwork. The blizzard keeps its one-pixel shiver and snow accumulation. */
+.about-page[data-whiteout="true"] :is(.niveora-crew, .niveora-prince) { animation: niv-shiver .14s steps(2) infinite; }
+@keyframes niv-shiver { from { translate: -1px 0; } to { translate: 1px 0; } }
+.niveora-plane .niveora-snowcap { opacity: 0; image-rendering: pixelated; transition: opacity .5s steps(3), translate .5s steps(3); translate: 0 4px; }
+.niveora-plane .niveora-snowcap--glaucia { background:
+  linear-gradient(var(--niv-snow) 0 0) 36% 1.2% / 30% 1.6% no-repeat, linear-gradient(var(--niv-snow) 0 0) 40% .2% / 16% 1.1% no-repeat,
+  linear-gradient(var(--niv-snow) 0 0) 14% 23.6% / 28% 1.4% no-repeat, linear-gradient(var(--niv-snow) 0 0) 86% 23.1% / 30% 1.4% no-repeat,
+  linear-gradient(#cfe9fb 0 0) 16% 24.8% / 22% .8% no-repeat, linear-gradient(#cfe9fb 0 0) 84% 24.3% / 24% .8% no-repeat; }
+.niveora-plane .niveora-snowcap--prince { background:
+  linear-gradient(var(--niv-snow) 0 0) 50% 13% / 30% 3.5% no-repeat, linear-gradient(var(--niv-snow) 0 0) 50% 10.5% / 16% 2.5% no-repeat,
+  linear-gradient(var(--niv-snow) 0 0) 50% 56% / 58% 3% no-repeat, linear-gradient(#cfe9fb 0 0) 50% 59% / 46% 2% no-repeat; }
+.about-page[data-whiteout="true"] .niveora-plane .niveora-snowcap { opacity: 1; translate: 0 0; transition: opacity 6s steps(6), translate 0s; }
+.about-page[data-whiteout="true"] .niveora-hero:is([data-pose="capsule"], [data-pose="cheer"]) .niveora-snowcap--glaucia,
+.about-page[data-whiteout="true"] .niveora-hero:not([data-prince="cold"]) .niveora-snowcap--prince { opacity: 0; transition: none; }
+.niveora-hero[data-aurora="prism"] .page-hero__image { filter: saturate(1.25) brightness(1.06); transition: filter 1.2s steps(6); }
+.niveora-hero .page-hero__image { transition: filter 1.6s steps(8); }
+
+/* Hotspots: invisible pixel brackets until hovered or focused; Glaucia and Prince wink to be noticed. */
+.niveora-plane--hot { pointer-events: none; }
+.niveora-hot { position: absolute; padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.niveora-hot[hidden] { display: none; }
+.niveora-hot::after { content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity var(--duration-fast); background:
+  linear-gradient(var(--niv-cyan) 0 0) 0 0 / 10px 2px no-repeat, linear-gradient(var(--niv-cyan) 0 0) 0 0 / 2px 10px no-repeat,
+  linear-gradient(var(--niv-cyan) 0 0) 100% 0 / 10px 2px no-repeat, linear-gradient(var(--niv-cyan) 0 0) 100% 0 / 2px 10px no-repeat,
+  linear-gradient(var(--niv-cyan) 0 0) 0 100% / 10px 2px no-repeat, linear-gradient(var(--niv-cyan) 0 0) 0 100% / 2px 10px no-repeat,
+  linear-gradient(var(--niv-cyan) 0 0) 100% 100% / 10px 2px no-repeat, linear-gradient(var(--niv-cyan) 0 0) 100% 100% / 2px 10px no-repeat; }
+.niveora-hot:hover::after, .niveora-hot:focus-visible::after { opacity: 1; }
+.niveora-hot:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 4px; }
+:is(.niveora-hot--prince, .niveora-hot--glaucia, .niveora-hot--crystal)::before { content: ""; position: absolute; left: 50%; top: -4%; width: 6px; height: 6px; background: var(--niv-snow); box-shadow: 0 0 8px var(--niv-cyan); animation: hud-blink 1.6s steps(1) infinite; }
+.niveora-hot--glaucia::before { animation-delay: .8s; }
+.niveora-hot--crystal::before { top: -10%; animation-delay: 1.2s; }
+.niveora-hero:not([data-stage="idle"]) .niveora-hot::before { display: none; }
+
+/* Status caption for every secret, and the HUD readout (three taps on the thermometer call the storm). */
+.niveora-status { position: absolute; z-index: 1; right: calc(max(var(--gutter), (100vw - var(--content-width)) / 2 - 1.5rem) + 1.75rem); top: 3.2rem; margin: 0; padding: .4rem .6rem; opacity: 0; visibility: hidden; pointer-events: none; background: color-mix(in srgb, var(--niv-night) 78%, transparent); color: var(--niv-snow); font: 400 .66rem/1 var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; text-shadow: 0 0 10px var(--niv-cyan); box-shadow: 0 -2px 0 0 var(--niv-cyan), 0 2px 0 0 var(--niv-cyan), -2px 0 0 0 var(--niv-cyan), 2px 0 0 0 var(--niv-cyan); }
+.niveora-status:empty { display: none; }
+.niveora-hud .hud-location, .niveora-hud .hud-hint { color: var(--niv-glacier); }
+.niveora-hud .hud-hint::before { background: var(--niv-cyan); }
+.niveora-readout { right: 1.75rem; top: 2.6rem; flex-direction: column; align-items: flex-end !important; gap: .55rem !important; pointer-events: auto; cursor: pointer; -webkit-user-select: none; user-select: none; touch-action: manipulation; }
+.niveora-readout > span { display: inline-flex; align-items: center; gap: .6rem; }
+.niveora-readout b { color: var(--color-white); font-weight: 400; font-variant-numeric: tabular-nums; }
+.niveora-wind { display: inline-flex; gap: 3px; }
+.niveora-wind i { width: 6px; height: 10px; background: var(--niv-glacier); box-shadow: 0 0 6px var(--niv-cyan); }
+.niveora-wind i:nth-child(n+4) { opacity: .3; }
+.niveora-wind i:last-child { animation: hud-blink 1.4s steps(1) infinite; }
+.about-page[data-whiteout="true"] .niveora-wind i { opacity: 1; background: var(--color-white); animation: hud-blink .15s steps(1) infinite; }
+.niveora-hero-wrap .hero-bar__track b { color: var(--niv-cyan); }
+.niveora-hero:is([data-stage="capsule"], [data-stage="prism"]) .sky-vignette { opacity: .6; }
+.niveora-hero .sky-vignette { background: radial-gradient(ellipse at 76% 60%, transparent 30%, color-mix(in srgb, var(--color-space-0) 78%, transparent) 100%); }
+
+/* The hero jump, Nivéora style: snow and aurora, ending in a frosted white. */
+.hero-jump--niveora .hero-jump__canvas { background: radial-gradient(circle at 52% 50%, color-mix(in srgb, var(--niv-night) 35%, transparent), var(--niv-night) 88%); }
+.hero-jump--niveora .hero-jump__label { color: var(--niv-night); text-shadow: 0 0 18px var(--color-white), 0 0 2px var(--color-white); }
+.hero-jump--niveora .hero-jump__flash { background: radial-gradient(circle, var(--color-white) 0 40%, #e6f3ff 70%, color-mix(in srgb, var(--niv-glacier) 80%, var(--color-white))); }
+
+/* ——— 2. Whiteout: a blizzard over the whole viewport. Flakes travel one tile left and one tile down, so the loop is seamless. ——— */
+.niveora-whiteout { position: fixed; inset: 0; z-index: 40; pointer-events: none; overflow: hidden; opacity: 0; visibility: hidden; transition: opacity 1.4s, visibility 1.4s; }
+.niveora-whiteout > * { position: absolute; }
+.about-page[data-whiteout="true"] .niveora-whiteout { opacity: 1; visibility: visible; transition-duration: .6s; }
+.about-page[data-whiteout="ending"] .niveora-whiteout { visibility: visible; }
+.niveora-whiteout__fog { inset: -25%; background: radial-gradient(ellipse 45% 35% at 30% 45%, color-mix(in srgb, var(--niv-snow) 55%, transparent), transparent 70%), radial-gradient(ellipse 40% 30% at 75% 60%, color-mix(in srgb, var(--niv-snow) 45%, transparent), transparent 70%), linear-gradient(color-mix(in srgb, #dceaf8 22%, transparent), color-mix(in srgb, #dceaf8 22%, transparent)); }
+.niveora-whiteout__streaks { inset: 0 -50% 0 0; opacity: .5; background: repeating-linear-gradient(-12deg, transparent 0 34px, color-mix(in srgb, var(--niv-snow) 60%, transparent) 34px 35px, transparent 35px 90px); }
+.niveora-whiteout__snow { left: 0; top: calc(-1 * var(--tile)); width: calc(100% + var(--tile)); height: calc(100% + var(--tile)); background-size: var(--tile) var(--tile); }
+.niveora-whiteout__snow--mid { --tile: 190px; --fall: .7s; opacity: .85; background-image: radial-gradient(circle at 30px 40px, var(--niv-snow) 0 3px, transparent 3.5px), radial-gradient(circle at 140px 20px, var(--niv-snow) 0 2.5px, transparent 3px), radial-gradient(circle at 95px 130px, var(--niv-snow) 0 3px, transparent 3.5px), radial-gradient(circle at 170px 160px, var(--niv-snow) 0 2.5px, transparent 3px), radial-gradient(circle at 60px 100px, var(--niv-snow) 0 2px, transparent 2.5px); }
+.niveora-whiteout__snow--near { --tile: 340px; --fall: .48s; opacity: .9; filter: blur(1.5px); background-image: radial-gradient(circle at 60px 90px, var(--niv-snow) 0 6px, transparent 7px), radial-gradient(circle at 260px 230px, var(--niv-snow) 0 5px, transparent 6px), radial-gradient(circle at 200px 40px, var(--niv-snow) 0 4px, transparent 5px), radial-gradient(circle at 120px 300px, var(--niv-snow) 0 5px, transparent 6px); }
+.niveora-whiteout__snow--far { --tile: 110px; --fall: .9s; opacity: .7; background-image: radial-gradient(circle at 15px 20px, var(--niv-snow) 0 1.5px, transparent 2px), radial-gradient(circle at 70px 45px, var(--niv-snow) 0 1.5px, transparent 2px), radial-gradient(circle at 40px 90px, var(--niv-snow) 0 1.5px, transparent 2px), radial-gradient(circle at 95px 75px, var(--niv-snow) 0 1.5px, transparent 2px), radial-gradient(circle at 55px 5px, var(--niv-snow) 0 1.5px, transparent 2px); }
+.niveora-whiteout__frost { inset: 0; background: radial-gradient(ellipse 70% 65% at 50% 50%, transparent 45%, color-mix(in srgb, #e8f4ff 45%, transparent) 78%, color-mix(in srgb, var(--color-white) 80%, transparent)); box-shadow: inset 0 0 120px color-mix(in srgb, var(--color-white) 55%, transparent); }
+.about-page:is([data-whiteout="true"], [data-whiteout="ending"]) .niveora-whiteout__snow { animation: whiteout-snow var(--fall) linear infinite; }
+.about-page:is([data-whiteout="true"], [data-whiteout="ending"]) .niveora-whiteout__streaks { animation: whiteout-streaks .35s linear infinite; }
+.about-page:is([data-whiteout="true"], [data-whiteout="ending"]) .niveora-whiteout__fog { animation: whiteout-fog 2.2s ease-in-out infinite alternate; }
+@keyframes whiteout-snow { to { transform: translate3d(calc(-1 * var(--tile)), var(--tile), 0); } }
+@keyframes whiteout-streaks { to { transform: translateX(-90px); } }
+@keyframes whiteout-fog { from { transform: translateX(6%); opacity: .55; } to { transform: translateX(-8%); opacity: 1; } }
+.niveora-calm { position: fixed; z-index: 41; left: 50%; bottom: 2rem; translate: -50% 0; display: inline-flex; align-items: center; gap: .7rem; min-height: 44px; padding: .65rem 1.1rem; border: 0; background: var(--niv-night); color: var(--color-white); font: 400 .68rem var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+  box-shadow: 0 -3px 0 0 var(--niv-cyan), 0 3px 0 0 var(--niv-cyan), -3px 0 0 0 var(--niv-cyan), 3px 0 0 0 var(--niv-cyan), 0 12px 40px color-mix(in srgb, var(--niv-night) 70%, transparent); }
+.niveora-calm[hidden] { display: none; }
+.niveora-calm span { width: 8px; height: 8px; background: var(--niv-cyan); animation: hud-blink .8s steps(1) infinite; }
+.niveora-calm:hover, .niveora-calm:focus-visible { background: color-mix(in srgb, var(--niv-cyan) 25%, var(--niv-night)); }
+.niveora-calm:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 4px; }
+
+/* ——— 3. Memory capsule: the records thaw out of the ice one by one. ——— */
+.capsule { --focus: var(--focus-inverse); width: min(980px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); margin: auto; padding: 0; border: 0; background: transparent; color: var(--text-inverse); overflow: visible; }
+.capsule[open] { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: clamp(1.25rem, 3vw, 2.5rem); align-items: center; }
+.capsule::backdrop { background: radial-gradient(circle at 30% 50%, color-mix(in srgb, #3a2414 50%, var(--niv-night)), #050b18 75%); }
+.capsule__art { position: relative; width: min(100%, 320px); aspect-ratio: 181 / 205; margin-inline: auto; }
+.capsule__art i { position: absolute; inset: 0; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; filter: drop-shadow(0 0 24px color-mix(in srgb, var(--niv-ember) 60%, transparent)); }
+.capsule__light { position: absolute; left: 50%; top: 45%; width: 160%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; z-index: -1; background: radial-gradient(circle, color-mix(in srgb, var(--niv-ember) 45%, transparent), transparent 62%); }
+.capsule[open] .capsule__art { animation: capsule-arrive .5s steps(5) both; }
+@keyframes capsule-arrive { from { opacity: 0; translate: 0 18px; } to { opacity: 1; translate: 0 0; } }
+.capsule__panel { display: grid; gap: 1rem; padding: clamp(1.25rem, 3vw, 2rem); background: color-mix(in srgb, var(--niv-night) 90%, transparent); box-shadow: 0 -3px 0 0 var(--niv-glacier), 0 3px 0 0 var(--niv-glacier), -3px 0 0 0 var(--niv-glacier), 3px 0 0 0 var(--niv-glacier), 0 0 60px color-mix(in srgb, var(--niv-ember) 18%, transparent); }
+.capsule__panel h2 { margin: 0; color: var(--niv-snow); font: 400 clamp(1.3rem, 2.4vw, 2rem)/1.1 var(--font-pixel); text-shadow: 0 0 18px color-mix(in srgb, var(--niv-ember) 50%, transparent); }
+.capsule__intro { margin: 0; color: var(--text-muted); line-height: 1.6; }
+.capsule__records { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin: 0; padding: 0; list-style: none; }
+.capsule__records li { display: grid; align-content: start; gap: .35rem; padding: .9rem 1rem; background: linear-gradient(160deg, color-mix(in srgb, var(--niv-glacier) 14%, var(--color-space-1)), var(--color-space-1)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--niv-glacier) 45%, transparent); }
+.capsule[open] .capsule__records li { animation: capsule-thaw .6s steps(6) both; }
+@keyframes capsule-thaw { from { opacity: 0; filter: blur(3px) brightness(2.2) saturate(0); } to { opacity: 1; filter: none; } }
+.capsule__label { color: var(--niv-ember); font: 400 .58rem var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; }
+.capsule__records b { color: var(--text-heading); font: 400 .9rem/1.4 var(--font-pixel); }
+.capsule__detail { color: var(--text-muted); font-size: .85rem; line-height: 1.5; }
+.capsule__records a { justify-self: start; display: inline-flex; align-items: center; min-height: 32px; color: var(--color-primary-200); font-size: .8rem; text-decoration: underline; text-underline-offset: 3px; }
+.capsule__close { justify-self: start; min-height: 44px; padding: .6rem 1rem; border: 1px solid var(--niv-glacier); background: transparent; color: var(--color-white); font: 400 .66rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
+.capsule__close:hover, .capsule__close:focus-visible { background: color-mix(in srgb, var(--niv-glacier) 18%, transparent); }
+@media (max-width: 760px) { .capsule[open] { grid-template-columns: 1fr; overflow: auto; } .capsule__art { width: min(50%, 200px); } .capsule__records { grid-template-columns: 1fr; } }
+html.reduce-motion .capsule[open] :is(.capsule__art, .capsule__records li) { animation: none; }
+@media (prefers-reduced-motion: reduce) { .capsule[open] :is(.capsule__art, .capsule__records li) { animation: none; } }
+
+/* ——— 4. Expedition log ——— */
+.chapter--log { padding-top: calc(var(--section-space) * 1.1); }
+.log-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: clamp(2.5rem, 7vw, 6.5rem); align-items: center; }
+.log-card { --mx: 50%; --my: 30%; }
+.home-page .log-card__frame { --frame: color-mix(in srgb, var(--niv-glacier) 55%, var(--color-space-line)); }
+.log-card__portrait { position: relative; overflow: hidden; aspect-ratio: 3 / 4; background: var(--niv-night); }
+.log-ice { position: absolute; inset: 0; z-index: 2; display: none; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.log-card[data-frozen="true"] .log-ice { display: block; }
+.log-ice__shards polygon { stroke: color-mix(in srgb, var(--color-white) 55%, transparent); stroke-width: .3; }
+.log-ice__cracks { fill: none; stroke: var(--color-white); stroke-width: .9; filter: drop-shadow(0 0 1.5px var(--niv-glacier)); }
+.log-card[data-frozen="true"] .holo-card__name::after { content: " ❄"; color: var(--niv-glacier); }
+.log-card .holo-card__class { border-color: var(--niv-cyan); color: var(--niv-cyan); }
+
+/* Living portrait: a window onto Nivéora — aurora, falling snow, Glaucia blinking and Prince at her feet. */
+.niveora-portrait { position: absolute; inset: 0; overflow: hidden; image-rendering: pixelated; }
+.niveora-portrait > i, .niveora-portrait > span { position: absolute; display: block; }
+.niveora-portrait__sky { inset: 0; background: no-repeat 76% 6% / auto 160%; }
+.niveora-portrait__sky::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--niv-night) 70%, transparent)); }
+.niveora-portrait__aurora { inset: 0 0 50%; mix-blend-mode: screen; }
+.niveora-portrait__aurora i { position: absolute; inset: 0; background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--niv-cyan) 26%, transparent) 0 6px, transparent 6px 9px, color-mix(in srgb, var(--niv-lilac) 20%, transparent) 9px 14px, transparent 14px 20px); mask: linear-gradient(180deg, transparent, #000 30%, #000 60%, transparent); opacity: .5; animation: portrait-aurora 8s steps(14) infinite alternate; }
+.niveora-portrait__aurora i + i { animation-duration: 12s; animation-delay: -4s; opacity: .35; }
+.niveora-portrait__glaucia { left: 58%; bottom: 0; height: 90%; aspect-ratio: 305 / 834; translate: -50% 0; background: no-repeat 0 0 / 100% 100%; filter: drop-shadow(0 0 18px color-mix(in srgb, var(--niv-cyan) 28%, transparent)); }
+.niveora-portrait__blink { position: absolute; inset: 0; opacity: 0; background: no-repeat 0 0 / 100% 100%; }
+.niveora-portrait__prince { left: 24%; bottom: 1%; height: 24%; aspect-ratio: 318 / 477; translate: -50% 0; background: no-repeat 0 0 / 100% 100%; }
+.niveora-portrait__flake { width: 3px; height: 3px; background: var(--niv-snow); animation: portrait-snow 6s linear var(--fall-delay) infinite; }
+@keyframes portrait-snow { from { translate: 0 -40px; opacity: 0; } 10% { opacity: 1; } to { translate: -24px 420px; opacity: .8; } }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .niveora-portrait__blink { animation: crew-blink 4.4s steps(1) .9s infinite; } }
+html.reduce-motion .niveora-portrait * { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .niveora-portrait * { animation: none !important; } }
+
+.log-copy > p:not(.chapter-tag) { max-width: 58ch; }
+.log-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1px; margin: 0 0 1.25rem; background: var(--hud-line); border: 1px solid var(--hud-line); }
+.log-stats > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: .35rem; padding: .9rem 1rem; background: var(--color-space-1); }
+.log-stats dt { color: var(--text-inverse-muted); font: 400 .55rem/1.5 var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; }
+.log-stats dd { margin: 0; color: var(--text-heading); font: 400 clamp(1.25rem, 2vw, 1.8rem)/1.1 var(--font-pixel); text-shadow: 0 0 24px color-mix(in srgb, var(--niv-cyan) 45%, transparent); white-space: nowrap; }
+.chapter .log-languages { margin: 0; color: var(--text-heading); font: 400 .66rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; }
+
+/* Crystal badges: flip to read what each recognition is. */
+.badges { margin-top: clamp(4rem, 8vw, 6.5rem); text-align: center; }
+.badges__title { margin: 0 0 .5rem; color: var(--niv-glacier); font: 400 .78rem var(--font-pixel); letter-spacing: .2em; text-transform: uppercase; }
+.chapter .badges__intro { margin: 0 auto 2.25rem; max-width: 52ch; font-size: .92rem; }
+.badge-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+.badge { position: relative; display: block; width: 100%; min-height: 230px; padding: 0; border: 0; background: none; color: inherit; font: inherit; cursor: pointer; perspective: 900px; }
+.badge__inner { position: relative; display: block; height: 100%; min-height: 230px; transform-style: preserve-3d; transition: transform .7s var(--ease-out); }
+.badge:is(:hover, :focus-visible) .badge__inner, .badge[aria-pressed="true"] .badge__inner { transform: rotateY(180deg); }
+.badge__face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 1.25rem; backface-visibility: hidden; background: linear-gradient(170deg, color-mix(in srgb, var(--tint) 10%, var(--color-space-2)), var(--color-space-0)); box-shadow: inset 0 0 0 1px var(--hud-line); }
+.badge__face b { color: var(--text-heading); font: 400 .74rem/1.5 var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; }
+.badge__face--back { transform: rotateY(180deg); box-shadow: inset 0 0 0 1px var(--tint), 0 0 30px color-mix(in srgb, var(--tint) 20%, transparent); }
+.badge__face--back span { color: var(--text-muted); font-size: .86rem; line-height: 1.6; }
+.badge__icon { width: 64px; height: 64px; image-rendering: pixelated; filter: drop-shadow(0 0 14px color-mix(in srgb, var(--tint) 60%, transparent)); }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .badge:hover .badge__icon { animation: badge-shine .9s steps(3) infinite; } }
+@keyframes badge-shine { 50% { filter: drop-shadow(0 0 22px var(--tint)) brightness(1.3); } }
+
+/* ——— 5. Crossing map ——— */
+.chapter--ops { padding-top: calc(var(--section-space) * .6); }
+.ops { --lane-h: 50px; --era-h: 4.2rem; --axis-h: 2.6rem; --brief-h: 5rem; --zf: 0; --zs: 1; }
+.ops-filter { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.75rem; }
+.ops-filter[hidden] { display: none; }
+.ops-filter button { min-height: 44px; margin: 0; padding: .6rem .95rem; border: 1px solid var(--color-primary-400); border-radius: 0; background: transparent; color: var(--text-inverse); font: 400 .66rem var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast); }
+.ops-filter button:hover { border-color: var(--niv-glacier); }
+.ops-filter button[aria-pressed="true"] { background: var(--niv-glacier); border-color: var(--niv-glacier); color: var(--color-primary-950); }
+
+.ops-era[data-era="foundation"] { --era: var(--era-foundation); }
+.ops-era[data-era="advocacy"] { --era: var(--era-advocacy); }
+.ops-era[data-era="leadership"] { --era: var(--era-leadership); }
+.ops-roles { margin: 0; padding: 0; list-style: none; }
+.ops-role__brief h4 { margin: .35rem 0 .3rem; color: var(--text-heading); font-size: 1rem; line-height: 1.4; }
+.ops-role__brief p { margin: 0; font-size: .85rem; line-height: 1.5; }
+.ops-role__period { color: var(--color-neutral-400) !important; font: 400 .6rem/1.6 var(--font-pixel) !important; letter-spacing: .08em; text-transform: uppercase; }
+.ops-role__period b { color: var(--era); font-weight: 400; }
+.ops-role__company { color: var(--text-muted); }
+.ops-role__brief a { display: inline-flex; align-items: center; min-height: 32px; color: var(--color-primary-200); font-size: .8rem; text-decoration: underline; text-underline-offset: 3px; }
+.ops-era__title { margin: 0; color: var(--era); font: 400 .72rem/1.5 var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
+.ops-era__title small { display: block; color: var(--text-inverse-muted); font-size: .58rem; letter-spacing: .08em; }
+.ops-chart { position: relative; }
+
+@media (min-width: 901px) {
+  .ops-chart {
+    height: calc(var(--era-h) + var(--axis-h) + var(--lanes) * var(--lane-h) + var(--brief-h)); overflow: hidden;
+    border-top: 1px solid var(--hud-line); border-bottom: 1px solid var(--hud-line);
+    background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--lane-h) - 1px), color-mix(in srgb, var(--hud-line) 55%, transparent) calc(var(--lane-h) - 1px) var(--lane-h)) 0 calc(var(--era-h) + var(--axis-h)) / 100% calc(var(--lanes) * var(--lane-h)) no-repeat;
+  }
+  .ops-chart :is(.ops-era__band, .ops-era__title, .ops-role) { transition: left .9s var(--ease-out), width .9s var(--ease-out), opacity .5s; }
+  .ops-chart .ops-tick { transition: left .9s var(--ease-out); }
+  .ops-era, .ops-roles { position: static; }
+  .ops-era__band { position: absolute; top: 0; bottom: var(--brief-h); left: calc((var(--x) - var(--zf)) / var(--zs) * 100%); width: calc(var(--w) / var(--zs) * 100%); border-left: 1px dashed color-mix(in srgb, var(--era) 60%, transparent); background: linear-gradient(to bottom, color-mix(in srgb, var(--era) 10%, transparent), color-mix(in srgb, var(--era) 3%, transparent)); }
+  .ops-era__title { position: absolute; top: .8rem; left: calc((var(--x) - var(--zf)) / var(--zs) * 100% + .75rem); width: calc(var(--w) / var(--zs) * 100% - 1.5rem); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .ops-era__summary { position: absolute; left: 0; right: 0; bottom: 1.4rem; margin: 0; max-width: 64ch; color: var(--text-muted); font-size: .95rem; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; pointer-events: none; }
+  :is(.ops[data-focus="foundation"] .ops-era[data-era="foundation"], .ops[data-focus="advocacy"] .ops-era[data-era="advocacy"], .ops[data-focus="leadership"] .ops-era[data-era="leadership"]) .ops-era__summary { visibility: visible; }
+  .ops-axis { position: absolute; left: 0; right: 0; top: var(--era-h); height: var(--axis-h); }
+  .ops-tick { position: absolute; top: .55rem; left: calc((var(--x) - var(--zf)) / var(--zs) * 100%); translate: -50% 0; color: var(--text-inverse-muted); font: 400 .58rem var(--font-pixel); letter-spacing: .06em; }
+  .ops-tick::after { content: ""; position: absolute; left: 50%; top: 1.4rem; width: 1px; height: calc(var(--lanes) * var(--lane-h) + 1rem); background: color-mix(in srgb, var(--hud-line) 70%, transparent); }
+  .ops-tick--now { translate: -100% 0; color: var(--niv-glacier); }
+  .ops-tick--now::after { left: auto; right: 0; background: var(--niv-glacier); opacity: .5; }
+  .ops-trail { position: absolute; left: 0; right: 0; top: calc(var(--era-h) + var(--axis-h) - 5px); height: 3px; background: repeating-linear-gradient(90deg, var(--hud-line) 0 6px, transparent 6px 12px); }
+  .ops-trail__beam { position: absolute; inset: 0; transform: scaleX(var(--progress, 1)); transform-origin: 0 50%; background: linear-gradient(90deg, var(--niv-glacier), var(--niv-cyan) 60%, var(--niv-lilac)); box-shadow: 0 0 8px var(--niv-cyan); }
+  .ops-ship { position: absolute; z-index: 3; top: calc(var(--era-h) + var(--axis-h) - 14px); left: calc(var(--progress, 0) * 100%); width: 44px; aspect-ratio: 137 / 70; translate: -50% 0; visibility: hidden; opacity: 0; pointer-events: none; }
+  .ops-ship__art { position: absolute; inset: 0; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; scale: -1 1; filter: drop-shadow(4px 0 6px var(--niv-cyan)); }
+  .ops-ship__year { position: absolute; left: 50%; top: -1.35rem; translate: -50% 0; padding: .1rem .35rem; background: var(--niv-glacier); color: var(--color-primary-950); font: 400 .56rem var(--font-pixel); }
+  .ops-role { position: absolute; z-index: 1; left: calc((var(--x) - var(--zf)) / var(--zs) * 100%); width: max(12px, calc(var(--w) / var(--zs) * 100% - 3px)); top: calc(var(--era-h) + var(--axis-h) + var(--lane) * var(--lane-h) + 7px); height: calc(var(--lane-h) - 14px); }
+  .ops-role:is(:hover, :focus-within) { z-index: 4; }
+  .ops-role__bar { position: relative; display: flex; align-items: center; height: 100%; overflow: hidden; cursor: pointer; transition: opacity .35s, filter .35s, box-shadow .35s;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--era) 22%, var(--color-space-2)), color-mix(in srgb, var(--era) 50%, var(--color-space-2)));
+    box-shadow: inset 0 0 0 1px var(--era), 0 0 18px color-mix(in srgb, var(--era) 35%, transparent); }
+  .ops-role[data-lit="false"] .ops-role__bar { opacity: .32; filter: saturate(.3); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--era) 55%, transparent); }
+  .ops-role__bar::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-white) 45%, transparent), transparent); translate: -100% 0; }
+  .ops-role:is(:hover, :focus-within) .ops-role__bar::before { animation: ops-sweep .7s steps(8) 1; }
+  .ops-role[data-current] .ops-role__bar::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 4px; background: var(--color-white); box-shadow: 0 0 10px var(--era), 0 0 22px var(--era); animation: hud-blink .9s steps(1) infinite; }
+  .ops-role__label { overflow: hidden; padding: 0 .6rem; color: var(--color-white); font: 400 .6rem var(--font-pixel); letter-spacing: .04em; white-space: nowrap; text-overflow: ellipsis; text-shadow: 1px 1px 0 var(--color-space-0); }
+  .ops-role__brief { position: absolute; left: 0; top: calc(100% + 8px); width: 300px; padding: .9rem 1rem; opacity: 0; translate: 0 -4px; pointer-events: none; transition: opacity .2s, translate .2s;
+    background: var(--color-space-1); box-shadow: 0 -2px 0 0 var(--era), 0 2px 0 0 var(--era), -2px 0 0 0 var(--era), 2px 0 0 0 var(--era), 0 18px 40px color-mix(in srgb, var(--color-space-0) 80%, transparent); }
+  .ops-role:is(:hover, :focus-within) .ops-role__brief { opacity: 1; translate: 0 0; pointer-events: auto; }
+  .ops-role[data-side="end"] .ops-role__brief { left: auto; right: 0; }
+  .ops-role[data-open="up"] .ops-role__brief { top: auto; bottom: calc(100% + 8px); translate: 0 4px; }
+  .ops:not([data-focus="all"]) .ops-era :is(.ops-role, .ops-era__band, .ops-era__title) { opacity: .22; }
+  :is(.ops[data-focus="foundation"] .ops-era[data-era="foundation"], .ops[data-focus="advocacy"] .ops-era[data-era="advocacy"], .ops[data-focus="leadership"] .ops-era[data-era="leadership"]) :is(.ops-role, .ops-era__band, .ops-era__title, .ops-era__summary) { opacity: 1; }
+}
+@keyframes ops-sweep { to { translate: 100% 0; } }
+
+/* ——— 6. Expedition call: the ship lifts off the snow when the chapter comes into view. ——— */
+.chapter--expedition::before { background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--niv-cyan) 32%, transparent), color-mix(in srgb, var(--niv-lilac) 28%, transparent) 25%, transparent 60%); }
+.expedition-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 16%; background: linear-gradient(to top, color-mix(in srgb, var(--niv-snow) 16%, transparent), transparent); clip-path: polygon(0 60%, 8% 40%, 16% 55%, 27% 30%, 36% 50%, 48% 35%, 60% 55%, 71% 32%, 83% 50%, 92% 38%, 100% 52%, 100% 100%, 0 100%); }
+.expedition-ship { position: absolute; left: 10%; bottom: 13%; width: 110px; aspect-ratio: 137 / 70; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; transform: scale(-1, 1) rotate(6deg); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--niv-cyan) 40%, transparent)); }
+.expedition-ship__engine { position: absolute; left: 96%; top: 38%; width: 28px; height: 32%; opacity: 0; background: radial-gradient(ellipse at 0% 50%, var(--color-white), var(--niv-cyan) 40%, transparent 75%); }
+.chapter--expedition[data-launch="true"] .expedition-ship__engine { opacity: 1; animation: hud-blink .18s steps(2) infinite; }
+.chapter--expedition[data-launch="true"] .expedition-ship { animation: expedition-launch 9s cubic-bezier(.55, 0, .7, .4) forwards; }
+@keyframes expedition-launch { 0% { transform: translate(0, 0) scale(-1, 1) rotate(6deg); } 15% { transform: translate(0, -20px) scale(-1, 1) rotate(6deg); } 100% { transform: translate(110vw, -70vh) scale(-1, 1) rotate(14deg); } }
+.chapter .expedition-hint { margin: 2.5rem auto 0; color: var(--niv-glacier); font: 400 .62rem/1.8 var(--font-pixel); letter-spacing: .08em; }
+.chapter .expedition-end { margin: 1rem auto 0; color: var(--text-inverse-muted); font: 400 .6rem var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+
+/* ——— 7. Settling snow: a drift grows from the bottom of the screen and caps build up on cards. ——— */
+.snowcap { position: absolute; z-index: 5; left: -3px; right: -3px; top: -10px; height: 14px; pointer-events: none; transform: scaleY(0); transform-origin: 50% 100%; transition: transform .3s steps(3);
+  background: radial-gradient(circle at 10% 100%, var(--niv-snow) 0 5px, transparent 5.5px) 0 0 / 22px 10px repeat-x, linear-gradient(to top, var(--niv-snow) 0 45%, transparent 45%);
+  filter: drop-shadow(0 1px 0 color-mix(in srgb, var(--niv-glacier) 60%, transparent)); }
+.holo-card__frame > .snowcap { top: 0; }
+.about-page[data-settled="true"] .snowcap { transform: scaleY(1); transition: transform 6s linear; }
+.niveora-drift { position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; height: 90px; pointer-events: none; transform: translateY(105%); transition: transform .45s steps(4); }
+.niveora-drift > span { position: absolute; left: 0; right: 0; bottom: 0; }
+.niveora-drift__back { height: 80%; opacity: .6; background: radial-gradient(circle at 50% 100%, var(--niv-snow) 0 30px, transparent 31px) 0 100% / 74px 44px repeat-x, linear-gradient(to top, var(--niv-snow) 0 45%, transparent 45%); filter: drop-shadow(0 -2px 0 var(--niv-glacier)); }
+.niveora-drift__front { height: 60%; background: radial-gradient(circle at 50% 100%, var(--niv-snow) 0 22px, transparent 23px) 20px 100% / 52px 30px repeat-x, linear-gradient(to top, var(--niv-snow) 0 50%, transparent 50%); filter: drop-shadow(0 -2px 0 color-mix(in srgb, var(--niv-glacier) 80%, transparent)) drop-shadow(0 -10px 18px color-mix(in srgb, var(--niv-snow) 35%, transparent)); }
+.about-page[data-settled="true"] .niveora-drift { transform: translateY(0); transition: transform 7s cubic-bezier(.2, .6, .3, 1); }
+.niveora-flake { position: fixed; z-index: 45; width: 4px; height: 4px; pointer-events: none; background: var(--niv-snow); }
+
+/* ——— 8. Frozen cards: pixel frost over the card; scrape it (mouse), click or tap three times, or press Enter. ——— */
+.is-frozen { position: relative; }
+.ice-block { position: absolute; z-index: 8; inset: -3px; display: block; cursor: grab; -webkit-user-select: none; user-select: none; touch-action: pan-y; -webkit-tap-highlight-color: transparent;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--color-white) 75%, transparent), 0 0 22px color-mix(in srgb, var(--niv-glacier) 40%, transparent); }
+.ice-block:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 3px; }
+.ice-block__frost { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.ice-block__cracks { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.ice-block__crack { fill: none; stroke: var(--color-white); stroke-width: 2; vector-effect: non-scaling-stroke; opacity: 0; filter: drop-shadow(0 0 3px var(--niv-glacier)); }
+.ice-block:is([data-hits="1"], [data-hits="2"], [data-hits="3"]) .ice-block__crack--1, .ice-block:is([data-hits="2"], [data-hits="3"]) .ice-block__crack--2 { opacity: 1; }
+.ice-block__hint { position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: .35rem .55rem; background: color-mix(in srgb, var(--niv-night) 82%, transparent); color: var(--niv-snow); font: 400 .58rem/1 var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; pointer-events: none; transition: opacity .3s; box-shadow: 0 -2px 0 0 var(--niv-glacier), 0 2px 0 0 var(--niv-glacier), -2px 0 0 0 var(--niv-glacier), 2px 0 0 0 var(--niv-glacier); }
+.ice-block[data-shattered] { box-shadow: none; pointer-events: none; }
+.ice-block[data-shattered] :is(.ice-block__cracks, .ice-block__hint) { display: none; }
+.ice-block[data-melting] { opacity: 0; transition: opacity 1.4s steps(7); pointer-events: none; }
+.ice-shard { position: absolute; width: 8px; height: 8px; background: color-mix(in srgb, #e9f6ff 85%, transparent); box-shadow: inset -2px -2px 0 color-mix(in srgb, var(--niv-glacier) 80%, transparent); pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .ice-block:not([data-shattered]) .ice-block__hint { animation: hud-blink 1.6s steps(1) infinite; } }
+
+/* ——— Responsive ——— */
+/* Phones, tablets and short laptop screens: copy first, then the whole 16:9 plate at full width, never cropped. */
+@media (max-width: 1199px), (max-height: 679px) {
+  .about-page .niveora-hero { --scene-height: 56.25vw; display: block; min-height: 0; padding-bottom: 56.25%; }
+  .about-page .niveora-hero .page-hero__content { padding-block: 4.5rem 2rem; }
+  .niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 720px); }
+  .about-page .niveora-hero h1 { max-width: min(100%, 720px); font-size: clamp(2rem, 6vw, 3.2rem); }
+  .niveora-hero :is(.page-hero__image, .hero-scene-layer--niveora, .niveora-layer, .page-hero__shade) { top: auto !important; bottom: 0; left: 0; right: 0; width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; }
+  .niveora-hero .page-hero__shade { background: var(--hero-overlay-scene); }
+  .niveora-status { top: auto; bottom: calc(var(--scene-height) - 3.4rem); }
+  .niveora-hero .hud-hint { display: none; }
+}
+@media (max-width: 900px) {
+  .niveora-hud .niveora-readout { left: 0; right: auto; top: 1.5rem; align-items: flex-start !important; }
+  .niveora-readout > span:last-child { display: none; }
+
+  .ops-era { margin-top: 2.25rem; padding: 1.25rem 0 0 1.25rem; border-left: 2px solid var(--era); }
+  .ops-era__band, .ops-axis, .ops-trail, .ops-ship { display: none; }
+  .ops-era__summary { margin: .6rem 0 1rem; color: var(--text-muted); font-size: .92rem; }
+  .ops-role { position: relative; padding: 1rem 0; border-top: 1px solid var(--hud-line); }
+  .ops-role__bar { display: block; width: 18px; height: 6px; margin-bottom: .6rem; background: var(--era); box-shadow: 0 0 10px var(--era); }
+  .ops-role__label { display: none; }
+  .ops-role[data-current] .ops-role__bar { animation: hud-blink 1s steps(1) infinite; }
+  .ops:not([data-focus="all"]) .ops-era { display: none; }
+  :is(.ops[data-focus="foundation"] .ops-era[data-era="foundation"], .ops[data-focus="advocacy"] .ops-era[data-era="advocacy"], .ops[data-focus="leadership"] .ops-era[data-era="leadership"]) { display: block; }
+
+  .log-grid { grid-template-columns: 1fr; }
+  .log-card { width: min(380px, 100%); margin-inline: auto; }
+  .log-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .log-stats > div:last-child { grid-column: 1 / -1; }
+  .badge-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .expedition-ship { width: 80px; }
+}
+@media (max-width: 520px) { .badge-list { grid-template-columns: 1fr; } }
+
+/* ——— Reduced motion: the composition stays, effects stop ——— */
+html.reduce-motion :is(.niveora-whiteout, .niveora-drift, .niveora-calm, .expedition-ship__engine) { display: none; }
+html.reduce-motion :is(.niveora-crystal__art, .niveora-station__lamp, .niveora-wind i) { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  :is(.niveora-whiteout, .niveora-drift, .niveora-calm, .expedition-ship__engine) { display: none; }
+  :is(.niveora-crystal__art, .niveora-station__lamp, .niveora-wind i) { animation: none; }
+}
+.niveora-hero[data-motion="false"] .hud-hint { display: none; }

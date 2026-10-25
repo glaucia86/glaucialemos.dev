@@ -1,5 +1,5 @@
 export const BOOT_KEY = "galaxia-boot";
-export const ECHO_BOOT_KEY = "echo-boot";
+export const NIVEORA_BOOT_KEY = "niveora-boot";
 export const R2_BOOT_KEY = "r2-boot";
 export const BOOT_DONE_EVENT = "holonet:boot-done";
 

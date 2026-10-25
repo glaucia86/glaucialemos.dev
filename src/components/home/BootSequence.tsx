@@ -9,10 +9,10 @@ import { play } from "@/lib/sfx";
 const BLOCKS = 24;
 let mounted = 0;
 const pixels = (rows: string[]) => rows.flatMap((row, y) => [...row].flatMap((pixel, x) => pixel === "#" ? [[x, y]] : []));
-// Rebel starbird, 15 × 15 pixels.
-const CREST = pixels([
-  ".......#.......", "......###......", "..#...###...#..", ".##...###...##.", ".##..#####..##.", "###..#####..###", "###...###...###", "####..###..####",
-  ".####.###.####.", ".#####.#.#####.", "..###########..", "...#########...", "....#######....", "......###......", ".......#.......",
+// Nivéora's ice crystal, 15 × 15 pixels.
+const ICE_CREST = pixels([
+  ".......#.......", "....#..#..#....", ".....#.#.#.....", "..#...###...#..", "...#..###..#...", "....#.###.#....", ".#...#####...#.", "#######.#######",
+  ".#...#####...#.", "....#.###.#....", "...#..###..#...", "..#...###...#..", ".....#.#.#.....", "....#..#..#....", ".......#.......",
 ]);
 // R2-D2's dome and body, 15 × 15 pixels.
 const R2_CREST = pixels([
@@ -24,9 +24,9 @@ const OBSERVATORY_CREST = pixels([
   ".......#.......", "......###......", "....#######....", "......###......", ".......#.......", "...............", ".....#####.....", "...#########...",
   "..##.####..##..", ".###.#####.###.", ".#############.", ".#############.", ".##.##...##.##.", ".##.##...##.##.", "###############",
 ]);
-const CRESTS: Partial<Record<BootVariant, number[][]>> = { echo: CREST, astromech: R2_CREST, observatory: OBSERVATORY_CREST };
+const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, astromech: R2_CREST, observatory: OBSERVATORY_CREST };
 
-type BootVariant = "echo" | "astromech" | "observatory";
+type BootVariant = "niveora" | "astromech" | "observatory";
 type BootProps = { lines: string[]; granted: string; skip: string; label: string; storageKey?: string; brand?: string; variant?: BootVariant; armOnNavigation?: boolean };
 
 // Visible only when the inline boot script marked <html data-boot="pending">.

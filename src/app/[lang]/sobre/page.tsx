@@ -1,28 +1,31 @@
 import "../../home.css";
-import "../../about.css";
+import "../../niveora.css";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { socialLinks } from "@/data/social";
-import { SceneMotion } from "@/components/SceneMotion";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { BootSequence } from "@/components/home/BootSequence";
 import { HudClock } from "@/components/home/HudClock";
 import { HomeChoreography } from "@/components/home/HomeChoreography";
-import { ChapterJump, ChapterTag, numerals } from "@/components/home/Chapter";
-import { EchoBaseScene } from "@/components/about/EchoBaseScene";
+import { ChapterJump, ChapterTag } from "@/components/home/Chapter";
+import { observatory } from "@/components/home/ObservatoryScene";
+import { NiveoraHotspots, NiveoraScene, niveoraScene } from "@/components/about/NiveoraScene";
+import { NiveoraMotion } from "@/components/about/NiveoraMotion";
+import { MemoryCapsule, type CapsuleRecord } from "@/components/about/MemoryCapsule";
+import { ExpeditionLog } from "@/components/about/ExpeditionLog";
 import { CareerMap } from "@/components/about/CareerMap";
 import { AboutChoreography } from "@/components/about/AboutChoreography";
-import { RebelDossier } from "@/components/about/RebelDossier";
-import { EchoEggs } from "@/components/about/EchoEggs";
-import { LeiaActor } from "@/components/about/LeiaActor";
-import { PixelSprite, TRANSPORT } from "@/components/about/sprites";
+import { SnowDrift } from "@/components/about/SnowDrift";
+import { FrozenCards } from "@/components/about/FrozenCards";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { bootScriptFor, ECHO_BOOT_KEY } from "@/lib/boot";
-import { buildCareer, careerStats } from "@/lib/career";
-import { getCargos, getEventStats } from "@/lib/data";
+import type { NiveoraCopy } from "@/i18n/niveora";
+import { bootScriptFor, NIVEORA_BOOT_KEY } from "@/lib/boot";
+import { buildCareer, careerStats, type CareerRole } from "@/lib/career";
+import { getCargos, getEventStats, getEventos } from "@/lib/data";
+import { formatExperiencePeriod } from "@/lib/home-curation";
 
 type Props = { params: Promise<{ lang: string }> };
 
@@ -36,97 +39,108 @@ function splitTitle(title: string) {
   return [words.slice(0, at).join(" "), words.slice(at).join(" ")];
 }
 
+const code = (index: number) => `✦ ${String(index + 1).padStart(2, "0")}`;
+
+// The memory capsule's records: first role, first documented event, the Microsoft years and today, all from the data.
+function capsuleRecords(roles: CareerRole[], microsoftYears: number, copy: NiveoraCopy["capsule"], locale: string): CapsuleRecord[] {
+  const first = roles[roles.length - 1];
+  const now = roles[0];
+  const microsoft = roles.filter((role) => role.empresa === "Microsoft");
+  const event = getEventos().reduce((oldest, item) => item.ano < oldest.ano ? item : oldest);
+  const records: CapsuleRecord[] = [
+    { label: copy.labels.first, title: first.cargo, detail: `${first.empresa} · ${formatExperiencePeriod(first.periodo, locale)}`, source: first.fonte },
+    { label: copy.labels.event, title: event.nome, detail: [event.cidade, event.pais, event.ano].filter(Boolean).join(" · "), source: event.fonte },
+  ];
+  if (microsoft.length) records.push({ label: copy.labels.microsoft, title: copy.microsoftYears.replace("{n}", String(microsoftYears)), detail: [...new Set(microsoft.map((role) => role.cargo))].reverse().join(" → "), source: microsoft[0].fonte });
+  records.push({ label: copy.labels.now, title: now.cargo, detail: `${now.empresa} · ${formatExperiencePeriod(now.periodo, locale)}`, source: now.fonte });
+  return records;
+}
+
 export default async function About({ params }: Props) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const d = getDictionary(lang);
-  const e = d.echo;
+  const n = d.niveora;
   const roles = buildCareer(getCargos());
   const career = careerStats(roles);
   const events = getEventStats();
   const [first, second] = splitTitle(d.about.title);
-  const ticker = [...e.hud.ticker, ...e.hud.ticker];
-  const tx = (index: number) => `TX.${numerals[index]}`;
+  const ticker = [...n.hud.ticker, ...n.hud.ticker];
 
   return <main id="main" className="home-page about-page" tabIndex={-1}>
-    <script dangerouslySetInnerHTML={{ __html: bootScriptFor(ECHO_BOOT_KEY) }} />
-    <BootSequence lines={e.boot.lines} granted={e.boot.granted} skip={e.boot.skip} label={e.boot.label} storageKey={ECHO_BOOT_KEY} brand="// ECHO BASE UPLINK" variant="echo" armOnNavigation />
+    <script dangerouslySetInnerHTML={{ __html: bootScriptFor(NIVEORA_BOOT_KEY) }} />
+    <BootSequence lines={n.boot.lines} granted={n.boot.granted} skip={n.boot.skip} label={n.boot.label} storageKey={NIVEORA_BOOT_KEY} brand={n.boot.brand} variant="niveora" armOnNavigation />
     <ReadingProgress />
 
-    {/* Transmission I — Echo Base */}
-    <div className="echo-hero-wrap">
-      <section className="page-hero echo-hero" aria-labelledby="about-title" data-echo-hero>
-        <Image className="page-hero__image" src="/pixel/sobre-leia.jpg" alt={d.about.heroImageAlt} fill priority sizes="100vw" />
-        <SceneMotion scene="hoth"><EchoBaseScene /></SceneMotion>
+    {/* Chapter 1 — Nivéora */}
+    <div className="niveora-hero-wrap">
+      <NiveoraMotion labelledBy="about-title" labels={{ jump: n.chapters[1], touch: n.hud.touch, calm: n.hud.calm, status: n.status }}>
+        <Image className="page-hero__image" src={niveoraScene.assets.background.src} alt={d.about.heroImageAlt} fill priority fetchPriority="high" sizes="100vw" />
+        <NiveoraScene />
         <div className="page-hero__shade" aria-hidden="true" />
-        <div className="echo-frost" aria-hidden="true" />
-        <div className="hero-hud echo-hud" aria-hidden="true">
+        <div className="hero-hud niveora-hud" aria-hidden="true">
           <span className="hud-corner hud-corner--tl" /><span className="hud-corner hud-corner--tr" /><span className="hud-corner hud-corner--bl" /><span className="hud-corner hud-corner--br" />
-          <p className="hud-top"><span className="hud-rec" />{e.hud.channel}<span className="hud-sep">/</span><HudClock /></p>
-          <p className="hud-location">{e.hud.location}</p>
-          <p className="echo-hud__readout"><span>{e.hud.temp} <b data-temp>−32 °C</b></span><span>{e.hud.shield} <span className="echo-shield" data-shield><i /><i /><i /><i /><i /></span></span></p>
-          <p className="hud-hint">{e.hud.hint}</p>
+          <p className="hud-top"><span className="hud-rec" />{n.hud.channel}<span className="hud-sep">/</span><HudClock /></p>
+          <p className="hud-location">{n.hud.location}</p>
+          <p className="niveora-readout"><span>{n.hud.temp} <b data-temp>−32 °C</b></span><span>{n.hud.wind} <span className="niveora-wind"><i /><i /><i /><i /><i /></span></span></p>
+          <p className="hud-hint">{n.hud.hint}</p>
         </div>
-        <p className="echo-touch-hint" aria-hidden="true"><span />{e.hud.touch}</p>
-        <div className="page-hero__content echo-copy">
-          <ChapterTag code={tx(0)} label={e.transmissions[0]} />
-          <h1 id="about-title">{first}{second && <span>{second}</span>}</h1>
+        <div className="page-hero__content niveora-copy">
+          <ChapterTag code={code(0)} label={n.chapters[0]} />
+          <h1 id="about-title">{first}{second && <><br /><span>{second}</span></>}</h1>
           <p className="page-hero__subtitle">{d.about.intro}</p>
           <p className="page-hero__extra">{d.about.mvp}</p>
           <div className="actions">
             <a className="button primary" data-magnetic href="#trajetoria">{d.about.primaryCta}</a>
             <a className="hero-link" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{d.about.secondaryCta} <span aria-hidden="true">↗</span></a>
-            <button type="button" className="echo-ion-button" hidden><span className="echo-ion-button__icon" aria-hidden="true" />{e.hero.ion}</button>
           </div>
-          <p className="sr-only" role="status" data-ion-status data-done={e.hero.ionDone} />
         </div>
-      </section>
+        <NiveoraHotspots labels={{ glaucia: n.hud.glaucia, prince: n.hud.prince, crystal: n.hud.crystal, station: n.hud.station, capsule: n.hud.capsule }} />
+      </NiveoraMotion>
+      <MemoryCapsule copy={n.capsule} records={capsuleRecords(roles, career.microsoftYears, n.capsule, lang)} art={niveoraScene.assets.props["memory-capsule-open"].src} />
       <div className="hero-bar" aria-hidden="true">
-        <span className="hero-bar__caption"><span className="pixel-mark" />{e.hero.caption}</span>
+        <span className="hero-bar__caption"><span className="pixel-mark" />{n.hero.caption}</span>
         <span className="hero-bar__ticker"><span className="hero-bar__track">{ticker.map((item, index) => <span key={index}>{item}<b>✦</b></span>)}</span></span>
-        <span className="hero-bar__scroll">{e.hero.scroll}<i /></span>
+        <span className="hero-bar__scroll">{n.hero.scroll}<i /></span>
       </div>
     </div>
 
-    <ChapterJump code={tx(1)} label={e.transmissions[1]} />
+    {/* Chapter 2 — Expedition log */}
+    <ExpeditionLog copy={n.log} tag={[code(1), n.chapters[1]]} locale={lang} stats={[career.years, events.eventos, events.paises, 100000, career.microsoftYears]} />
 
-    {/* Transmission II — Rebel dossier */}
-    <RebelDossier copy={e.dossier} threepio={e.threepio} tag={[tx(1), e.transmissions[1]]} locale={lang} stats={[career.years, events.eventos, events.paises, 100000, career.microsoftYears]} />
+    <ChapterJump code={code(2)} label={n.chapters[2]} />
 
-    <ChapterJump code={tx(2)} label={e.transmissions[2]} />
-
-    {/* Transmission III — Operations map */}
+    {/* Chapter 3 — Crossing map */}
     <section className="chapter chapter--ops" id="trajetoria" aria-labelledby="ops-title">
       <div className="chapter__inner">
         <div className="chapter-head">
-          <div><ChapterTag code={tx(2)} label={e.transmissions[2]} /><h2 id="ops-title" data-reveal="lines">{e.ops.title}</h2><p data-reveal="up">{e.ops.intro}</p></div>
+          <div><ChapterTag code={code(2)} label={n.chapters[2]} /><h2 id="ops-title" data-reveal="lines">{n.map.title}</h2><p data-reveal="up">{n.map.intro}</p></div>
         </div>
-        <CareerMap roles={roles} copy={e.ops} locale={lang} source={d.common.source} />
+        <CareerMap roles={roles} copy={n.map} locale={lang} source={d.common.source} ship={observatory.assets.props["spacecraft-far"].src} />
       </div>
     </section>
 
-    {/* Transmission IV — Recruitment */}
-    <section className="chapter chapter--credits chapter--recruit" aria-labelledby="recruit-title">
-      <div className="credits-sky recruit-sky" aria-hidden="true">
-        <span className="recruit-transport"><PixelSprite {...TRANSPORT} /><span className="recruit-transport__engine" /></span>
-        <span className="recruit-cover recruit-cover--a" /><span className="recruit-cover recruit-cover--b" />
-        <span className="recruit-ground" />
+    {/* Chapter 4 — Expedition call */}
+    <section className="chapter chapter--credits chapter--expedition" aria-labelledby="expedition-title">
+      <div className="credits-sky expedition-sky" aria-hidden="true">
+        <span className="expedition-ship" style={{ backgroundImage: `url(${observatory.assets.props["spacecraft-far"].src})` }}><span className="expedition-ship__engine" /></span>
+        <span className="expedition-ground" />
       </div>
       <div className="chapter__inner credits">
-        <ChapterTag code={tx(3)} label={e.transmissions[3]} />
-        <h2 id="recruit-title" data-reveal="lines">{e.credits.title}</h2>
-        <p data-reveal="up">{e.credits.body}</p>
+        <ChapterTag code={code(3)} label={n.chapters[3]} />
+        <h2 id="expedition-title" data-reveal="lines">{n.credits.title}</h2>
+        <p data-reveal="up">{n.credits.body}</p>
         <div className="actions">
-          <Link className="button primary" data-magnetic href={`/${lang}/servicos#contato`}>{e.credits.cta}</Link>
-          <a className="hero-link" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{e.credits.secondary} <span aria-hidden="true">↗</span></a>
+          <Link className="button primary" data-magnetic href={`/${lang}/servicos#contato`}>{n.credits.cta}</Link>
+          <a className="hero-link" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{n.credits.secondary} <span aria-hidden="true">↗</span></a>
         </div>
-        <p className="recruit-hint">{e.credits.hint}</p>
-        <p className="recruit-end">{e.credits.end}</p>
+        <p className="expedition-hint">{n.credits.hint}</p>
+        <p className="expedition-end">{n.credits.end}</p>
       </div>
     </section>
 
-    <EchoEggs copy={e.eggs} />
-    <LeiaActor />
+    <FrozenCards copy={n.ice} />
+    <SnowDrift />
     <HomeChoreography />
     <AboutChoreography />
   </main>;

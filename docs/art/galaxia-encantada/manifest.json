@@ -29,6 +29,32 @@
       "notes": ""
     },
     {
+      "id": "GE-DOG-02B",
+      "file": "approved-source/GE-DOG-02B-niveora.png",
+      "sceneId": "niveora",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "0c09bb267ed610e99aba16c7b8c9b8043e44ccd5396797c6d907b18c23c45d6d",
+      "reviewer": "Glaucia Lemos",
+      "notes": "Fonte fornecida para Etapa B; integração normalizada em 25/10/2026. Composição e uso em animação aguardam aprovação visual."
+    },
+    {
+      "id": "GE-DOG-02C",
+      "file": "approved-source/GE-DOG-02C-niveora.png",
+      "sceneId": "niveora",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "ad11842e1b89b2b5b527cdf0472aedcc88dbe7b00e461be24b57d12cac1a830f",
+      "reviewer": "Glaucia Lemos",
+      "notes": "Fonte fornecida para Etapa B; integração normalizada em 25/10/2026. Composição e uso em animação aguardam aprovação visual."
+    },
+    {
       "id": "GE-DOG-03",
       "file": "approved-source/GE-DOG-03-mars-lab.png",
       "sceneId": "mars-lab",
@@ -118,6 +144,19 @@
       "sha256": "86518d5136c1e3208626d4d5ba52f725c70be97c7af6bddd42f15b3f3648d8e2",
       "reviewer": "Glaucia Lemos",
       "notes": ""
+    },
+    {
+      "id": "GE-GL-02B",
+      "file": "approved-source/GE-GL-02B-niveora.png",
+      "sceneId": "niveora",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "381a480f5364ef42efba53560405f0a47f1b9d5db5baabceccd0ff80a4cdf745",
+      "reviewer": "Glaucia Lemos",
+      "notes": "Fonte fornecida para Etapa B; integração normalizada em 25/10/2026. Composição e uso em animação aguardam aprovação visual."
     },
     {
       "id": "GE-GL-03",
