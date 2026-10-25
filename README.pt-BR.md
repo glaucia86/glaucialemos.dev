@@ -4,15 +4,6 @@
 
 <br />
 
-<pre>
-   ██████╗ ██╗         ·  GALÁXIA ENCANTADA // abrindo o observatório
-  ██╔════╝ ██║         ·  carregando perfil: GLAUCIA_LEMOS
-  ██║  ███╗██║         ·  classe: principal software engineer
-  ██║   ██║██║         ·          ai transformation lead · microsoft mvp
-  ╚██████╔╝███████╗    ·  ACESSO CONCEDIDO
-   ╚═════╝ ╚══════╝
-</pre>
-
 # glaucialemos.dev
 
 ### *Engenharia, IA e curiosidade em uma expedição por um universo autoral em pixel art.*
