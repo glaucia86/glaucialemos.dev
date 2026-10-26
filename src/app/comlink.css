@@ -23,7 +23,7 @@
 .comlink-toggle[data-fresh] { color: var(--color-white); animation: comlink-ring .18s steps(2) 8; box-shadow: 0 -2px 0 0 var(--color-accent), 0 2px 0 0 var(--color-accent), -2px 0 0 0 var(--color-accent), 2px 0 0 0 var(--color-accent), 0 0 30px color-mix(in srgb, var(--color-accent) 50%, transparent); }
 .comlink-toggle[data-fresh] .comlink-toggle__screen { fill: var(--color-accent-200); }
 @keyframes comlink-ring { 50% { translate: 2px 0; } }
-.comlink-fresh { position: fixed; z-index: 55; right: max(1rem, env(safe-area-inset-right)); top: calc(72px + .75rem); margin: 0; padding: .45rem .7rem; opacity: 0; translate: 0 6px; pointer-events: none; background: var(--color-accent); color: var(--text-on-accent); font: 400 .58rem var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; transition: opacity .2s, translate .2s; }
+.comlink-fresh { position: fixed; z-index: 55; right: max(1rem, env(safe-area-inset-right)); top: calc(var(--header-height) + .75rem); margin: 0; padding: .45rem .7rem; opacity: 0; translate: 0 6px; pointer-events: none; background: var(--color-accent); color: var(--text-on-accent); font: 400 .58rem var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; transition: opacity .2s, translate .2s; }
 .comlink-fresh[data-show] { opacity: 1; translate: 0 0; }
 
 .comlink { --focus: var(--focus-inverse); width: min(460px, calc(100% - 2rem)); max-height: min(720px, calc(100dvh - 6rem)); margin: 5rem 1rem auto auto; padding: 0; border: 0; background: transparent; color: var(--text-inverse); overflow: visible; }

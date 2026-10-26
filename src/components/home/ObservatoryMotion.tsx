@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, ScrollTrigger, useGSAP, DESKTOP, FINE_POINTER, SCRAMBLE_CHARS } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY, FINE_POINTER, SCRAMBLE_CHARS } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
@@ -51,7 +51,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
   const hero = useRef<HTMLElement>(null);
   const jumpCanvas = useRef<HTMLCanvasElement>(null);
   const motion = useMotionEnabled();
-  const desktop = useMediaQuery(DESKTOP);
+  const desktop = useMediaQuery(HERO_OVERLAY);
   const fine = useMediaQuery(FINE_POINTER);
 
   useGSAP(() => {

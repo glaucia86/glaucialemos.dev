@@ -27,6 +27,7 @@ const routes = [["home", ""], ["about", "sobre"], ["projects", "projetos"], ["co
 export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dictionary: Dictionary; children: ReactNode }) {
   const pathname = usePathname(); const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const menuRef = useRef<HTMLButtonElement>(null);
   const [reduced, setReduced] = useState<boolean | null>(null); const [egg, setEgg] = useState(false); const [menuOpen, setMenuOpen] = useState(false);
   const [sound, setSound] = useState(false); const [scrolled, setScrolled] = useState(false); const [comlinkSlot, setComlinkSlot] = useState<HTMLSpanElement | null>(null);
   useEffect(() => { try { setReduced(localStorage.getItem("reduce-motion") === "true"); } catch { setReduced(false); } setSound(isSoundEnabled()); }, []);
@@ -49,7 +50,33 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
   }, []);
   useEffect(() => { const dialog = dialogRef.current; if (!dialog) return; if (egg && !reduced && !matchMedia("(prefers-reduced-motion: reduce)").matches && !dialog.open) dialog.showModal(); if ((!egg || reduced) && dialog.open) dialog.close(); }, [egg, reduced]);
   useEffect(() => { setMenuOpen(false); }, [pathname]);
-  useEffect(() => { const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setMenuOpen(false); }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
+  useEffect(() => {
+    if (menuOpen) document.querySelector<HTMLAnchorElement>("#primary-navigation a")?.focus();
+  }, [menuOpen]);
+  useEffect(() => {
+    const wide = matchMedia("(min-width: 1440px)");
+    const close = () => {
+      setMenuOpen(false);
+      if (!wide.matches && document.activeElement?.closest("#primary-navigation")) menuRef.current?.focus();
+    };
+    wide.addEventListener("change", close);
+    return () => wide.removeEventListener("change", close);
+  }, []);
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+    const update = () => {
+      document.documentElement.style.setProperty("--visible-height", `${viewport.height}px`);
+      document.documentElement.style.setProperty("--visible-top", `${viewport.offsetTop}px`);
+    };
+    update();
+    viewport.addEventListener("resize", update); viewport.addEventListener("scroll", update);
+    return () => {
+      viewport.removeEventListener("resize", update); viewport.removeEventListener("scroll", update);
+      document.documentElement.style.removeProperty("--visible-height"); document.documentElement.style.removeProperty("--visible-top");
+    };
+  }, []);
+  useEffect(() => { const onKey = (event: KeyboardEvent) => { if (event.key === "Escape" && menuOpen) { setMenuOpen(false); menuRef.current?.focus(); } }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, [menuOpen]);
   useEffect(() => { const onScroll = () => setScrolled(scrollY > 24); onScroll(); addEventListener("scroll", onScroll, { passive: true }); return () => removeEventListener("scroll", onScroll); }, []);
   const go = (href: string) => { setMenuOpen(false); router.push(href); };
   const toggleSound = () => { setSoundEnabled(!sound); setSound(!sound); };
@@ -58,16 +85,17 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
     <a className="skip-link" href="#main">{dictionary.accessibility.skip}</a>
     <header className="site-header" data-scrolled={scrolled}>
       <Link href={`/${lang}`} className="brand" onClick={(event) => { if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); go(`/${lang}`); }}><span className="brand__mark" aria-hidden="true" />GL<span>.</span></Link>
-      <nav id="primary-navigation" className={menuOpen ? "is-open" : ""} aria-label={dictionary.accessibility.primaryNav}>{routes.map(([key, slug], index) => { const href = `/${lang}${slug ? `/${slug}` : ""}`; return <Link className={pathname === href ? "active" : ""} aria-current={pathname === href ? "page" : undefined} href={href} key={key} onClick={(event) => { if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); go(href); }}><span className="nav-index" aria-hidden="true">0{index}</span>{dictionary.nav[key]}</Link>; })}</nav>
-      <div className="header-tools">
-        <label className="sr-only" htmlFor="locale">{dictionary.nav.language}</label><select id="locale" value={lang} onChange={(event) => go(localizePath(pathname, event.target.value as Locale))}>{locales.map((locale) => <option value={locale} key={locale}>{locale.toUpperCase()}</option>)}</select>
-        <span className="comlink-slot" ref={setComlinkSlot} />
+      <nav id="primary-navigation" className={menuOpen ? "is-open" : ""} aria-label={dictionary.accessibility.primaryNav}>{routes.map(([key, slug], index) => { const href = `/${lang}${slug ? `/${slug}` : ""}`; return <Link className={pathname === href ? "active" : ""} aria-current={pathname === href ? "page" : undefined} href={href} key={key} onClick={(event) => { if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); go(href); }}><span className="nav-index" aria-hidden="true">0{index}</span>{dictionary.nav[key]}</Link>; })}<div className="nav-preferences">
         <button className="sound-toggle" type="button" aria-pressed={sound} aria-label={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} title={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} onClick={toggleSound}>
           <svg viewBox="0 0 16 16" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false"><path fill="currentColor" d="M2 6h3V5h1V4h1V3h1v10H7v-1H6v-1H5v-1H2z" />{sound ? <path fill="currentColor" d="M10 6h1v4h-1zM12 4h1v8h-1zM14 2h1v12h-1z" /> : <path fill="currentColor" d="M10 5h1v1h1v1h1V6h1V5h1v1h-1v1h-1v2h1v1h1v1h-1v-1h-1V9h-1v1h-1v1h-1v-1h1V9h1V7h-1V6h-1z" />}</svg>
         </button>
         <button className="motion-toggle" type="button" aria-pressed={Boolean(reduced)} onClick={() => setReduced((value) => !value)}>{reduced ? dictionary.motion.enable : dictionary.motion.reduce}</button>
+      </div></nav>
+      <div className="header-tools">
+        <label className="sr-only" htmlFor="locale">{dictionary.nav.language}</label><select id="locale" value={lang} onChange={(event) => go(localizePath(pathname, event.target.value as Locale))}>{locales.map((locale) => <option value={locale} key={locale}>{locale.toUpperCase()}</option>)}</select>
+        <span className="comlink-slot" ref={setComlinkSlot} />
       </div>
-      <button className="menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="primary-navigation" aria-label={dictionary.accessibility.primaryNav} onClick={() => setMenuOpen((open) => !open)}><span aria-hidden="true" /><span aria-hidden="true" /><span aria-hidden="true" /></button>
+      <button ref={menuRef} className="menu-toggle" type="button" aria-expanded={menuOpen} aria-controls="primary-navigation" aria-label={dictionary.accessibility.primaryNav} onClick={() => setMenuOpen((open) => !open)}><span aria-hidden="true" /><span aria-hidden="true" /><span aria-hidden="true" /></button>
     </header>
     {children}
     <PageEffects />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, ScrollTrigger, useGSAP, FINE_POINTER } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY, FINE_POINTER } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
@@ -19,7 +19,7 @@ import { FREEZE_EVENT, STORM_END_EVENT } from "./FrozenCards";
 const ABOUT_EGGS: EggId[] = ["paw-tracks", "memory-capsule", "whiteout", "aurora-prism", "snowdrift"];
 const HERO_EGGS: EggId[] = ["paw-tracks", "memory-capsule", "whiteout", "aurora-prism"];
 // Same breakpoint as niveora.css: the copy sits over the plate only on wide and tall screens; elsewhere it stacks.
-const OVERLAY = "(min-width: 1200px) and (min-height: 680px)";
+const OVERLAY = HERO_OVERLAY;
 const PRISM_MS = 6500;
 const WHITEOUT_MS = 8000;
 const TRACKS_FADE_MS = 16000;

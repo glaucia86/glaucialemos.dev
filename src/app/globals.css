@@ -68,7 +68,7 @@ button,select,input,textarea {
   display: flex;
   align-items: center;
   gap: 1.8rem;
-  height: 64px;
+  height: var(--header-height);
   padding: 0 max(1.5rem,calc((100vw - 1180px)/2));
   border-bottom: 1px solid var(--border-inverse);
   background: var(--gradient-header);
@@ -658,11 +658,11 @@ main {
 
 .not-found {
   padding: 0;
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - var(--header-height));
 }
 
 .not-found .page-hero {
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - var(--header-height));
   width: 100%;
 }
 
@@ -802,7 +802,7 @@ footer small {
   .site-header nav {
     display: none;
     position: absolute;
-    top: 64px;
+    top: var(--header-height);
     left: 0;
     width: 100%;
     padding: 1rem 1.5rem;

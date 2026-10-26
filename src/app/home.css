@@ -39,7 +39,7 @@ html[data-boot="pending"] .boot--observatory { background: radial-gradient(ellip
 /* ——— 1. Observatory hero ——— */
 .home-page { overflow: clip; }
 .home-hero { background: var(--color-space-0); }
-.home-page .home-hero-v2 { min-height: max(640px, calc(100svh - 72px)); cursor: crosshair; }
+.home-page .home-hero-v2 { min-height: max(640px, calc(100svh - var(--header-height))); cursor: crosshair; }
 .home-hero-v2 .page-hero__content { padding-block: 6rem 5rem; }
 .home-hero-v2 :is(.chapter-tag, .hero-name, .hero-role, .page-hero__subtitle, .actions) { max-width: min(46%, 560px); }
 .home-page .home-hero-v2 .hero-name {

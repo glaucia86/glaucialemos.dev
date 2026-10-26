@@ -6,7 +6,7 @@ button:disabled { cursor: not-allowed; }
 p { text-wrap: pretty; }
 h1, h2, h3 { text-wrap: balance; }
 .site-header {
-  height: 76px;
+  height: var(--header-height);
   padding-inline: max(var(--gutter), calc((100vw - var(--content-width)) / 2));
   background: var(--surface-dark);
   box-shadow: none;
@@ -131,8 +131,8 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 @media (min-width: 901px) and (max-width: 1120px) { .site-header { gap: 1rem; } .site-header nav { gap: .8rem; } }
 @media (max-width: 900px) {
-  .site-header { height: 64px; gap: .7rem; }
-  .site-header nav { top: 64px; padding: 1rem var(--gutter); }
+  .site-header { height: var(--header-height); gap: .7rem; }
+  .site-header nav { top: var(--header-height); padding: 1rem var(--gutter); }
   .site-header nav a { min-height: 44px; }
   .home-hero .page-hero { min-height: 0; }
   .home-hero .page-hero__content > :is(.eyebrow, h1, .page-hero__subtitle, .actions) { max-width: 100%; }

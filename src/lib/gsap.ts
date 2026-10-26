@@ -11,6 +11,8 @@ import { useGSAP } from "@gsap/react";
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrambleTextPlugin, DrawSVGPlugin, Flip, useGSAP);
 
 export const DESKTOP = "(min-width: 901px)";
+// Keep in sync with the hero layout queries in the scene stylesheets.
+export const HERO_OVERLAY = "(min-width: 1200px) and (min-height: 680px) and (hover: hover) and (pointer: fine)";
 export const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 export const SCRAMBLE_CHARS = "█▓▒░<>/\\|=+*#01";
 

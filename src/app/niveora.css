@@ -24,7 +24,7 @@ html[data-boot="pending"] .boot--niveora { background: radial-gradient(ellipse a
    viewport) and the copy sits over its quiet left side. Everything else: copy on top, the full 16:9 scene below it. */
 .niveora-hero { --scene-x: 80%; --scene-y: 100%; }
 .niveora-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
-.about-page .niveora-hero { min-height: min(calc(100svh - 72px), 56.25vw); }
+.about-page .niveora-hero { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
 .about-page .niveora-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
 .niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 580px); }
 .about-page .niveora-hero h1 { max-width: min(44%, 580px); margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--color-primary-900) 80%, transparent); }
@@ -33,7 +33,7 @@ html[data-boot="pending"] .boot--niveora { background: radial-gradient(ellipse a
 .niveora-hero .page-hero__subtitle { margin-top: 1.1rem; font-size: clamp(1rem, 1.25vw, 1.12rem); }
 .niveora-hero .page-hero__extra { margin-top: .9rem; font-size: .92rem; }
 .niveora-hero .actions { margin-top: 1.6rem; }
-@media (min-width: 1200px) and (min-height: 680px) { .page-hero.niveora-hero .page-hero__shade { background: var(--hero-overlay-left); } }
+@media (min-width: 1200px) and (min-height: 680px) and (hover: hover) and (pointer: fine) { .page-hero.niveora-hero .page-hero__shade { background: var(--hero-overlay-left); } }
 
 /* Scene plane: the 16:9 plate's cover projection, anchored on the snowfield (the crop eats sky, never the feet). */
 .hero-scene-layer--niveora, .niveora-layer { container-type: size; }
@@ -357,7 +357,7 @@ html.reduce-motion .niveora-portrait * { animation: none !important; }
 
 /* ——— Responsive ——— */
 /* Phones, tablets and short laptop screens: copy first, then the whole 16:9 plate at full width, never cropped. */
-@media (max-width: 1199px), (max-height: 679px) {
+@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
   .about-page .niveora-hero { --scene-height: 56.25vw; display: block; min-height: 0; padding-bottom: 56.25%; }
   .about-page .niveora-hero .page-hero__content { padding-block: 4.5rem 2rem; }
   .niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 720px); }

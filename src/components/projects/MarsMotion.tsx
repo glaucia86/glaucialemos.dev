@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type ReactNode } from "react";
-import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
@@ -18,7 +18,7 @@ type Reading = { kind: "scan" | "sample"; repo: ReadingRepo };
 
 const HERO_EGGS: EggId[] = ["rover-scan", "sample-cache"];
 // Same breakpoint as marte.css: the copy sits over the plate only on wide and tall screens; elsewhere it stacks.
-const OVERLAY = "(min-width: 1200px) and (min-height: 680px)";
+const OVERLAY = HERO_OVERLAY;
 const pct = (spot: { u: number; v: number }): UV => ({ u: spot.u / 100, v: spot.v / 100 });
 
 type Props = {
