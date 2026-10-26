@@ -9,7 +9,7 @@ export type Palette = { base: string; accent: string; glow: string };
 export type VoyageWorld = { page: (typeof DESTINATIONS)[number]; path: string | null; plate: string | null; palette: Palette };
 
 const FAINT: Palette = { base: "#120d1c", accent: "#5b4a6e", glow: "#c75b76" };
-const PLATES: Partial<Record<EggPage, keyof typeof SCENES>> = { home: "earth-observatory", about: "niveora", projects: "mars-lab", content: "lumina" };
+const PLATES: Partial<Record<EggPage, keyof typeof SCENES>> = { home: "earth-observatory", about: "niveora", projects: "mars-lab", content: "lumina", services: "aurelia" };
 const PATHS: Record<(typeof DESTINATIONS)[number], string | null> = { home: "", about: "/sobre", projects: "/projetos", content: "/conteudo", events: "/eventos", services: "/servicos", notfound: null };
 
 export const VOYAGE_WORLDS: VoyageWorld[] = DESTINATIONS.map((page) => {

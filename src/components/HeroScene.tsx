@@ -7,7 +7,6 @@ type Scene = "dagobah" | "nevarro" | "bespin" | "death-star";
 const sceneByImage: Record<string, Scene> = {
   "/pixel/home-yoda.jpg": "dagobah",
   "/pixel/eventos-grogu.jpg": "nevarro",
-  "/pixel/servicos-vader.jpg": "bespin",
   "/pixel/404-stormtrooper.jpg": "death-star",
 };
 

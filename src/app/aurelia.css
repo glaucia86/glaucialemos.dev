@@ -1,0 +1,155 @@
+/* Aurélia shares the chapter/hero/boot system of its sister worlds. The plate is untouched. */
+.services-page {
+  --scene-bg: #082a30; --scene-accent: #87e4c1; --scene-glow: #ffa69e;
+  --aurelia-cream: #f9d3ba; --aurelia-line: color-mix(in srgb, var(--scene-accent) 35%, var(--color-space-line));
+  overflow: clip;
+}
+.services-page [hidden] { display: none !important; }
+.services-page :is(button,a,input):focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 5px; }
+.services-page :is(.chapter-tag,.hero-link) { color: var(--scene-accent); }
+.services-page .chapter-head > div > p { max-width: 65ch; }
+.boot--aurelia .boot__frame { background: var(--scene-bg); color: var(--text-inverse); --frame: var(--scene-accent); }
+.boot--aurelia .boot__brand span, .boot--aurelia .boot__granted { color: var(--scene-accent); }
+.boot--aurelia .boot__block { background: var(--scene-accent); }
+.boot--aurelia .boot__block:nth-child(3n) { background: var(--scene-glow); }
+.boot--aurelia .boot__crest { display: block; width: 56px; height: 56px; margin-bottom: 1.25rem; }
+.boot--aurelia .boot__crest-px { fill: var(--scene-accent); opacity: 0; }
+.reading-progress--aurelia .reading-progress__fill { background: var(--scene-accent); box-shadow: 0 0 10px var(--scene-glow); }
+.reading-progress__leaf { position: absolute; width: 16px; height: 16px; bottom: 0; left: 50%; translate: -50% 0; image-rendering: pixelated; }
+.aurelia-hero-wrap { background: var(--color-space-0); }
+.aurelia-hero { --scene-x: 80%; --scene-y: 100%; }
+.services-page .aurelia-hero { min-height: min(calc(100svh - var(--header-height)),56.25vw); }
+.aurelia-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
+.services-page .aurelia-hero .page-hero__content { padding-block: clamp(3rem,7vh,5rem) clamp(2rem,5vh,3.5rem); }
+.aurelia-copy > :is(.chapter-tag,.aurelia-world,h1,.page-hero__subtitle,.page-hero__extra,.actions) { max-width: min(44%,580px); }
+.services-page .aurelia-hero h1 { font-size: clamp(2.1rem,3.3vw,3.5rem); line-height: 1.08; letter-spacing: -.04em; text-wrap: balance; }
+.aurelia-world { margin: .9rem 0; color: var(--scene-glow); font: .75rem/1.5 var(--font-pixel); letter-spacing: .2em; text-transform: uppercase; }
+.aurelia-hero .page-hero__subtitle { margin-top: 1.1rem; font-size: clamp(1rem,1.25vw,1.12rem); }
+.aurelia-hero .page-hero__extra { font-size: .92rem; }
+.aurelia-hero .actions { margin-top: 1.6rem; }
+.hero-scene-layer--aurelia,.aurelia-layer { container-type: size; }
+.aurelia-layer { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.aurelia-plane { position: absolute; width: max(100cqw,177.777778cqh); height: max(100cqh,56.25cqw); left: var(--scene-x); top: var(--scene-y); transform: translate(calc(-1 * var(--scene-x)),calc(-1 * var(--scene-y))); }
+.aurelia-plane > * { position: absolute; display: block; }
+.aurelia-sky { inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+.aurelia-crew,.aurelia-prince { inset: 0; pointer-events: none; }
+:is(.aurelia-crew,.aurelia-prince) > i { position: absolute; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; opacity: 0; }
+.aurelia-crew:not([data-pose]) > [data-actor-pose="idle"],.aurelia-prince:not([data-pose]) > [data-actor-pose="stand"],
+.aurelia-crew[data-pose="idle"] > [data-actor-pose="idle"],.aurelia-crew[data-pose="relaxed"] > [data-actor-pose="relaxed"],.aurelia-crew[data-pose="side"] > [data-actor-pose="side"],
+.aurelia-prince[data-pose="stand"] > [data-actor-pose="stand"],.aurelia-prince[data-pose="paw"] > [data-actor-pose="paw"] { opacity: 1; }
+.aurelia-garden > i,.aurelia-beacon > i { display: block; position: absolute; inset: 0; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; }
+.aurelia-garden__bloom,.aurelia-beacon__active { opacity: 0; }
+.aurelia-hero[data-bloom] .aurelia-garden__bloom,.aurelia-hero[data-beacon] .aurelia-beacon__active { opacity: 1; }
+.aurelia-hero[data-bloom] .aurelia-garden__idle,.aurelia-hero[data-beacon] .aurelia-beacon__idle { opacity: 0; }
+.aurelia-hot { position: absolute; min-width: 44px; min-height: 44px; border: 0; padding: 0; background: transparent; pointer-events: auto; touch-action: manipulation; cursor: pointer; }
+.aurelia-hot::after { content: ''; position: absolute; inset: 0; border: 1px solid var(--scene-accent); opacity: 0; }
+.aurelia-hot:hover::after,.aurelia-hot:focus-visible::after { opacity: 1; }
+.aurelia-hot::before { content: ''; position: absolute; top: -6px; left: 50%; width: 4px; height: 4px; background: var(--aurelia-cream); box-shadow: 0 0 8px var(--scene-glow); }
+.aurelia-hud :is(.hud-location,.hud-hint) { color: var(--scene-accent); }
+.aurelia-discoveries { margin: 0; padding: .9rem 1.5rem; color: var(--scene-glow); background: var(--color-space-1); font: .65rem/1.8 var(--font-pixel); text-align: center; }
+.aurelia-readout { position: relative; z-index: 3; width: min(400px,calc(100% - 2 * var(--gutter))); margin: 0 auto 1.25rem; padding: 1.1rem; border: 1px solid var(--scene-accent); background: var(--scene-bg); color: var(--text-inverse); }
+.aurelia-readout p { margin: 0 0 .65rem; font-size: .9rem; }
+.aurelia-readout .aurelia-readout__title { font-weight: 700; font-size: 1.05rem; }
+.aurelia-kicker { font: .65rem/1.8 var(--font-pixel); color: var(--scene-glow); }
+.aurelia-readout__actions { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
+.services-page :is(.aurelia-readout button,.aurelia-reset,.seed-vault button,.greenhouse button) { padding: .65rem .8rem; min-height: 44px; background: transparent; color: var(--scene-accent); border: 1px solid var(--aurelia-line); cursor: pointer; }
+.aurelia-readout a { color: var(--scene-accent); }
+.aurelia-hero .hero-jump__label { color: var(--aurelia-cream); }
+@media (min-width:1200px) and (min-height:680px) and (hover:hover) and (pointer:fine) {
+  .aurelia-hero .page-hero__shade { background: var(--hero-overlay-left); }
+  .aurelia-readout { position: absolute; left: 48%; top: 12%; width: 27%; margin: 0; max-height: 76%; overflow: auto; }
+}
+/* The suspended beds pick up the terrace's copper edges and quiet mint light. */
+.chapter--orbits { background: radial-gradient(ellipse at 20% 50%,var(--scene-bg),transparent 65%),var(--color-space-0); }
+.orbital-garden { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem,6vw,6rem); align-items: center; }
+.orbital-garden__planet { position: relative; width: min(100%,430px); aspect-ratio: 1; margin: auto; }
+.orbital-garden__planet > i { position: absolute; inset: 26%; border-radius: 50%; background: repeating-linear-gradient(18deg,#285b62 0 4px,#87e4c1 5px 7px,#387b78 8px 16px); box-shadow: inset -20px -10px 30px #082a30,0 0 40px #87e4c122; }
+.orbital-garden__planet > span { position: absolute; inset: calc(5% + var(--orbit) * 6%); border: 1px solid var(--aurelia-line); border-radius: 50%; rotate: var(--angle); transition: rotate .4s steps(8); }
+.orbital-garden__planet b { position: absolute; width: 9px; height: 9px; background: var(--scene-glow); top: -4px; left: calc(50% - 4px); }
+.orbital-garden[data-aligned] .orbital-garden__planet > span { border-color: var(--scene-accent); box-shadow: 0 0 16px #87e4c133; }
+.orbital-garden__controls { display: flex; gap: .75rem; margin-block: 1.5rem; }
+.orbital-garden__controls button { min-width: 64px; min-height: 48px; color: var(--scene-glow); border: 1px solid var(--aurelia-line); background: var(--color-space-1); font: .75rem var(--font-pixel); cursor: pointer; }
+.orbital-garden__controls [aria-pressed="true"] { color: var(--scene-accent); border-color: var(--scene-accent); }
+.orbital-garden__panel [role="status"] { min-height: 3em; color: var(--scene-accent); }
+.aurelia-reset { display: block; margin-block: 1rem; }
+.chapter--garden { background: linear-gradient(180deg,var(--color-space-0),var(--scene-bg)); }
+.service-garden__instruction { color: var(--text-inverse-muted); font-size: .9rem; }
+.services-page .aurelia-cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1.5rem; margin-top: 2rem; }
+.services-page .aurelia-cards article { position: relative; display: flex; flex-direction: column; gap: 1rem; padding: 2rem 1.5rem; background: var(--color-space-1); border: 1px solid var(--aurelia-line); border-top: 3px solid var(--scene-glow); scroll-margin-top: 7rem; }
+.aurelia-cards h3 { font-size: 1.3rem; line-height: 1.35; margin: 0; text-wrap: balance; }
+.aurelia-cards p { margin: 0; color: var(--text-inverse-muted); }
+.aurelia-cards strong { color: var(--scene-glow); margin-top: auto; }
+.aurelia-cards .hero-link { font-size: .9rem; }
+.aurelia-cards article[data-lit] { border-color: var(--scene-accent); box-shadow: 0 0 25px #87e4c11c; }
+.service-garden__stem { height: 76px; position: relative; margin-bottom: .8rem; opacity: .4; }
+.service-garden__stem::before { content: ''; position: absolute; bottom: 0; left: 50%; width: 2px; height: 55px; background: var(--scene-accent); }
+.service-garden__stem i { position: absolute; left: 50%; top: 25%; width: 22px; height: 12px; background: var(--scene-accent); clip-path: polygon(0 0,70% 0,100% 50%,100% 100%,30% 100%,0 50%); }
+.service-garden__stem i:nth-child(2) { left: calc(50% - 22px); top: 45%; rotate: 180deg; }
+.service-garden__stem i:nth-child(3) { width: 12px; height: 12px; left: calc(50% - 5px); top: 0; background: var(--scene-glow); transform: rotate(45deg); }
+[data-lit] .service-garden__stem { opacity: 1; }
+.service-garden__connect { min-height: 44px; background: transparent; color: var(--scene-accent); border: 1px solid var(--aurelia-line); font: .7rem var(--font-pixel); cursor: pointer; margin-top: 1rem; }
+.service-garden__connect[aria-pressed="true"] { background: #87e4c120; }
+.service-garden__status { min-height: 1.8em; color: var(--scene-accent); margin-top: 1.5rem; }
+.seed-vault { max-width: 720px; margin: 3rem auto 0; border: 1px solid var(--aurelia-line); background: var(--color-space-1); }
+.seed-vault summary { padding: 1.3rem 1.5rem; cursor: pointer; color: var(--scene-glow); }
+.seed-vault summary span { color: var(--scene-accent); margin-right: .5rem; }
+.seed-vault__body { padding: 0 1.5rem 1.5rem; display: grid; gap: 1rem; }
+.seed-vault__body :is(h3,p) { margin: 0; }
+.chapter--collaboration { background: radial-gradient(ellipse at 85% 10%,var(--scene-bg),transparent 50%),var(--color-space-0); }
+.greenhouse { display: grid; grid-template-columns: .8fr 1.2fr; gap: 3rem; align-items: center; padding: 2rem; margin-block: 2rem 3rem; border: 1px solid var(--aurelia-line); background: #082a3080; }
+.greenhouse__glass { position: relative; height: 220px; border: 1px solid var(--scene-glow); border-radius: 50% 50% 0 0; overflow: hidden; background: repeating-linear-gradient(90deg,transparent 0 calc(25% - 1px),#87e4c144 calc(25% - 1px) 25%); }
+.greenhouse__glass::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 90%,#87e4c133,transparent); }
+.greenhouse__glass i { position: absolute; bottom: 15%; left: 15%; width: 10px; height: 38%; border-left: 2px solid var(--scene-accent); border-top: 8px solid var(--scene-glow); rotate: -10deg; }
+.greenhouse__glass i:nth-child(2) { left: 35%; height: 25%; rotate: 15deg; }.greenhouse__glass i:nth-child(3) { left: 55%; height: 45%; rotate: 4deg; }.greenhouse__glass i:nth-child(4) { left: 70%; height: 35%; rotate: -8deg; }.greenhouse__glass i:nth-child(5) { left: 80%; height: 20%; rotate: 12deg; }
+.greenhouse[data-dusk] .greenhouse__glass i { filter: drop-shadow(0 0 8px var(--scene-glow)); }
+.greenhouse[data-dusk] .greenhouse__glass { background-color: var(--color-space-0); }
+.greenhouse__copy h3 { margin-top: 0; font-size: 1.4rem; }
+.greenhouse__copy label { display: block; margin-top: 1.5rem; }
+.greenhouse__scale { display: flex; justify-content: space-between; font-size: .8rem; color: var(--text-inverse-muted); margin-top: .75rem; }
+.greenhouse input { width: 100%; min-height: 44px; accent-color: var(--scene-accent); }
+.services-page[data-greenhouse="dusk"] :is(.chapter--orbits,.chapter--garden,.chapter--collaboration) { background-color: #061c24; }
+.services-page[data-greenhouse="dusk"] .aurelia-hero .page-hero__image { filter: brightness(.65) saturate(.85); }
+.services-page[data-greenhouse="dusk"] :is(.aurelia-garden,.aurelia-beacon) { filter: drop-shadow(0 0 7px var(--scene-glow)); }
+.aurelia-relay { display: inline-flex; gap: .75rem; align-items: center; min-height: 48px; padding: .8rem 1.2rem; border: 1px solid var(--scene-accent); background: var(--scene-bg); color: var(--text-inverse); cursor: pointer; }
+.aurelia-relay span { color: var(--scene-glow); }.aurelia-channel-status:empty { display: none; }
+.aurelia-channel-status { color: var(--scene-accent); }
+.services-page .contact-panel { margin: 2rem 0 0; width: 100%; max-width: none; padding: clamp(1.25rem,4vw,3rem); border: 1px solid var(--aurelia-line); scroll-margin-top: 7rem; }
+.services-page .contact-panel[data-relay] { border-color: var(--scene-accent); box-shadow: 0 0 28px #87e4c122; }
+.services-page .contact-panel h2 { font-size: clamp(1.4rem,3vw,2rem); }
+.services-page .epilogue-signal { margin-top: 3rem; }
+@media (prefers-reduced-motion:no-preference) {
+  html:not(.reduce-motion) .aurelia-hero[data-motion="true"] .aurelia-crew[data-pose="idle"] > :is([data-actor-pose="idle"],.aurelia-blink) { animation: aurelia-breathe 4.8s ease-in-out infinite; }
+  html:not(.reduce-motion) .aurelia-hero[data-motion="true"] .aurelia-crew[data-pose="idle"] > .aurelia-blink { animation: aurelia-breathe 4.8s ease-in-out infinite,crew-blink 5.2s steps(1) 1.5s infinite; }
+  html:not(.reduce-motion) .aurelia-hero[data-motion="true"] .aurelia-prince[data-pose="stand"] > [data-actor-pose="stand"] { animation: aurelia-breathe 3.6s ease-in-out infinite; }
+}
+@keyframes aurelia-breathe { 50% { scale: 1 1.003; } }
+.hero-scene-layer--aurelia[data-paused="true"] * { animation-play-state: paused !important; }
+@media (width < 1200px),(height < 680px),(hover:none),(pointer:coarse) {
+  .services-page .aurelia-hero { display: block; min-height: 0; padding-bottom: 56.25%; }
+  .services-page .aurelia-hero .page-hero__content { padding-block: 4.5rem 2rem; }
+  .aurelia-copy > :is(.chapter-tag,.aurelia-world,h1,.page-hero__subtitle,.page-hero__extra,.actions) { max-width: min(100%,720px); }
+  .services-page .aurelia-hero h1 { font-size: clamp(2rem,6vw,3.2rem); }
+  .aurelia-hero :is(.page-hero__image,.hero-scene-layer--aurelia,.aurelia-layer,.page-hero__shade) { top: auto !important; bottom: 0; left: 0; right: 0; width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; }
+  .aurelia-hero .page-hero__shade { background: var(--hero-overlay-scene); }
+  .aurelia-hero .hud-hint { display: none; }
+}
+@media (max-width:900px) {
+  .services-page .aurelia-cards { grid-template-columns: 1fr; }
+  .orbital-garden,.greenhouse { grid-template-columns: 1fr; gap: 1.5rem; }
+  .orbital-garden__planet { max-width: 300px; }
+  .greenhouse { padding: 1.25rem; }.greenhouse__glass { max-width: 300px; width: 100%; margin: auto; }
+}
+html.reduce-motion .services-page *,html.reduce-motion .services-page *::before { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion:reduce) { .services-page *, .services-page *::before { animation: none !important; transition: none !important; } }
+
+@media (max-width:640px) {
+  /* The actors provide the same actions without overlapping 44px prop targets on a phone. */
+  .aurelia-hot--garden,.aurelia-hot--beacon { display: none; }
+  .aurelia-hot--prince { left: 70% !important; top: auto !important; bottom: 5%; width: 44px !important; height: 44px !important; }
+}
+
+/* Use the existing pixel-frame token: the shared kit deliberately removes normal borders. */
+.services-page :is(.aurelia-cards article,.contact-panel) { --frame: var(--aurelia-line); }
+.services-page :is(.aurelia-cards article[data-lit],.contact-panel[data-relay]) { --frame: var(--scene-accent); }
+.services-page .chapter-tag__ep { background: var(--scene-accent); color: var(--scene-bg); }
+.services-page .chapter-jump__streaks i { background: linear-gradient(90deg,transparent,var(--scene-accent),var(--scene-glow),transparent); }

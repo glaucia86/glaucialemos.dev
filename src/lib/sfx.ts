@@ -3,12 +3,13 @@ export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" |
   | "type" | "return" | "disk-in" | "disk-out" | "crt-on" | "dig" | "thread" | "letter" | "snow" | "gust-dust" | "scan-sweep" | "static" | "build" | "brush"
   | "chime" | "page" | "prism" | "scanner" | "echo" | "link" | "dusk" | "refract" | "facet"
   | "implode" | "nova" | "shimmer" | "bloom" | "star-ping" | "slam" | "credits-chord" | "transmission" | "dive"
+  | "garden-bloom" | "relay" | "seed" | "greenhouse" | "align-aurelia" | "hover-aurelia" | "click-aurelia"
   | "hover-observatory" | "click-observatory" | "hover-niveora" | "click-niveora" | "hover-mars" | "click-mars" | "hover-lumina" | "click-lumina"
   | "hover-epilogue" | "click-epilogue";
 // "noise" is filtered white noise: `from`/`to` sweep the band-pass centre instead of a pitch.
 type Tone = { wave: OscillatorType | "noise"; from: number; to: number; duration: number; gain: number; delay?: number };
-export type SoundWorld = "observatory" | "niveora" | "mars" | "lumina" | "epilogue";
-const WORLDS: readonly string[] = ["observatory", "niveora", "mars", "lumina", "epilogue"] satisfies SoundWorld[];
+export type SoundWorld = "aurelia" | "observatory" | "niveora" | "mars" | "lumina" | "epilogue";
+const WORLDS: readonly string[] = ["aurelia","observatory", "niveora", "mars", "lumina", "epilogue"] satisfies SoundWorld[];
 
 export const SOUND_KEY = "sfx-enabled";
 export const SOUND_EVENT = "sfx-change";
@@ -103,6 +104,13 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   "click-niveora": [{ wave: "noise", from: 4000, to: 2500, duration: .04, gain: .03 }, { wave: "square", from: 1800, to: 1200, duration: .03, gain: .012 }],
   "hover-mars": [{ wave: "square", from: 1200, to: 1000, duration: .025, gain: .014 }, { wave: "noise", from: 3000, to: 3000, duration: .02, gain: .01 }],
   "click-mars": [{ wave: "noise", from: 1500, to: 900, duration: .04, gain: .035 }, { wave: "square", from: 300, to: 200, duration: .05, gain: .02 }],
+  "garden-bloom": [{ wave: "sine", from: 523, to: 784, duration: .28, gain: .045 }, { wave: "triangle", from: 1047, to: 1319, duration: .2, gain: .025, delay: .08 }],
+  relay: [{ wave: "sine", from: 880, to: 880, duration: .09, gain: .035 }, { wave: "triangle", from: 1320, to: 1760, duration: .16, gain: .025, delay: .12 }],
+  seed: [{ wave: "triangle", from: 392, to: 587, duration: .18, gain: .04 }],
+  greenhouse: [{ wave: "sine", from: 440, to: 220, duration: .38, gain: .035 }],
+  "align-aurelia": [{ wave: "sine", from: 659, to: 988, duration: .24, gain: .04 }, { wave: "sine", from: 1319, to: 1319, duration: .2, gain: .022, delay: .1 }],
+  "hover-aurelia": [{ wave: "sine", from: 1760, to: 2093, duration: .045, gain: .015 }],
+  "click-aurelia": [{ wave: "triangle", from: 1047, to: 1568, duration: .08, gain: .025 }],
   "hover-lumina": [{ wave: "sine", from: 3136, to: 3322, duration: .05, gain: .016 }, { wave: "triangle", from: 4699, to: 4699, duration: .03, gain: .007, delay: .02 }],
   "click-lumina": [{ wave: "triangle", from: 2637, to: 2637, duration: .05, gain: .022 }, { wave: "noise", from: 6000, to: 4000, duration: .03, gain: .015 }],
   "hover-epilogue": [{ wave: "sine", from: 1760, to: 1976, duration: .06, gain: .016 }, { wave: "triangle", from: 3520, to: 3520, duration: .03, gain: .006, delay: .02 }],
@@ -112,7 +120,7 @@ export const soundBank: Record<SoundKind, Tone[]> = {
 // Minimum gap between two plays of the same sound, so fast typing or wiping never piles up (milliseconds).
 export const MIN_GAP: Partial<Record<SoundKind, number>> = {
   type: 28, build: 40, brush: 70, snow: 400, "gust-dust": 1500, bug: 300, pawstep: 120,
-  "hover-observatory": 40, "hover-niveora": 40, "hover-mars": 40, "hover-lumina": 40, "hover-epilogue": 40, page: 90, link: 60, blip: 40,
+  "hover-aurelia": 40, "hover-observatory": 40, "hover-niveora": 40, "hover-mars": 40, "hover-lumina": 40, "hover-epilogue": 40, page: 90, link: 60, blip: 40,
   "star-ping": 45,
 };
 const lastPlayed = new Map<SoundKind, number>();
