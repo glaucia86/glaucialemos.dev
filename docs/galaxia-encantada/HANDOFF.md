@@ -1,5 +1,55 @@
 # Handoff — Migração Galáxia Encantada
 
+## Retomada — próxima página: Eventos/Atlas das Conexões (órbita da Terra)
+
+**Estado conferido (25/10/2026):**
+- **Lúmina:** está no commit `3b54da8` da `feat/lumina-conteudo`, já enviada.
+- **⚠ PR #9 na base errada:** o PR foi mesclado em **`feat/marte-projetos`** (merge `7b8d719`), não na `main`. Hoje `origin/main` está em `e765e02` e **não tem Lúmina**. Antes de começar Eventos, a Glaucia precisa abrir um PR de `feat/lumina-conteudo` → `main` (ou trocar a base do #9) e atualizar a `main` local.
+- **Por que a TV "não aparecia":** o repositório local estava na `main`, sem Lúmina. O agente voltou para `feat/lumina-conteudo`, com a árvore limpa.
+- **Base de Eventos:** criar a branch nova (`feat/atlas-eventos`) da `main` **depois** que Lúmina entrar nela. Não refazer Home, Sobre, Projetos nem Conteúdo.
+- **Pendências de Lúmina (não bloqueiam Eventos):** validação visual e auditiva da Glaucia, `node tests/lumina.browser.mjs` e um build com o dev parado.
+
+**Ler:** seção 4.5 do `PLANO-MIGRACAO.md`.
+- **Cena:** sala de navegação original com janela grande para a Terra, rastros luminosos e estrelas. À direita, Glaucia operando um globo e o Prince revelando um ponto no painel; à esquerda, o histórico e o convite para eventos.
+- **Regra factual:** país de evento remoto **não é** país visitado. Nunca transformar apresentações remotas em viagens.
+- **Segredos previstos (plano 8.3):**
+  - `orbital-trail`: trilha orbital destaca um conjunto real de eventos;
+  - `constellation-route`: o mapa liga pontos do globo num desenho original;
+  - `dog-navigation`: o Prince aciona o visor e destaca a origem de um evento.
+- **Aceite:** `EventGlobe`, histórico filtrável, contagens e países do dataset preservados.
+
+**Página atual:**
+- `src/app/[lang]/eventos/page.tsx`: `PageHero` + `HeroScene` Nevarro/Grogu (`/pixel/eventos-grogu.jpg`), `GlobeLoader`/`EventGlobe` (cobe), `EventHistory`, `EventMap`.
+- Textos em `d.events` e `src/i18n/events-ui.ts`; dados em `src/data/eventos.json` (`getEventos`, `getEventStats`, `getEventCountries`).
+- Testes de navegador que usam Eventos como cena Star Wars, a ajustar na migração: `hero-ctas.browser.mjs` (CTA `?assunto=palestra#contato`, composição do globo), `scene-lifecycle.browser.mjs` (agora aponta para `eventos`) e `events-page.browser.mjs`.
+
+**Arte aprovada, ainda não processada:**
+- Sheets: `GE-PL-05-earth-orbit.png`, `GE-GL-05-earth-orbit.png`, `GE-DOG-05-earth-orbit.png`.
+- Props em `props/earth-orbit/`: `globe-pedestal-off/activated`, `orb-navigation-idle/active`, `radar-dish-large/small`.
+- Passos:
+  1. `node scripts/build-galaxia-assets.mjs earth-orbit --debug`;
+  2. nomear `POSES`/`ANCHORS`/`SEAMS`;
+  3. palcos em `layout.json`; `PROP_CLEANUP` se os props vierem com halo;
+  4. prévias compostas no `%TEMP%` para aprovação **antes** da atuação.
+- Conferir nas sheets se o Prince aparece colado na Glaucia ou sem pose de ação, como em Lúmina. Se faltar pose, propor sheets `GE-GL-05B`/`GE-DOG-05B` com prompts.
+
+**Repetir o padrão de Marte e Lúmina:**
+- `BootSequence` com variante e chave próprias;
+- `ReadingProgress` com variante própria;
+- `data-sound-world` novo (ex.: `orbit`), com voz de hover e clique e uma paleta curta;
+- salto da rolagem próprio (rotas orbitais);
+- segredos espalhados pelo conteúdo, sempre com registros reais e fonte, cada um com frase digitável e dica "Transmissão: …" no rádio (a Glaucia achou a constelação difícil sem comando);
+- movimento reduzido, toque, teclado e versão sem JS desde a proposta.
+
+**Como a Glaucia prefere:**
+- Decisões simples (não pediu aprovação item a item dos idiomas).
+- Retorno visual claro.
+- Personagens fixos, só piscando.
+- Pixel fino na grade 1.
+- Explicações em PT-BR.
+
+**Operação:** não iniciar servidor nem testes de navegador pelo agente. Não rodar build com o dev aberto (conferir as portas 3000/3100 com `netstat -ano`). Sem commit, push ou publicação sem pedido.
+
 ## Lúmina — TV antiga com o último vídeo (25/10/2026)
 - **Novo segredo `retro-tv` (7º de Conteúdo; catálogo 29).** TV de tubo em pixel (CSS/SVG) no capítulo 5. Liga por clique, toque, Enter, rádio ou comando digitado (`tv`, `play`, `assistir`, `watch`, `televisao`, `television`, `mirar`). Ao ligar: o tubo abre, chia por 0,6 s e o player `youtube-nocookie` entra na tela 4:3. Abaixo da TV ficam "Desligar" e "Abrir no YouTube". Com movimento reduzido, liga direto. Sem JS, a tela é a miniatura com link para o YouTube.
 - **Vídeo:** RSS público do canal, sem chave de API, lido a cada 24 h. Os Shorts são pulados; hoje toca "Build in Public: Melhorias no Repo Doctor… #02" (`I_TlmQ1T3Ok`). Reserva em `src/data/youtube.json`.
@@ -337,4 +387,4 @@ Create a production-ready 2D PIXEL ART DOG SPRITE SHEET of PRINCE, the EXACT sam
 - Os testes de navegador da Home (`tests/holonet.browser.mjs`) foram atualizados, mas ainda não rodaram.
 
 ## Prompt para abrir a nova sessão
-> Leia `AGENTS.md`, `docs/galaxia-encantada/HANDOFF.md` (comece por “Retomada — próxima página: Conteúdo/Lúmina”) e a seção 4.4 de `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Quero iniciar a migração de Conteúdo para Lúmina, a Biblioteca Viva. A branch atual é `feat/marte-projetos`, com Marte no commit `78b9fa6`: preserve tudo e não refaça Marte nem a Sobre. Inspecione a página atual de Conteúdo, os dados de `artigos.json`, o `ContentFilter` e as artes aprovadas de `lumina`; apresente uma proposta de narrativa, seções, rolagem com variação própria (cristais), paleta sonora e segredos distribuídos pelo conteúdo, com registros reais. Pixel art fina, celular, teclado e movimento reduzido desde o início. Não inicie servidor nem testes de navegador; não faça commit, push ou publicação. Comece em planejamento.
+> Leia `AGENTS.md`, `docs/galaxia-encantada/HANDOFF.md` (comece por “Retomada — próxima página: Eventos/Atlas das Conexões”) e a seção 4.5 de `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Quero iniciar a migração de Eventos para o Atlas das Conexões, na órbita da Terra. Lúmina (Conteúdo) está na `feat/lumina-conteudo` (`3b54da8`). Confira se ela já está na `main` e crie `feat/atlas-eventos` a partir da `main` atualizada; se não estiver, me avise antes. Preserve tudo e não refaça Home, Sobre, Projetos nem Conteúdo. Inspecione a página atual de Eventos, `eventos.json`, `EventGlobe`/`EventHistory`/`EventMap` e as artes aprovadas de `earth-orbit`. Apresente uma proposta de narrativa, seções, rolagem com variação própria (rotas orbitais), paleta sonora e segredos espalhados pelo conteúdo, com registros reais e um comando fácil para cada um. Respeite a regra de que evento remoto não é país visitado. Pixel art fina, celular, teclado e movimento reduzido desde o início. Não inicie servidor nem testes de navegador; não faça commit, push ou publicação. Comece em planejamento.
