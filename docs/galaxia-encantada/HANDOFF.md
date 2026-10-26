@@ -1,5 +1,32 @@
 # Handoff — Migração Galáxia Encantada
 
+## Retomada — Serviços/Aurélia (26/10/2026)
+
+- **Branch:** `feat/aurelia-servicos`, sem commit/push/merge/deploy. `/[lang]/servicos` migrou para Aurélia em PT/EN/ES. Eventos e 404 continuam no tema anterior.
+- **Estrutura:** quatro capítulos no padrão de Lúmina: hero com `AureliaScene`/`AureliaMotion`, anéis orbitais, canteiros com os serviços reais e canal de colaboração. `home.css`, `HomeChoreography`, `ChapterTag`/`ChapterJump`, `BootSequence variant="aurelia"` (`aurelia-boot`), `ReadingProgress variant="aurelia"`, `data-sound-world="aurelia"` e copy `d.aurelia`. Nenhuma dependência nova.
+- **Contratos preservados:** `ContactForm.tsx` e `EpilogueSignal.tsx` não foram alterados. Metadata, `formId`, validação, estados de sucesso/erro, links `?assunto=workshop|mentoria|palestra#contato`, CTAs `#contato`/Eventos e regra dos três mundos continuam. Os dados vêm de `getServicos()`: títulos, descrições e preço sob consulta. Nada foi inventado sobre clientes, entregas, resultados ou depoimentos.
+- **Arte:** executado `node scripts/build-galaxia-assets.mjs aurelia --debug`. Placa `GE-PL-06-aurelia.png` preservada, grid 1, 160 cores de ator/128 de props. A sheet da Glaucia tem fundo magenta e poses reais `idle` (mão no quadril), `relaxed`, `side`, `back` + quatro retratos. Não contém regador/gesto de transmissão. O pipeline faz key exclusivo da 06 e deriva uma pequena camada de pálpebras para `blink`. Prince: `front`, `stand`, `paw` + retratos. Sem inventar poses de regar/tocar. Estufa e sinalizador são props aprovados já presentes na pasta da cena.
+- **Composição:** Glaucia (88;93;h47), Prince (77;93;h14); estufa (69;92), sinalizador (74,5;93). Prévia raster examinada em `/tmp/aurelia-composition.png` e `/tmp/aurelia-mobile.png`; **não são screenshots do site**. Frente da Glaucia segue a arte recebida; perfil entra brevemente na floração. O sinalizador fica na frente da pata do Prince.
+- **Movimento:** `garden-engine.ts` usa canvas 2D pixelado (pétalas, esporos, vapor e reflexos; pixel 2; até 160 partículas), pausa via `observeMotionActivity` fora de tela/aba e destrói RAF/observer. `petal-jump.ts` desenha uma espiral apenas quando a rolagem muda. Pin/zoom só no `HERO_OVERLAY` (1200×680 + hover/fine pointer); compacto empilha texto e placa 16:9. Respiração/piscar CSS pausados com a cena. Movimento reduzido mantém o resultado estático; troca de preferência durante a interação conserva o desfecho.
+- **Seis segredos novos:** catálogo total 37; Serviços tem sete IDs contando `epilogue-signal`. O atlas do epílogo usa a placa/paleta de Aurélia e seis luas próprias; a ponte não conta como lua nem amplia a elegibilidade do epílogo.
+
+| ID | Mouse/toque | Teclado | Frases PT / EN / ES (também no Comlink) |
+|---|---|---|---|
+| `garden-bloom` | Glaucia ou estufa do hero; revela um serviço, replay alterna os três | Tab até Glaucia, Enter/Espaço; “Outra possibilidade” para replay | `florescer` / `garden bloom` / `florecer` |
+| `beacon-relay` | Prince, sinalizador do hero ou botão do canal; pata aciona luz, rola até contato e foca o título | Tab até o botão, Enter/Espaço | `sinalizador` / `beacon` / `baliza` |
+| `ring-alignment` | Girar cada anel até marca no alto; início [1,2,3], 3/2/1 cliques respectivamente | Tab/Enter/Espaço nos três botões | `anéis` / `rings` / `anillos` |
+| `seed-vault` | Abrir o `<details>` “Cofre de sementes” sob os cards; botão/replay alterna serviço | Tab até summary, Enter/Espaço | `sementes` / `seeds` / `semillas` |
+| `greenhouse-dusk` | Slider de luz ≤20%; botão restaura | Tab até slider, Home/setas; Esc restaura | `estufa` / `greenhouse` / `invernadero` |
+| `pollination` | Botões dos cards 01→02→03; fora de ordem reinicia | Tab/Enter/Espaço na mesma ordem | `polinizar` / `pollinate` / `polinizar jardín` |
+
+- Em telas ≤640 px, os hotspots duplicados de estufa/sinalizador ficam ocultos; Glaucia/Prince oferecem as mesmas ações com alvos de toque separados. Frases ignoram input, textarea, select, contenteditable, diálogos, composição IME e boot pendente. Registro/replay/reset usam apenas o store existente. Nenhum segredo escreve em campos, envia formulário ou cria pedido. Os links de serviço são ações explícitas de pré-preenchimento.
+- **Revisão estática:** corrigidos conflito de especificidade do título (coluna de 44%) e retomada de timeline iniciada com a cena inativa. Controles puros em `aurelia-controls.ts` evitam importar datasets/dictionaries nos componentes de anéis/cards. Sons opt-in novos com gain ≤0,08 e duração total por tom ≤0,6s.
+- **Verificação:** `npm run lint`, `npm run typecheck`, `npm test` passaram (33 arquivos, 280 testes). `tests/aurelia.test.ts` cobre records, SSR dos serviços, preço/assuntos, catálogo/i18n, assets alpha/croma, layout, motor/cancelamento de RAF e progresso do salto. Testes de contagem/atlas/sons atualizados. Sintaxe de `aurelia.browser.mjs`, `hero-scenes.browser.mjs`, `epilogue.browser.mjs` verificada com `node --check`.
+- **Ambiente:** no início faltavam GSAP/Lenis já declarados; não se usou rede nem mocks para contornar isso. As versões corretas passaram a estar disponíveis no ambiente (`gsap 3.15.0`, `@gsap/react 2.1.2`, `lenis 1.3.23`), e as verificações completas foram reexecutadas com sucesso. `package.json`/lockfile intactos.
+- **Pendente para a Glaucia:** build (com dev parado) e navegador. Não foi iniciado servidor nem executado Playwright. Rodar `node tests/aurelia.browser.mjs` contra o servidor escolhido (`BASE_URL`, padrão 3100). O script cobre PT/EN/ES, mouse/teclado/toque, rádio/frases, reduced motion, no-JS, pin/resize, pausa fora da cena, retorno de rota, assuntos e gate do epílogo. Formspree é interceptado; casos de validação/sucesso/erro precisam de `NEXT_PUBLIC_FORMSPREE_ID` configurado no build e são explicitamente pulados se ausente.
+- Conferir no site: recorte/piscar, tamanho/posição de props, enquadramento em 390/768/1280/1440, foco/leitor de tela, comportamento em aba oculta, ritmo e áudio, LCP/CLS/INP. Nada disso foi medido no navegador. Resumo completo em `/tmp/aurelia-summary.md`.
+
+
 ## Retomada — Auditoria Playwright do epílogo (26/10/2026)
 
 - **Como:** a Glaucia subiu o `npm run dev`; o agente rodou Playwright contra `localhost:3000` (1920×1080, 1440×900, 1366×768, 1280×720, 768×1024, 390×844; antes/depois de `last-light`). Capturas em `%TEMP%/bo-audit*`.

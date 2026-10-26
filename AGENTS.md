@@ -27,7 +27,7 @@
   Enquadramento: `.beyond-orbit__frame` mostra o palco 16:9 `.beyond-orbit__scene` como cover (tela inteira abaixo do menu
   no desktop, 4:5 em retrato, 16:9 nos demais); sobreposições de tela (vinheta, barras, rolo, pista, "Pular") ficam na moldura.
   `epilogue-signal` em Serviços exige descobertas em três mundos distintos
-  (Home/Sobre/Projetos/Conteúdo), helpers em `src/lib/epilogue.ts`. Catálogo (31) em `src/lib/egg-catalog.ts`, reexportado
+  (Home/Sobre/Projetos/Conteúdo), helpers em `src/lib/epilogue.ts`. Catálogo (37) em `src/lib/egg-catalog.ts`, reexportado
   por `eggs.ts`. `last-light` revela o final e permite replay; SSR/no-JS/reduced motion mantêm copy visível. Comlink tem
   comandos PT/EN/ES e revisita; persistência/reset continuam únicos. Testes: `tests/epilogue.test.ts` e
   `tests/beyond-orbit.test.ts` e `tests/epilogue.browser.mjs` (navegador somente pela usuária). Retomada atual no início do handoff.
@@ -35,8 +35,8 @@
 - Handoff da migração: `docs/galaxia-encantada/HANDOFF.md` (comece pela seção “Retomada”).
 - Migração Galáxia Encantada (Home, Sobre e Projetos já na `main`; Conteúdo/Lúmina na branch `feat/lumina-conteudo`; o tema
   Star Wars está congelado em `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração
-  página a página: Home (Observatório), Sobre (Nivéora), Projetos (Marte) e Conteúdo (Lúmina) migradas; Eventos, Serviços e
-  404 ainda usam Star Wars.
+  página a página: Home (Observatório), Sobre (Nivéora), Projetos (Marte), Conteúdo (Lúmina) e Serviços (Aurélia) migradas; Eventos e
+  404 ainda usam Star Wars. Aurélia está em `feat/aurelia-servicos`, com validação de navegador pendente.
 - Arte-fonte aprovada (Grok) em `docs/art/galaxia-encantada/approved-source` (`GE-PL-0X` placas, `GE-GL-0X` Glaucia,
   `GE-DOG-0X` Prince, `GE-MASTER-*`, `props/<cena>`). `manifest.json` com sha256: `node scripts/build-galaxia-assets.mjs --manifest`.
   Assets web por cena: `node scripts/build-galaxia-assets.mjs <scene-id> [--debug]` gera `public/galaxia/**` e
@@ -139,5 +139,29 @@
   em Conteúdo), pula Shorts (`HEAD /shorts/{id}`: 200 = Short; falhou → `#shorts`/`#YouTubeShorts`) e cai em `src/data/youtube.json`
   (`node scripts/snapshot-youtube.mjs`). O iframe `youtube-nocookie` só nasce depois de ligar (clique/toque/Enter, comando "tv"/"play"/"assistir").
   Testes: `tests/lumina.test.ts`, `tests/youtube.test.ts`, `tests/lumina.browser.mjs`.
+- Serviços (Aurélia, os Jardins Suspensos): `src/app/[lang]/servicos/page.tsx` + `src/app/aurelia.css`,
+  `className="home-page services-page"`, `data-sound-world="aurelia"`, copy PT/EN/ES em `src/i18n/aurelia.ts` (`d.aurelia`).
+  Quatro capítulos: hero, órbitas, canteiros de serviços e colaboração/contato. `ContactForm` e `EpilogueSignal` intactos;
+  metadata, `formId`, preço sob consulta e assuntos `workshop`/`mentoria`/`palestra` preservados. Registros em
+  `src/lib/aurelia-records.ts` vêm de `getServicos()`; controles puros separados em `aurelia-controls.ts` para não levar
+  datasets/dictionaries ao bundle dos controles. Nenhum segredo escreve ou envia o formulário; o sinalizador apenas
+  rola até `#contato` e foca seu título. Pré-preenchimento continua por links explícitos com `?assunto=...#contato`.
+  Pipeline: `node scripts/build-galaxia-assets.mjs aurelia --debug`; placa 06 intacta, grid 1, 160/128 cores. Glaucia tem
+  fundo magenta (key exclusivo de Aurélia), retratos `face-*` e poses reais `idle` (mão no quadril), `relaxed`, `side`, `back`.
+  Não há gesto de regar/receber transmissão na sheet; `blink` é uma pequena sobreposição de pálpebras derivada de `idle`,
+  não uma pose nomeada incorretamente. Prince: `front`, `stand`, `paw`, retratos `face-*`. Palco: Glaucia (88;93;h47),
+  Prince (77;93;h14); estufa em (69;92), sinalizador em (74,5;93). `AureliaScene` usa `SCENES.aurelia` e caixas na placa.
+  `AureliaMotion` usa `useGSAP`, `HERO_OVERLAY` 1200×680/fine pointer, `observeMotionActivity`, estado final estático no
+  movimento reduzido, respiração/piscar pausados fora da tela/aba. `garden-engine.ts` (pétalas, esporos, vapor, reflexos;
+  pixels 2, até 160 partículas); `petal-jump.ts` (espiral de pétalas guiada pela rolagem, sem RAF próprio).
+  `BootSequence variant="aurelia"`, chave `aurelia-boot`; `ReadingProgress variant="aurelia"`; sons opt-in ≤0,08/≤0,6s.
+  Seis segredos novos (37 no catálogo, 7 em Serviços contando a ponte): `garden-bloom` (Glaucia/estufa → serviço real),
+  `beacon-relay` (Prince/sinalizador/botão do canal → contato), `ring-alignment` (três anéis, alinhar marcas no alto),
+  `seed-vault` (`<details>` sob os cards; replay alterna serviço), `greenhouse-dusk` (luz ≤20%; botão/Esc restauram),
+  `pollination` (conectar os cards em ordem). Todos no Comlink PT/EN/ES e `AureliaEggs`; campos editáveis/diálogos/IME
+  não capturam frases. Em celular, os dois atores oferecem as ações dos props sem alvos pequenos sobrepostos.
+  Atlas do epílogo agora usa a placa de Aurélia e seis luas; elegibilidade do sinal segue três dos quatro mundos anteriores.
+  Testes: `tests/aurelia.test.ts` e `tests/aurelia.browser.mjs` (somente a usuária executa). Ver resultados exatos e pendências
+  de validação visual na seção “Retomada — Serviços/Aurélia” do handoff. Sem commit/build/servidor/navegador.
 - Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
   `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).
