@@ -280,7 +280,7 @@ for (const width of [390, 1440]) await check(`${width}: "A Última Luz" plays as
   }
   await expect(page.locator(".beyond-orbit__credits-run")).toHaveAttribute("data-cinema", "on");
   await expect(page.locator('[data-world="home"] .beyond-orbit__moons i[data-found]')).toHaveCount(1);
-  await expect(page.locator('[data-world="services"]')).not.toHaveAttribute("data-charted", /.*/);
+  await expect(page.locator('[data-world="services"]')).toHaveAttribute("data-charted", "true");
   if (width >= 1200) await expect(page.locator(".beyond-orbit__atlas")).toHaveAttribute("data-flight", "on");
   else await expect(page.locator(".beyond-orbit__atlas")).not.toHaveAttribute("data-flight", /.*/);
   if (width < 1200) {

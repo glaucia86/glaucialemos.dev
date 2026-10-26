@@ -9,7 +9,15 @@ describe("sons dos mundos", () => {
     expect(uiSound(undefined, "hover")).toBe("blip");
     expect(uiSound("lumina", "hover")).toBe("hover-lumina");
     expect(uiSound("nevarro", "click")).toBe("key");
-    for (const world of ["observatory", "niveora", "mars", "lumina"]) for (const action of ["hover", "click"] as const) expect(soundBank[uiSound(world, action)].length).toBeGreaterThan(0);
+    for (const world of ["observatory", "niveora", "mars", "lumina", "aurelia"]) for (const action of ["hover", "click"] as const) expect(soundBank[uiSound(world, action)].length).toBeGreaterThan(0);
+  });
+
+  it("Aurélia usa tons opt-in curtos e suaves", () => {
+    expect(uiSound("aurelia", "hover")).toBe("hover-aurelia");
+    for(const kind of ["garden-bloom", "relay", "seed", "greenhouse", "align-aurelia", "hover-aurelia", "click-aurelia"] as const) for(const tone of soundBank[kind]) {
+      expect(tone.gain).toBeLessThanOrEqual(.08);
+      expect((tone.delay ?? 0) + tone.duration).toBeLessThanOrEqual(.6);
+    }
   });
 
   it("não empilha teclas: respeita o intervalo mínimo de cada som", () => {

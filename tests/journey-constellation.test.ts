@@ -28,7 +28,7 @@ describe("journey constellation", () => {
   it("lists destinations without secrets of their own as the next coordinates", () => {
     const next = unchartedWorlds();
     expect(next).toEqual(DESTINATIONS.filter((world) => !EGGS.some((egg) => egg.page === world && egg.id !== "epilogue-signal")));
-    expect(next).toContain("services");
+    expect(next).not.toContain("services");
     expect(next).not.toContain("home");
   });
   it("draws the visitor's path in discovery order, ignoring duplicates and unknown ids", () => {

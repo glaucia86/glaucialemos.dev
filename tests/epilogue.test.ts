@@ -19,7 +19,7 @@ describe("epilogue eligibility", () => {
     expect(epilogueUnlocked(found)).toBe(count >= 3);
   });
   it("ignores duplicates, unknown ids and discoveries outside the four worlds", () => {
-    const found = ["focus-lens", "focus-lens", "wish", "dog-signal", "star-map", "curious-letter", "last-light", "epilogue-signal", "invalid"];
+    const found = ["focus-lens", "focus-lens", "wish", "dog-signal", "star-map", "curious-letter", "last-light", "epilogue-signal", "garden-bloom", "beacon-relay", "invalid"];
     expect(discoveredWorldCount(found)).toBe(1);
     expect(remainingDiscoveries("epilogue-signal", found)).toBe(2);
     expect(remainingDiscoveries("curious-letter", ["focus-lens", "wish", "dog-signal"])).toBe(0);
@@ -29,7 +29,7 @@ describe("epilogue eligibility", () => {
   });
   it.each(["pt", "en", "es"])("maps the route in %s", lang => {
     expect(pageOf(`/${lang}/alem-da-ultima-orbita`)).toBe("epilogue");
-    expect(EGGS).toHaveLength(31);
+    expect(EGGS).toHaveLength(37);
   });
 });
 
