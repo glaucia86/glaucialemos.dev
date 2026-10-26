@@ -17,9 +17,14 @@ const DEBUG = process.argv.includes("--debug");
 // Stages, prop scales and the pixel grid per scene, shared with src/lib/scenes.ts.
 const LAYOUT = JSON.parse(fs.readFileSync(`${DATA}/layout.json`, "utf8"));
 
-export const SCENES = ["earth-observatory", "niveora", "mars-lab", "lumina", "earth-orbit", "aurelia", "red-tide"];
+export const SCENES = ["earth-observatory", "niveora", "mars-lab", "lumina", "earth-orbit", "aurelia", "red-tide", "beyond-orbit"];
 // Pose names in reading order (rows top to bottom, then left to right). Unnamed poses become pose-N.
 const POSES = {
+  // The accepted sheets vary subtly; do not label them as a fabricated reach or head turn.
+  "beyond-orbit": {
+    glaucia: ["float-idle", "float-b", "float-c", "float-d"],
+    prince: ["float-idle", "float-b", "float-c", "float-d"],
+  },
   "earth-observatory": {
     glaucia: ["idle", "blink", "telescope", "point"],
     prince: ["stand", "side", "paw", "look-up", "face-idle", "face-happy", "face-joy", "face-curious", "face-wink"],
@@ -141,9 +146,18 @@ const ANCHORS = {
   },
 };
 
+// Floating actors pivot at the life-support connection, not at their lowest boot.
+// Source pixels relative to the padded crop. Mirroring is applied at render time.
+const FLOAT_ANCHORS = {
+  "beyond-orbit": {
+    glaucia: { "float-idle": [136, 192], "float-b": [131, 191], "float-c": [133, 187], "float-d": [131, 188] },
+    prince: { "float-idle": [174, 224], "float-b": [176, 224], "float-c": [176, 238], "float-d": [185, 241] },
+  },
+};
+
 const num = (scene) => String(SCENES.indexOf(scene) + 1).padStart(2, "0");
 const sources = (scene) => ({
-  plate: `${SOURCE}/GE-PL-${num(scene)}-${scene}.png`,
+  plate: `${SOURCE}/GE-PL-${num(scene)}-${scene}.${scene === "beyond-orbit" ? "jpg" : "png"}`,
   glaucia: `${SOURCE}/GE-GL-${num(scene)}-${scene}.png`,
   prince: `${SOURCE}/GE-DOG-${num(scene)}-${scene}.png`,
   props: `${SOURCE}/props/${scene}`,
@@ -402,6 +416,7 @@ async function cutActor(scene, name, prefix) {
       if (DEBUG) console.log(`${key}: ${normalization.pose} ${sourceHeight}px → ${normalization.reference} ${referenceHeight}px; sheet scale ${factor.toFixed(6)}`);
     }
     const { label, groups } = poses(img, seams);
+    if (scene === "beyond-orbit" && groups.length !== names.length) throw new Error(`${file}: expected ${names.length} separate floating poses, found ${groups.length}`);
     if (normalization && groups.length !== names.length) throw new Error(`${file}: normalization changed pose count to ${groups.length}`);
     groups.forEach((group, index) => { sprites[names[index] ?? `pose-${tag}${index + 1}`] = cut(img, label, group); });
   }
@@ -466,6 +481,14 @@ async function bench(id, plateFile, sprites, scale, colors) {
   return out;
 }
 
+// A tiny copy of the plate, stretched smoothly behind the 16:9 frame so the scene's light spills over the page.
+const AMBIENT = new Set(["beyond-orbit"]);
+async function ambient(id, plate) {
+  const [w, h] = [64, 36];
+  await sharp(plate).resize(w, h, { kernel: "lanczos3" }).modulate({ saturation: 1.35 }).webp({ quality: 80 }).toFile(`${OUT}/scenes/${id}/ambient.webp`);
+  return { src: `/galaxia/scenes/${id}/ambient.webp`, w, h };
+}
+
 async function scene(id) {
   const src = sources(id);
   const grid = LAYOUT[id]?.grid ?? 0;
@@ -482,6 +505,7 @@ async function scene(id) {
     const art = plateGrid ? await pixelate(plate, 1 / plateGrid, colors.plate) : null;
     if (art) await lossless(art).toFile(file); else await sharp(src.plate).webp({ quality: 90, smartSubsample: true, effort: 6 }).toFile(file);
     result.background = { src: `/galaxia/scenes/${id}/background.webp`, w: plate.w, h: plate.h, ...(art && { px: [art.w, art.h] }) };
+    if (AMBIENT.has(id)) result.ambient = await ambient(id, src.plate);
   }
   result.actors = {};
   for (const [name, prefix] of [["glaucia", "GE-GL"], ["prince", "GE-DOG"]]) {
@@ -495,8 +519,9 @@ async function scene(id) {
     for (const [pose, sprite] of Object.entries(sprites)) {
       const file = `${dir}/${pose}.webp`;
       if (art) await lossless(art[pose]).toFile(file); else await webp(sprite.data, { width: sprite.w, height: sprite.h, channels: 4 }).toFile(file);
-      const feetX = ANCHORS[id]?.[name]?.[pose === "blink" ? "idle" : pose] ?? sprite.feetX;
-      result.actors[name][pose] = { src: `/galaxia/actors/${name}/${id}/${pose}.webp`, w: sprite.w, h: sprite.h, feetX, ...(art && { px: [art[pose].w, art[pose].h] }) };
+      const pivot = FLOAT_ANCHORS[id]?.[name]?.[pose];
+      const feetX = pivot?.[0] ?? ANCHORS[id]?.[name]?.[pose === "blink" ? "idle" : pose] ?? sprite.feetX;
+      result.actors[name][pose] = { src: `/galaxia/actors/${name}/${id}/${pose}.webp`, w: sprite.w, h: sprite.h, feetX, ...(pivot && { anchorY: pivot[1] }), ...(art && { px: [art[pose].w, art[pose].h] }) };
       if (DEBUG && sprite.x0 !== undefined) console.log(`${name}/${pose}: ${sprite.w}×${sprite.h} at ${sprite.x0},${sprite.y0}${art ? ` → ${art[pose].w}×${art[pose].h} px` : ""}`);
     }
     if (name === "glaucia" && BENCH[id]) result.bench = await bench(id, src.plate, sprites, factor * (grid || 1), COLORS.actor);
@@ -559,9 +584,12 @@ async function preview(id) {
       const scale = actorScale(id, name, sprites, plate.h);
       const pose = await pixelate(sprites[stage.reference], scale / grid, colors.actor);
       const w = Math.round(sprites[stage.reference].w * scale); const h = Math.round(sprites[stage.reference].h * scale);
-      const feetX = ANCHORS[id]?.[name]?.[stage.reference] ?? sprites[stage.reference].feetX;
-      const input = await sharp(pose.data, { raw: { width: pose.w, height: pose.h, channels: 4 } }).resize(w, h, { kernel: "nearest" }).png().toBuffer();
-      layers.push({ input, left: Math.round(stage.x / 100 * plate.w - feetX * scale), top: Math.round(stage.y / 100 * plate.h - h) });
+      const pivot = FLOAT_ANCHORS[id]?.[name]?.[stage.reference];
+      const feetX = pivot?.[0] ?? ANCHORS[id]?.[name]?.[stage.reference] ?? sprites[stage.reference].feetX;
+      let image = sharp(pose.data, { raw: { width: pose.w, height: pose.h, channels: 4 } }).resize(w, h, { kernel: "nearest" });
+      if (stage.flip) image = image.flop();
+      const input = await image.png().toBuffer();
+      layers.push({ input, left: Math.round(stage.x / 100 * plate.w - (stage.flip ? sprites[stage.reference].w - feetX : feetX) * scale), top: Math.round(stage.y / 100 * plate.h - (pivot ? pivot[1] * scale : h)) });
     }
     const composed = await sharp(base).composite(layers).png().toBuffer();
     const full = path.join(os.tmpdir(), `galaxia-${id}-${variant}.png`);
@@ -576,12 +604,13 @@ async function manifest() {
   const previous = fs.existsSync(`${ART}/manifest.json`) ? JSON.parse(fs.readFileSync(`${ART}/manifest.json`, "utf8")) : { assets: [] };
   const byFile = new Map(previous.assets.map((a) => [a.file, a]));
   const files = [];
-  const walk = (dir) => { for (const entry of fs.readdirSync(dir, { withFileTypes: true })) { const p = `${dir}/${entry.name}`; if (entry.isDirectory()) walk(p); else if (p.endsWith(".png")) files.push(p); } };
+  const plates = new Set(SCENES.map(id => sources(id).plate));
+  const walk = (dir) => { for (const entry of fs.readdirSync(dir, { withFileTypes: true })) { const p = `${dir}/${entry.name}`; if (entry.isDirectory()) walk(p); else if (p.endsWith(".png") || plates.has(p)) files.push(p); } };
   walk(SOURCE);
   const assets = [];
   for (const file of files.sort()) {
     const rel = path.relative(ART, file).split(path.sep).join("/");
-    const base = path.basename(file, ".png");
+    const base = path.basename(file, path.extname(file));
     const sceneId = SCENES.find((s) => rel.includes(`/${s}/`) || base.endsWith(s)) ?? null;
     const id = base.startsWith("GE-") ? base.replace(new RegExp(`-${sceneId}$`), "") : `GE-PROP-${num(sceneId)}:${base}`;
     const meta = await sharp(file).metadata();

@@ -1,4 +1,15 @@
 {
+  "beyond-orbit": {
+    "grid": 1,
+    "plateGrid": 0,
+    "colors": { "actor": 160, "prop": 128 },
+    "stages": {
+      "glaucia": { "x": 63, "y": 64, "height": 29, "reference": "float-idle", "flip": true },
+      "prince": { "x": 81, "y": 65, "height": 15, "reference": "float-idle", "flip": false }
+    },
+    "actorScale": {},
+    "props": {}
+  },
   "earth-observatory": {
     "grid": 1,
     "plateGrid": 0,

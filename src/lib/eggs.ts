@@ -1,40 +1,11 @@
 // Easter egg registry shared by every page. Triggers (keyboard, touch gestures, the Comlink) only emit an id;
 // the component that owns the effect listens, plays it and marks it as discovered.
-export type EggPage = "global" | "home" | "about" | "projects" | "content" | "events" | "services" | "notfound";
-export const EGGS = [
-  { id: "star-map", page: "global", phrases: ["konami", "uuddlrlrba", "mapaestelar", "starmap"] },
-  { id: "curious-letter", page: "global", phrases: ["cartacuriosa", "curiousletter", "cartaparaloscuriosos"] },
-  { id: "focus-lens", page: "home", phrases: ["telescopio", "telescope", "foco", "focus", "enfocar"] },
-  { id: "launch-charge", page: "home", phrases: ["decolar", "launch", "despegar", "ignicao", "ignition", "ignicion"] },
-  { id: "dog-signal", page: "home", phrases: ["prince", "principe", "auau", "woof", "guau"] },
-  { id: "hangar-check", page: "home", phrases: ["hangar", "nave", "ship"] },
-  { id: "dark-sky", page: "home", phrases: ["escuro", "dark", "oscuro", "vialactea", "milkyway"] },
-  { id: "wish", page: "home", phrases: ["desejo", "wish", "deseo", "estrelacadente", "shootingstar", "estrellafugaz"] },
-  { id: "paw-tracks", page: "about", phrases: ["pegadas", "pawprints", "huellas", "rastro", "tracks"] },
-  { id: "memory-capsule", page: "about", phrases: ["capsula", "capsule", "memoria", "memory"] },
-  { id: "whiteout", page: "about", phrases: ["nevasca", "whiteout", "ventisca", "blizzard", "tempestade", "storm"] },
-  { id: "aurora-prism", page: "about", phrases: ["aurora", "prisma", "prism", "cristal", "crystal"] },
-  { id: "snowdrift", page: "about", phrases: ["neve", "snow", "nieve"] },
-  { id: "between-lines", page: "about", phrases: ["entrelinhas", "betweenthelines", "entrelineas"] },
-  { id: "borrowed-star", page: "about", phrases: ["estrelaemprestada", "borrowedstar", "estrellaprestada"] },
-  { id: "rover-scan", page: "projects", phrases: ["rover", "varredura", "scan", "escaneo", "escanear"] },
-  { id: "sample-cache", page: "projects", phrases: ["amostra", "sample", "muestra"] },
-  { id: "terminal-launch", page: "projects", phrases: ["npx", "npxglaucialemos", "glaucialemos"] },
-  { id: "first-sprout", page: "projects", phrases: ["broto", "sprout", "brote"] },
-  { id: "before-pretty", page: "projects", phrases: ["carcaca", "carcasa", "rascunho", "draft", "borrador"] },
-  { id: "lost-bug", page: "projects", phrases: ["bug", "inseto", "insecto", "depurar"] },
-  { id: "dust-fall", page: "projects", phrases: ["poeira", "dust", "polvo"] },
-  { id: "crystal-whisper", page: "content", phrases: ["sussurro", "whisper", "susurro"] },
-  { id: "first-page", page: "content", phrases: ["primeirapagina", "firstpage", "primerapagina"] },
-  { id: "prism-align", page: "content", phrases: ["alinhar", "align", "alinear", "feixe", "beam"] },
-  { id: "crystal-echo", page: "content", phrases: ["eco", "echo"] },
-  { id: "series-constellation", page: "content", phrases: ["serie", "series", "colecao", "coleccion"] },
-  { id: "library-dusk", page: "content", phrases: ["entardecer", "dusk", "atardecer", "crepusculo"] },
-  { id: "retro-tv", page: "content", phrases: ["tv", "televisao", "television", "play", "assistir", "watch", "mirar"] },
-] as const satisfies readonly { id: string; page: EggPage; phrases: readonly string[] }[];
-export type EggId = (typeof EGGS)[number]["id"];
+import { EGGS, type EggId, type EggPage } from "./egg-catalog";
+import { epilogueRemaining } from "./epilogue";
+export { EGGS, type EggId, type EggPage } from "./egg-catalog";
 
 export function remainingDiscoveries(id: EggId, found: readonly string[]): number {
+  if (id === "epilogue-signal") return epilogueRemaining(found);
   if (id !== "curious-letter") return 0;
   const count = EGGS.filter(egg => egg.id !== "curious-letter" && found.includes(egg.id)).length;
   return Math.max(0, 3 - count);
@@ -49,7 +20,7 @@ export const RESET_EVENT = "egg:reset";
 // Letters only, accents removed: "Eu te amo!" → "euteamo", "Canhão" → "canhao".
 export const normalizePhrase = (text: string) => text.normalize("NFD").replace(/[^a-zA-Z]/g, "").toLowerCase();
 
-const PAGES: Record<string, EggPage> = { sobre: "about", projetos: "projects", conteudo: "content", eventos: "events", servicos: "services" };
+const PAGES: Record<string, EggPage> = { sobre: "about", projetos: "projects", conteudo: "content", eventos: "events", servicos: "services", "alem-da-ultima-orbita": "epilogue" };
 
 export function pageOf(pathname: string): EggPage {
   const parts = pathname.split("/").filter(Boolean);

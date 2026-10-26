@@ -1,0 +1,108 @@
+{
+  "scene": "beyond-orbit",
+  "background": {
+    "src": "/galaxia/scenes/beyond-orbit/background.webp",
+    "w": 1792,
+    "h": 1008
+  },
+  "ambient": {
+    "src": "/galaxia/scenes/beyond-orbit/ambient.webp",
+    "w": 64,
+    "h": 36
+  },
+  "actors": {
+    "glaucia": {
+      "float-idle": {
+        "src": "/galaxia/actors/glaucia/beyond-orbit/float-idle.webp",
+        "w": 257,
+        "h": 461,
+        "feetX": 136,
+        "anchorY": 192,
+        "px": [
+          163,
+          292
+        ]
+      },
+      "float-b": {
+        "src": "/galaxia/actors/glaucia/beyond-orbit/float-b.webp",
+        "w": 252,
+        "h": 460,
+        "feetX": 131,
+        "anchorY": 191,
+        "px": [
+          160,
+          292
+        ]
+      },
+      "float-c": {
+        "src": "/galaxia/actors/glaucia/beyond-orbit/float-c.webp",
+        "w": 246,
+        "h": 452,
+        "feetX": 133,
+        "anchorY": 187,
+        "px": [
+          156,
+          287
+        ]
+      },
+      "float-d": {
+        "src": "/galaxia/actors/glaucia/beyond-orbit/float-d.webp",
+        "w": 246,
+        "h": 450,
+        "feetX": 131,
+        "anchorY": 188,
+        "px": [
+          156,
+          285
+        ]
+      }
+    },
+    "prince": {
+      "float-idle": {
+        "src": "/galaxia/actors/prince/beyond-orbit/float-idle.webp",
+        "w": 410,
+        "h": 459,
+        "feetX": 174,
+        "anchorY": 224,
+        "px": [
+          135,
+          151
+        ]
+      },
+      "float-b": {
+        "src": "/galaxia/actors/prince/beyond-orbit/float-b.webp",
+        "w": 390,
+        "h": 459,
+        "feetX": 176,
+        "anchorY": 224,
+        "px": [
+          128,
+          151
+        ]
+      },
+      "float-c": {
+        "src": "/galaxia/actors/prince/beyond-orbit/float-c.webp",
+        "w": 394,
+        "h": 463,
+        "feetX": 176,
+        "anchorY": 238,
+        "px": [
+          130,
+          153
+        ]
+      },
+      "float-d": {
+        "src": "/galaxia/actors/prince/beyond-orbit/float-d.webp",
+        "w": 401,
+        "h": 464,
+        "feetX": 185,
+        "anchorY": 241,
+        "px": [
+          132,
+          153
+        ]
+      }
+    }
+  },
+  "props": {}
+}

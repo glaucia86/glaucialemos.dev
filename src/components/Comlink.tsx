@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { createPortal } from "react-dom";
 import type { ComlinkCopy } from "@/i18n/comlink";
 import { EGGS, FOUND_EVENT, discover, emitEgg, eggsFor, forget, getFoundSnapshot, matchPhrase, matchTail, normalizePhrase, onEgg, pageOf, remainingDiscoveries, subscribeReset, type EggId } from "@/lib/eggs";
@@ -85,7 +86,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
   };
   const run = (id: EggId) => {
     const missing = remainingDiscoveries(id, getFoundSnapshot().split(","));
-    if (missing) { setFeedback(copy.letter.locked.replace("{n}", String(missing))); return; }
+    if (missing) { setFeedback((id === "epilogue-signal" ? copy.epilogue.signalLocked : copy.letter.locked).replace("{n}", String(missing))); return; }
     dialog.current?.close(); clearTimeout(replayTimer.current);
     replayTimer.current = setTimeout(() => emitEgg(id), 280);
   };
@@ -124,6 +125,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <span className="comlink__bar" aria-hidden="true"><i style={{ transform: `scaleX(${count / total})` }} /></span>
         </p>
         {remainingDiscoveries("curious-letter", found) === 0 && <button type="button" className="comlink__envelope" onClick={() => run("curious-letter")}><span aria-hidden="true">✉</span> {copy.letter.open}</button>}
+        {found.includes("epilogue-signal") && <Link className="comlink__envelope" href={`/${pathname.split("/")[1]}/alem-da-ultima-orbita`} onClick={() => dialog.current?.close()}>{copy.epilogue.revisit}</Link>}
         {count > 0 && <button type="button" className="comlink__reset" data-confirming={confirming || undefined} onClick={wipe}>
           <span aria-hidden="true">{confirming ? "!" : "⟲"}</span>{confirming ? copy.resetConfirm.replace("{n}", String(count)) : copy.reset}
         </button>}

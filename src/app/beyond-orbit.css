@@ -1,0 +1,450 @@
+/* Além da Última Órbita — epílogo secreto. Layers and states are described in BeyondOrbitScene/BeyondOrbitMotion.
+   Continuous effects run only under [data-motion] (set after hydration when motion is allowed); the opening is pure
+   CSS and ends in the static state, so no-JS and reduced motion keep the same composition and copy. */
+/* `overflow: clip` on both axes: the global `main { overflow: hidden }` would make <main> a scroll container and break
+   every `position: sticky` of the voyage. */
+.beyond-orbit {
+  --bo-header: 72px;
+  background: #060a18;
+  color: #f3eee3;
+  padding: 0 0 2rem;
+  overflow: clip;
+}
+.beyond-orbit__hero { position: relative; }
+
+/* The frame shows the 16:9 stage (.beyond-orbit__scene, where every coordinate lives) like `object-fit: cover`:
+   the stage is at least as large as the frame and is shifted by --fx/--fy to keep the crew and the star in view.
+   Landscape tablets and short desktops: the frame is 16:9 itself (the whole plate). Portrait screens: 4:5, focused on
+   the crew. Wide desktops: the whole screen below the menu. */
+.beyond-orbit__frame { --fx: .5; --fy: .5; position: relative; overflow: hidden; container-type: size; aspect-ratio: 16 / 9; background: #060a18; }
+.beyond-orbit__frame > * {
+  --sw: max(100cqw, 100cqh * 16 / 9); --sh: max(100cqh, 100cqw * 9 / 16);
+  --sl: calc((100cqw - var(--sw)) * var(--fx)); --st: calc((100cqh - var(--sh)) * var(--fy));
+}
+@media (max-aspect-ratio: 3 / 4) {
+  .beyond-orbit__frame { --fx: .92; aspect-ratio: 4 / 5; }
+  /* The calm sky on the left is cropped out: the constellation slides into view, only during the finale. */
+  .beyond-orbit__constellation { transform: translateX(52%); }
+  .beyond-orbit__experience[data-revealed]:not([data-theater]) .beyond-orbit__constellation { opacity: 0; }
+}
+.beyond-orbit__copy { position: relative; z-index: 1; padding: clamp(1.25rem, 4vw, 4rem); }
+.beyond-orbit__chapter, .beyond-orbit__eyebrow, .beyond-orbit__coords { font-family: var(--font-departure), monospace; font-size: .8rem; letter-spacing: .08em; color: #b9cba4; }
+.beyond-orbit__eyebrow { color: #83efac; }
+.beyond-orbit__coords { margin-top: 1.75rem; font-size: .7rem; color: #7d86a8; opacity: .85; font-variant-numeric: tabular-nums; }
+.beyond-orbit__copy h1 { font-size: clamp(2rem, 4vw, 3.6rem); line-height: 1.15; text-wrap: balance; margin: 1.5rem 0; text-shadow: 0 0 28px rgba(240, 127, 119, .25); }
+.beyond-orbit__intro { color: #d8d2c4; }
+.beyond-orbit__body { max-width: 40ch; font-size: 1.2rem; line-height: 1.7; }
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .beyond-orbit__copy h1 {
+    background: linear-gradient(100deg, #f3eee3 0 42%, #fff7dc 47%, #f0c98b 50%, #83efac 52%, #f3eee3 58% 100%);
+    background-size: 260% 100%; background-position: 100% 0;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: none; filter: drop-shadow(0 0 22px rgba(240, 127, 119, .28));
+  }
+}
+
+/* The experience: ambilight, curtain, the 16:9 scene, the finale and the credits. */
+.beyond-orbit__experience { position: relative; z-index: 0; isolation: isolate; --dive-bars: 0%; --theater-bars: 0%; --charge: 0; }
+.beyond-orbit__ambient { position: absolute; inset: -22% -30% -6%; z-index: -1; pointer-events: none; opacity: .55;
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 45%, #000 45%, transparent 100%); }
+.beyond-orbit__ambient img { display: block; width: 100%; height: 100%; object-fit: fill; filter: blur(42px) saturate(1.35); }
+.beyond-orbit__curtain { position: fixed; inset: 0; z-index: -2; background: #02040b; opacity: 0; pointer-events: none; transition: opacity 1.2s ease; }
+.beyond-orbit__scene { position: absolute; left: var(--sl); top: var(--st); width: var(--sw); height: var(--sh); overflow: hidden; background: #060a18; isolation: isolate; }
+.beyond-orbit__camera, .beyond-orbit__layer, .beyond-orbit__art { position: absolute; inset: 0; }
+.beyond-orbit__art { pointer-events: none; transition: filter 1.2s ease; }
+.beyond-orbit__plate { display: block; width: 100%; height: 100%; object-fit: contain; }
+.beyond-orbit__glow { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.beyond-orbit__filters { position: absolute; width: 0; height: 0; }
+
+/* Light running along the filaments, a single breath from the core, the nova's chromatic split, and god rays. */
+.beyond-orbit__currents { position: absolute; inset: 0; mix-blend-mode: screen; opacity: 0;
+  mask-image: linear-gradient(115deg, transparent 30%, #000 44%, #000 50%, transparent 64%); mask-size: 320% 100%; mask-position: 100% 0; mask-repeat: no-repeat; }
+.beyond-orbit__glow { background: var(--plate) center / 100% 100% no-repeat; }
+.beyond-orbit__currents .beyond-orbit__glow { filter: brightness(1.55) saturate(1.45); }
+.beyond-orbit__breath { --r: 0%; position: absolute; inset: 0; mix-blend-mode: screen; opacity: 0;
+  mask-image: radial-gradient(circle at 72% 43%, transparent calc(var(--r) - 30%), #000 calc(var(--r) - 10%), transparent var(--r)); }
+.beyond-orbit__breath .beyond-orbit__glow { filter: brightness(2.1) saturate(1.6); }
+.beyond-orbit__chroma { position: absolute; inset: 0; display: none; mix-blend-mode: screen; opacity: 0; }
+.beyond-orbit__chroma[data-channel="red"] .beyond-orbit__glow { filter: url(#beyond-orbit-red) brightness(1.4); }
+.beyond-orbit__chroma[data-channel="cyan"] .beyond-orbit__glow { filter: url(#beyond-orbit-cyan) brightness(1.4); }
+.beyond-orbit__rays { position: absolute; inset: -60%; opacity: .12; mix-blend-mode: screen; transform-origin: 60% 46.8%;
+  mask-image: radial-gradient(circle at 60% 46.8%, #000 0 4%, transparent 40%); }
+.beyond-orbit__rays::before { content: ""; position: absolute; inset: 0; transform-origin: 60% 46.8%;
+  background: repeating-conic-gradient(from 0deg at 60% 46.8%, rgba(255, 240, 201, 0) 0deg 9deg, rgba(255, 240, 201, .6) 11deg, rgba(240, 127, 119, .2) 12.5deg, rgba(255, 240, 201, 0) 14deg 23deg); }
+
+/* The journey's constellation in the dark sky on the left. */
+.beyond-orbit__constellation { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 1.4s ease; overflow: visible; }
+.beyond-orbit__node { fill: #3b4466; transition: fill .4s ease; }
+.beyond-orbit__node[data-lit] { fill: #fff0c9; filter: drop-shadow(0 0 4px #e9a966); }
+.beyond-orbit__journey { fill: none; stroke: #e9a966; stroke-width: 1.5; stroke-opacity: .6; }
+.beyond-orbit__world text { font-family: var(--font-departure), monospace; font-size: 17px; letter-spacing: .06em; fill: #b9cba4; opacity: .75; }
+.beyond-orbit__world[data-uncharted] text { fill: #c75b76; letter-spacing: .3em; }
+.beyond-orbit__uncharted { fill: rgba(199, 91, 118, .06); stroke: rgba(199, 91, 118, .4); stroke-width: 1; stroke-dasharray: 3 7; }
+.beyond-orbit__experience[data-revealed] .beyond-orbit__constellation { opacity: .9; }
+.beyond-orbit__experience[data-theater] .beyond-orbit__constellation { opacity: 0; }
+.beyond-orbit__experience[data-theater]:is([data-beat="constellation"], [data-beat="title"], [data-beat="slam"], [data-beat="postscript"]) .beyond-orbit__constellation { opacity: 1; }
+.beyond-orbit__experience[data-theater] .beyond-orbit__node[data-lit]:not([data-on]) { fill: #3b4466; filter: none; }
+.beyond-orbit__node[data-on] { fill: #fff0c9; filter: drop-shadow(0 0 5px #f07f77); animation: bo-node .7s cubic-bezier(.2, 1.6, .4, 1) both; transform-box: fill-box; transform-origin: center; }
+
+/* The last star at the heart of the Veil. */
+.beyond-orbit__star { position: absolute; transform: translate(-50%, -50%); width: 48px; height: 48px; padding: 0; border-radius: 50%;
+  border: 1px solid rgba(255, 240, 201, .55); color: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 2;
+  background: radial-gradient(circle, rgba(255, 255, 255, .95) 0 6%, rgba(255, 240, 201, .55) 16%, rgba(233, 169, 102, .25) 40%, rgba(6, 10, 24, .55) 72%);
+  box-shadow: 0 0 calc(14px + var(--charge) * 18px) rgba(255, 240, 201, calc(.35 + var(--charge) * .3)), inset 0 0 10px rgba(240, 127, 119, .35);
+  text-shadow: 0 0 8px #fff0c9, 0 0 18px #f07f77; }
+.beyond-orbit__star span { display: block; }
+.beyond-orbit__star i { position: absolute; inset: -1px; border-radius: 50%; border: 1px solid rgba(255, 240, 201, .7); opacity: 0; pointer-events: none; }
+.beyond-orbit__star:hover, .beyond-orbit__star:focus-visible { border-color: #fff0c9; box-shadow: 0 0 34px rgba(255, 240, 201, .7), inset 0 0 12px rgba(240, 127, 119, .5); }
+
+/* Pixel canvases and the crew. */
+.beyond-orbit__canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.beyond-orbit__crew { pointer-events: none; }
+.beyond-orbit__cables { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke-linecap: round; }
+.beyond-orbit__cable-edge { stroke: #101526; stroke-width: 6; }
+.beyond-orbit__cable { stroke: #b7b3c5; stroke-width: 3; }
+.beyond-orbit__cable-pulse { stroke: #fff0c9; stroke-width: 2; stroke-dasharray: 2 46; opacity: 0; filter: drop-shadow(0 0 3px #83efac); }
+.beyond-orbit__actor { position: absolute; transform-origin: 0 0; }
+.beyond-orbit__sprite { position: absolute; width: 100%; height: 100%; background-size: 100% 100%; background-repeat: no-repeat; image-rendering: pixelated;
+  transform: scaleX(var(--face)) rotate(calc(var(--tilt, 0deg) * -1)); transform-origin: 50% 42%;
+  filter: drop-shadow(-1px 0 1px rgba(240, 127, 119, .3)); transition: filter 1s ease; }
+/* Nebula light on the suits: a warm tint on the side facing the core and a sheen across helmet and suit. In sprite space
+   the core is always on the left (Glaucia is mirrored), so one gradient serves both. */
+.beyond-orbit__sheen { position: absolute; inset: 0; pointer-events: none;
+  mask-image: var(--sprite); mask-size: 100% 100%; mask-repeat: no-repeat;
+  background: linear-gradient(110deg, transparent 42%, rgba(255, 240, 201, .32) 48%, rgba(131, 239, 172, .14) 51%, transparent 56%) 100% 0 / 300% 100% no-repeat; }
+.beyond-orbit__sheen::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to right, rgba(240, 127, 119, .14), rgba(233, 169, 102, .04) 30%, transparent 50%); }
+.beyond-orbit__heart { position: absolute; left: 52%; top: 4%; --p: max(2px, .22vw); width: var(--p); height: var(--p); opacity: 0; pointer-events: none;
+  box-shadow:
+    calc(var(--p) * 1) 0 #f07f77, calc(var(--p) * 2) 0 #f07f77, calc(var(--p) * 4) 0 #f07f77, calc(var(--p) * 5) 0 #f07f77,
+    0 var(--p) #f07f77, calc(var(--p) * 1) var(--p) #fff0c9, calc(var(--p) * 2) var(--p) #f07f77, calc(var(--p) * 3) var(--p) #f07f77, calc(var(--p) * 4) var(--p) #f07f77, calc(var(--p) * 5) var(--p) #f07f77, calc(var(--p) * 6) var(--p) #f07f77,
+    0 calc(var(--p) * 2) #f07f77, calc(var(--p) * 1) calc(var(--p) * 2) #f07f77, calc(var(--p) * 2) calc(var(--p) * 2) #f07f77, calc(var(--p) * 3) calc(var(--p) * 2) #f07f77, calc(var(--p) * 4) calc(var(--p) * 2) #f07f77, calc(var(--p) * 5) calc(var(--p) * 2) #f07f77, calc(var(--p) * 6) calc(var(--p) * 2) #c75b76,
+    calc(var(--p) * 1) calc(var(--p) * 3) #f07f77, calc(var(--p) * 2) calc(var(--p) * 3) #f07f77, calc(var(--p) * 3) calc(var(--p) * 3) #f07f77, calc(var(--p) * 4) calc(var(--p) * 3) #f07f77, calc(var(--p) * 5) calc(var(--p) * 3) #c75b76,
+    calc(var(--p) * 2) calc(var(--p) * 4) #f07f77, calc(var(--p) * 3) calc(var(--p) * 4) #f07f77, calc(var(--p) * 4) calc(var(--p) * 4) #c75b76,
+    calc(var(--p) * 3) calc(var(--p) * 5) #c75b76; }
+
+/* Lens and film: anamorphic flare, vignette, grain, flash and letterbox. */
+.beyond-orbit__flare { position: absolute; left: -20%; width: 140%; height: 3px; margin-top: -1.5px; opacity: 0; pointer-events: none; mix-blend-mode: screen; transform-origin: 65.7% 50%;
+  background: linear-gradient(90deg, transparent 10%, rgba(131, 239, 172, .55) 45%, #fff 65.7%, rgba(240, 127, 119, .7) 82%, transparent 98%);
+  box-shadow: 0 0 14px 3px rgba(255, 240, 201, .55), 0 0 60px 10px rgba(131, 239, 172, .18); }
+.beyond-orbit__vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 75% 75% at 58% 48%, transparent 55%, rgba(2, 4, 11, .62) 100%); transition: opacity 1s ease; }
+.beyond-orbit__grain { position: absolute; inset: -50%; pointer-events: none; opacity: .06; mix-blend-mode: overlay;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.beyond-orbit__flash { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at calc(var(--sl) + var(--sw) * .72) calc(var(--st) + var(--sh) * .41), #fff 0, #fff0c9 30%, rgba(255, 240, 201, .75) 65%, rgba(240, 127, 119, .5) 100%); }
+.beyond-orbit__bars { position: absolute; inset: 0; pointer-events: none; }
+.beyond-orbit__bars i { position: absolute; left: 0; right: 0; height: max(var(--dive-bars), var(--theater-bars)); background: #000; transition: height .9s cubic-bezier(.65, 0, .35, 1); }
+.beyond-orbit__bars i:first-child { top: 0; }
+.beyond-orbit__bars i:last-child { bottom: 0; }
+.beyond-orbit__jump { z-index: 1; }
+.beyond-orbit__skip { position: absolute; z-index: 6; top: .5rem; right: .75rem; display: none; min-height: 44px; padding: .5rem .9rem; cursor: pointer;
+  font-family: var(--font-departure), monospace; font-size: .75rem; letter-spacing: .08em; color: #f0c98b; background: rgba(6, 10, 24, .7); border: 1px solid rgba(185, 203, 164, .6); }
+.beyond-orbit__dust { position: absolute; inset: 0; z-index: 5; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; }
+
+/* Credits roll (an aria-hidden copy of the real list) and the post-credits transmission. */
+.beyond-orbit__roll { position: absolute; z-index: 4; left: 0; right: 0; top: 12.8%; bottom: 12.8%; overflow: hidden; display: none; text-align: center; pointer-events: none;
+  mask-image: linear-gradient(transparent, #000 14%, #000 86%, transparent); }
+.beyond-orbit__roll-track { position: absolute; left: 0; right: 0; top: 0; padding: 0 1rem; }
+.beyond-orbit__roll h2 { font-family: var(--font-departure), monospace; letter-spacing: .4em; font-size: clamp(.9rem, 1.6vw, 1.3rem); color: #83efac; margin: 0 0 1.5em; }
+.beyond-orbit__roll .beyond-orbit__credit-list { margin: 0; }
+.beyond-orbit__roll .beyond-orbit__credit-list div { margin: 0 0 clamp(.8rem, 2.2vw, 1.8rem); }
+.beyond-orbit__roll dt { font-size: clamp(.6rem, 1vw, .85rem); letter-spacing: .25em; text-transform: uppercase; color: #b9cba4; }
+.beyond-orbit__roll dd { margin: .25em 0 0; font-size: clamp(.9rem, 2vw, 1.7rem); color: #fff0c9; }
+.beyond-orbit__roll .beyond-orbit__count { color: #e9a966; font-size: clamp(.7rem, 1.2vw, 1rem); }
+.beyond-orbit__roll .beyond-orbit__thanks { margin-top: 2em; font-size: clamp(1rem, 2.4vw, 2rem); color: #f0c98b; }
+.beyond-orbit__roll .beyond-orbit__post { padding-top: clamp(1rem, 10%, 6rem); font-family: var(--font-departure), monospace; color: #83efac; font-size: clamp(.7rem, 1.4vw, 1.1rem); }
+.beyond-orbit__roll .beyond-orbit__post h3 { color: #c75b76; letter-spacing: .4em; font-size: inherit; }
+.beyond-orbit__roll .beyond-orbit__post ul { list-style: none; padding: 0; color: #fff0c9; }
+
+/* The finale: below the scene on compact screens, over the Veil (top right, away from the copy) on wide ones. */
+.beyond-orbit__finale { position: relative; z-index: 3; padding: 1.75rem 1rem 0; text-align: center; line-height: 1.5; pointer-events: none; }
+.beyond-orbit__finale[data-waiting] { visibility: hidden; }
+.beyond-orbit__continued { color: #f0c98b; font-family: var(--font-departure), monospace; font-size: clamp(1.5rem, 6.4vw, 2.8rem); letter-spacing: .02em; margin: 0;
+  text-shadow: 0 0 2px #fff, 0 0 18px rgba(240, 127, 119, .65), 0 0 46px rgba(131, 239, 172, .25); transform-origin: 50% 55%; }
+.beyond-orbit__postscript { margin: .75rem auto 0; max-width: 40ch; padding: 0 .5rem; color: #e8e2d4; text-shadow: 0 1px 8px #060a18; }
+
+/* Before the last light: a hint pointing up at the star. */
+.beyond-orbit__hint { position: absolute; z-index: 5; left: 0; right: 0; bottom: clamp(.75rem, 4%, 2rem); display: flex; align-items: center; justify-content: center; gap: .75rem; margin: 0; padding: 0 1rem;
+  text-shadow: 0 1px 6px #02040b, 0 0 2px #02040b; pointer-events: none;
+  font-family: var(--font-departure), monospace; font-size: .8rem; letter-spacing: .06em; color: #b9cba4; text-align: center; }
+.beyond-orbit__hint b { flex: none; width: 0; height: 0; border: 6px solid transparent; border-bottom: 9px solid #fff0c9; margin-top: -9px; filter: drop-shadow(0 0 4px #f07f77); }
+.beyond-orbit__experience[data-motion] .beyond-orbit__hint b { animation: bo-hint 1.6s ease-in-out infinite; }
+@keyframes bo-hint { 50% { transform: translateY(-6px); } }
+
+/* ——— A Viagem: everything below the hero, revealed after the last light ——— */
+.beyond-orbit__voyage { position: relative; margin-top: clamp(1rem, 4vh, 2.5rem); }
+.beyond-orbit__voyage[data-waiting] { display: none; }
+.beyond-orbit__voyage-sky { position: sticky; top: 0; display: block; width: 100%; height: 100vh; height: 100svh; margin-bottom: -100vh; margin-bottom: -100svh; image-rendering: pixelated; pointer-events: none; }
+.beyond-orbit__voyage > section { position: relative; z-index: 1; }
+.beyond-orbit__voyage h2 { font-family: var(--font-departure), monospace; letter-spacing: .32em; text-transform: uppercase; font-size: clamp(.85rem, .7rem + .6vw, 1.15rem); color: #83efac; text-align: center; margin: 0 0 1.5rem; }
+
+/* The letter. Static: a centred letter in the flow. With motion ([data-cinema]): one sentence at a time on a sticky
+   stage the size of the screen, so phones, tablets and desktops (portrait or landscape) all show it whole. */
+.beyond-orbit__letter { padding: clamp(3rem, 8vh, 6rem) clamp(1.25rem, 5vw, 3rem); }
+.beyond-orbit__letter-inner { max-width: 44rem; margin: 0 auto; text-align: center; }
+.beyond-orbit__voyage-eyebrow { font-family: var(--font-departure), monospace; font-size: .75rem; letter-spacing: .5em; color: #c75b76; margin: 0 0 .75rem; }
+.beyond-orbit__letter-lines p { margin: 0 auto 1.1em; max-width: 34ch; font-size: clamp(1.1rem, .9rem + 1.2vw, 1.75rem); line-height: 1.5; color: #fff0c9; text-wrap: balance; text-shadow: 0 2px 18px #02040b, 0 0 2px #02040b; }
+.beyond-orbit__letter-lines p:first-child { color: #b9cba4; font-style: italic; }
+.beyond-orbit__letter-lines .beyond-orbit__signature { display: flex; align-items: center; justify-content: center; gap: .9rem; font-family: var(--font-departure), monospace; font-style: normal; letter-spacing: .12em; color: #f0c98b; }
+.beyond-orbit__letter-progress { display: none; }
+.beyond-orbit__letter[data-cinema] { height: calc(var(--lines) * 48vh + 100vh); height: calc(var(--lines) * 48svh + 100svh); padding: 0; }
+.beyond-orbit__letter[data-cinema] .beyond-orbit__letter-inner { position: sticky; top: 0; height: 100vh; height: 100svh; max-width: none; box-sizing: border-box;
+  display: grid; grid-template-rows: auto 1fr auto; padding: clamp(4.5rem, 12svh, 7rem) clamp(1.25rem, 6vw, 4rem) clamp(1.25rem, 5svh, 3rem); }
+.beyond-orbit__letter[data-cinema] .beyond-orbit__letter-head h2 { margin-bottom: 0; }
+.beyond-orbit__letter[data-cinema] .beyond-orbit__letter-lines { display: grid; place-items: center; min-height: 0; }
+.beyond-orbit__letter[data-cinema] .beyond-orbit__letter-lines > p { grid-area: 1 / 1; margin: 0; max-width: min(30ch, 100%); will-change: transform, opacity, filter;
+  font-size: clamp(1.15rem, min(.85rem + 2.4vw, 5.2svh), 2.7rem); line-height: 1.4; }
+.beyond-orbit__letter[data-cinema] .beyond-orbit__letter-lines > p:first-child { font-size: clamp(1rem, min(.8rem + 1.6vw, 4svh), 1.9rem); }
+.beyond-orbit__letter[data-cinema] .beyond-orbit__signature { font-size: clamp(1.2rem, min(1rem + 2vw, 5svh), 2.4rem); }
+.beyond-orbit__letter[data-cinema] .beyond-orbit__paw { --p: clamp(3px, .45vw, 5px); }
+.beyond-orbit__word { transition: opacity .35s ease, text-shadow .35s ease; }
+.beyond-orbit__letter[data-cinema] .beyond-orbit__letter-progress { display: flex; align-items: center; justify-content: center; gap: .9rem; margin: 0;
+  font-family: var(--font-departure), monospace; font-size: .75rem; letter-spacing: .14em; color: #b9cba4; font-variant-numeric: tabular-nums; }
+.beyond-orbit__letter-bar { position: relative; width: clamp(80px, 22vw, 220px); height: 2px; background: rgba(185, 203, 164, .25); overflow: hidden; }
+.beyond-orbit__letter-bar i { position: absolute; inset: 0; background: linear-gradient(90deg, #83efac, #f0c98b, #f07f77); transform: scaleX(0); transform-origin: 0 50%; box-shadow: 0 0 8px #f0c98b; }
+.beyond-orbit__paw { --p: 3px; display: inline-block; width: var(--p); height: var(--p); margin: 0 calc(var(--p) * 4) calc(var(--p) * 2) 0;
+  box-shadow: var(--p) 0 #f0c98b, calc(var(--p) * 3) 0 #f0c98b, 0 calc(var(--p) * 1.5) #f0c98b, calc(var(--p) * 4) calc(var(--p) * 1.5) #f0c98b,
+    calc(var(--p) * 1.5) calc(var(--p) * 2.5) #f0c98b, calc(var(--p) * 2.5) calc(var(--p) * 2.5) #f0c98b, calc(var(--p) * 1.5) calc(var(--p) * 3.5) #f0c98b, calc(var(--p) * 2.5) calc(var(--p) * 3.5) #f0c98b; }
+
+/* The atlas: one planet per world, moons for the secrets found there. */
+.beyond-orbit__atlas { overflow: clip; padding: 5rem 0; }
+.beyond-orbit__atlas[data-flight] { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 3rem 0; }
+.beyond-orbit__atlas-head { text-align: center; padding: 0 1.5rem; }
+.beyond-orbit__atlas-head p { color: #d8d2c4; margin: 0 auto 3rem; max-width: 40ch; }
+.beyond-orbit__planets { list-style: none; margin: 0; padding: 0 1.25rem; display: flex; flex-direction: column; align-items: center; gap: 5rem; }
+.beyond-orbit__atlas[data-flight] .beyond-orbit__planets { flex-direction: row; align-items: center; width: max-content; gap: 9vw; padding: 0 32vw 0 10vw; will-change: transform; }
+.beyond-orbit__world-stop { --size: clamp(170px, 46vw, 260px); display: grid; justify-items: center; gap: 2rem; max-width: 30rem; }
+.beyond-orbit__atlas[data-flight] .beyond-orbit__world-stop { --size: clamp(200px, 20vw, 320px); grid-template-columns: auto 22rem; align-items: center; justify-items: start; gap: 3rem; max-width: none; }
+.beyond-orbit__planet { position: relative; width: var(--size); height: var(--size); flex: none; }
+.beyond-orbit__planet::before { content: ""; position: absolute; inset: -9%; border-radius: 50%;
+  background: radial-gradient(circle, transparent 63%, color-mix(in srgb, var(--accent) 30%, transparent) 65.5%, transparent 68%); }
+.beyond-orbit__surface { position: absolute; inset: 0; border-radius: 50%; image-rendering: pixelated;
+  background: var(--surface, repeating-linear-gradient(0deg, #1a1426 0 3px, #241b33 3px 6px)) 0 50% / auto 100% repeat-x;
+  box-shadow: 0 0 calc(var(--size) * .16) color-mix(in srgb, var(--accent) 32%, transparent), inset calc(var(--size) * -.2) calc(var(--size) * -.06) calc(var(--size) * .22) rgba(2, 4, 11, .92); }
+.beyond-orbit__surface::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 28%, rgba(255, 255, 255, .22), transparent 42%); }
+/* Worlds still on their way: a dark planet of static, flickering like a weak signal. */
+.beyond-orbit__world-stop:not([data-charted]) .beyond-orbit__surface {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .78 0 0 0 0 .36 0 0 0 0 .46 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 120px 120px, #120d1c;
+  box-shadow: 0 0 calc(var(--size) * .1) rgba(199, 91, 118, .25), inset calc(var(--size) * -.22) calc(var(--size) * -.04) calc(var(--size) * .24) rgba(2, 4, 11, .96); }
+.beyond-orbit__moons { position: absolute; inset: 0; }
+.beyond-orbit__moons i { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px; border-radius: 50%;
+  transform: rotate(calc(var(--i) * 360deg / var(--n))) translateX(calc(var(--size) * .66)); background: rgba(255, 240, 201, .16); }
+.beyond-orbit__moons i[data-found] { width: 10px; height: 10px; margin: -5px; background: radial-gradient(circle at 35% 35%, #fff, #fff0c9 45%, #c9b48a); box-shadow: 0 0 10px var(--glow); }
+.beyond-orbit__planet-card h3 { margin: 0 0 .35rem; font-size: clamp(1.25rem, 2vw, 1.7rem); color: #fff0c9; }
+.beyond-orbit__planet-count { margin: 0 0 1rem; font-family: var(--font-departure), monospace; font-size: .85rem; color: #e9a966; }
+.beyond-orbit__world-stop:not([data-charted]) .beyond-orbit__planet-count { color: #c75b76; }
+.beyond-orbit__planet-label { margin: 0 0 .35rem; font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: #b9cba4; }
+.beyond-orbit__moon-list { list-style: none; padding: 0; margin: 0 0 1rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+.beyond-orbit__moon-list li { padding: .2rem .55rem; font-size: .8rem; color: #060a18; background: #fff0c9; box-shadow: 0 0 10px color-mix(in srgb, var(--glow, #f07f77) 45%, transparent); }
+.beyond-orbit__hints { margin: 0 0 1rem; font-size: .9rem; color: #d8d2c4; }
+.beyond-orbit__hints summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font-family: var(--font-departure), monospace; font-size: .75rem; letter-spacing: .08em; color: #83efac; }
+.beyond-orbit__hints ul { margin: .25rem 0 0; padding-left: 1.1rem; line-height: 1.5; }
+.beyond-orbit__hints li + li { margin-top: .4rem; }
+.beyond-orbit__revisit { display: inline-flex; align-items: center; min-height: 44px; padding: .5rem .9rem; color: #f0c98b; border: 1px solid rgba(185, 203, 164, .6); background: rgba(16, 21, 27, .75); }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__surface { animation: bo-planet 70s linear infinite; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__moons { animation: bo-spin 46s linear infinite; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__world-stop:nth-child(even) .beyond-orbit__moons { animation-direction: reverse; animation-duration: 58s; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__world-stop:not([data-charted]) .beyond-orbit__surface { animation: bo-planet 120s linear infinite, bo-faint 3.6s steps(2) infinite; }
+@keyframes bo-planet { to { background-position: calc(var(--size) * -1.778) 50%; } }
+@keyframes bo-faint { 50% { opacity: .55; } }
+
+/* The next star: the voyage converges on it; touching it plays the last light again. */
+.beyond-orbit__next { min-height: 90vh; display: grid; place-content: center; justify-items: center; gap: 1rem; padding: 4rem 1.5rem 2rem; text-align: center; }
+.beyond-orbit__next p { margin: 0; color: #d8d2c4; }
+.beyond-orbit__next-star { position: relative; width: 120px; height: 120px; margin: 1.5rem 0 .5rem; padding: 0; border-radius: 50%; cursor: pointer; color: #fff; font-size: 3rem; line-height: 1;
+  border: 1px solid rgba(255, 240, 201, .6); text-shadow: 0 0 10px #fff0c9, 0 0 26px #f07f77;
+  background: radial-gradient(circle, #fff 0 5%, rgba(255, 240, 201, .7) 14%, rgba(240, 127, 119, .3) 38%, rgba(6, 10, 24, .4) 70%);
+  box-shadow: 0 0 40px rgba(255, 240, 201, .45), 0 0 120px rgba(240, 127, 119, .25), inset 0 0 18px rgba(131, 239, 172, .35); }
+.beyond-orbit__next-star i { position: absolute; inset: -1px; border-radius: 50%; border: 1px solid rgba(255, 240, 201, .65); opacity: 0; pointer-events: none; }
+.beyond-orbit__next-star:hover, .beyond-orbit__next-star:focus-visible { box-shadow: 0 0 60px rgba(255, 240, 201, .7), 0 0 160px rgba(240, 127, 119, .35), inset 0 0 22px rgba(131, 239, 172, .5); }
+.beyond-orbit__next-label { font-family: var(--font-departure), monospace; font-size: .8rem; letter-spacing: .12em; color: #f0c98b; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__next-star i { animation: bo-ping 3.6s ease-out infinite; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__next-star i:nth-child(3) { animation-delay: 1.2s; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__next-star i:nth-child(4) { animation-delay: 2.4s; }
+
+/* End credits. Static: a film credits sheet (two columns on wide screens, one on phones). With motion ([data-cinema])
+   the reel rolls up through a projector frame; the credit in the middle of the frame comes into focus (--focus). */
+.beyond-orbit__credits { padding: clamp(2rem, 6vh, 4rem) 0 0; text-align: center; }
+.beyond-orbit__credits-stage { position: relative; }
+.beyond-orbit__credit-reel { max-width: 54rem; margin: 0 auto; padding: 0 clamp(1.25rem, 5vw, 3rem); }
+.beyond-orbit__credits-kicker { margin: 0 0 .5rem; font-family: var(--font-departure), monospace; font-size: clamp(.7rem, .6rem + .4vw, .9rem); letter-spacing: .45em; text-transform: uppercase; color: #c75b76; }
+.beyond-orbit__credits .beyond-orbit__credit-reel h2 { font-family: inherit; font-size: clamp(2.4rem, 1.4rem + 5vw, 5.5rem); letter-spacing: .08em; line-height: 1; margin: 0 0 1rem;
+  background: linear-gradient(100deg, #fff0c9 20%, #f0c98b 45%, #f07f77 55%, #83efac 80%); -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 24px rgba(240, 127, 119, .35)); }
+.beyond-orbit__count { font-family: var(--font-departure), monospace; color: #e9a966; font-size: .85rem; margin: 0 0 clamp(2rem, 6vh, 4rem); }
+.beyond-orbit__credit-list { margin: 0; display: grid; gap: clamp(1.75rem, 5vh, 3.25rem); }
+.beyond-orbit__credit-list > div { display: grid; gap: .5rem; justify-items: center; }
+.beyond-orbit__credit-list dt { font-size: clamp(.68rem, .6rem + .3vw, .82rem); letter-spacing: .26em; text-transform: uppercase; color: #b9cba4; }
+.beyond-orbit__credit-list dd { margin: 0; display: grid; justify-items: center; gap: .6rem; font-size: clamp(1.25rem, .9rem + 1.6vw, 2.2rem); line-height: 1.2; color: #fff0c9; text-wrap: balance; }
+.beyond-orbit__credit-art { display: block; }
+.beyond-orbit__credit-portrait { display: block; width: auto; height: clamp(72px, 12vw, 130px); image-rendering: pixelated; filter: drop-shadow(-1px 0 1px rgba(240, 127, 119, .6)) drop-shadow(0 0 14px rgba(131, 239, 172, .25)); }
+.beyond-orbit__credit-portrait[data-flip] { transform: scaleX(-1); }
+.beyond-orbit__credit-you { display: grid; place-items: center; width: clamp(56px, 8vw, 84px); aspect-ratio: 1; border-radius: 50%; font-size: clamp(1.6rem, 3vw, 2.4rem); color: #fff;
+  background: radial-gradient(circle, rgba(255, 240, 201, .6), rgba(240, 127, 119, .2) 45%, transparent 70%); border: 1px solid rgba(255, 240, 201, .45); text-shadow: 0 0 10px #fff0c9, 0 0 22px #f07f77; }
+.beyond-orbit__secret-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; max-width: min(28rem, 86vw); }
+.beyond-orbit__secret-strip i { width: 8px; height: 8px; background: #2a3150; }
+.beyond-orbit__secret-strip i[data-lit] { background: #fff0c9; box-shadow: 0 0 6px #f0c98b; }
+.beyond-orbit__world-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+.beyond-orbit__world-badges img { width: clamp(40px, 6vw, 64px); height: clamp(40px, 6vw, 64px); border-radius: 50%; object-fit: cover; image-rendering: pixelated;
+  box-shadow: 0 0 14px rgba(131, 239, 172, .35), inset -6px -4px 10px rgba(0, 0, 0, .7); }
+.beyond-orbit__thanks { margin: clamp(2.5rem, 8vh, 5rem) 0 0; font-size: clamp(1.6rem, 1rem + 3vw, 3.4rem); line-height: 1.15; color: #f0c98b; text-shadow: 0 0 26px rgba(240, 127, 119, .45); }
+@media (min-width: 760px) {
+  .beyond-orbit__credit-list > div:not([data-art]) { grid-template-columns: 1fr 1fr; align-items: baseline; gap: 2rem; }
+  .beyond-orbit__credit-list > div:not([data-art]) dt { justify-self: end; text-align: right; }
+  .beyond-orbit__credit-list > div:not([data-art]) dd { justify-items: start; text-align: left; }
+}
+.beyond-orbit__credits-run[data-cinema] { height: calc(var(--reel, 200vh) + 100vh); height: calc(var(--reel, 200svh) + 100svh); }
+.beyond-orbit__credits-run[data-cinema] .beyond-orbit__credits-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
+  mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); }
+.beyond-orbit__credits-run[data-cinema] .beyond-orbit__credit-reel { position: absolute; left: 0; right: 0; top: 0; will-change: transform; }
+.beyond-orbit__credits-run[data-cinema] .beyond-orbit__credit-reel > *, .beyond-orbit__credits-run[data-cinema] .beyond-orbit__credit-list > div {
+  opacity: calc(.18 + var(--focus, 0) * .82); transform: scale(calc(.9 + var(--focus, 0) * .1)); }
+.beyond-orbit__credits-run[data-cinema] .beyond-orbit__credit-list { opacity: 1; transform: none; }
+.beyond-orbit__credits-run[data-cinema] .beyond-orbit__credit-list > div { filter: drop-shadow(0 0 calc(var(--focus, 0) * 14px) rgba(240, 201, 139, .35)); }
+/* The projector: a cone of light from the top of the frame, two strips of film sprockets at the sides. */
+.beyond-orbit__projector, .beyond-orbit__film { display: none; }
+.beyond-orbit__credits-run[data-cinema] .beyond-orbit__projector { display: block; position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen; opacity: .5;
+  background: conic-gradient(from 168deg at 50% -8%, transparent 0deg, rgba(255, 240, 201, .16) 8deg, rgba(255, 240, 201, .05) 16deg, rgba(255, 240, 201, .16) 24deg, transparent 32deg); }
+.beyond-orbit__credits-run[data-cinema] .beyond-orbit__film { display: block; position: absolute; inset: 0; pointer-events: none; }
+.beyond-orbit__film i { position: absolute; top: -10%; bottom: -10%; width: clamp(14px, 2.4vw, 28px); opacity: .35;
+  background: repeating-linear-gradient(180deg, transparent 0 10px, rgba(255, 240, 201, .5) 10px 18px, transparent 18px 26px) 50% 0 / 45% 26px repeat-y, rgba(2, 4, 11, .8);
+  border-inline: 1px solid rgba(255, 240, 201, .12); }
+.beyond-orbit__film i:first-child { left: clamp(.25rem, 2vw, 2rem); }
+.beyond-orbit__film i:last-child { right: clamp(.25rem, 2vw, 2rem); }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__projector { animation: bo-projector .18s steps(2) infinite; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__film i { animation: bo-film 1.2s linear infinite; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__credit-portrait { animation: bo-float 5s ease-in-out infinite; }
+.beyond-orbit__voyage[data-motion] [data-art="copilot"] .beyond-orbit__credit-portrait { animation-duration: 4.2s; animation-delay: -1.3s; }
+@keyframes bo-projector { 50% { opacity: .42; } }
+@keyframes bo-film { to { background-position: 50% 26px, 0 0; } }
+@keyframes bo-float { 50% { translate: 0 -6px; rotate: 2deg; } }
+
+/* The copy of the reel that rolls inside the scene during "A Última Luz" is much smaller. */
+.beyond-orbit__roll .beyond-orbit__credit-list { gap: clamp(.6rem, 2vw, 1.4rem); }
+.beyond-orbit__roll .beyond-orbit__credit-list dt { font-size: clamp(.5rem, .9vw, .8rem); }
+.beyond-orbit__roll .beyond-orbit__credit-list dd { font-size: clamp(.8rem, 1.8vw, 1.6rem); gap: .3rem; }
+.beyond-orbit__roll .beyond-orbit__credit-portrait { height: clamp(28px, 6vw, 72px); }
+.beyond-orbit__roll .beyond-orbit__credit-you { width: clamp(24px, 4vw, 48px); font-size: clamp(.8rem, 1.6vw, 1.4rem); }
+.beyond-orbit__roll .beyond-orbit__world-badges img { width: clamp(18px, 3vw, 40px); height: clamp(18px, 3vw, 40px); }
+.beyond-orbit__roll .beyond-orbit__secret-strip i { width: 5px; height: 5px; }
+.beyond-orbit__roll .beyond-orbit__credits-kicker { font-size: clamp(.45rem, .9vw, .75rem); }
+.beyond-orbit__roll .beyond-orbit__thanks { font-size: clamp(1rem, 2.4vw, 2rem); margin-top: 1.5em; }
+.beyond-orbit__roll .beyond-orbit__count { margin-bottom: 1em; }
+
+/* Post-credits: an intercepted transmission on an old monitor. */
+.beyond-orbit__post { position: relative; overflow: hidden; margin: clamp(3rem, 10vh, 6rem) auto 0; width: min(34rem, calc(100% - 2.5rem)); box-sizing: border-box; padding: 1.5rem clamp(1.1rem, 4vw, 2rem) 1.75rem; text-align: left;
+  font-family: var(--font-departure), monospace; font-size: clamp(.8rem, .75rem + .25vw, .95rem); line-height: 1.6; color: #83efac;
+  background: radial-gradient(ellipse at 50% 40%, rgba(34, 107, 89, .28), rgba(2, 4, 11, .92) 75%); border: 1px solid rgba(131, 239, 172, .35);
+  box-shadow: 0 0 40px rgba(131, 239, 172, .12), inset 0 0 50px rgba(0, 0, 0, .7); text-shadow: 0 0 6px rgba(131, 239, 172, .6); }
+.beyond-orbit__post::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .28) 0 1px, transparent 1px 3px); }
+.beyond-orbit__post-bar { display: flex; justify-content: space-between; margin: 0 0 1rem; font-size: .7rem; letter-spacing: .2em; color: #c75b76; }
+.beyond-orbit__post h3 { margin: 0 0 .75rem; font-size: .8rem; letter-spacing: .35em; text-transform: uppercase; color: #c75b76; }
+.beyond-orbit__post p { margin: 0 0 .5rem; }
+.beyond-orbit__post ul { list-style: none; padding: 0; margin: .5rem 0 0; color: #fff0c9; }
+.beyond-orbit__post li::before { content: "▸ "; color: #f07f77; }
+.beyond-orbit__post-signal { color: #e9a966; }
+.beyond-orbit__cursor { display: inline-block; width: .6em; height: 1.1em; margin-top: .5rem; vertical-align: text-bottom; background: #83efac; box-shadow: 0 0 8px #83efac; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__cursor { animation: bo-cursor 1s steps(1) infinite; }
+.beyond-orbit__voyage[data-motion] .beyond-orbit__post-bar span:first-child { animation: bo-cursor 1.4s steps(1) infinite; }
+@keyframes bo-cursor { 50% { opacity: 0; } }
+
+/* The atlas on tablets: planet and card side by side. */
+@media (min-width: 700px) {
+  .beyond-orbit__atlas:not([data-flight]) .beyond-orbit__world-stop { grid-template-columns: auto 1fr; justify-items: start; align-items: center; gap: 3rem; max-width: 46rem; width: 100%; }
+}
+@media (max-width: 699px) {
+  .beyond-orbit__planet-card { text-align: center; }
+  .beyond-orbit__moon-list { justify-content: center; }
+  .beyond-orbit__hints { text-align: left; }
+}
+
+.beyond-orbit__return { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; padding: 2rem; }
+.beyond-orbit__return a, .epilogue-signal button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: .7rem 1rem; color: #f0c98b; border: 1px solid #b9cba4; background: #10151b; }
+.beyond-orbit__return a:hover { border-color: #f0c98b; box-shadow: 0 0 18px rgba(240, 201, 139, .25); }
+.beyond-orbit :is(a, button):focus-visible, .epilogue-signal button:focus-visible { outline: 3px solid #f0c98b; outline-offset: 5px; }
+.epilogue-signal { margin: 3rem auto; max-width: 42rem; padding: 1.5rem; background: #10151b; color: #f3eee3; border: 1px solid #b9cba4; }
+.epilogue-signal button { cursor: pointer; gap: .75rem; }
+
+/* ——— Living atmosphere (only with motion) ——— */
+.beyond-orbit__experience[data-motion] .beyond-orbit__currents { opacity: .5; animation: bo-current 22s linear infinite; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__rays::before { animation: bo-spin 180s linear infinite; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__ambient { animation: bo-ambient 14s ease-in-out infinite alternate; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__star { animation: bo-pulse 3.2s ease-in-out infinite; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__star i { animation: bo-ping 4s ease-out infinite; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__star i + i { animation-delay: 2s; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__cable-pulse { opacity: .8; animation: bo-flow 2.6s linear infinite; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__cable-pulse[data-cable="prince"] { animation-duration: 2.1s; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__sheen { animation: bo-sheen 8s ease-in-out infinite; }
+.beyond-orbit__experience[data-motion] [data-orbit-actor="prince"] .beyond-orbit__sheen { animation-delay: 3.1s; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__grain { animation: bo-grain .9s steps(6) infinite; }
+.beyond-orbit__experience[data-motion] .beyond-orbit__continued { background: linear-gradient(100deg, #f0c98b 0 40%, #fff 48%, #83efac 52%, #f0c98b 60% 100%) 100% 0 / 260% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent; animation: bo-sweep 6s ease-in-out 1s infinite;
+  text-shadow: none; filter: drop-shadow(0 0 2px rgba(255, 255, 255, .7)) drop-shadow(0 0 16px rgba(240, 127, 119, .6)); }
+
+/* ——— "A Última Luz": theater mode and beats ——— */
+/* Below the sticky header (z-index 40), so the radio and the menu stay reachable during the sequence. */
+.beyond-orbit__experience[data-theater] { z-index: 30; --theater-bars: 12.8%; }
+.beyond-orbit__experience[data-theater] .beyond-orbit__curtain { opacity: .9; }
+.beyond-orbit__experience[data-theater] .beyond-orbit__ambient { opacity: .85; }
+.beyond-orbit__experience[data-theater] .beyond-orbit__skip { display: inline-flex; align-items: center; }
+.beyond-orbit__experience[data-theater] .beyond-orbit__chroma { display: block; }
+.beyond-orbit__experience[data-beat="implode"] .beyond-orbit__art { filter: brightness(.55) saturate(.45); }
+.beyond-orbit__experience[data-beat="hush"] .beyond-orbit__art { filter: brightness(.22) saturate(.3); transition-duration: .4s; }
+.beyond-orbit__experience:is([data-beat="implode"], [data-beat="hush"]) .beyond-orbit__vignette { opacity: 1; background: radial-gradient(circle at 72% 41%, transparent 8%, rgba(2, 4, 11, .85) 60%); }
+.beyond-orbit__experience:is([data-beat="nova"], [data-beat="bloom"]) .beyond-orbit__art { filter: brightness(1.3) saturate(1.25); transition-duration: .15s; }
+.beyond-orbit__experience:is([data-beat="credits"]) .beyond-orbit__art { filter: brightness(.28) saturate(.6) blur(1px); transition-duration: 1.6s; }
+.beyond-orbit__experience:is([data-beat="post"]) .beyond-orbit__art { filter: brightness(.05); transition-duration: 1s; }
+.beyond-orbit__experience:is([data-beat="credits"], [data-beat="post"]) :is(.beyond-orbit__crew, .beyond-orbit__canvas, .beyond-orbit__star) { opacity: .2; transition: opacity 1.4s ease; }
+.beyond-orbit__experience[data-beat="post"] :is(.beyond-orbit__crew, .beyond-orbit__canvas, .beyond-orbit__star) { opacity: 0; }
+.beyond-orbit__experience:is([data-beat="credits"], [data-beat="post"]) .beyond-orbit__roll { display: block; }
+.beyond-orbit__experience[data-beat="post"] .beyond-orbit__finale { opacity: 0; transition: opacity .8s ease; }
+.beyond-orbit__experience[data-react] .beyond-orbit__sprite { filter: drop-shadow(-1px 0 0 #f07f77) drop-shadow(-2px 0 4px rgba(240, 127, 119, .7)) drop-shadow(1px 0 3px rgba(131, 239, 172, .45)); }
+.beyond-orbit__experience[data-react] .beyond-orbit__heart { animation: bo-heart 2.4s ease-out .6s both; }
+.beyond-orbit__experience[data-react] .beyond-orbit__cable-pulse { stroke-dasharray: 3 18; animation-duration: .9s; }
+
+@keyframes bo-current { from { mask-position: 100% 0; } to { mask-position: 0% 0; } }
+@keyframes bo-spin { to { transform: rotate(360deg); } }
+@keyframes bo-ambient { from { opacity: .45; } to { opacity: .7; } }
+@keyframes bo-pulse { 50% { box-shadow: 0 0 calc(26px + var(--charge) * 22px) rgba(255, 240, 201, .6), inset 0 0 12px rgba(240, 127, 119, .5); } }
+@keyframes bo-ping { from { transform: scale(1); opacity: .75; } to { transform: scale(3.2); opacity: 0; } }
+@keyframes bo-flow { to { stroke-dashoffset: 96; } }
+@keyframes bo-sheen { 0%, 12% { background-position: 100% 0; } 42%, 100% { background-position: 0% 0; } }
+@keyframes bo-grain { 0% { transform: translate(0, 0); } 20% { transform: translate(-3%, 2%); } 40% { transform: translate(2%, -4%); } 60% { transform: translate(-4%, -1%); } 80% { transform: translate(3%, 3%); } 100% { transform: translate(0, 0); } }
+@keyframes bo-sweep { 0%, 30% { background-position: 100% 0; } 70%, 100% { background-position: 0% 0; } }
+@keyframes bo-node { 0% { transform: scale(0); } 60% { transform: scale(2.4); } 100% { transform: scale(1); } }
+@keyframes bo-heart { 0% { opacity: 0; transform: translateY(0) scale(.4); } 18% { opacity: 1; transform: translateY(-20%) scale(1.15); } 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(-260%) scale(1); } }
+
+/* The opening: an iris of light, letterbox bars opening and the copy rising out of the dark. Pure CSS that ends in the
+   static state; skipped with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .beyond-orbit__art { animation: bo-iris 3.6s cubic-bezier(.2, .7, .1, 1) backwards; }
+  html:not(.reduce-motion) .beyond-orbit__bars i { animation: bo-bars 2.4s cubic-bezier(.65, 0, .35, 1) .5s backwards; }
+  html:not(.reduce-motion) .beyond-orbit__copy > * { animation: bo-rise 1.3s cubic-bezier(.2, .7, .1, 1) backwards; }
+  html:not(.reduce-motion) .beyond-orbit__copy > :nth-child(1) { animation-delay: .5s; }
+  html:not(.reduce-motion) .beyond-orbit__copy > :nth-child(2) { animation-delay: .75s; }
+  html:not(.reduce-motion) .beyond-orbit__copy > :nth-child(3) { animation: bo-rise 1.3s cubic-bezier(.2, .7, .1, 1) 1s backwards, bo-title-sweep 2.6s ease-in-out 1.8s backwards; }
+  html:not(.reduce-motion) .beyond-orbit__copy > :nth-child(4) { animation-delay: 1.45s; }
+  html:not(.reduce-motion) .beyond-orbit__copy > :nth-child(5) { animation-delay: 1.75s; }
+  html:not(.reduce-motion) .beyond-orbit__copy > :nth-child(6) { animation-delay: 2.1s; }
+}
+@keyframes bo-iris { from { transform: scale(1.14); filter: brightness(0) saturate(.3); } 35% { filter: brightness(.45) saturate(.6); } }
+@keyframes bo-bars { from { height: 14%; } }
+@keyframes bo-rise { from { opacity: 0; transform: translateY(14px); filter: blur(8px); } }
+@keyframes bo-title-sweep { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+
+@media (max-width: 899px) {
+  .beyond-orbit__world text { display: none; }
+}
+@media (min-width: 1200px) and (min-height: 680px) {
+  /* The frame covers the whole screen below the menu; the stage keeps the crew and the star in view. */
+  .beyond-orbit__frame { --fx: .7; aspect-ratio: auto; height: calc(100vh - var(--bo-header)); height: calc(100svh - var(--bo-header)); }
+  .beyond-orbit__copy { position: absolute; width: min(39%, 40rem); top: 0; padding: clamp(2rem, 7vh, 5rem) 0 0 clamp(2rem, 5vw, 6rem); box-sizing: border-box; }
+  .beyond-orbit__finale { position: absolute; left: 42%; right: 2%; top: calc((100svh - var(--bo-header)) * .135); padding: 0; }
+  .beyond-orbit__continued { font-size: clamp(2rem, 4.2vw, 4.4rem); }
+  .beyond-orbit__experience[data-revealed]:not([data-theater]) .beyond-orbit__constellation { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .beyond-orbit__finale[data-waiting] { visibility: visible; }
+  .beyond-orbit__voyage[data-waiting] { display: block; }
+}
+.reduce-motion .beyond-orbit__finale[data-waiting] { visibility: visible; }
+.reduce-motion .beyond-orbit__voyage[data-waiting] { display: block; }

@@ -146,6 +146,19 @@
       "notes": ""
     },
     {
+      "id": "GE-DOG-08",
+      "file": "approved-source/GE-DOG-08-beyond-orbit.png",
+      "sceneId": "beyond-orbit",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "7fe5b95f60a31c549d62c9eddfd0c08d37bd5f4e2f0939e13e24c4c1b0bc17c9",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
       "id": "GE-GL-01",
       "file": "approved-source/GE-GL-01-earth-observatory.png",
       "sceneId": "earth-observatory",
@@ -259,6 +272,19 @@
       "nativeHeight": 941,
       "alpha": false,
       "sha256": "d052e4b69255f52fb921ce29a8b3b0bfb2974ace7a77ff3fb596b17f8c1b1442",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
+      "id": "GE-GL-08",
+      "file": "approved-source/GE-GL-08-beyond-orbit.png",
+      "sceneId": "beyond-orbit",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "fae956e93aad541c4b586d7ab169a230e4ac621781b6674e90cf03f7f7d3a360",
       "reviewer": "Glaucia Lemos",
       "notes": ""
     },
@@ -402,6 +428,19 @@
       "nativeHeight": 941,
       "alpha": false,
       "sha256": "96efd61fe808a849c29e867da75e2645625349473405705df9bf0d3eb5af08f8",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
+      "id": "GE-PL-08",
+      "file": "approved-source/GE-PL-08-beyond-orbit.jpg",
+      "sceneId": "beyond-orbit",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": false,
+      "sha256": "bf256d7aa4d84f02c0f3182715250a058bf12825213485f23b24fd39f07146d0",
       "reviewer": "Glaucia Lemos",
       "notes": ""
     },
