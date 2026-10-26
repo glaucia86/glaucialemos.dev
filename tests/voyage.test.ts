@@ -4,6 +4,7 @@ import { DESTINATIONS } from "@/lib/journey-constellation";
 import { VOYAGE_WORLDS, mix, paletteAt, worldReport } from "@/lib/voyage";
 import { beyondOrbit } from "@/i18n/beyond-orbit";
 import { comlink } from "@/i18n/comlink";
+import { SCENES } from "@/lib/scenes";
 
 describe("a viagem", () => {
   it("visits every destination in order, with the approved plate of each migrated world", () => {
@@ -23,6 +24,21 @@ describe("a viagem", () => {
     const later = [...EGGS, { id: "orbital-trail" as EggId, page: "events" as EggPage }];
     expect(worldReport("events", [], later)).toMatchObject({ total: 1, charted: true });
   });
+  it("gives Aurélia its own plate, palette and six moons, with only Events and 404 still faint", () => {
+    const ids = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination"];
+    const world = VOYAGE_WORLDS.find((world) => world.page === "services")!;
+    expect(world).toMatchObject({ path: "/servicos", plate: SCENES.aurelia.assets.background.src, palette: SCENES.aurelia.palette });
+    expect(paletteAt(VOYAGE_WORLDS.indexOf(world) / (VOYAGE_WORLDS.length - 1))).toEqual(SCENES.aurelia.palette);
+    expect(worldReport("services", []).missing).toEqual(ids);
+    for (const count of [0, 1, 6]) {
+      const found = ids.slice(0, count);
+      expect(worldReport("services", [...found, ...found, "epilogue-signal", "first-page", "unknown"])).toEqual({
+        total: 6, charted: true, found, missing: ids.slice(count),
+      });
+    }
+    expect(VOYAGE_WORLDS.filter((world) => worldReport(world.page, []).charted)).toHaveLength(5);
+    expect(VOYAGE_WORLDS.filter((world) => !worldReport(world.page, []).charted).map((world) => world.page)).toEqual(["events", "notfound"]);
+  });
   it("blends palettes continuously between worlds", () => {
     expect(mix("#000000", "#ffffff", .5)).toBe("#808080");
     expect(paletteAt(0)).toEqual(VOYAGE_WORLDS[0].palette);
@@ -32,6 +48,8 @@ describe("a viagem", () => {
   });
   it.each(["pt", "en", "es"] as const)("has a complete voyage in %s, with a name and hint for every secret", (lang) => {
     const copy = beyondOrbit[lang];
+    expect(copy.worlds.services).toBe({ pt: "Aurélia, os Jardins Suspensos", en: "Aurélia, the Hanging Gardens", es: "Aurélia, los Jardines Colgantes" }[lang]);
+    expect(copy.letter.some((line) => line.includes("Aurélia"))).toBe(true);
     expect(copy.letter.length).toBeGreaterThanOrEqual(5);
     for (const key of ["voyage", "letterTitle", "signature", "atlasTitle", "atlasIntro", "moons", "missing", "seeHint", "revisitWorld", "faint", "allFound", "nextStar", "nextBody", "replay"] as const) expect(copy[key].length, key).toBeGreaterThan(0);
     expect(copy.revisitWorld).toContain("{world}");

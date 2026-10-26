@@ -27,9 +27,22 @@ describe("journey constellation", () => {
   });
   it("lists destinations without secrets of their own as the next coordinates", () => {
     const next = unchartedWorlds();
+    expect(next).toEqual(["events", "notfound"]);
     expect(next).toEqual(DESTINATIONS.filter((world) => !EGGS.some((egg) => egg.page === world && egg.id !== "epilogue-signal")));
     expect(next).not.toContain("services");
     expect(next).not.toContain("home");
+  });
+  it("charts Aurélia through its six secrets and preserves the bridge as a separate star", () => {
+    const ids = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination"];
+    const serviceStars = stars.filter((star) => star.world === "services");
+    expect(serviceStars.map((star) => star.id).sort()).toEqual([...ids, "epilogue-signal"].sort());
+    const trip = journey(["first-page", ...ids, "garden-bloom", "epilogue-signal", "last-light"]);
+    expect(trip.worlds).toEqual(["content", "services"]);
+    expect(trip.found).toBe(9);
+    expect(trip.total).toBe(37);
+    expect(trip.path.map((star) => star.id)).toEqual(["first-page", ...ids, "epilogue-signal", "last-light"]);
+    const bridgeOnly = EGGS.filter((egg) => egg.page !== "services" || egg.id === "epilogue-signal");
+    expect(unchartedWorlds(bridgeOnly)).toContain("services");
   });
   it("draws the visitor's path in discovery order, ignoring duplicates and unknown ids", () => {
     const trip = journey(["rover-scan", "focus-lens", "rover-scan", "nope", "paw-tracks"], stars);

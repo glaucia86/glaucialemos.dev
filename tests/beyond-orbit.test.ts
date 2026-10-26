@@ -4,6 +4,11 @@ import { soundBank } from "@/lib/sfx";
 import fs from "node:fs";
 import sharp from "sharp";
 import { SCENES, poseBox } from "@/lib/scenes";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { EpilogueCredits } from "@/components/epilogue/EpilogueCredits";
+import { beyondOrbit } from "@/i18n/beyond-orbit";
+import { EGGS } from "@/lib/egg-catalog";
 
 describe("floating companions", () => {
   it("starts at rest and keeps separate, inward-facing actors clear of the copy", () => {
@@ -56,12 +61,26 @@ describe("A Última Luz", () => {
     }
   });
   it("lights any journey before the title, one distinct note per star", () => {
-    for (const count of [0, 1, 4, 31, 80]) {
+    for (const count of [0, 1, 4, EGGS.length, 80]) {
       const delays = starDelays(count);
       expect(delays).toHaveLength(count);
       if (count) expect(BEATS.constellation + .3 + delays.at(-1)!).toBeLessThan(BEATS.title);
     }
     expect(new Set(Array.from({ length: 15 }, (_, index) => starNote(index))).size).toBe(15);
+  });
+  it.each(["pt", "en", "es"] as const)("includes Aurélia in the %s credits and leaves only future worlds after them", lang => {
+    const copy = beyondOrbit[lang];
+    const html = renderToStaticMarkup(createElement(EpilogueCredits, { copy }));
+    const credits = html.slice(0, html.indexOf('class="beyond-orbit__post"'));
+    const post = html.slice(html.indexOf('class="beyond-orbit__post"'));
+    const badges = credits.match(/class="beyond-orbit__world-badges">(.*?)<\/span>/)![1];
+    expect(badges.match(/<img /g)).toHaveLength(5);
+    expect(badges).toContain(SCENES.aurelia.assets.background.src);
+    expect(credits).toContain(copy.worlds.services);
+    expect(credits).toContain(copy.mapped.replace("{total}", "37"));
+    for (const actor of ["glaucia", "prince"] as const) expect(credits).toContain(SCENES["beyond-orbit"].assets.actors[actor]["float-idle"].src);
+    expect(post).not.toContain(copy.worlds.services);
+    expect(post).toContain(`<li>${copy.worlds.events}</li><li>${copy.worlds.notfound}</li>`);
   });
   it("keeps the last star on the Veil and clear of both actors", () => {
     const scene = SCENES["beyond-orbit"];
