@@ -7,8 +7,9 @@ describe("sons dos mundos", () => {
     expect(uiSound("niveora", "click")).toBe("click-niveora");
     expect(uiSound("mars", "hover")).toBe("hover-mars");
     expect(uiSound(undefined, "hover")).toBe("blip");
-    expect(uiSound("kashyyyk", "click")).toBe("key");
-    for (const world of ["observatory", "niveora", "mars"]) for (const action of ["hover", "click"] as const) expect(soundBank[uiSound(world, action)].length).toBeGreaterThan(0);
+    expect(uiSound("lumina", "hover")).toBe("hover-lumina");
+    expect(uiSound("nevarro", "click")).toBe("key");
+    for (const world of ["observatory", "niveora", "mars", "lumina"]) for (const action of ["hover", "click"] as const) expect(soundBank[uiSound(world, action)].length).toBeGreaterThan(0);
   });
 
   it("não empilha teclas: respeita o intervalo mínimo de cada som", () => {
@@ -26,5 +27,12 @@ describe("sons dos mundos", () => {
       for (const tone of soundBank[kind]) expect((tone.delay ?? 0) + tone.duration, kind).toBeLessThanOrEqual(.6);
     }
     expect(soundBank.type.some((tone) => tone.wave === "noise")).toBe(true);
+  });
+
+  it("Lúmina tem cristal, página, prisma, scanner, eco, entardecer e o túnel, todos curtos", () => {
+    for (const kind of ["chime", "page", "prism", "scanner", "echo", "link", "dusk", "refract", "facet", "hover-lumina", "click-lumina"] as const) {
+      expect(soundBank[kind].length, kind).toBeGreaterThan(0);
+      for (const tone of soundBank[kind]) expect((tone.delay ?? 0) + tone.duration, kind).toBeLessThanOrEqual(.6);
+    }
   });
 });

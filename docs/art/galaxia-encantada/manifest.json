@@ -94,6 +94,19 @@
       "notes": ""
     },
     {
+      "id": "GE-DOG-04B",
+      "file": "approved-source/GE-DOG-04B-lumina.png",
+      "sceneId": "lumina",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "79f162aa1de57cfd0adee6e0157c7cf2c5a4bbf0132f32eda855ae36c7269c38",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
       "id": "GE-DOG-05",
       "file": "approved-source/GE-DOG-05-earth-orbit.png",
       "sceneId": "earth-orbit",
@@ -194,6 +207,19 @@
       "nativeHeight": 1086,
       "alpha": true,
       "sha256": "f2e7184cd712a8e221fcf6426c71f5c55ed632017e7c217ef27b1a7666beb32e",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
+      "id": "GE-GL-04B",
+      "file": "approved-source/GE-GL-04B-lumina.png",
+      "sceneId": "lumina",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "e3fa21f9bf3b70125cef64f6818d8edaceff1aefa5b2844205e9f85e8645e407",
       "reviewer": "Glaucia Lemos",
       "notes": ""
     },
