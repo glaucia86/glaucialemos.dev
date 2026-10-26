@@ -1,5 +1,37 @@
 # AGENTS.md
 
+- Epílogo funcional em `/[lang]/alem-da-ultima-orbita` (PT/EN/ES), `noindex`, fora do menu: `src/app/beyond-orbit.css`,
+  `src/components/epilogue/*`, copy em `src/i18n/beyond-orbit.ts`. Arte 08 integrada: nebulosa sem terraço, Glaucia à esquerda
+  espelhada, Prince à direita, ambos flutuando e olhando para o centro (ângulo levemente lateral aceito). Fontes: placa
+  `GE-PL-08-beyond-orbit.jpg`, atores PNG com alpha. Pipeline `beyond-orbit`, `FLOAT_ANCHORS` na conexão das mochilas;
+  `anchorY` e `flip` em `poseBox`. Flutuação GSAP/ritmos distintos + cabos SVG em `src/lib/beyond-orbit.ts`, pausa fora da
+  tela/aba e respeita movimento reduzido. `float-idle` em repouso; `float-b/c/d` só em trocas raras e na reação do final
+  (`poseStyle` mantém o pivô da mochila). Prévia de arte: `node scripts/preview-beyond-orbit.mjs` (TEMP, não é navegador).
+  Versão cinematográfica: abertura só em CSS (íris, letterbox, copy subindo); ambilight `ambient.webp` 64×36 (pipeline,
+  `AMBIENT`); camadas `[data-depth]` com câmera por ponteiro (`DEPTH`); correntes de luz/raios/brilho e contorno nos trajes;
+  `veil-engine.ts` (estrelas, fios de possibilidade, cometas, poeira, cursor, implosão, onda de choque). Pin + mergulho
+  (`veil-jump.ts`) só em `HERO_OVERLAY`. Estrela `last-light` no núcleo (`STAR`) toca "A Última Luz" (`BEATS`/`CUES` em
+  `src/lib/beyond-orbit.ts`, ~28 s, `data-theater`/`data-beat` no `.beyond-orbit__experience`): implosão → silêncio →
+  supernova → véu → reação → constelação da jornada (`src/lib/journey-constellation.ts`, uma estrela por egg de `EGGS`,
+  mundos sem segredos = "???") → "To be continued…" de poeira estelar (`stardust-text.ts`) com zoom in/out → créditos
+  (`EpilogueCredits`, cópia aria-hidden rola na cena) → pós-créditos com os mundos não mapeados. Pular: botão, Esc, roda,
+  toque; sempre termina no estado estático. Sons novos no `sfx.ts` (gain ≤ 0,08 por tom, ≤ 0,6 s; peso por camadas).
+  Antes da estrela, só a pista `starHint` abaixo da cena. Depois dela, "A Viagem" (`EpilogueVoyage.tsx`, fora do hero para
+  não aninhar pins, `data-waiting` até `last-light`): céu `voyage-engine.ts` sticky (dobra pela velocidade da rolagem, gás
+  na paleta do mundo via `paletteAt`), carta da tripulação (`copy.letter`, palavras por SplitText), atlas (`src/lib/voyage.ts`:
+  um planeta por destino com a placa do mundo, luas = segredos achados, dicas do Comlink em `<details>`, mundos sem
+  segredos = "sinal fraco"; trilha horizontal só com `data-flight` em `HERO_OVERLAY`), créditos e `.beyond-orbit__next-star`
+  (reexecuta "A Última Luz"). O diretor clona créditos/pós-créditos do `<main>` sem estilos inline.
+  Armadilhas encontradas com Playwright: o `main { overflow: hidden }` global quebra `position: sticky` (o epílogo usa
+  `overflow: clip`), e o `PageEffects` anima `section`s com `transform` (anula pins; o epílogo fica fora do seletor).
+  Enquadramento: `.beyond-orbit__frame` mostra o palco 16:9 `.beyond-orbit__scene` como cover (tela inteira abaixo do menu
+  no desktop, 4:5 em retrato, 16:9 nos demais); sobreposições de tela (vinheta, barras, rolo, pista, "Pular") ficam na moldura.
+  `epilogue-signal` em Serviços exige descobertas em três mundos distintos
+  (Home/Sobre/Projetos/Conteúdo), helpers em `src/lib/epilogue.ts`. Catálogo (31) em `src/lib/egg-catalog.ts`, reexportado
+  por `eggs.ts`. `last-light` revela o final e permite replay; SSR/no-JS/reduced motion mantêm copy visível. Comlink tem
+  comandos PT/EN/ES e revisita; persistência/reset continuam únicos. Testes: `tests/epilogue.test.ts` e
+  `tests/beyond-orbit.test.ts` e `tests/epilogue.browser.mjs` (navegador somente pela usuária). Retomada atual no início do handoff.
+
 - Handoff da migração: `docs/galaxia-encantada/HANDOFF.md` (comece pela seção “Retomada”).
 - Migração Galáxia Encantada (Home, Sobre e Projetos já na `main`; Conteúdo/Lúmina na branch `feat/lumina-conteudo`; o tema
   Star Wars está congelado em `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração

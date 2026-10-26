@@ -4,16 +4,17 @@ import earthObservatory from "@/data/galaxia/earth-observatory.json";
 import niveora from "@/data/galaxia/niveora.json";
 import marsLab from "@/data/galaxia/mars-lab.json";
 import lumina from "@/data/galaxia/lumina.json";
+import beyondOrbit from "@/data/galaxia/beyond-orbit.json";
 import layout from "@/data/galaxia/layout.json";
 
-export type SceneId = "earth-observatory" | "niveora" | "mars-lab" | "lumina" | "earth-orbit" | "aurelia" | "red-tide";
+export type SceneId = "earth-observatory" | "niveora" | "mars-lab" | "lumina" | "earth-orbit" | "aurelia" | "red-tide" | "beyond-orbit";
 
-export type Sprite = { src: string; w: number; h: number; feetX?: number };
+export type Sprite = { src: string; w: number; h: number; feetX?: number; anchorY?: number };
 type SceneAssets = { scene: string; background: Sprite; actors: Record<string, Record<string, Sprite>>; props: Record<string, Sprite> };
 // Stages, prop scales and the pixel grid live in layout.json, shared with scripts/build-galaxia-assets.mjs.
 type Layout = { grid: number; stages: Record<string, Stage>; props: Record<string, number> };
 // Where an actor stands on the plate (percent) and how tall its reference pose is (percent of the plate height).
-type Stage = { x: number; y: number; height: number; reference: string };
+type Stage = { x: number; y: number; height: number; reference: string; flip?: boolean };
 
 export type SceneDefinition = {
   id: SceneId;
@@ -25,6 +26,14 @@ export type SceneDefinition = {
 };
 
 export const SCENES = {
+  "beyond-orbit": {
+    id: "beyond-orbit",
+    assets: beyondOrbit,
+    palette: { base: "#060a18", accent: "#83efac", glow: "#e9a966" },
+    focalPoint: { x: 72, y: 43 },
+    stages: layout["beyond-orbit"].stages,
+    propScale: layout["beyond-orbit"].props,
+  },
   "earth-observatory": {
     id: "earth-observatory",
     assets: earthObservatory,
@@ -70,7 +79,8 @@ export function poseBox(scene: SceneDefinition, actor: string, pose: string): Bo
   const scale = stage.height / 100 * background.h / actors[actor][stage.reference].h;
   const width = sprite.w * scale / background.w * 100;
   const height = sprite.h * scale / background.h * 100;
-  return { left: round(stage.x - (sprite.feetX ?? sprite.w / 2) * scale / background.w * 100), top: round(stage.y - height), width: round(width), height: round(height) };
+  const anchorX = sprite.feetX ?? sprite.w / 2;
+  return { left: round(stage.x - (stage.flip ? sprite.w - anchorX : anchorX) * scale / background.w * 100), top: round(stage.y - (sprite.anchorY ?? sprite.h) * scale / background.h * 100), width: round(width), height: round(height) };
 }
 
 // Props are drawn at the scale set in layout.json (the pixel art was cut for that size).

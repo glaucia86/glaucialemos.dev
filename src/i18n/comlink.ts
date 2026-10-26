@@ -1,3 +1,4 @@
+import { beyondOrbit, type BeyondOrbitCopy } from "./beyond-orbit";
 import { curiousLetter } from "./niveora-stories";
 import type { EggId, EggPage } from "@/lib/eggs";
 
@@ -9,17 +10,21 @@ export type ComlinkCopy = {
   pages: Record<Exclude<EggPage, "global">, string>;
   eggs: Record<EggId, Entry>;
   letter: typeof curiousLetter.pt;
+  epilogue: Pick<BeyondOrbitCopy, "signalLocked" | "revisit">;
 };
 
 export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   pt: {
     letter: curiousLetter.pt,
+    epilogue: beyondOrbit.pt,
     open: "Abrir o rádio estelar", title: "Rádio estelar", channel: "RÁDIO // GALÁXIA ENCANTADA", counter: "Segredos descobertos", master: "Guardiã das Estrelas",
     placeholder: "digite uma transmissão…", send: "Transmitir", sent: "Sinal enviado.", unknown: "Transmissão desconhecida. Tente uma das dicas abaixo.",
     elsewhere: "Sinal fora de alcance. Tente na página {page}.", play: "Reproduzir", close: "Fechar rádio", hidden: "Sinal criptografado", fresh: "Novo segredo descoberto!",
     reset: "Apagar memória", resetConfirm: "Confirmar: apagar {n} segredos?", resetDone: "Memória apagada. O céu voltou a ser um mistério, e a caçada recomeça.",
-    pages: { home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", notfound: "Coordenadas perdidas" },
+    pages: { epilogue: beyondOrbit.pt.title, home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", notfound: "Coordenadas perdidas" },
     eggs: {
+      "epilogue-signal": { name: beyondOrbit.pt.signalTitle, hint: "Descubra algo em três mundos e siga o sinal em Serviços. Transmissão: além da última órbita." },
+      "last-light": { name: "Última luz", hint: "Toque a estrela do epílogo. Transmissão: última luz." },
       "curious-letter": { name: "Carta aos curiosos", hint: "Três descobertas diferentes deixam uma carta no rádio. Transmissão: carta curiosa." },
       "between-lines": { name: "Entre as linhas", hint: "Há um fio além das barras do mapa. Transmissão: entre linhas." },
       "borrowed-star": { name: "A estrela emprestada", hint: "Uma pegada no diário aponta para o convite final. Transmissão: estrela emprestada." },
@@ -53,12 +58,15 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   },
   en: {
     letter: curiousLetter.en,
+    epilogue: beyondOrbit.en,
     open: "Open the star radio", title: "Star radio", channel: "RADIO // ENCHANTED GALAXY", counter: "Secrets discovered", master: "Keeper of the Stars",
     placeholder: "type a transmission…", send: "Transmit", sent: "Signal sent.", unknown: "Unknown transmission. Try one of the hints below.",
     elsewhere: "Signal out of range. Try it on the {page} page.", play: "Replay", close: "Close radio", hidden: "Encrypted signal", fresh: "New secret discovered!",
     reset: "Wipe memory", resetConfirm: "Confirm: wipe {n} secrets?", resetDone: "Memory wiped. The sky is a mystery again, and the hunt starts over.",
-    pages: { home: "Home", about: "About", projects: "Projects", content: "Content", events: "Events", services: "Services", notfound: "Lost coordinates" },
+    pages: { epilogue: beyondOrbit.en.title, home: "Home", about: "About", projects: "Projects", content: "Content", events: "Events", services: "Services", notfound: "Lost coordinates" },
     eggs: {
+      "epilogue-signal": { name: "Unknown transmission", hint: "Make a discovery in three worlds and follow the signal in Services. Transmission: beyond the last orbit." },
+      "last-light": { name: "Last light", hint: "Touch the epilogue star. Transmission: last light." },
       "curious-letter": { name: "Letter to the curious", hint: "Three different discoveries leave a letter in the radio. Transmission: curious letter." },
       "between-lines": { name: "Between the lines", hint: "A thread runs beyond the map's bars. Transmission: between the lines." },
       "borrowed-star": { name: "The borrowed star", hint: "A paw print in the log points to the final invitation. Transmission: borrowed star." },
@@ -92,12 +100,15 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   },
   es: {
     letter: curiousLetter.es,
+    epilogue: beyondOrbit.es,
     open: "Abrir la radio estelar", title: "Radio estelar", channel: "RADIO // GALAXIA ENCANTADA", counter: "Secretos descubiertos", master: "Guardiana de las Estrellas",
     placeholder: "escribe una transmisión…", send: "Transmitir", sent: "Señal enviada.", unknown: "Transmisión desconocida. Prueba una de las pistas.",
     elsewhere: "Señal fuera de alcance. Prueba en la página {page}.", play: "Reproducir", close: "Cerrar radio", hidden: "Señal cifrada", fresh: "¡Nuevo secreto descubierto!",
     reset: "Borrar memoria", resetConfirm: "¿Confirmas? Borrar {n} secretos", resetDone: "Memoria borrada. El cielo vuelve a ser un misterio y la búsqueda empieza de nuevo.",
-    pages: { home: "Inicio", about: "Sobre mí", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Servicios", notfound: "Coordenadas perdidas" },
+    pages: { epilogue: beyondOrbit.es.title, home: "Inicio", about: "Sobre mí", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Servicios", notfound: "Coordenadas perdidas" },
     eggs: {
+      "epilogue-signal": { name: beyondOrbit.es.signalTitle, hint: "Haz un descubrimiento en tres mundos y sigue la señal en Servicios. Transmisión: más allá de la última órbita." },
+      "last-light": { name: "Última luz", hint: "Toca la estrella del epílogo. Transmisión: última luz." },
       "curious-letter": { name: "Carta para los curiosos", hint: "Tres descubrimientos diferentes dejan una carta en la radio. Transmisión: carta curiosa." },
       "between-lines": { name: "Entre líneas", hint: "Un hilo continúa más allá de las barras del mapa. Transmisión: entre líneas." },
       "borrowed-star": { name: "La estrella prestada", hint: "Una huella en el diario apunta a la invitación final. Transmisión: estrella prestada." },

@@ -29,6 +29,16 @@ describe("sons dos mundos", () => {
     expect(soundBank.type.some((tone) => tone.wave === "noise")).toBe(true);
   });
 
+  it("o epílogo tem voz própria e uma sequência de impacto, toda curta", () => {
+    expect(uiSound("epilogue", "hover")).toBe("hover-epilogue");
+    expect(uiSound("epilogue", "click")).toBe("click-epilogue");
+    for (const kind of ["implode", "nova", "shimmer", "bloom", "star-ping", "slam", "credits-chord", "transmission", "dive", "hover-epilogue", "click-epilogue"] as const) {
+      expect(soundBank[kind].length, kind).toBeGreaterThan(0);
+      for (const tone of soundBank[kind]) expect((tone.delay ?? 0) + tone.duration, kind).toBeLessThanOrEqual(.6);
+    }
+    expect(soundBank.nova.some((tone) => tone.from < 100 && tone.wave === "sine")).toBe(true);
+  });
+
   it("Lúmina tem cristal, página, prisma, scanner, eco, entardecer e o túnel, todos curtos", () => {
     for (const kind of ["chime", "page", "prism", "scanner", "echo", "link", "dusk", "refract", "facet", "hover-lumina", "click-lumina"] as const) {
       expect(soundBank[kind].length, kind).toBeGreaterThan(0);

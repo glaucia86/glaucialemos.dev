@@ -14,8 +14,8 @@ export function PageEffects() {
         }
       }
     }, { threshold: .08 });
-    // The home choreographs its own chapters with GSAP.
-    document.querySelectorAll("main:not(.home-page) section:not(.page-hero), .timeline li").forEach((element) => observer.observe(element));
+    // The home and the epilogue choreograph their own chapters with GSAP (a transform here would undo their pins).
+    document.querySelectorAll("main:not(.home-page):not(.beyond-orbit) section:not(.page-hero), .timeline li").forEach((element) => observer.observe(element));
     return () => observer.disconnect();
   }, [pathname]);
   return null;

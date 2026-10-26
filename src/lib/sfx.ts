@@ -2,10 +2,13 @@
 export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" | "error" | "success" | "levitate" | "deflect" | "rumble" | "splash" | "wind" | "ice" | "holo" | "r2" | "jawa" | "pod" | "cantina" | "sunset" | "zap" | "twinkle" | "lens" | "woof" | "beacon" | "ignite" | "launch" | "hangar" | "switch" | "hush" | "catch" | "wish" | "warp" | "pawstep" | "capsule" | "aurora" | "gust" | "scan" | "dust" | "sprout" | "bug"
   | "type" | "return" | "disk-in" | "disk-out" | "crt-on" | "dig" | "thread" | "letter" | "snow" | "gust-dust" | "scan-sweep" | "static" | "build" | "brush"
   | "chime" | "page" | "prism" | "scanner" | "echo" | "link" | "dusk" | "refract" | "facet"
-  | "hover-observatory" | "click-observatory" | "hover-niveora" | "click-niveora" | "hover-mars" | "click-mars" | "hover-lumina" | "click-lumina";
+  | "implode" | "nova" | "shimmer" | "bloom" | "star-ping" | "slam" | "credits-chord" | "transmission" | "dive"
+  | "hover-observatory" | "click-observatory" | "hover-niveora" | "click-niveora" | "hover-mars" | "click-mars" | "hover-lumina" | "click-lumina"
+  | "hover-epilogue" | "click-epilogue";
 // "noise" is filtered white noise: `from`/`to` sweep the band-pass centre instead of a pitch.
 type Tone = { wave: OscillatorType | "noise"; from: number; to: number; duration: number; gain: number; delay?: number };
-export type SoundWorld = "observatory" | "niveora" | "mars" | "lumina";
+export type SoundWorld = "observatory" | "niveora" | "mars" | "lumina" | "epilogue";
+const WORLDS: readonly string[] = ["observatory", "niveora", "mars", "lumina", "epilogue"] satisfies SoundWorld[];
 
 export const SOUND_KEY = "sfx-enabled";
 export const SOUND_EVENT = "sfx-change";
@@ -81,6 +84,18 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   dusk: [{ wave: "sine", from: 659, to: 659, duration: .4, gain: .022 }, { wave: "sine", from: 523, to: 523, duration: .4, gain: .02, delay: .1 }, { wave: "sine", from: 392, to: 392, duration: .38, gain: .018, delay: .2 }],
   refract: [{ wave: "sine", from: 600, to: 2400, duration: .45, gain: .018 }, { wave: "sine", from: 606, to: 2424, duration: .45, gain: .012, delay: .03 }],
   facet: [{ wave: "noise", from: 7000, to: 4000, duration: .2, gain: .02 }, { wave: "triangle", from: 2093, to: 2093, duration: .25, gain: .016, delay: .05 }, { wave: "triangle", from: 3136, to: 3136, duration: .25, gain: .01, delay: .12 }],
+  // Epilogue: light pulled into the last star, the nova's sub-bass boom, the Veil blooming, the constellation's
+  // arpeggio, the title landing, warm credit chords and an intercepted transmission. Chained on the finale's timeline.
+  // Every tone stays within the site's volume cap (gain ≤ 0.08); the weight comes from stacking low voices.
+  implode: [{ wave: "noise", from: 300, to: 4200, duration: .6, gain: .05 }, { wave: "sine", from: 40, to: 110, duration: .6, gain: .08 }, { wave: "sine", from: 41, to: 112, duration: .6, gain: .06 }, { wave: "sawtooth", from: 80, to: 240, duration: .55, gain: .02 }],
+  nova: [{ wave: "sine", from: 95, to: 28, duration: .6, gain: .08 }, { wave: "sine", from: 72, to: 24, duration: .6, gain: .08 }, { wave: "triangle", from: 55, to: 30, duration: .6, gain: .08 }, { wave: "noise", from: 3000, to: 150, duration: .5, gain: .08 }, { wave: "noise", from: 900, to: 60, duration: .6, gain: .07 }, { wave: "square", from: 1800, to: 60, duration: .18, gain: .04 }],
+  shimmer: [{ wave: "sine", from: 2093, to: 2093, duration: .5, gain: .02 }, { wave: "sine", from: 2637, to: 2637, duration: .45, gain: .018, delay: .05 }, { wave: "sine", from: 3136, to: 3136, duration: .4, gain: .016, delay: .1 }, { wave: "triangle", from: 4186, to: 4186, duration: .3, gain: .01, delay: .2 }],
+  bloom: [{ wave: "triangle", from: 392, to: 392, duration: .5, gain: .035 }, { wave: "sine", from: 587, to: 587, duration: .5, gain: .03, delay: .05 }, { wave: "sine", from: 784, to: 784, duration: .45, gain: .025, delay: .1 }, { wave: "noise", from: 6000, to: 3000, duration: .4, gain: .015 }],
+  "star-ping": [{ wave: "triangle", from: 1047, to: 1047, duration: .25, gain: .03 }, { wave: "sine", from: 2094, to: 2094, duration: .2, gain: .012, delay: .02 }],
+  slam: [{ wave: "sine", from: 80, to: 30, duration: .6, gain: .08 }, { wave: "sine", from: 62, to: 26, duration: .6, gain: .08 }, { wave: "triangle", from: 48, to: 30, duration: .55, gain: .07 }, { wave: "noise", from: 1500, to: 100, duration: .35, gain: .08 }, { wave: "square", from: 110, to: 55, duration: .2, gain: .03 }, { wave: "triangle", from: 220, to: 220, duration: .6, gain: .035 }, { wave: "triangle", from: 277, to: 277, duration: .55, gain: .03, delay: .03 }, { wave: "triangle", from: 330, to: 330, duration: .5, gain: .03, delay: .06 }],
+  "credits-chord": [{ wave: "sine", from: 262, to: 262, duration: .6, gain: .03 }, { wave: "sine", from: 330, to: 330, duration: .54, gain: .026, delay: .05 }, { wave: "sine", from: 392, to: 392, duration: .49, gain: .024, delay: .1 }, { wave: "triangle", from: 523, to: 523, duration: .44, gain: .015, delay: .15 }],
+  transmission: [{ wave: "noise", from: 5000, to: 1500, duration: .25, gain: .03 }, { wave: "square", from: 1400, to: 1400, duration: .05, gain: .02, delay: .28 }, { wave: "square", from: 1800, to: 1800, duration: .05, gain: .02, delay: .38 }, { wave: "square", from: 1400, to: 1400, duration: .08, gain: .02, delay: .48 }],
+  dive: [{ wave: "noise", from: 200, to: 3000, duration: .5, gain: .04 }, { wave: "sawtooth", from: 120, to: 900, duration: .5, gain: .02 }],
   // Hover and click, one voice per world (FxLayer reads data-sound-world on <main>).
   "hover-observatory": [{ wave: "triangle", from: 2093, to: 2093, duration: .06, gain: .018 }],
   "click-observatory": [{ wave: "triangle", from: 1319, to: 1319, duration: .05, gain: .025 }, { wave: "triangle", from: 1760, to: 1760, duration: .07, gain: .02, delay: .05 }],
@@ -90,12 +105,15 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   "click-mars": [{ wave: "noise", from: 1500, to: 900, duration: .04, gain: .035 }, { wave: "square", from: 300, to: 200, duration: .05, gain: .02 }],
   "hover-lumina": [{ wave: "sine", from: 3136, to: 3322, duration: .05, gain: .016 }, { wave: "triangle", from: 4699, to: 4699, duration: .03, gain: .007, delay: .02 }],
   "click-lumina": [{ wave: "triangle", from: 2637, to: 2637, duration: .05, gain: .022 }, { wave: "noise", from: 6000, to: 4000, duration: .03, gain: .015 }],
+  "hover-epilogue": [{ wave: "sine", from: 1760, to: 1976, duration: .06, gain: .016 }, { wave: "triangle", from: 3520, to: 3520, duration: .03, gain: .006, delay: .02 }],
+  "click-epilogue": [{ wave: "triangle", from: 1319, to: 1319, duration: .05, gain: .022 }, { wave: "sine", from: 659, to: 330, duration: .12, gain: .02 }],
 };
 
 // Minimum gap between two plays of the same sound, so fast typing or wiping never piles up (milliseconds).
 export const MIN_GAP: Partial<Record<SoundKind, number>> = {
   type: 28, build: 40, brush: 70, snow: 400, "gust-dust": 1500, bug: 300, pawstep: 120,
-  "hover-observatory": 40, "hover-niveora": 40, "hover-mars": 40, "hover-lumina": 40, page: 90, link: 60, blip: 40,
+  "hover-observatory": 40, "hover-niveora": 40, "hover-mars": 40, "hover-lumina": 40, "hover-epilogue": 40, page: 90, link: 60, blip: 40,
+  "star-ping": 45,
 };
 const lastPlayed = new Map<SoundKind, number>();
 export function allowed(kind: SoundKind, now: number, played = lastPlayed) {
@@ -108,7 +126,7 @@ export function allowed(kind: SoundKind, now: number, played = lastPlayed) {
 
 // Hover/click voice for the current world; pages without a world keep the original blip and key.
 export function uiSound(world: string | undefined, action: "hover" | "click"): SoundKind {
-  if (world === "observatory" || world === "niveora" || world === "mars" || world === "lumina") return `${action}-${world}`;
+  if (world && WORLDS.includes(world)) return `${action}-${world as SoundWorld}`;
   return action === "hover" ? "blip" : "key";
 }
 
