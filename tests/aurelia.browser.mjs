@@ -48,9 +48,14 @@ try{
   });
   await check('mouse/teclado: Glaucia, Prince, anéis, cofre, polinização e luz',async()=>{
     const {context,page,posts}=await open();try{
+      const prince=page.locator('.aurelia-prince');
+      await expect(prince).toHaveAttribute('data-pose','front');
+      await expect(prince.locator('[data-actor-pose="front"]')).toHaveCSS('opacity','1');
       await page.locator('.aurelia-hot--glaucia').focus();await page.keyboard.press('Enter');await discovered(page,'garden-bloom');await expect(page.locator('.aurelia-readout')).toBeVisible();await expect(page.locator('.aurelia-readout__title')).toBeFocused();
       await page.getByRole('button',{name:'Fechar descoberta'}).click();
       await page.locator('.aurelia-hot--prince').click();await discovered(page,'beacon-relay');await expect(page.locator('#contato h2')).toBeFocused();
+      await expect(prince).toHaveAttribute('data-pose','front');
+      await expect(prince.locator('[data-actor-pose="paw"]')).toHaveCSS('opacity','0');
       const rings=page.locator('.orbital-garden__controls button');
       for(let i=0;i<3;i++)for(let j=0;j<3-i;j++){await rings.nth(i).focus();await page.keyboard.press('Space');}
       await discovered(page,'ring-alignment');await expect(page.locator('.orbital-garden')).toHaveAttribute('data-aligned','true');
@@ -59,6 +64,49 @@ try{
       for(let i=0;i<services.length;i++)await nodes.nth(i).click();await discovered(page,'pollination');
       const light=page.locator('.greenhouse input');await light.focus();await page.keyboard.press('Home');await discovered(page,'greenhouse-dusk');await expect(page.locator('main')).toHaveAttribute('data-greenhouse','dusk');await page.keyboard.press('Escape');await expect(page.locator('main')).not.toHaveAttribute('data-greenhouse');
       assert.deepEqual(posts,[]);
+    }finally{await context.close();}
+  });
+  await check('Prince: reação espelhada, retorno frontal e replay do sinalizador',async()=>{
+    const {context,page,posts,errors}=await open({reducedMotion:'no-preference'});try{
+      await settleIntro(page);
+      // Hotspots also exist during the static hydration pass. Wait for the motion context.
+      await expect(page.locator('.aurelia-hero')).toHaveAttribute('data-motion','true');
+      const prince=page.locator('.aurelia-prince'),front=prince.locator('[data-actor-pose="front"]'),paw=prince.locator('[data-actor-pose="paw"]');
+      for(const trigger of ['prince','beacon']){
+        // The relay scrolls to contact; bring the hero back into view before each trigger.
+        await page.evaluate(()=>window.scrollTo(0,0));
+        await expect(page.locator('.hero-scene-layer--aurelia')).toHaveAttribute('data-paused','false');
+        await expect(prince).toHaveAttribute('data-pose','front');
+        await expect(front).toHaveCSS('opacity','1');
+        // Record before clicking: the ~1s pose can end before a remote assertion polls it.
+        await prince.evaluate(actor=>{
+          window.__aureliaReaction=[];
+          window.__aureliaReactionObserver=new MutationObserver(()=>{
+            const pose=actor.dataset.pose;
+            if(!window.__aureliaReaction.length&&pose==='front')return;
+            if(window.__aureliaReaction.at(-1)?.pose===pose)return;
+            const paw=actor.querySelector('[data-actor-pose="paw"]');
+            const front=actor.querySelector('[data-actor-pose="front"]');
+            const box=paw.getBoundingClientRect();
+            window.__aureliaReaction.push({pose,time:performance.now(),opacity:getComputedStyle(paw).opacity,
+              transform:getComputedStyle(paw).transform,frontOpacity:getComputedStyle(front).opacity,
+              inView:box.top>=0&&box.bottom<=innerHeight&&box.left>=0&&box.right<=innerWidth});
+          });
+          window.__aureliaReactionObserver.observe(actor,{attributes:true,attributeFilter:['data-pose']});
+        });
+        await page.locator(`.aurelia-hot--${trigger}`).click();
+        await expect.poll(()=>page.evaluate(()=>window.__aureliaReaction.map(frame=>frame.pose)),{message:`${trigger}: paw → front`}).toEqual(['paw','front']);
+        const [reaction,rest]=await page.evaluate(()=>{
+          window.__aureliaReactionObserver.disconnect();return window.__aureliaReaction;
+        });
+        assert.equal(reaction.opacity,'1');assert.equal(reaction.frontOpacity,'0');
+        assert.equal(reaction.transform,'matrix(-1, 0, 0, 1, 0, 0)');assert.equal(reaction.inView,true);
+        assert.ok(rest.time-reaction.time>=900,`${trigger}: reação durou apenas ${rest.time-reaction.time}ms`);
+        await expect(prince).toHaveAttribute('data-pose','front');
+        await expect(paw).toHaveCSS('opacity','0');
+        await expect(page.locator('#contato h2')).toBeFocused();
+      }
+      await discovered(page,'beacon-relay');assert.deepEqual(posts,[]);assert.deepEqual(errors,[]);
     }finally{await context.close();}
   });
   for(const lang of ['pt','en','es'])await check(`frases na página em ${lang}; nenhuma frase dentro do formulário`,async()=>{
@@ -120,6 +168,15 @@ try{
     const {context,page,errors}=await open({viewport,hasTouch:viewport.width<1000,isMobile:viewport.width<500});try{
       const scene=page.locator('.hero-scene-layer--aurelia .aurelia-plane'),box=await scene.boundingBox();assert.ok(Math.abs(box.width/box.height-16/9)<.03);
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+      const targets=await page.locator('.aurelia-hot:visible').evaluateAll(buttons=>buttons.map(button=>({id:button.dataset.hot,...button.getBoundingClientRect().toJSON()})));
+      assert.deepEqual(targets.map(target=>target.id).sort(),viewport.width<=700?['glaucia','prince']:['beacon','garden','glaucia','prince']);
+      for(let i=0;i<targets.length;i++){
+        const a=targets[i];assert.ok(a.width>=44&&a.height>=44,`${a.id}: alvo menor que 44px`);
+        const art=page.locator(a.id==='prince'?'.aurelia-prince [data-actor-pose="front"]':a.id==='glaucia'?'.aurelia-crew [data-actor-pose="idle"]':`.aurelia-${a.id}`);
+        const visual=await art.boundingBox();
+        assert.ok(Math.min(a.right,visual.x+visual.width)>Math.max(a.left,visual.x)&&Math.min(a.bottom,visual.y+visual.height)>Math.max(a.top,visual.y),`${a.id}: alvo fora da arte`);
+        for(const b of targets.slice(i+1))assert.ok(a.right<=b.left||b.right<=a.left||a.bottom<=b.top||b.bottom<=a.top,`${a.id} sobrepõe ${b.id} em ${viewport.width}px`);
+      }
       if(viewport.width<1000){await page.locator('.aurelia-hot--glaucia').tap();await discovered(page,'garden-bloom');}
       await page.screenshot({path:`${shots}/hero-${viewport.width}.png`});assert.deepEqual(errors,[]);
     }finally{await context.close();}
@@ -127,6 +184,8 @@ try{
   await check('sans JS: dados, links, cofre e contato disponíveis',async()=>{
     const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});try{
       const page=await context.newPage();await page.goto(`${base}/pt/servicos`);
+      await expect(page.locator('.aurelia-prince [data-actor-pose="front"]')).toHaveCSS('opacity','1');
+      await expect(page.locator('.aurelia-prince [data-actor-pose="paw"]')).toHaveCSS('opacity','0');
       await expect(page.locator('#services-title')).toBeVisible();await expect(page.locator('.aurelia-cards article')).toHaveCount(services.length);
       await page.locator('.seed-vault summary').click();await expect(page.locator('.seed-vault__body')).toBeVisible();
       await page.locator('.aurelia-copy .actions a[href="#contato"]').click();await expect(page).toHaveURL(/#contato$/);
