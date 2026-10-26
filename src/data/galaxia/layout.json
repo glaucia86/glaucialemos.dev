@@ -94,5 +94,36 @@
       "prismatic-gate-closed": 0.8,
       "prismatic-gate-open": 0.8
     }
+  },
+  "aurelia": {
+    "grid": 1,
+    "plateGrid": 0,
+    "colors": {
+      "actor": 160,
+      "prop": 128
+    },
+    "stages": {
+      "glaucia": {
+        "x": 88,
+        "y": 93,
+        "height": 47,
+        "reference": "idle"
+      },
+      "prince": {
+        "x": 77,
+        "y": 93,
+        "height": 14,
+        "reference": "stand"
+      }
+    },
+    "actorScale": {},
+    "props": {
+      "communication-beacon-idle": 0.3,
+      "communication-beacon-active": 0.3,
+      "garden-dome-idle": 0.45,
+      "garden-dome-blooming": 0.45,
+      "hanging-botanical-waterfall": 0.4,
+      "suspended-garden-waterfall": 0.4
+    }
   }
 }

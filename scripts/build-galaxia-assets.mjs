@@ -20,6 +20,11 @@ const LAYOUT = JSON.parse(fs.readFileSync(`${DATA}/layout.json`, "utf8"));
 export const SCENES = ["earth-observatory", "niveora", "mars-lab", "lumina", "earth-orbit", "aurelia", "red-tide", "beyond-orbit"];
 // Pose names in reading order (rows top to bottom, then left to right). Unnamed poses become pose-N.
 const POSES = {
+  // 06: four portraits, then front hand-on-hip, front relaxed, left profile and back. No watering gesture.
+  aurelia: {
+    glaucia: ["face-smile", "face-neutral", "face-thoughtful", "face-look", "idle", "relaxed", "side", "back"],
+    prince: ["front", "stand", "paw", "face-idle", "face-happy", "face-joy", "face-curious"],
+  },
   // The accepted sheets vary subtly; do not label them as a fabricated reach or head turn.
   "beyond-orbit": {
     glaucia: ["float-idle", "float-b", "float-c", "float-d"],
@@ -163,6 +168,16 @@ const sources = (scene) => ({
   props: `${SOURCE}/props/${scene}`,
 });
 const webp = (input, raw) => sharp(input, raw && { raw }).webp({ quality: 92, alphaQuality: 100, smartSubsample: true, effort: 6 });
+
+// Aurélia's supplied Glaucia sheet has a flat magenta key, not white or alpha.
+// Restrict this to 06; preserve the costume's coral trim and the skin.
+function keyMagenta(img) {
+  for (let i = 0; i < img.data.length; i += 4) {
+    const r = img.data[i], g = img.data[i + 1], b = img.data[i + 2];
+    if (r > 140 && g < 75 && b > 75 && r > g * 2 && b > g * 1.5) img.data[i + 3] = 0;
+  }
+  return img;
+}
 
 async function loadRgba(file) {
   const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -394,7 +409,8 @@ async function cutActor(scene, name, prefix) {
   const sprites = {};
   for (const { file, tag } of sheets(scene, prefix)) {
     let img = await loadRgba(file);
-    if (!img.alpha) keyWhite(img);
+    if (scene === "aurelia" && name === "glaucia") keyMagenta(img);
+    else if (!img.alpha) keyWhite(img);
     const key = tag ? `${name}:${tag}` : name;
     if (LIGHT_FRINGE[scene]?.includes(key)) peelLightFringe(img);
     const names = POSES[scene]?.[key] ?? [];
@@ -416,7 +432,7 @@ async function cutActor(scene, name, prefix) {
       if (DEBUG) console.log(`${key}: ${normalization.pose} ${sourceHeight}px → ${normalization.reference} ${referenceHeight}px; sheet scale ${factor.toFixed(6)}`);
     }
     const { label, groups } = poses(img, seams);
-    if (scene === "beyond-orbit" && groups.length !== names.length) throw new Error(`${file}: expected ${names.length} separate floating poses, found ${groups.length}`);
+    if (["beyond-orbit", "aurelia"].includes(scene) && groups.length !== names.length) throw new Error(`${file}: expected ${names.length} separate floating poses, found ${groups.length}`);
     if (normalization && groups.length !== names.length) throw new Error(`${file}: normalization changed pose count to ${groups.length}`);
     groups.forEach((group, index) => { sprites[names[index] ?? `pose-${tag}${index + 1}`] = cut(img, label, group); });
   }
@@ -424,6 +440,21 @@ async function cutActor(scene, name, prefix) {
   if (sprites.idle && sprites.blink) {
     sprites.blink = blinkOverlay(sprites.idle, sprites.blink);
     if (DEBUG) console.log(`${name}/blink: shift ${JSON.stringify(sprites.blink.shift)}, eyes ${JSON.stringify(sprites.blink.eyes)}`);
+  }
+  // 06 has no closed-eye pose. A tiny pixel eyelid overlay, derived from idle's skin palette,
+  // supplies the blink without calling any of its open-eyed portraits a blink.
+  if (scene === "aurelia" && name === "glaucia") {
+    const idle = sprites.idle;
+    const data = Buffer.alloc(idle.w * idle.h * 4);
+    for (const [x0, y0, w, h] of [[104, 64, 27, 19], [149, 64, 26, 19]]) {
+      for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) {
+        const i = (y * idle.w + x) * 4;
+        const skin = ((y0 + h + 2) * idle.w + x) * 4;
+        idle.data.copy(data, i, skin, skin + 4);
+        if (y === y0 + 10 || y === y0 + 11) { data[i] = 70; data[i + 1] = 39; data[i + 2] = 30; data[i + 3] = 255; }
+      }
+    }
+    sprites.blink = { ...idle, data, eyes: { x0: 104, y0: 64, x1: 175, y1: 83 } };
   }
   return Object.keys(sprites).length ? sprites : null;
 }
