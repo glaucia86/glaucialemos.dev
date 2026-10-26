@@ -1,5 +1,117 @@
 # Handoff — Migração Galáxia Encantada
 
+## Lúmina — TV antiga com o último vídeo (25/10/2026)
+- **Novo segredo `retro-tv` (7º de Conteúdo; catálogo 29).** TV de tubo em pixel (CSS/SVG) no capítulo 5. Liga por clique, toque, Enter, rádio ou comando digitado (`tv`, `play`, `assistir`, `watch`, `televisao`, `television`, `mirar`). Ao ligar: o tubo abre, chia por 0,6 s e o player `youtube-nocookie` entra na tela 4:3. Abaixo da TV ficam "Desligar" e "Abrir no YouTube". Com movimento reduzido, liga direto. Sem JS, a tela é a miniatura com link para o YouTube.
+- **Vídeo:** RSS público do canal, sem chave de API, lido a cada 24 h. Os Shorts são pulados; hoje toca "Build in Public: Melhorias no Repo Doctor… #02" (`I_TlmQ1T3Ok`). Reserva em `src/data/youtube.json`.
+- **Constelação:** a dica no rádio agora fala em losangos e traz o comando ("Transmissão: série").
+- **Verificação:** lint, typecheck e `npm test` (28 arquivos / 222 testes) passaram; `node --check` em `tests/lumina.browser.mjs` (casos novos da TV). **Build não rodado:** a porta 3000 estava ocupada pelo dev.
+
+## Lúmina — Etapas B e C: página e atuação (25/10/2026, branch `feat/lumina-conteudo`)
+
+A Glaucia aprovou as poses da 04B. A `main` local foi atualizada com o PR #8 (Marte, `e765e02`) e a branch foi avançada para esse ponto, sem commit de merge. Sem commit, push ou publicação.
+
+- **Página `/conteudo`:** cinco capítulos, mapeados em `AGENTS.md`:
+  1. Biblioteca Viva (hero);
+  2. Anéis de cristal (números + um cristal por ano + veios por plataforma);
+  3. Estantes (`#artigos`, filtros, busca, ordem, ecos, portal prismático);
+  4. Coleções (4 séries);
+  5. Próximo capítulo (CTA Serviços/YouTube, última página escrita, luz da biblioteca).
+
+  A `PageHero` + `HeroScene` (kashyyyk) e o `ContentFilter` saíram, junto com o CSS de folhas e vaga-lumes do `hero-scenes.css`. O `alt` do hero deixou de citar o Chewbacca. `public/pixel/conteudo-chewbacca.jpg` e o CSS genérico `.filter`/`.article-list` ficam para a auditoria final.
+- **Atuação:**
+  - Glaucia: `touch` → `listen` → `cheer`. O monólito sobe até o dedo (`CRYSTAL_LIFT`), vibra 1 px e solta ondas em losango.
+  - Prince: `sniff-a`/`sniff-b` ×2 → `scan`, com o feixe ciano da mochila até os livros; a pilha abre e ele termina em `wag-b`. Hover ou foco no Prince abana em repouso.
+  - Sem vida própria: personagens fixos, só piscando.
+- **Sons:** `chime`, `page`, `prism`, `scanner`, `echo`, `link`, `dusk`, `refract`, `facet`, `hover/click-lumina`, todos ≤ 0,6 s.
+- **Catálogo:** 28 segredos (2 globais + 6 Home + 7 Sobre + 7 Projetos + 6 Conteúdo).
+- **Verificação:**
+  - lint, typecheck, `npm test` (27 arquivos / 217 testes) e `npm run build` com `ƒ Middleware` passaram.
+  - `node --check` passou em `tests/lumina.browser.mjs`, `scene-lifecycle` e `editorial`: os dois últimos deixaram de tratar `/conteudo` como Star Wars, e o `editorial` usa `.shelves__filter`/`.shelf-card`.
+  - Nada no navegador foi executado nem visto pelo agente.
+- **Para a Glaucia validar:** `npm run start -- --hostname 127.0.0.1 --port 3100` e `node tests/lumina.browser.mjs` (capturas em `docs/screenshots/lumina/`). Conferir:
+  - o cristal chegando ao dedo;
+  - a leitura do texto sobre a placa em 1440 px;
+  - o salto de cristal;
+  - o véu do entardecer;
+  - os prismas no celular;
+  - o volume dos sons.
+
+## Lúmina — Etapas 0 e A (25/10/2026, branch `feat/lumina-conteudo`)
+
+Plano aprovado pela Glaucia: branch nova a partir de `feat/marte-projetos` (78b9fa6), sheets extras para as ações, correção dos idiomas de `artigos.json` com aprovação item a item, 6 segredos (`crystal-whisper`, `first-page`, `prism-align`, `crystal-echo`, `series-constellation`, `library-dusk`). Sem commit/push.
+
+- **Assets processados:** `node scripts/build-galaxia-assets.mjs lumina` gera `public/galaxia/**/lumina/**` e `src/data/galaxia/lumina.json`.
+  - Glaucia: `idle`, `blink` (camada limpa) e as reservas `touch-duo`/`cheer-duo`, que trazem o Prince colado com outro peitoral e não vão para o palco. `SEAMS.lumina.glaucia = [655, 1083]`.
+  - Prince: `stand`, `side`, `look` (os dois com a mochila-scanner), `face-*`.
+  - Props: `PROP_CLEANUP.lumina` amplia o `keyDark` (halo azul-marinho) e passa `despeck`, que tira a lasca ao lado do portal e os ciscos sob o monólito. Não muda as outras cenas.
+- **Composição candidata (`layout.json`):** Glaucia (88; 84; h 47), Prince (78; 84,5; h 14). Prévias em `%TEMP%/lumina-etapa-a/`:
+  - `0A`: monólito entre os dois, em (82,5; 82,5), e pilha de livros em (73,5; 84,5);
+  - `0D`: monólito flutuando à altura do ombro, em (81,8; 64);
+  - `0E`: pedestal em (82,2; 84);
+  - cada uma em `-composicao`, `-debug` (caixas e área de texto até 47 %), `-zoom` e `-mobile-390`;
+  - também `poses.png`, `props-3x.png` e `blink-check.png`.
+  - **A Glaucia escolheu a A.**
+- **Registros:** `src/lib/lumina-records.ts` (curadoria por URL, que dá erro se a URL sumir) + `tests/lumina.test.ts`.
+- **Idiomas:** a Glaucia pediu algo mais simples do que aprovar item a item. Corrigi pelo idioma claro do título 25 rótulos de `artigos.json`: 23 viraram `pt-BR` e 2 viraram `es` (#68 e #86). O #63 ("Curso Gratuito - Bootcamp…") ficou como estava, por ser ambíguo.
+- **Sheets 04B integradas** (os hashes entraram no manifest):
+  - Glaucia B: `touch`, `listen`, `cheer`, `read`. Normalizada por `read` → `idle` (0,8746). O contorno cinza-claro fora do traço escuro sai com `LIGHT_FRINGE`/`peelLightFringe`. O livro do `read` saiu com a palavra "TOUCH" escrita: fica de reserva.
+  - Prince B: `sniff-a`, `sniff-b`, `scan`, `wag-a`, `wag-b`, `sit-up`. Normalizado por `sniff-a` → `side` (1,7386). O `wag-a` vinha maior e é reduzido a 0,88 (`POSE_SCALE`).
+  - Prévias em `%TEMP%/lumina-etapa-c/` (`00-composicoes.png`, `glaucia-poses.png`, `prince-poses.png`).
+  - O dedo do `touch` fica em ≈ (78,5; 55), acima do monólito (topo ≈ 68 %). Proposta: o cristal se ergue até a mão dela.
+- **Pendente:** aprovação das poses pela Glaucia; depois, Etapa B.
+
+**Prompt GE-GL-04B-lumina** (anexar `GE-MASTER-GL`, `GE-GL-04-lumina`, `GE-PL-04-lumina`):
+```text
+Create a production-ready 2D PIXEL ART ACTOR SPRITE SHEET of GLÁUCIA in Lúmina, the EXACT same woman, costume, colours, proportions and art style as the attached Lúmina sheet (GE-GL-04): long navy researcher coat with glowing crystal patches and lilac lining, violet jumpsuit, crystal wrist device, dark boots, long dark wavy hair. FOUR equally sized full-body panels in one row, identical character scale, feet on the SAME baseline, facing three-quarter-left, and NO DOG in any panel: (1) TOUCH: leaning slightly forward, right arm reaching forward-left and down, index finger touching the top of an invisible waist-high crystal (do NOT draw the crystal), curious smile; (2) LISTEN: same body pose as panel 1, eyes closed, soft smile, as if hearing the crystal hum; (3) CHEER: one fist raised, eyes happily closed, the other hand at the chest; (4) READING: holding an open book at chest height with both hands, looking down at the pages. Crisp square pixels, limited palette, no smooth gradients, no blur, no 3D. Complete hands and boots inside each panel with margin; panels must not touch. No background, no ground, no sparkles, no text, no logos. True transparent PNG.
+```
+
+**Prompt GE-DOG-04B-lumina** (anexar `GE-MASTER-DOG`, `GE-DOG-04-lumina`, `GE-PL-04-lumina`):
+```text
+Create a production-ready 2D PIXEL ART DOG SPRITE SHEET of PRINCE, the EXACT same cream Pomeranian from the attached Lúmina sheet (GE-DOG-04): same fur, ears, muzzle, eyes, violet crystal harness with teal straps and the small backpack crystal scanner, same scale and art style. SIX equally sized full-body panels in one row, SIDE VIEW FACING LEFT, paws on the SAME baseline, identical scale, panels not touching: (1) SNIFF A: nose down close to the floor, tail up; (2) SNIFF B: nose moved slightly forward, one front paw lifted; (3) SCAN: head raised and alert, ears up, the backpack crystal glowing brighter cyan; (4) TAIL WAG A: standing happy, mouth open, tail curled to the left; (5) TAIL WAG B: same pose, tail curled to the right; (6) SIT LOOKING UP: sitting, head tilted up and to the right as if looking at a person beside him. Natural dog anatomy, no human gestures. Crisp square pixels, limited palette, dark outline, no smooth gradients, no blur, no 3D. No background, no floor, no sparkles, no text. True transparent PNG.
+```
+
+## Retomada — próxima página: Conteúdo/Lúmina, a Biblioteca Viva
+
+**Estado conferido (25/10/2026):** branch `feat/marte-projetos`, criada da `main` (que já contém Home e Sobre, PR #7). Projetos/Marte está no commit `78b9fa6`, feito e enviado pela Glaucia para `origin/feat/marte-projetos`. Ainda não há PR para a `main`. Depois desse commit, só `AGENTS.md` e este handoff têm alterações. O agente não tem autorização para fazer commit, push, merge ou publicação.
+
+**Última verificação:** lint, typecheck, `npm test` (26 arquivos / 197 testes) e `npm run build` com `ƒ Middleware` passaram. `tests/marte.browser.mjs` foi escrito e **não foi executado**. Validação visual e auditiva de Marte e de Nivéora continuam pendentes com a Glaucia.
+
+### Marte em uma tela (detalhes nos registros abaixo e no `AGENTS.md`)
+- **Hero:** Glaucia (87; 93), Prince de três quartos (75,5; 93) pela sheet `GE-DOG-03B`, rover, console, beacon, maleta. Poeira em pixel (`dust-engine.ts`) e salto da rolagem (`dust-jump.ts`: rajada lateral, varredura com os números reais, estática âmbar).
+- **Seções:**
+  - Telemetria do laboratório: GitHub regerado a cada 24 h, selo de leitura, amostras minerais, terminal antigo, colônia que cresce.
+  - Arquivo de invenções: filtros, busca, ordenação e carcaças com o primeiro commit; bancada do site com comparação antes/depois.
+  - Estações parceiras: contribuições, com o inseto vermelho do PR #555.
+  - Próxima missão: painel de poeira com o último push.
+- **Segredos (7):** `rover-scan`, `sample-cache`, `terminal-launch`, `first-sprout`, `before-pretty`, `lost-bug`, `dust-fall`. Catálogo: 22 (2 globais + 6 Home + 7 Sobre + 7 Projetos).
+- **Sons:** paleta por mundo via `data-sound-world` no `<main>`. Digitação, disquete e CRT no terminal. Tudo opt-in, até 0,6 s, sem loops.
+- **Correções gerais nesta etapa:** abertura das páginas (lag smoothing do GSAP durante o `BootSequence`), centralização dos `<dialog>` (`margin: auto`), teste de sintaxe dos CSS (`tests/css-syntax.test.ts`).
+
+### Pendências de Marte (não bloqueiam Lúmina)
+- A Glaucia validar no navegador: `npm run start -- --hostname 127.0.0.1 --port 3100` e `node tests/marte.browser.mjs` (capturas em `docs/screenshots/marte/`).
+- Conferir:
+  - o encaixe do disquete no drive (`.retro__slot` em `marte.css`);
+  - o volume dos sons;
+  - a leitura do console em 390 px;
+  - o texto público da decisão "pixelada demais".
+- PR de `feat/marte-projetos` para a `main`: decisão da Glaucia.
+
+### Ponto de partida para Lúmina
+- **Base:** combinar com a Glaucia se Lúmina sai de `feat/marte-projetos` (Marte já está no commit `78b9fa6`) ou da `main`, depois do PR de Marte. Não trocar de branch carregando alterações sem combinar.
+- **Ler:** seção 4.4 do `PLANO-MIGRACAO.md`. Lúmina é um mundo inventado com arquitetura cristalina, árvores e rios bioluminescentes, em violeta, ciano e magenta. À direita, Glaucia pesquisadora e Prince com scanner de cristais; à esquerda, artigos e conteúdos com o CTA e os filtros atuais. Aceite: três segredos (plano 8.3: `crystal-whisper`, `prism-align`, `library-dusk`), filtros independentes da cena, URLs íntegras, teclado/toque/mouse.
+- **Página atual:** `src/app/[lang]/conteudo/page.tsx` usa `PageHero` + `HeroScene` (Chewbacca/Kashyyyk) e `ContentFilter` com `artigos.json`. A seção 7.1 do plano pede trocar `sceneByImage` por `sceneId` nesta migração.
+- **Arte aprovada:** `GE-PL-04-lumina.png`, `GE-GL-04-lumina.png`, `GE-DOG-04-lumina.png` e `props/lumina/` (`archive-book-open/closed`, `crystal-archive-platform`, `crystal-display-pedestal`, `crystal-monolith`, `prismatic-gate-open/closed`). Ainda não processada: `node scripts/build-galaxia-assets.mjs lumina --debug`, nomear `POSES`/`ANCHORS`, palcos em `layout.json` e prévias compostas para aprovação **antes** de qualquer atuação. Conferir na sheet do Prince se há poses sem capacete ou acessório, como aconteceu em Marte.
+- **Repetir o padrão de Marte:**
+  - `BootSequence` com variante e chave próprias;
+  - `ReadingProgress` com variante própria;
+  - `data-sound-world="lumina"` com paleta sonora nova (cristais, páginas, prismas);
+  - salto da rolagem próprio (túnel de cristais);
+  - segredos distribuídos pelo conteúdo, não só no hero, sempre com registros reais e fonte;
+  - movimento reduzido, toque, teclado e versão sem JS desde a proposta.
+- **Começar em planejamento:** propor narrativa, seções, rolagem e segredos antes de implementar.
+
+**Operação:** não iniciar servidor nem rodar a suíte de navegador pelo agente. Não rodar build com o `npm run dev` aberto (conferir as portas 3000/3100 com `netstat -ano`). Escrever para a Glaucia em PT-BR.
+
 ## Sons de 2026-10-25 — digitação no terminal e paleta por mundo
 
 - `src/lib/sfx.ts`: timbre de ruído filtrado (`wave: "noise"`), `play(kind, { detune, gain })`, intervalo mínimo por som (`MIN_GAP`/`allowed`), nada toca com a aba oculta. Tudo continua opt-in, ≤ 0,6 s e sem loops (`tests/sfx.test.ts`, `tests/holonet.test.ts`).
@@ -225,4 +337,4 @@ Create a production-ready 2D PIXEL ART DOG SPRITE SHEET of PRINCE, the EXACT sam
 - Os testes de navegador da Home (`tests/holonet.browser.mjs`) foram atualizados, mas ainda não rodaram.
 
 ## Prompt para abrir a nova sessão
-> Leia `AGENTS.md` e `docs/galaxia-encantada/HANDOFF.md` (comece por “Entrega de 2026-10-25 — Projetos/Marte”). A branch é `feat/marte-projetos`, com alterações sem commit: preserve tudo. Vou compartilhar o resultado de `node tests/marte.browser.mjs` e capturas de Marte para ajustarmos. Não inicie servidor nem testes de navegador e não faça commit, push ou publicação.
+> Leia `AGENTS.md`, `docs/galaxia-encantada/HANDOFF.md` (comece por “Retomada — próxima página: Conteúdo/Lúmina”) e a seção 4.4 de `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Quero iniciar a migração de Conteúdo para Lúmina, a Biblioteca Viva. A branch atual é `feat/marte-projetos`, com Marte no commit `78b9fa6`: preserve tudo e não refaça Marte nem a Sobre. Inspecione a página atual de Conteúdo, os dados de `artigos.json`, o `ContentFilter` e as artes aprovadas de `lumina`; apresente uma proposta de narrativa, seções, rolagem com variação própria (cristais), paleta sonora e segredos distribuídos pelo conteúdo, com registros reais. Pixel art fina, celular, teclado e movimento reduzido desde o início. Não inicie servidor nem testes de navegador; não faça commit, push ou publicação. Comece em planejamento.

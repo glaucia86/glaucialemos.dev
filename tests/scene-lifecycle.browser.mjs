@@ -102,7 +102,7 @@ try {
     });
     await page.goto(`${baseURL}/pt`);
     await expect(page.locator(".hero-scene-layer")).toHaveAttribute("data-motion", "running");
-    for (const slug of ["conteudo"]) {
+    for (const slug of ["eventos"]) {
       await page.locator(`nav a[href="/pt/${slug}"]`).click();
       await expect(page).toHaveURL(`${baseURL}/pt/${slug}`);
       await expect(page.locator(".hero-scene-layer")).toHaveAttribute("data-motion", "running");
@@ -125,7 +125,7 @@ try {
       assert.equal(await page.locator(".force-depth").first().evaluate((node) => getComputedStyle(node).animationPlayState), "paused");
     } finally { await context.close(); }
   });
-  await check("secondary scenes share cover geometry and distribute fireflies", async (page) => {
+  await check("secondary scenes share cover geometry", async (page) => {
     for (const width of [390, 900, 901, 1280, 1920]) {
       await page.setViewportSize({ width, height: 900 });
       for (const route of ["eventos"]) {
@@ -140,11 +140,6 @@ try {
         assert.ok(alignment.every((error) => Math.abs(error) < .1), `${route} at ${width}: ${alignment}`);
       }
     }
-    await page.setViewportSize({ width: 390, height: 900 });
-    await page.goto(`${baseURL}/pt/conteudo`);
-    const positions = await page.locator(".firefly:visible").evaluateAll((nodes) => nodes.map((node) => `${getComputedStyle(node).left}/${getComputedStyle(node).top}`));
-    assert.equal(positions.length, 4, "mobile keeps a deliberate four-firefly budget");
-    assert.equal(new Set(positions).size, 4, "fireflies do not stack");
   });
   if (failures.length) throw new Error(failures.join("\n\n"));
 } finally { await browser.close(); }

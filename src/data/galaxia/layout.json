@@ -64,5 +64,24 @@
       "floppy-flat": 0.2,
       "floppy-upright": 0.2
     }
+  },
+  "lumina": {
+    "grid": 1,
+    "plateGrid": 0,
+    "colors": { "actor": 160, "prop": 128 },
+    "stages": {
+      "glaucia": { "x": 88, "y": 84, "height": 47, "reference": "idle" },
+      "prince": { "x": 78, "y": 84.5, "height": 14, "reference": "stand" }
+    },
+    "actorScale": {},
+    "props": {
+      "crystal-monolith": 0.9,
+      "crystal-display-pedestal": 0.7,
+      "archive-books-closed": 0.45,
+      "archive-book-open": 0.45,
+      "crystal-archive-platform": 0.8,
+      "prismatic-gate-closed": 0.8,
+      "prismatic-gate-open": 0.8
+    }
   }
 }

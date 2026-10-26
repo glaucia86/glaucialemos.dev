@@ -1,9 +1,10 @@
 # AGENTS.md
 
-- Handoff da migração: `docs/galaxia-encantada/HANDOFF.md`.
-- Migração Galáxia Encantada (Home já na `main`; Sobre na branch `feat/niveora-sobre`; o tema Star Wars está congelado em
-  `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração página a página:
-  Home (Observatório) e Sobre (Nivéora) migradas; Projetos, Conteúdo, Eventos, Serviços e 404 ainda usam Star Wars.
+- Handoff da migração: `docs/galaxia-encantada/HANDOFF.md` (comece pela seção “Retomada”).
+- Migração Galáxia Encantada (Home, Sobre e Projetos já na `main`; Conteúdo/Lúmina na branch `feat/lumina-conteudo`; o tema
+  Star Wars está congelado em `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração
+  página a página: Home (Observatório), Sobre (Nivéora), Projetos (Marte) e Conteúdo (Lúmina) migradas; Eventos, Serviços e
+  404 ainda usam Star Wars.
 - Arte-fonte aprovada (Grok) em `docs/art/galaxia-encantada/approved-source` (`GE-PL-0X` placas, `GE-GL-0X` Glaucia,
   `GE-DOG-0X` Prince, `GE-MASTER-*`, `props/<cena>`). `manifest.json` com sha256: `node scripts/build-galaxia-assets.mjs --manifest`.
   Assets web por cena: `node scripts/build-galaxia-assets.mjs <scene-id> [--debug]` gera `public/galaxia/**` e
@@ -85,5 +86,26 @@
   `node scripts/snapshot-first-commits.mjs`. O script de assets também gera `public/galaxia/bench/mars-lab/` e o prop `sprout`
   (recortado da pose `sniff` por `DERIVED_PROPS`). Testes: `tests/mars.test.ts`, `tests/marte.browser.mjs`.
   O teste `social.test.ts` proíbe menções à Twitch em `src`. Tons do `sfx.ts` têm no máximo 0,6 s cada.
+- Conteúdo (Lúmina, a Biblioteca Viva): `src/app/[lang]/conteudo/page.tsx` + `src/app/lumina.css` (reusa `home.css` e
+  `HomeChoreography` via `className="home-page content-page"`, `data-sound-world="lumina"`). Textos em `src/i18n/lumina.ts` (`d.lumina`).
+  Registros reais em `src/lib/lumina-records.ts`: primeira e última página, anos, plataformas e ecos (mesmo título republicado) são
+  calculados de `artigos.json`; sussurros (um por ano), pares de tradução, séries e coleção do entardecer são curados por URL e
+  quebram o build se a URL sumir. Filtros das estantes na URL (`?plataforma=&idioma=&ano=&q=&ordem=antigos`) em `src/lib/lumina-shelves.ts`.
+  Hero: `src/components/content/LuminaScene.tsx` (composição A: Glaucia (88; 84), Prince (78; 84,5), monólito (82,5; 82,5), livros
+  (73,5; 84,5); `HOTSPOTS` glaucia/crystal/prince/books, `SPOTS`, `CRYSTAL_LIFT`) e `LuminaMotion.tsx` (`data-stage`/`data-pose`/`data-prince`,
+  `data-crystal`, `data-books`). Luz em pixel: `prism-engine.ts` (esporos, brilhos dos cristais, reflexo, ondas, scanner); salto da rolagem:
+  `crystal-jump.ts` (geodo fechando, refração, páginas em espiral, clarão opalino). Seções: `CrystalRings` (um cristal por ano filtra a
+  estante), `LuminaShelves` (`#artigos`, ecos em `<details>`), `PrismGate`, `Collections`, `LibraryDusk` (véu `.dusk-veil`, `data-dusk` no `main`),
+  `LuminaEggs`. Intro `BootSequence variant="lumina"`, chave `lumina-boot`; `ReadingProgress variant="lumina"`.
+  Segredos (6): `crystal-whisper` (Glaucia/cristal → o cristal sobe até o dedo e sussurra um artigo do ano), `first-page` (Prince fareja,
+  escaneia, livro abre no registro mais antigo), `prism-align` (3 prismas, um por idioma → pares de tradução), `crystal-echo` (eco de um card
+  republicado), `series-constellation` (acender as partes de uma série em ordem), `library-dusk` (luz da biblioteca ≤ 20 %; Esc volta).
+  Sheets extras `GE-GL-04B` (`touch`, `listen`, `cheer`, `read` com texto no livro, reserva) e `GE-DOG-04B` (`sniff-a/b`, `scan`, `wag-a` a 0,88 por
+  `POSE_SCALE`, `wag-b`, `sit-up`); `LIGHT_FRINGE` tira o contorno claro da 04B; `PROP_CLEANUP.lumina` limpa halo e ciscos dos props.
+  7º segredo `retro-tv`: TV de tubo em CSS/SVG (`RetroTV.tsx`, chiado em `tv-static.ts`) no capítulo 5 toca o último vídeo longo do canal.
+  `src/lib/youtube.ts` lê o RSS público (`channel_id=UC2Qzw5aqCBk_z0lWJnumWQQ`, sem chave, revalidado em 24 h; `revalidate = 86400`
+  em Conteúdo), pula Shorts (`HEAD /shorts/{id}`: 200 = Short; falhou → `#shorts`/`#YouTubeShorts`) e cai em `src/data/youtube.json`
+  (`node scripts/snapshot-youtube.mjs`). O iframe `youtube-nocookie` só nasce depois de ligar (clique/toque/Enter, comando "tv"/"play"/"assistir").
+  Testes: `tests/lumina.test.ts`, `tests/youtube.test.ts`, `tests/lumina.browser.mjs`.
 - Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
   `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).

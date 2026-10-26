@@ -24,9 +24,14 @@ const OBSERVATORY_CREST = pixels([
   ".......#.......", "......###......", "....#######....", "......###......", ".......#.......", "...............", ".....#####.....", "...#########...",
   "..##.####..##..", ".###.#####.###.", ".#############.", ".#############.", ".##.##...##.##.", ".##.##...##.##.", "###############",
 ]);
-const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, mars: ROVER_CREST, observatory: OBSERVATORY_CREST };
+// Lúmina's open book with a crystal rising from its pages, 15 × 15 pixels.
+const BOOK_CREST = pixels([
+  ".......#.......", "......###......", ".....#####.....", "......###......", ".......#.......", "...............", "..###.....###..", ".#...##.##...#.",
+  "#.##...#...##.#", "#....#.#.#....#", "#.##...#...##.#", "#....#.#.#....#", "#.##...#...##.#", ".####..#..####.", "......###......",
+]);
+const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, mars: ROVER_CREST, observatory: OBSERVATORY_CREST, lumina: BOOK_CREST };
 
-type BootVariant = "niveora" | "mars" | "observatory";
+type BootVariant = "niveora" | "mars" | "observatory" | "lumina";
 type BootProps = { lines: string[]; granted: string; skip: string; label: string; storageKey?: string; brand?: string; variant?: BootVariant; armOnNavigation?: boolean };
 
 // Visible only when the inline boot script marked <html data-boot="pending">.

@@ -1,0 +1,299 @@
+{
+  "scene": "lumina",
+  "background": {
+    "src": "/galaxia/scenes/lumina/background.webp",
+    "w": 1672,
+    "h": 941
+  },
+  "actors": {
+    "glaucia": {
+      "idle": {
+        "src": "/galaxia/actors/glaucia/lumina/idle.webp",
+        "w": 307,
+        "h": 750,
+        "feetX": 147,
+        "px": [
+          181,
+          442
+        ]
+      },
+      "blink": {
+        "src": "/galaxia/actors/glaucia/lumina/blink.webp",
+        "w": 307,
+        "h": 750,
+        "feetX": 147,
+        "px": [
+          181,
+          442
+        ]
+      },
+      "touch-duo": {
+        "src": "/galaxia/actors/glaucia/lumina/touch-duo.webp",
+        "w": 432,
+        "h": 809,
+        "feetX": 214,
+        "px": [
+          255,
+          477
+        ]
+      },
+      "cheer-duo": {
+        "src": "/galaxia/actors/glaucia/lumina/cheer-duo.webp",
+        "w": 360,
+        "h": 786,
+        "feetX": 163,
+        "px": [
+          212,
+          463
+        ]
+      },
+      "touch": {
+        "src": "/galaxia/actors/glaucia/lumina/touch.webp",
+        "w": 375,
+        "h": 755,
+        "feetX": 214,
+        "px": [
+          221,
+          445
+        ]
+      },
+      "listen": {
+        "src": "/galaxia/actors/glaucia/lumina/listen.webp",
+        "w": 359,
+        "h": 755,
+        "feetX": 202,
+        "px": [
+          212,
+          445
+        ]
+      },
+      "cheer": {
+        "src": "/galaxia/actors/glaucia/lumina/cheer.webp",
+        "w": 293,
+        "h": 777,
+        "feetX": 138,
+        "px": [
+          173,
+          458
+        ]
+      },
+      "read": {
+        "src": "/galaxia/actors/glaucia/lumina/read.webp",
+        "w": 297,
+        "h": 751,
+        "feetX": 145,
+        "px": [
+          175,
+          443
+        ]
+      }
+    },
+    "prince": {
+      "stand": {
+        "src": "/galaxia/actors/prince/lumina/stand.webp",
+        "w": 288,
+        "h": 466,
+        "feetX": 140,
+        "px": [
+          81,
+          132
+        ]
+      },
+      "side": {
+        "src": "/galaxia/actors/prince/lumina/side.webp",
+        "w": 510,
+        "h": 463,
+        "feetX": 276,
+        "px": [
+          144,
+          131
+        ]
+      },
+      "look": {
+        "src": "/galaxia/actors/prince/lumina/look.webp",
+        "w": 469,
+        "h": 465,
+        "feetX": 236,
+        "px": [
+          133,
+          131
+        ]
+      },
+      "face-idle": {
+        "src": "/galaxia/actors/prince/lumina/face-idle.webp",
+        "w": 281,
+        "h": 343,
+        "feetX": 139,
+        "px": [
+          79,
+          97
+        ]
+      },
+      "face-happy": {
+        "src": "/galaxia/actors/prince/lumina/face-happy.webp",
+        "w": 271,
+        "h": 346,
+        "feetX": 136,
+        "px": [
+          77,
+          98
+        ]
+      },
+      "face-wink": {
+        "src": "/galaxia/actors/prince/lumina/face-wink.webp",
+        "w": 277,
+        "h": 345,
+        "feetX": 143,
+        "px": [
+          78,
+          98
+        ]
+      },
+      "face-joy": {
+        "src": "/galaxia/actors/prince/lumina/face-joy.webp",
+        "w": 285,
+        "h": 345,
+        "feetX": 147,
+        "px": [
+          81,
+          98
+        ]
+      },
+      "face-curious": {
+        "src": "/galaxia/actors/prince/lumina/face-curious.webp",
+        "w": 283,
+        "h": 346,
+        "feetX": 148,
+        "px": [
+          80,
+          98
+        ]
+      },
+      "sniff-a": {
+        "src": "/galaxia/actors/prince/lumina/sniff-a.webp",
+        "w": 543,
+        "h": 463,
+        "feetX": 310,
+        "px": [
+          154,
+          131
+        ]
+      },
+      "sniff-b": {
+        "src": "/galaxia/actors/prince/lumina/sniff-b.webp",
+        "w": 505,
+        "h": 482,
+        "feetX": 339,
+        "px": [
+          143,
+          136
+        ]
+      },
+      "scan": {
+        "src": "/galaxia/actors/prince/lumina/scan.webp",
+        "w": 517,
+        "h": 536,
+        "feetX": 273,
+        "px": [
+          146,
+          152
+        ]
+      },
+      "wag-a": {
+        "src": "/galaxia/actors/prince/lumina/wag-a.webp",
+        "w": 348,
+        "h": 466,
+        "feetX": 200,
+        "px": [
+          98,
+          132
+        ]
+      },
+      "wag-b": {
+        "src": "/galaxia/actors/prince/lumina/wag-b.webp",
+        "w": 478,
+        "h": 532,
+        "feetX": 245,
+        "px": [
+          135,
+          150
+        ]
+      },
+      "sit-up": {
+        "src": "/galaxia/actors/prince/lumina/sit-up.webp",
+        "w": 409,
+        "h": 463,
+        "feetX": 203,
+        "px": [
+          116,
+          131
+        ]
+      }
+    }
+  },
+  "props": {
+    "archive-book-open": {
+      "src": "/galaxia/props/lumina/archive-book-open.webp",
+      "w": 181,
+      "h": 193,
+      "px": [
+        81,
+        87
+      ]
+    },
+    "archive-books-closed": {
+      "src": "/galaxia/props/lumina/archive-books-closed.webp",
+      "w": 179,
+      "h": 174,
+      "px": [
+        81,
+        78
+      ]
+    },
+    "crystal-archive-platform": {
+      "src": "/galaxia/props/lumina/crystal-archive-platform.webp",
+      "w": 303,
+      "h": 157,
+      "px": [
+        242,
+        126
+      ]
+    },
+    "crystal-display-pedestal": {
+      "src": "/galaxia/props/lumina/crystal-display-pedestal.webp",
+      "w": 127,
+      "h": 144,
+      "px": [
+        89,
+        101
+      ]
+    },
+    "crystal-monolith": {
+      "src": "/galaxia/props/lumina/crystal-monolith.webp",
+      "w": 92,
+      "h": 152,
+      "px": [
+        83,
+        137
+      ]
+    },
+    "prismatic-gate-closed": {
+      "src": "/galaxia/props/lumina/prismatic-gate-closed.webp",
+      "w": 184,
+      "h": 281,
+      "px": [
+        147,
+        225
+      ]
+    },
+    "prismatic-gate-open": {
+      "src": "/galaxia/props/lumina/prismatic-gate-open.webp",
+      "w": 165,
+      "h": 281,
+      "px": [
+        132,
+        225
+      ]
+    }
+  }
+}

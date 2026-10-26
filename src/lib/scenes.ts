@@ -3,6 +3,7 @@
 import earthObservatory from "@/data/galaxia/earth-observatory.json";
 import niveora from "@/data/galaxia/niveora.json";
 import marsLab from "@/data/galaxia/mars-lab.json";
+import lumina from "@/data/galaxia/lumina.json";
 import layout from "@/data/galaxia/layout.json";
 
 export type SceneId = "earth-observatory" | "niveora" | "mars-lab" | "lumina" | "earth-orbit" | "aurelia" | "red-tide";
@@ -47,6 +48,14 @@ export const SCENES = {
     focalPoint: { x: 80, y: 70 },
     stages: layout["mars-lab"].stages as Layout["stages"],
     propScale: layout["mars-lab"].props as Layout["props"],
+  },
+  lumina: {
+    id: "lumina",
+    assets: lumina,
+    palette: { base: "#221435", accent: "#53e0e8", glow: "#e474c7" },
+    focalPoint: { x: 82, y: 70 },
+    stages: layout.lumina.stages as Layout["stages"],
+    propScale: layout.lumina.props as Layout["props"],
   },
 } satisfies Partial<Record<SceneId, SceneDefinition>>;
 
