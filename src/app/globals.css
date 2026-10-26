@@ -635,7 +635,7 @@ main {
   font-weight: 700;
 }
 
-.contact-panel input,.contact-panel textarea {
+.contact-panel input,.contact-panel textarea,.contact-panel select {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -644,7 +644,7 @@ main {
   color: var(--text-body);
 }
 
-.contact-panel input:disabled,.contact-panel textarea:disabled {
+.contact-panel input:disabled,.contact-panel textarea:disabled,.contact-panel select:disabled {
   opacity: .45;
 }
 
@@ -990,3 +990,10 @@ html.reduce-motion .hero-scene-layer * {
 .event-countries h2 { font-size: clamp(1.4rem, 3vw, 2rem); }
 .event-countries p { color: var(--text-muted); line-height: 1.7; }
 .event-countries ul { display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; padding-left: 1.2rem; margin-block: 1.25rem; }
+
+.contact-panel .contact-consent { display: flex; align-items: flex-start; gap: .75rem; }
+.contact-panel .contact-consent input { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; margin-top: .2rem; }
+.contact-panel :is(input,textarea,select)[aria-invalid="true"] { border-color: var(--color-warning-text); }
+.contact-panel .contact-error { color: var(--color-warning-text); font-size: .9rem; font-weight: 400; }
+.contact-panel select { min-width: 0; max-width: 100%; }
+.contact-captcha { min-width: 0; }

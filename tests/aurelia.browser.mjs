@@ -1,9 +1,11 @@
 // User-run only. Start your server, then BASE_URL=http://127.0.0.1:3100 node tests/aurelia.browser.mjs.
-// Formspree is always intercepted: this suite cannot send a real message.
+// Server Action POSTs and both providers are intercepted; no real submission.
+// Optional CONTACT_EXPECT=disabled|enabled asserts the configuration of the running build.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { chromium } from 'playwright';
 import { expect } from '@playwright/test';
+import { mockContact } from './contact-browser-mocks.mjs';
 const base=process.env.BASE_URL??'http://127.0.0.1:3100';
 const shots='docs/screenshots/aurelia';fs.mkdirSync(shots,{recursive:true});
 const services=JSON.parse(fs.readFileSync('src/data/servicos.json','utf8'));
@@ -13,13 +15,13 @@ const browser=await chromium.launch();const failures=[];
 async function check(name,run){try{await run();console.log(`ok - ${name}`);}catch(error){failures.push(name);console.error(`not ok - ${name}\n${error.stack}`);}}
 async function open(options={},lang='pt',path=''){
   const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce',...options});
-  const page=await context.newPage();const errors=[],posts=[];
+  const page=await context.newPage();const errors=[];
+  const contact=await mockContact(page,base),posts=contact.posts;
   page.on('pageerror',error=>errors.push(String(error)));
   page.on('console',message=>{if(message.type()==='error')errors.push(message.text());});
-  await page.route('https://formspree.io/**',async route=>{posts.push(route.request().method());await route.fulfill({status:200,contentType:'application/json',body:'{"ok":true}'});});
   await page.goto(`${base}/${lang}/servicos${path}`);
   await expect(page.locator('.aurelia-hot--glaucia')).toBeVisible();
-  return {context,page,errors,posts};
+  return {context,page,errors,posts,contact};
 }
 const found=page=>page.evaluate(()=>JSON.parse(localStorage.getItem('galaxia-encantada:eggs:v2')??'[]'));
 async function discovered(page,id){await expect.poll(()=>found(page)).toContain(id);}
@@ -148,20 +150,47 @@ try{
       assert.deepEqual(errors,[]);
     }finally{await context.close();}
   });
-  for(const subject of ['workshop','mentoria','palestra'])await check(`pré-preenchimento ${subject} preservado`,async()=>{
+  for(const subject of ['workshop','mentoria','palestra','consultoria'])await check(`pré-preenchimento ${subject} preservado`,async()=>{
     const {context,page,posts}=await open({},'pt',`?assunto=${subject}#contato`);try{
-      const text=page.locator('#contato textarea');await expect(text).toHaveValue(subject==='workshop'?'Gostaria de planejar um workshop para o meu time.':subject==='mentoria'?'Gostaria de conversar sobre mentoria.':'Gostaria de convidar você para palestrar.');
+      await expect(page.locator('#contact-service')).toHaveValue(subject==='consultoria'?'consultoria':services.find(service=>service.id.startsWith(subject)).id);
+      const text=page.locator('#contato textarea');await expect(text).toHaveValue(subject==='workshop'?'Gostaria de planejar um workshop para o meu time.':subject==='mentoria'?'Gostaria de conversar sobre mentoria.':subject==='consultoria'?'Gostaria de conversar sobre consultoria.':'Gostaria de convidar você para palestrar.');
       await page.locator('.aurelia-relay').click();await expect(page.locator('#contato h2')).toBeFocused();assert.deepEqual(posts,[]);
     }finally{await context.close();}
   });
-  await check('formulário: validação, envio explícito, sucesso e erro (mock)',async()=>{
-    const {context,page,posts}=await open();try{
-      const form=page.locator('#contato form'),name=form.locator('[name=name]'),email=form.locator('[name=email]'),message=form.locator('[name=message]');
-      if(!(await name.isEnabled())){console.log('SKIP submission states: configure NEXT_PUBLIC_FORMSPREE_ID to test the mocked submission');await expect(page.locator('.form-notice')).toBeVisible();return;}
-      await form.locator('[type=submit]').click();assert.deepEqual(posts,[]);
-      await name.fill('Teste local');await email.fill('teste@example.com');await message.fill('Teste interceptado');await form.locator('[type=submit]').click();await expect(form.getByRole('status')).toHaveText('Mensagem enviada. Obrigada!');assert.equal(posts.length,1);
-      await page.unroute('https://formspree.io/**');await page.route('https://formspree.io/**',route=>route.fulfill({status:500,contentType:'application/json',body:'{}'}));
-      await name.fill('Teste local');await email.fill('teste@example.com');await message.fill('Teste interceptado');await form.locator('[type=submit]').click();await expect(form.getByRole('alert')).toHaveText('Não foi possível enviar. Tente novamente.');
+  for(const lang of ['pt','en','es'])await check(`contato: configuração e LinkedIn (${lang})`,async()=>{
+    const {context,page,contact}=await open({},lang);try{
+      const panel=page.locator('#contato'),disabled=await panel.getAttribute('data-contact-enabled')==='false';
+      if(process.env.CONTACT_EXPECT)assert.equal(disabled,process.env.CONTACT_EXPECT==='disabled');
+      const linkedin=panel.getByRole('link');await expect(linkedin).toHaveAttribute('href','https://www.linkedin.com/in/glaucialemos');await expect(linkedin).toHaveAttribute('target','_blank');await expect(linkedin).toHaveAttribute('rel','noopener');
+      await expect(panel.locator('select option')).toHaveCount(services.length+2);
+      if(disabled){
+        await expect(panel.locator('.form-notice')).toBeVisible();await expect(panel.getByRole('button',{name:/Enviar|Send/})).toBeDisabled();
+        for(const name of ['name','company','service','message','linkedin','consent'])await expect(panel.locator(`[name="${name}"]`)).toBeDisabled();
+        await panel.scrollIntoViewIfNeeded();assert.deepEqual(contact.challenges,[]);
+      } else {
+        assert.deepEqual(contact.challenges,[], 'Turnstile must wait for the form to enter the viewport');
+        await panel.scrollIntoViewIfNeeded();await expect.poll(()=>contact.challenges.length).toBe(1);
+        await expect(panel.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
+      }
+      assert.deepEqual(contact.posts,[]);assert.deepEqual(contact.providers,[]);
+    }finally{await context.close();}
+  });
+  await check('formulário: validação, foco, consentimento e estados da action (mock)',async()=>{
+    const {context,page,posts,contact}=await open();try{
+      const form=page.locator('#contato form'),name=form.locator('[name=name]'),company=form.locator('[name=company]'),service=form.locator('[name=service]'),linkedin=form.locator('[name=linkedin]'),message=form.locator('[name=message]'),consent=form.locator('[name=consent]'),submit=form.locator('[type=submit]');
+      if(!(await name.isEnabled())){console.log('SKIP enabled submission states: run a build with all 3 contact env vars; disabled state covered above');return;}
+      await submit.click();await expect(name).toBeFocused();await expect(name).toHaveAttribute('aria-invalid','true');await expect(name).toHaveAttribute('aria-describedby','contact-name-error');assert.deepEqual(posts,[]);
+      const fill=async()=>{await name.fill('Teste local');await company.fill('Empresa teste');await service.selectOption('consultoria');await message.fill('Teste interceptado');await linkedin.fill('https://www.linkedin.com/in/teste-local');await consent.check();};
+      await fill();await linkedin.fill('https://example.com');await submit.click();await expect(linkedin).toBeFocused();assert.deepEqual(posts,[]);
+      await linkedin.fill('https://linkedin.com/in/teste-local');await consent.uncheck();await submit.click();await expect(consent).toBeFocused();assert.deepEqual(posts,[]);
+      await consent.check();await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
+      await submit.click();await expect(form.getByRole('status').filter({hasText:'Mensagem enviada.'})).toHaveText('Mensagem enviada. Obrigada!');assert.equal(posts.length,1);await expect(name).toHaveValue('');
+      await fill();contact.result={status:'error'};await submit.click();await expect(form.getByRole('alert')).toHaveText('Não foi possível enviar. Tente novamente.');await expect(company).toHaveValue('Empresa teste');
+      contact.result={status:'captcha'};await submit.click();await expect(form.getByRole('alert')).toContainText('verificação de segurança');
+      contact.result={status:'invalid',errors:{name:['Informe seu nome (até 120 caracteres).']},values:{name:'Teste local',company:'Empresa teste',service:'consultoria',message:'Teste interceptado',linkedin:'https://linkedin.com/in/teste-local',consent:true}};
+      await submit.click();await expect(name).toBeFocused();await expect(name).toHaveAttribute('aria-invalid','true');
+      contact.result={status:'unavailable'};await submit.click();await expect(submit).toBeDisabled();await expect(page.locator('.form-notice')).toBeVisible();
+      assert.deepEqual(contact.providers,[]);
     }finally{await context.close();}
   });
   for(const viewport of [{width:390,height:844},{width:768,height:1024},{width:1280,height:720},{width:1440,height:900}])await check(`enquadramento ${viewport.width}×${viewport.height}`,async()=>{
@@ -183,13 +212,17 @@ try{
   });
   await check('sans JS: dados, links, cofre e contato disponíveis',async()=>{
     const context=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:844}});try{
-      const page=await context.newPage();await page.goto(`${base}/pt/servicos`);
+      const page=await context.newPage();await mockContact(page,base);await page.goto(`${base}/pt/servicos?assunto=workshop`);
       await expect(page.locator('.aurelia-prince [data-actor-pose="front"]')).toHaveCSS('opacity','1');
       await expect(page.locator('.aurelia-prince [data-actor-pose="paw"]')).toHaveCSS('opacity','0');
       await expect(page.locator('#services-title')).toBeVisible();await expect(page.locator('.aurelia-cards article')).toHaveCount(services.length);
       await page.locator('.seed-vault summary').click();await expect(page.locator('.seed-vault__body')).toBeVisible();
       await page.locator('.aurelia-copy .actions a[href="#contato"]').click();await expect(page).toHaveURL(/#contato$/);
       await expect(page.locator('#contato')).toHaveCount(1);await expect(page.locator('#contato h2')).toBeVisible();
+      await expect(page.locator('#contact-service')).toHaveValue(services[0].id);
+      await expect(page.locator('#contact-message')).toHaveValue('Gostaria de planejar um workshop para o meu time.');
+      await expect(page.locator('#contato form')).toHaveAttribute('method',/post/i);
+      await expect(page.locator('#contato form')).not.toHaveAttribute('action',/^javascript:/);
       const contactLink=page.locator('#contato a');await expect(contactLink).toBeVisible();await expect(contactLink).toHaveAttribute('href','https://www.linkedin.com/in/glaucialemos');await expect(contactLink).not.toBeEmpty();
     }finally{await context.close();}
   });

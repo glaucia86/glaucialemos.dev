@@ -1,12 +1,12 @@
 import '../../home.css';
 import '../../aurelia.css';
 import '../../beyond-orbit.css';
-import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ContactForm } from '@/components/ContactForm';
+import { contactConfig } from '@/lib/contact-config';
 import { EpilogueSignal } from '@/components/epilogue/EpilogueSignal';
 import { ReadingProgress } from '@/components/ReadingProgress';
 import { BootSequence } from '@/components/home/BootSequence';
@@ -23,18 +23,20 @@ import { GreenhouseDusk } from '@/components/services/GreenhouseDusk';
 import { CollaborationBeacon } from '@/components/services/CollaborationBeacon';
 import { gardenRecords } from '@/lib/aurelia-records';
 import { getServicos } from '@/lib/data';
-import { socialLinks } from '@/data/social';
 import { AURELIA_BOOT_KEY, bootScriptFor } from '@/lib/boot';
 import { beyondOrbit } from '@/i18n/beyond-orbit';
 import { isLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 
-type Props={params:Promise<{lang:string}>};
+type Props={params:Promise<{lang:string}>;searchParams:Promise<{assunto?:string|string[]}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{const {lang}=await params;return isLocale(lang)?getDictionary(lang).services.metadata:{};}
 const code=(index:number)=>`◆ ${String(index+1).padStart(2,'0')}`;
-export default async function Services({params}:Props){
+export default async function Services({params,searchParams}:Props){
   const {lang}=await params;if(!isLocale(lang))notFound();
   const d=getDictionary(lang),a=d.aurelia,records=gardenRecords(getServicos());
+  const contact=contactConfig();
+  const {assunto}=await searchParams;
+  const subject=typeof assunto==='string'?assunto:null;
   const ticker=records.map(({service})=>service.titulo[lang]);
   return <main id="main" className="home-page services-page" data-sound-world="aurelia" tabIndex={-1}>
     <script dangerouslySetInnerHTML={{__html:bootScriptFor(AURELIA_BOOT_KEY)}}/>
@@ -77,10 +79,7 @@ export default async function Services({params}:Props){
       <GreenhouseDusk copy={a.dusk}/>
       <CollaborationBeacon label={a.contact.relay}/>
       <p id="aurelia-channel-status" className="aurelia-channel-status" role="status"/>
-      <Suspense fallback={<div id="contato" className="contact-panel">
-        <h2>{d.services.formTitle}</h2>
-        <a className="button secondary" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{d.services.linkedin}</a>
-      </div>}><ContactForm copy={d.services} formId={process.env.NEXT_PUBLIC_FORMSPREE_ID}/></Suspense>
+      <ContactForm copy={d.services} lang={lang} subject={subject} enabled={contact.enabled} siteKey={contact.enabled ? contact.siteKey : undefined}/>
       <EpilogueSignal lang={lang} copy={beyondOrbit[lang]}/>
     </div></section>
     <AureliaEggs/><HomeChoreography/>
