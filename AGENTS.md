@@ -150,7 +150,7 @@
   fundo magenta (key exclusivo de Aurélia), retratos `face-*` e poses reais `idle` (mão no quadril), `relaxed`, `side`, `back`.
   Não há gesto de regar/receber transmissão na sheet; `blink` é uma pequena sobreposição de pálpebras derivada de `idle`,
   não uma pose nomeada incorretamente. Prince: `front`, `stand`, `paw`, retratos `face-*`. Palco: Glaucia (88;93;h47),
-  Prince (77;93;h14); estufa em (69;92), sinalizador em (74,5;93). `AureliaScene` usa `SCENES.aurelia` e caixas na placa.
+  Prince (77;93;h14); estufa em (69;92), sinalizador em (74,5;93). Repouso/SSR/reduced motion em `front`; `paw` espelhada só no relay (1,1 s), depois `front`; hotspot frontal, escala de `stand` preservada. `AureliaScene` usa `SCENES.aurelia` e caixas na placa.
   `AureliaMotion` usa `useGSAP`, `HERO_OVERLAY` 1200×680/fine pointer, `observeMotionActivity`, estado final estático no
   movimento reduzido, respiração/piscar pausados fora da tela/aba. `garden-engine.ts` (pétalas, esporos, vapor, reflexos;
   pixels 2, até 160 partículas); `petal-jump.ts` (espiral de pétalas guiada pela rolagem, sem RAF próprio).

@@ -1,6 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { ServiceGarden } from '@/components/services/ServiceGarden';
+import { AureliaScene, HOTSPOTS } from '@/components/services/AureliaScene';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getServicos } from '@/lib/data';
 import { gardenRecords, serviceHref, servicePrice, advancePollination, turnRing, ringsAligned } from '@/lib/aurelia-records';
@@ -89,18 +90,37 @@ describe('Aurélia — catálogo e idiomas', () => {
   });
   it('mantém os atores dentro da placa e fora da área de texto', () => {
     const scene = SCENES.aurelia;
-    for (const [actor, poses] of [['glaucia',['idle','relaxed','side','blink']],['prince',['stand','paw']]] as const) for (const pose of poses) {
+    for (const [actor, poses] of [['glaucia',['idle','relaxed','side','blink']],['prince',['front','paw']]] as const) for (const pose of poses) {
       const box = poseBox(scene,actor,pose);
       expect(box.left).toBeGreaterThan(58);
       expect(box.left + box.width).toBeLessThanOrEqual(100);
       expect(box.top + box.height).toBeCloseTo(93, 2);
     }
   });
+  it('mantém Prince no chão, com hotspot frontal e pata espelhada na mesma âncora', () => {
+    const scene=SCENES.aurelia,stage=scene.stages.prince;
+    const front=poseBox(scene,'prince','front'),stand=poseBox(scene,'prince','stand');
+    expect(HOTSPOTS.prince.left).toBe(front.left);
+    expect(HOTSPOTS.prince.top).toBe(front.top);
+    expect(HOTSPOTS.prince.width).toBe(front.width);
+    expect(HOTSPOTS.prince.top+HOTSPOTS.prince.height).toBeLessThan(HOTSPOTS.beacon.top);
+    expect(front.height/stand.height).toBeCloseTo(1,1);
+    const html=renderToStaticMarkup(createElement(AureliaScene));
+    expect(html).toContain('data-actor-pose="front"');
+    expect(html).not.toContain('data-actor-pose="stand"');
+    const style=html.match(/data-actor-pose="paw" style="([^"]+)"/)![1];
+    const values=Object.fromEntries(style.split(';').map(rule=>rule.split(':')));
+    const art=scene.assets.actors.prince.paw;
+    expect(values.transform).toBe('scaleX(-1)');
+    expect(values['transform-origin']).toBe('50% 100%');
+    expect(parseFloat(values.left)+parseFloat(values.width)*(1-art.feetX/art.w)).toBeCloseTo(stage.x,2);
+    expect(parseFloat(values.top)+parseFloat(values.height)).toBeCloseTo(stage.y,2);
+  });
 });
 describe('Aurélia — assets', () => {
   it('recorta magenta e mantém sprites com alpha e grade 1', async () => {
     const sharp=(await import('sharp')).default;
-    for(const actor of ['glaucia','prince'] as const) for(const name of actor==='glaucia'?['idle','relaxed','side','blink']:['stand','paw']) {
+    for(const actor of ['glaucia','prince'] as const) for(const name of actor==='glaucia'?['idle','relaxed','side','blink']:['front','paw']) {
       const sprite=(SCENES.aurelia.assets.actors[actor] as Record<string,{src:string;px:number[]}>)[name];
       const {data,info}=await sharp(`public${sprite.src}`).ensureAlpha().raw().toBuffer({resolveWithObject:true});
       expect([info.width,info.height]).toEqual(sprite.px);

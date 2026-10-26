@@ -31,9 +31,9 @@ export function AureliaMotion({children,copy,records,lang}:{children:ReactNode;c
     let disposed=false,active=false,request=0;
     const garden=motion?createGarden({back:q('.aurelia-sky--back'),front:q('.aurelia-sky--front')}):null;
     const setPose=(actor:HTMLElement,name:string)=>{actor.dataset.pose=name;};
-    setPose(crew,'idle');setPose(prince,'stand');
+    setPose(crew,'idle');setPose(prince,'front');
     section.dataset.stage='idle';
-    const settle=()=>{section.dataset.stage='idle';setPose(crew,'idle');setPose(prince,'stand');};
+    const settle=()=>{section.dataset.stage='idle';setPose(crew,'idle');setPose(prince,'front');};
     const reveal=()=>{
       focusReading.current=!!document.activeElement?.matches('.aurelia-hot:focus-visible, .comlink *');
       setReading(next.current++%records.length);

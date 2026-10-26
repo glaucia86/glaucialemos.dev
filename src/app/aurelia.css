@@ -34,14 +34,17 @@
 .aurelia-sky { inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
 .aurelia-crew,.aurelia-prince { inset: 0; pointer-events: none; }
 :is(.aurelia-crew,.aurelia-prince) > i { position: absolute; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; opacity: 0; }
-.aurelia-crew:not([data-pose]) > [data-actor-pose="idle"],.aurelia-prince:not([data-pose]) > [data-actor-pose="stand"],
+.aurelia-crew:not([data-pose]) > [data-actor-pose="idle"],.aurelia-prince:not([data-pose]) > [data-actor-pose="front"],
 .aurelia-crew[data-pose="idle"] > [data-actor-pose="idle"],.aurelia-crew[data-pose="relaxed"] > [data-actor-pose="relaxed"],.aurelia-crew[data-pose="side"] > [data-actor-pose="side"],
-.aurelia-prince[data-pose="stand"] > [data-actor-pose="stand"],.aurelia-prince[data-pose="paw"] > [data-actor-pose="paw"] { opacity: 1; }
+.aurelia-prince[data-pose="front"] > [data-actor-pose="front"],.aurelia-prince[data-pose="paw"] > [data-actor-pose="paw"] { opacity: 1; }
 .aurelia-garden > i,.aurelia-beacon > i { display: block; position: absolute; inset: 0; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; }
 .aurelia-garden__bloom,.aurelia-beacon__active { opacity: 0; }
 .aurelia-hero[data-bloom] .aurelia-garden__bloom,.aurelia-hero[data-beacon] .aurelia-beacon__active { opacity: 1; }
 .aurelia-hero[data-bloom] .aurelia-garden__idle,.aurelia-hero[data-beacon] .aurelia-beacon__idle { opacity: 0; }
 .aurelia-hot { position: absolute; min-width: 44px; min-height: 44px; border: 0; padding: 0; background: transparent; pointer-events: auto; touch-action: manipulation; cursor: pointer; }
+.aurelia-hot--prince { translate: -50% -100%; }
+.aurelia-hot--beacon { translate: -50% 0; }
+.aurelia-hot--garden { translate: -100% 0; }
 .aurelia-hot::after { content: ''; position: absolute; inset: 0; border: 1px solid var(--scene-accent); opacity: 0; }
 .aurelia-hot:hover::after,.aurelia-hot:focus-visible::after { opacity: 1; }
 .aurelia-hot::before { content: ''; position: absolute; top: -6px; left: 50%; width: 4px; height: 4px; background: var(--aurelia-cream); box-shadow: 0 0 8px var(--scene-glow); }
@@ -120,7 +123,7 @@
 @media (prefers-reduced-motion:no-preference) {
   html:not(.reduce-motion) .aurelia-hero[data-motion="true"] .aurelia-crew[data-pose="idle"] > :is([data-actor-pose="idle"],.aurelia-blink) { animation: aurelia-breathe 4.8s ease-in-out infinite; }
   html:not(.reduce-motion) .aurelia-hero[data-motion="true"] .aurelia-crew[data-pose="idle"] > .aurelia-blink { animation: aurelia-breathe 4.8s ease-in-out infinite,crew-blink 5.2s steps(1) 1.5s infinite; }
-  html:not(.reduce-motion) .aurelia-hero[data-motion="true"] .aurelia-prince[data-pose="stand"] > [data-actor-pose="stand"] { animation: aurelia-breathe 3.6s ease-in-out infinite; }
+  html:not(.reduce-motion) .aurelia-hero[data-motion="true"] .aurelia-prince[data-pose="front"] > [data-actor-pose="front"] { animation: aurelia-breathe 3.6s ease-in-out infinite; }
 }
 @keyframes aurelia-breathe { 50% { scale: 1 1.003; } }
 .hero-scene-layer--aurelia[data-paused="true"] * { animation-play-state: paused !important; }
@@ -142,10 +145,10 @@
 html.reduce-motion .services-page *,html.reduce-motion .services-page *::before { animation: none !important; transition: none !important; }
 @media (prefers-reduced-motion:reduce) { .services-page *, .services-page *::before { animation: none !important; transition: none !important; } }
 
-@media (max-width:640px) {
+@media (max-width:700px) {
   /* The actors provide the same actions without overlapping 44px prop targets on a phone. */
   .aurelia-hot--garden,.aurelia-hot--beacon { display: none; }
-  .aurelia-hot--prince { left: 70% !important; top: auto !important; bottom: 5%; width: 44px !important; height: 44px !important; }
+  .aurelia-hot--prince { top: auto !important; bottom: 7%; width: 44px !important; height: 44px !important; translate: -50% 0; }
 }
 
 /* Use the existing pixel-frame token: the shared kit deliberately removes normal borders. */
