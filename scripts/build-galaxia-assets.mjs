@@ -37,6 +37,13 @@ const POSES = {
     prince: ["front", "side", "look", "face-idle", "face-happy", "face-joy", "face-curious"],
     "prince:B": ["stand", "gaze", "watch", "sniff"],
   },
+  // Poses 3 and 4 of the Glaucia sheet carry a Prince in another harness: kept as assets, not used on stage.
+  lumina: {
+    glaucia: ["idle", "blink", "touch-duo", "cheer-duo"],
+    prince: ["stand", "side", "look", "face-idle", "face-happy", "face-wink", "face-joy", "face-curious"],
+    "glaucia:B": ["touch", "listen", "cheer", "read"],
+    "prince:B": ["sniff-a", "sniff-b", "scan", "wag-a", "wag-b", "sit-up"],
+  },
 };
 
 // One body-height ratio per extra sheet, before final cutting. Measurements exclude the two-pixel cut padding.
@@ -49,10 +56,16 @@ const SHEET_NORMALIZATION = {
   },
   // B: watch's tail tip shares columns with the sprout in front of sniff.
   "mars-lab": { "prince:B": { pose: "stand", reference: "side", seams: [1274] } },
+  // 04B: Glaucia reading stands as upright as idle; Prince's first sniff is the same side view as the 04 sheet.
+  lumina: {
+    "glaucia:B": { pose: "read", reference: "idle" },
+    "prince:B": { pose: "sniff-a", reference: "side" },
+  },
 };
 
-// Source-space seams for sheets whose poses touch: mars-lab's pointing finger reaches the blink pose's backpack.
-const SEAMS = { "mars-lab": { glaucia: [702] } };
+// Source-space seams for sheets whose poses touch: mars-lab's pointing finger reaches the blink pose's backpack;
+// in lumina the blink pose's coat touches the next Prince, whose companion pose reaches the cheering one.
+const SEAMS = { "mars-lab": { glaucia: [702] }, lumina: { glaucia: [655, 1083] } };
 
 // Props cut out of a pose sheet by colour: the glowing sprout Prince sniffs in GE-DOG-03B. `exclude` drops the bubble
 // helmet's rim (a circle), except for the leaf tip in front of it; small gaps and holes inside the leaves are closed.
@@ -165,9 +178,9 @@ function keyWhite(img) {
 
 // Props were cut from sheets on a black background and keep a dark margin. Flood from the transparent outside
 // through near-black pixels only, so the sprites' own dark navy outlines survive.
-function keyDark(img) {
+function keyDark(img, { rg = 20, b = 36 } = {}) {
   const { data, w, h } = img;
-  const dark = (i) => data[i * 4 + 3] > 0 && Math.max(data[i * 4], data[i * 4 + 1]) < 20 && data[i * 4 + 2] < 36;
+  const dark = (i) => data[i * 4 + 3] > 0 && Math.max(data[i * 4], data[i * 4 + 1]) < rg && data[i * 4 + 2] < b;
   const seen = new Uint8Array(w * h);
   const stack = [];
   for (let i = 0; i < w * h; i++) {
@@ -185,6 +198,54 @@ function keyDark(img) {
     const x = i % w; const y = (i / w) | 0;
     if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1);
     if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w);
+  }
+  return img;
+}
+
+// A light grey contour drawn outside the dark outline (GE-GL-04B): peeled from the transparent outside, at most
+// `depth` pixels deep, through greyish light pixels only, so the coat's own light trim behind the outline survives.
+const LIGHT_FRINGE = { lumina: ["glaucia:B"] };
+function peelLightFringe(img, depth = 3) {
+  const { data, w, h } = img;
+  const light = (i) => { const r = data[i * 4]; const g = data[i * 4 + 1]; const b = data[i * 4 + 2]; return Math.min(r, g, b) >= 140 && Math.max(r, g, b) - Math.min(r, g, b) < 40; };
+  let front = [];
+  for (let i = 0; i < w * h; i++) if (data[i * 4 + 3] === 0) front.push(i);
+  for (let step = 0; step < depth && front.length; step++) {
+    const next = [];
+    for (const i of front) {
+      const x = i % w; const y = (i / w) | 0;
+      for (const j of [x > 0 ? i - 1 : -1, x < w - 1 ? i + 1 : -1, y > 0 ? i - w : -1, y < h - 1 ? i + w : -1]) {
+        if (j < 0 || data[j * 4 + 3] === 0 || !light(j)) continue;
+        data[j * 4 + 3] = 0; next.push(j);
+      }
+    }
+    front = next;
+  }
+  return img;
+}
+
+// One pose drawn bigger than the rest of its sheet (GE-DOG-04B wag-a is a closer front view): source-space scale.
+const POSE_SCALE = { lumina: { prince: { "wag-a": 0.88 } } };
+async function rescale(sprite, factor) {
+  const w = Math.round(sprite.w * factor); const h = Math.round(sprite.h * factor);
+  const data = await sharp(sprite.data, { raw: { width: sprite.w, height: sprite.h, channels: 4 } }).resize(w, h, { kernel: "nearest" }).raw().toBuffer();
+  return { ...sprite, data, w, h, feetX: Math.round(sprite.feetX * factor) };
+}
+
+// Per-scene prop cleanup. Lúmina's props came with a navy glow halo a little lighter than the default key, and loose
+// specks (a sliver beside the gate, dust under the monolith): a wider dark key, then only the pixels of the big shapes.
+const PROP_CLEANUP = { lumina: { rg: 26, b: 48 } };
+function despeck(img) {
+  const { label, groups } = poses(img);
+  const keep = new Set(groups.flatMap((group) => group.ids));
+  const kept = (x, y) => x >= 0 && y >= 0 && x < img.w && y < img.h && keep.has(label[y * img.w + x]);
+  for (let i = 0; i < img.w * img.h; i++) {
+    if (!img.data[i * 4 + 3] || keep.has(label[i])) continue;
+    // The soft fringe (unlabelled, alpha < 96) stays when it touches a kept shape; other specks go.
+    const x = i % img.w; const y = (i / img.w) | 0;
+    let near = false;
+    if (label[i] < 0) for (let d = -2; d <= 2 && !near; d++) near = kept(x + d, y) || kept(x, y + d);
+    if (!near) img.data[i * 4 + 3] = 0;
   }
   return img;
 }
@@ -321,6 +382,7 @@ async function cutActor(scene, name, prefix) {
     let img = await loadRgba(file);
     if (!img.alpha) keyWhite(img);
     const key = tag ? `${name}:${tag}` : name;
+    if (LIGHT_FRINGE[scene]?.includes(key)) peelLightFringe(img);
     const names = POSES[scene]?.[key] ?? [];
     const normalization = SHEET_NORMALIZATION[scene]?.[key];
     let seams = normalization?.seams ?? SEAMS[scene]?.[key] ?? [];
@@ -343,6 +405,7 @@ async function cutActor(scene, name, prefix) {
     if (normalization && groups.length !== names.length) throw new Error(`${file}: normalization changed pose count to ${groups.length}`);
     groups.forEach((group, index) => { sprites[names[index] ?? `pose-${tag}${index + 1}`] = cut(img, label, group); });
   }
+  for (const [pose, factor] of Object.entries(POSE_SCALE[scene]?.[name] ?? {})) if (sprites[pose]) sprites[pose] = await rescale(sprites[pose], factor);
   if (sprites.idle && sprites.blink) {
     sprites.blink = blinkOverlay(sprites.idle, sprites.blink);
     if (DEBUG) console.log(`${name}/blink: shift ${JSON.stringify(sprites.blink.shift)}, eyes ${JSON.stringify(sprites.blink.eyes)}`);
@@ -443,7 +506,9 @@ async function scene(id) {
     fs.mkdirSync(`${OUT}/props/${id}`, { recursive: true });
     for (const file of fs.readdirSync(src.props).filter((f) => f.endsWith(".png")).sort()) {
       const name = file.replace(/\.png$/, "");
-      const img = keyDark(await loadRgba(`${src.props}/${file}`));
+      const cleanup = PROP_CLEANUP[id];
+      const keyed = keyDark(await loadRgba(`${src.props}/${file}`), cleanup);
+      const img = cleanup ? despeck(keyed) : keyed;
       const art = grid ? await pixelate(img, (LAYOUT[id]?.props?.[name] ?? 1) / grid, colors.prop) : null;
       await (art ? lossless(art) : webp(img.data, { width: img.w, height: img.h, channels: 4 })).toFile(`${OUT}/props/${id}/${name}.webp`);
       result.props[name] = { src: `/galaxia/props/${id}/${name}.webp`, w: img.w, h: img.h, ...(art && { px: [art.w, art.h] }) };

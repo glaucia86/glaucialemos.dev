@@ -2,11 +2,10 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import { SceneMotion } from "./SceneMotion";
 
-type Scene = "dagobah" | "kashyyyk" | "nevarro" | "bespin" | "death-star";
+type Scene = "dagobah" | "nevarro" | "bespin" | "death-star";
 
 const sceneByImage: Record<string, Scene> = {
   "/pixel/home-yoda.jpg": "dagobah",
-  "/pixel/conteudo-chewbacca.jpg": "kashyyyk",
   "/pixel/eventos-grogu.jpg": "nevarro",
   "/pixel/servicos-vader.jpg": "bespin",
   "/pixel/404-stormtrooper.jpg": "death-star",
@@ -85,7 +84,6 @@ function Dagobah() {
   </div></>;
 }
 
-function Kashyyyk() { return <>{particles("falling-leaf", 10)}{particles("firefly", 8)}</>; }
 function Nevarro() { return <><span className="hologram-glow" /><span className="hologram-ring" /></>; }
 function Bespin() {
   return <>
@@ -100,7 +98,7 @@ function Bespin() {
 function DeathStar() { return <><span className="alarm-light alarm-light--left" /><span className="alarm-light alarm-light--right" /></>; }
 
 const scenes: Record<Scene, () => React.ReactNode> = {
-  dagobah: Dagobah, kashyyyk: Kashyyyk,
+  dagobah: Dagobah,
   nevarro: Nevarro, bespin: Bespin, "death-star": DeathStar,
 };
 

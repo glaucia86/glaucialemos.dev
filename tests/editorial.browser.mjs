@@ -73,13 +73,13 @@ try {
       await page.screenshot({ path: `docs/screenshots/editorial/${route}-${lang}-390.png`, fullPage: true, animations: "disabled" });
     }
     await page.goto(`${base}/${lang}/conteudo`);
-    const filters = page.locator(".filter button");
-    const total = await page.locator(".article-list article").count();
+    const filters = page.locator(".shelves__filter").first().locator("button");
+    const total = await page.locator(".shelf-card").count();
     await filters.nth(1).click();
     await expect(filters.nth(1)).toHaveAttribute("aria-pressed", "true");
-    assert.ok(await page.locator(".article-list article").count() < total);
+    assert.ok(await page.locator(".shelf-card").count() < total);
     await filters.first().click();
-    await expect(page.locator(".article-list article")).toHaveCount(total);
+    await expect(page.locator(".shelf-card")).toHaveCount(total);
     await page.locator(".menu-toggle").click();
     await expect(page.locator(".menu-toggle")).toHaveAttribute("aria-expanded", "true");
     await page.keyboard.press("Escape");

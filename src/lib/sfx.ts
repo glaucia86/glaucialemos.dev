@@ -1,10 +1,11 @@
 // 8-bit effects synthesized with Web Audio: no files, off by default, opt-in only.
 export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" | "error" | "success" | "levitate" | "deflect" | "rumble" | "splash" | "wind" | "ice" | "holo" | "r2" | "jawa" | "pod" | "cantina" | "sunset" | "zap" | "twinkle" | "lens" | "woof" | "beacon" | "ignite" | "launch" | "hangar" | "switch" | "hush" | "catch" | "wish" | "warp" | "pawstep" | "capsule" | "aurora" | "gust" | "scan" | "dust" | "sprout" | "bug"
   | "type" | "return" | "disk-in" | "disk-out" | "crt-on" | "dig" | "thread" | "letter" | "snow" | "gust-dust" | "scan-sweep" | "static" | "build" | "brush"
-  | "hover-observatory" | "click-observatory" | "hover-niveora" | "click-niveora" | "hover-mars" | "click-mars";
+  | "chime" | "page" | "prism" | "scanner" | "echo" | "link" | "dusk" | "refract" | "facet"
+  | "hover-observatory" | "click-observatory" | "hover-niveora" | "click-niveora" | "hover-mars" | "click-mars" | "hover-lumina" | "click-lumina";
 // "noise" is filtered white noise: `from`/`to` sweep the band-pass centre instead of a pitch.
 type Tone = { wave: OscillatorType | "noise"; from: number; to: number; duration: number; gain: number; delay?: number };
-export type SoundWorld = "observatory" | "niveora" | "mars";
+export type SoundWorld = "observatory" | "niveora" | "mars" | "lumina";
 
 export const SOUND_KEY = "sfx-enabled";
 export const SOUND_EVENT = "sfx-change";
@@ -70,6 +71,16 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   static: [{ wave: "noise", from: 6000, to: 2000, duration: .3, gain: .03 }],
   build: [{ wave: "square", from: 660, to: 520, duration: .04, gain: .018 }, { wave: "noise", from: 2500, to: 2500, duration: .03, gain: .018 }],
   brush: [{ wave: "noise", from: 1800, to: 1200, duration: .09, gain: .025 }],
+  // Lúmina: a crystal humming, a page turning, light splitting in a prism, the scanner, an echo, a dusk chord, the tunnel.
+  chime: [{ wave: "sine", from: 1568, to: 1568, duration: .3, gain: .024 }, { wave: "sine", from: 1976, to: 1976, duration: .3, gain: .02, delay: .1 }, { wave: "sine", from: 2349, to: 2349, duration: .35, gain: .016, delay: .2 }],
+  page: [{ wave: "noise", from: 3500, to: 1200, duration: .12, gain: .03 }, { wave: "noise", from: 2800, to: 900, duration: .1, gain: .02, delay: .1 }],
+  prism: [{ wave: "triangle", from: 784, to: 784, duration: .08, gain: .024 }, { wave: "triangle", from: 988, to: 988, duration: .08, gain: .024, delay: .07 }, { wave: "triangle", from: 1175, to: 1175, duration: .08, gain: .024, delay: .14 }, { wave: "triangle", from: 1568, to: 1568, duration: .22, gain: .022, delay: .21 }, { wave: "sine", from: 1576, to: 1576, duration: .25, gain: .01, delay: .21 }],
+  scanner: [{ wave: "sine", from: 1200, to: 1250, duration: .05, gain: .02 }, { wave: "sine", from: 1600, to: 1650, duration: .05, gain: .02, delay: .09 }, { wave: "sine", from: 2000, to: 2100, duration: .08, gain: .02, delay: .18 }],
+  echo: [{ wave: "triangle", from: 1319, to: 1319, duration: .1, gain: .03 }, { wave: "triangle", from: 1319, to: 1319, duration: .1, gain: .015, delay: .16 }, { wave: "triangle", from: 1319, to: 1319, duration: .12, gain: .007, delay: .32 }],
+  link: [{ wave: "triangle", from: 1760, to: 1760, duration: .06, gain: .022 }, { wave: "sine", from: 3520, to: 3520, duration: .04, gain: .006, delay: .02 }],
+  dusk: [{ wave: "sine", from: 659, to: 659, duration: .4, gain: .022 }, { wave: "sine", from: 523, to: 523, duration: .4, gain: .02, delay: .1 }, { wave: "sine", from: 392, to: 392, duration: .38, gain: .018, delay: .2 }],
+  refract: [{ wave: "sine", from: 600, to: 2400, duration: .45, gain: .018 }, { wave: "sine", from: 606, to: 2424, duration: .45, gain: .012, delay: .03 }],
+  facet: [{ wave: "noise", from: 7000, to: 4000, duration: .2, gain: .02 }, { wave: "triangle", from: 2093, to: 2093, duration: .25, gain: .016, delay: .05 }, { wave: "triangle", from: 3136, to: 3136, duration: .25, gain: .01, delay: .12 }],
   // Hover and click, one voice per world (FxLayer reads data-sound-world on <main>).
   "hover-observatory": [{ wave: "triangle", from: 2093, to: 2093, duration: .06, gain: .018 }],
   "click-observatory": [{ wave: "triangle", from: 1319, to: 1319, duration: .05, gain: .025 }, { wave: "triangle", from: 1760, to: 1760, duration: .07, gain: .02, delay: .05 }],
@@ -77,12 +88,14 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   "click-niveora": [{ wave: "noise", from: 4000, to: 2500, duration: .04, gain: .03 }, { wave: "square", from: 1800, to: 1200, duration: .03, gain: .012 }],
   "hover-mars": [{ wave: "square", from: 1200, to: 1000, duration: .025, gain: .014 }, { wave: "noise", from: 3000, to: 3000, duration: .02, gain: .01 }],
   "click-mars": [{ wave: "noise", from: 1500, to: 900, duration: .04, gain: .035 }, { wave: "square", from: 300, to: 200, duration: .05, gain: .02 }],
+  "hover-lumina": [{ wave: "sine", from: 3136, to: 3322, duration: .05, gain: .016 }, { wave: "triangle", from: 4699, to: 4699, duration: .03, gain: .007, delay: .02 }],
+  "click-lumina": [{ wave: "triangle", from: 2637, to: 2637, duration: .05, gain: .022 }, { wave: "noise", from: 6000, to: 4000, duration: .03, gain: .015 }],
 };
 
 // Minimum gap between two plays of the same sound, so fast typing or wiping never piles up (milliseconds).
 export const MIN_GAP: Partial<Record<SoundKind, number>> = {
   type: 28, build: 40, brush: 70, snow: 400, "gust-dust": 1500, bug: 300, pawstep: 120,
-  "hover-observatory": 40, "hover-niveora": 40, "hover-mars": 40, blip: 40,
+  "hover-observatory": 40, "hover-niveora": 40, "hover-mars": 40, "hover-lumina": 40, page: 90, link: 60, blip: 40,
 };
 const lastPlayed = new Map<SoundKind, number>();
 export function allowed(kind: SoundKind, now: number, played = lastPlayed) {
@@ -95,7 +108,7 @@ export function allowed(kind: SoundKind, now: number, played = lastPlayed) {
 
 // Hover/click voice for the current world; pages without a world keep the original blip and key.
 export function uiSound(world: string | undefined, action: "hover" | "click"): SoundKind {
-  if (world === "observatory" || world === "niveora" || world === "mars") return `${action}-${world}`;
+  if (world === "observatory" || world === "niveora" || world === "mars" || world === "lumina") return `${action}-${world}`;
   return action === "hover" ? "blip" : "key";
 }
 
