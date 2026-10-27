@@ -175,6 +175,40 @@ try{
       assert.deepEqual(contact.posts,[]);assert.deepEqual(contact.providers,[]);
     }finally{await context.close();}
   });
+  for(const viewport of [{width:390,height:844},{width:1440,height:900}])await check(`cinema do contato: chegada, pausa e sucesso em ${viewport.width}px (mock)`,async()=>{
+    const {context,page,errors,contact}=await open({viewport,reducedMotion:'no-preference'});try{
+      await settleIntro(page);
+      const cinema=page.locator('.contact-cinema'),panel=page.locator('#contato');
+      await expect(cinema).toHaveAttribute('data-paused','true');
+      await panel.scrollIntoViewIfNeeded();
+      await expect(cinema).toHaveAttribute('data-cinema-entered','true');
+      await expect(cinema).toHaveAttribute('data-paused','false');
+      await expect(cinema).toHaveAttribute('data-cinema','ready');
+      await expect(cinema.locator('.contact-cinema__invitation [aria-hidden]')).toHaveText('Um canal aberto. Sua mensagem é a próxima semente.');
+      await page.locator('#services-title').scrollIntoViewIfNeeded();
+      await expect(cinema).toHaveAttribute('data-paused','true');
+      await panel.scrollIntoViewIfNeeded();await expect(cinema).toHaveAttribute('data-cinema','ready');
+      const form=panel.locator('form');
+      if(await form.locator('[name=name]').isEnabled()){
+        await form.locator('[name=name]').fill('Teste local');await form.locator('[name=company]').fill('Empresa teste');
+        await form.locator('[name=service]').selectOption('consultoria');await form.locator('[name=message]').fill('Teste interceptado');
+        await form.locator('[name=linkedin]').fill('https://linkedin.com/in/teste-local');await form.locator('[name=consent]').check();
+        await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
+        await form.locator('[type=submit]').click();
+        await expect(form.getByRole('status')).toHaveText('Mensagem enviada. Obrigada!');
+        await expect(cinema).toHaveAttribute('data-cinema','celebrating');
+        await expect(cinema).toHaveAttribute('data-cinema','success');
+        await expect(cinema.locator('.contact-cinema__sprout')).toHaveCSS('opacity','0.85');
+        assert.equal(contact.posts.length,1);
+        // A preference change after success must preserve the final state, never replay it.
+        await page.emulateMedia({reducedMotion:'reduce'});await expect(cinema).toHaveAttribute('data-paused','true');
+        await page.emulateMedia({reducedMotion:'no-preference'});await expect(cinema).toHaveAttribute('data-paused','false');
+        await expect(cinema).toHaveAttribute('data-cinema','success');
+      }else console.log('SKIP animated submission: contact env vars missing; arrival covered');
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
+      assert.deepEqual(contact.providers,[]);assert.deepEqual(errors,[]);
+    }finally{await context.close();}
+  });
   await check('formulário: validação, foco, consentimento e estados da action (mock)',async()=>{
     const {context,page,posts,contact}=await open();try{
       const form=page.locator('#contato form'),name=form.locator('[name=name]'),company=form.locator('[name=company]'),service=form.locator('[name=service]'),linkedin=form.locator('[name=linkedin]'),message=form.locator('[name=message]'),consent=form.locator('[name=consent]'),submit=form.locator('[type=submit]');
@@ -185,7 +219,11 @@ try{
       await linkedin.fill('https://linkedin.com/in/teste-local');await consent.uncheck();await submit.click();await expect(consent).toBeFocused();assert.deepEqual(posts,[]);
       await consent.check();await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
       await submit.click();await expect(form.getByRole('status').filter({hasText:'Mensagem enviada.'})).toHaveText('Mensagem enviada. Obrigada!');assert.equal(posts.length,1);await expect(name).toHaveValue('');
+      await expect(page.locator('.contact-cinema')).toHaveAttribute('data-cinema','success');
+      await expect(page.locator('.contact-cinema')).toHaveAttribute('data-paused','true');
+      await expect(page.locator('.contact-cinema__sprout')).toHaveCSS('animation-name','none');
       await fill();contact.result={status:'error'};await submit.click();await expect(form.getByRole('alert')).toHaveText('Não foi possível enviar. Tente novamente.');await expect(company).toHaveValue('Empresa teste');
+      await expect(page.locator('.contact-cinema')).not.toHaveAttribute('data-cinema-success');
       contact.result={status:'captcha'};await submit.click();await expect(form.getByRole('alert')).toContainText('verificação de segurança');
       contact.result={status:'invalid',errors:{name:['Informe seu nome (até 120 caracteres).']},values:{name:'Teste local',company:'Empresa teste',service:'consultoria',message:'Teste interceptado',linkedin:'https://linkedin.com/in/teste-local',consent:true}};
       await submit.click();await expect(name).toBeFocused();await expect(name).toHaveAttribute('aria-invalid','true');
@@ -217,6 +255,9 @@ try{
       await expect(page.locator('.aurelia-prince [data-actor-pose="paw"]')).toHaveCSS('opacity','0');
       await expect(page.locator('#services-title')).toBeVisible();await expect(page.locator('.aurelia-cards article')).toHaveCount(services.length);
       await page.locator('.seed-vault summary').click();await expect(page.locator('.seed-vault__body')).toBeVisible();
+      await expect(page.locator('.contact-cinema')).toHaveAttribute('data-cinema','static');
+      const invitation=page.locator('.contact-cinema__invitation [aria-hidden]');
+      await invitation.scrollIntoViewIfNeeded();await expect(invitation).toBeVisible();await expect(invitation).not.toBeEmpty();
       await page.locator('.aurelia-copy .actions a[href="#contato"]').click();await expect(page).toHaveURL(/#contato$/);
       await expect(page.locator('#contato')).toHaveCount(1);await expect(page.locator('#contato h2')).toBeVisible();
       await expect(page.locator('#contact-service')).toHaveValue(services[0].id);

@@ -3,6 +3,11 @@ export const PIXEL = 2;
 export const MAX_PARTICLES = 160;
 export type UV = { u: number; v: number };
 type Particle = UV & { age: number; life: number; dx: number; dy: number; petal: boolean };
+function gardenPixel(ctx: CanvasRenderingContext2D, x: number, y: number, petal: boolean, alpha: number, phase: number) {
+  ctx.globalAlpha = alpha; ctx.fillStyle = petal ? '#ffa69e' : '#87e4c1';
+  ctx.fillRect(x, y, petal ? 3 : 1, petal ? 2 : 1);
+  if (petal) { ctx.fillStyle = '#f9d3ba'; ctx.fillRect(x + (Math.sin(phase) > 0 ? 2 : -1), y - 1, 2, 1); }
+}
 export function createGarden({ back, front }: { back: HTMLCanvasElement; front: HTMLCanvasElement }) {
   const bg = back.getContext('2d'), fg = front.getContext('2d');
   let width = 1, height = 1, time = 0, previous = 0, raf = 0, running = false, destroyed = false;
@@ -17,9 +22,7 @@ export function createGarden({ back, front }: { back: HTMLCanvasElement; front: 
   };
   const pixel = (ctx: CanvasRenderingContext2D, u: number, v: number, petal: boolean, alpha: number, phase: number) => {
     const x = Math.round(u * width), y = Math.round(v * height);
-    ctx.globalAlpha = alpha; ctx.fillStyle = petal ? '#ffa69e' : '#87e4c1';
-    ctx.fillRect(x, y, petal ? 3 : 1, petal ? 2 : 1);
-    if (petal) { ctx.fillStyle = '#f9d3ba'; ctx.fillRect(x + (Math.sin(phase) > 0 ? 2 : -1), y - 1, 2, 1); }
+    gardenPixel(ctx, x, y, petal, alpha, phase);
   };
   const draw = (dt: number) => {
     time += dt;
@@ -63,5 +66,46 @@ export function createGarden({ back, front }: { back: HTMLCanvasElement; front: 
     stop,
     load: () => particles.length,
     destroy() { destroyed=true; stop(); observer.disconnect(); },
+  };
+}
+
+/** The garden's same pixels converge at the form edges. No independent animation loop. */
+export function createContactGarden(canvas: HTMLCanvasElement) {
+  const ctx = canvas.getContext('2d');
+  let width = 1, height = 1, destroyed = false;
+  const resize = () => {
+    if (destroyed) return;
+    // Bounded backing store even on tall mobile forms / high-DPR screens.
+    width = canvas.width = Math.max(1, Math.min(720, Math.round(canvas.clientWidth / PIXEL)));
+    height = canvas.height = Math.max(1, Math.min(900, Math.round(canvas.clientHeight / PIXEL)));
+    if (ctx) ctx.imageSmoothingEnabled = false;
+  };
+  resize();
+  const observer = new ResizeObserver(resize); observer.observe(canvas);
+  const clear = () => ctx?.clearRect(0, 0, width, height);
+  return {
+    clear,
+    draw(phase: 'arrival' | 'success', progress: number) {
+      if (destroyed || !ctx) return;
+      clear();
+      const p = Math.max(0, Math.min(1, Number.isFinite(progress) ? progress : 0));
+      const eased = 1 - (1 - p) ** 3;
+      const count = width < 300 ? 32 : 56;
+      for (let i = 0; i < count; i++) {
+        const side = i % 2 === 0 ? 1 : -1;
+        const seed = (i * .61803398875) % 1;
+        // Stay in the gutters: never obscure field content, errors or the success copy.
+        const u = phase === 'arrival'
+          ? .5 + side * (.5 - eased * (.018 + seed * .045))
+          : .5 + side * (.455 + Math.sin(p * 4 + i) * .025);
+        const v = phase === 'arrival'
+          ? seed * (1 - eased * .3) + eased * .15
+          : .98 - p * (.35 + seed * .55);
+        const alpha = Math.sin(p * Math.PI) * (phase === 'success' ? .72 : .5);
+        gardenPixel(ctx, Math.round(u * width), Math.round(v * height), i % 3 === 0, alpha, p * 8 + i);
+      }
+      ctx.globalAlpha = 1;
+    },
+    destroy() { destroyed = true; observer.disconnect(); clear(); },
   };
 }

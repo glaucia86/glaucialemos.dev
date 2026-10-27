@@ -67,7 +67,7 @@ function ContactFields({ copy, lang, enabled, siteKey, subject }: {
   const error = (field: ContactField) => errors[field]?.length ? <span className="contact-error" id={`contact-${field}-error`}>{errors[field]![0]}</span> : null;
   const update = (field: Exclude<ContactField, 'consent'>, value: string) => setValues(previous => ({ ...previous, [field]: value }));
 
-  return <div id="contato" className="contact-panel" data-contact-enabled={!unavailable}>
+  return <div id="contato" className="contact-panel" data-contact-enabled={!unavailable} data-contact-status={pending ? 'pending' : state?.status ?? 'idle'}>
     <h2>{copy.formTitle}</h2>
     {unavailable && <p className="form-notice" role="status">{copy.missing}</p>}
     <form ref={form} action={action} onSubmit={validate} noValidate aria-busy={pending}>

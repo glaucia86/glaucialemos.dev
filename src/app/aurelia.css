@@ -119,6 +119,33 @@
 .services-page .contact-panel { margin: 2rem 0 0; width: 100%; max-width: none; padding: clamp(1.25rem,4vw,3rem); border: 1px solid var(--aurelia-line); scroll-margin-top: 7rem; }
 .services-page .contact-panel[data-relay] { border-color: var(--scene-accent); box-shadow: 0 0 28px #87e4c122; }
 .services-page .contact-panel h2 { font-size: clamp(1.4rem,3vw,2rem); }
+/* Contact is always readable. Only decorative layers enter the finite cinema. */
+.contact-cinema { position: relative; max-width: 920px; margin: clamp(3rem,6vw,5rem) auto 0; }
+.contact-cinema__invitation { margin: 0 0 1.5rem; min-height: 3.2em; max-width: 36em; color: var(--aurelia-cream); font-size: clamp(1rem,2vw,1.25rem); font-weight: 400; line-height: 1.6; letter-spacing: .015em; }
+.contact-cinema__stage { position: relative; display: grid; isolation: isolate; }
+.services-page .contact-cinema .contact-panel { position: relative; z-index: 1; width: 100% !important; margin: 0 !important; padding-bottom: 5rem; background: linear-gradient(135deg,#183b3d40,transparent 45%),var(--surface-soft); }
+.contact-cinema__halo,.contact-cinema__air,.contact-cinema__flare,.contact-cinema__sprout { position: absolute; pointer-events: none; }
+.contact-cinema__halo { z-index: -1; inset: -2rem -1rem; opacity: .5; background: radial-gradient(ellipse at 50% 4%,#f9d3ba26,transparent 45%),radial-gradient(ellipse at 50% 70%,#87e4c118,transparent 70%); box-shadow: 0 0 60px #87e4c110; }
+.contact-cinema__halo::before { content: ''; position: absolute; inset: 1rem .4rem; border: 1px solid #d5fff01a; }
+.contact-cinema__air { z-index: 2; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+.contact-cinema__flare { z-index: 2; inset: 0; opacity: 0; background: radial-gradient(ellipse at 50% 90%,#fff4dd70,#bfe8de18 50%,transparent 75%); }
+.contact-cinema__sprout { z-index: 2; width: 48px; height: 48px; bottom: 1rem; right: 1.25rem; stroke: var(--scene-accent); stroke-width: 1.3; opacity: 0; transform-origin: 50% 90%; }
+.contact-cinema__sprout circle { fill: var(--scene-glow); stroke: none; }
+.contact-cinema[data-cinema-success] .contact-cinema__sprout { opacity: .85; }
+.contact-cinema .contact-panel[data-contact-status="ok"] form > [role="status"] { border-inline-start: 2px solid var(--scene-accent); padding: .8rem 1rem; color: var(--scene-accent); background: #87e4c10c; }
+.contact-cinema .button.primary::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg,transparent 25%,#fff4dd45 50%,transparent 75%); opacity: 0; }
+@media (prefers-reduced-motion:no-preference) {
+  html:not(.reduce-motion) .contact-cinema[data-cinema="arriving"] .contact-cinema__halo { animation: contact-converge 2.4s ease-out both; }
+  html:not(.reduce-motion) .contact-cinema[data-cinema="arriving"] .button.primary:not(:disabled)::before { animation: contact-sheen 2.4s ease-in-out both; }
+  html:not(.reduce-motion) .contact-cinema[data-cinema="celebrating"] .contact-cinema__flare { animation: contact-opal 2.6s ease-out both; }
+  html:not(.reduce-motion) .contact-cinema[data-cinema="celebrating"] .contact-cinema__sprout { animation: contact-sprout 2.6s ease-out both; }
+}
+.contact-cinema[data-paused="true"] :is(.contact-cinema__halo,.contact-cinema__flare,.contact-cinema__sprout),
+.contact-cinema[data-paused="true"] .button.primary::before { animation-play-state: paused !important; }
+@keyframes contact-converge { 0% { opacity: 0; transform: scale(1.06); } 65% { opacity: .95; } 100% { opacity: .5; transform: scale(1); } }
+@keyframes contact-sheen { 0%,15% { opacity: 0; transform: translateX(-100%); } 45% { opacity: .6; } 100% { opacity: 0; transform: translateX(100%); } }
+@keyframes contact-opal { 0% { opacity: 0; } 14% { opacity: .38; } 48%,100% { opacity: 0; } }
+@keyframes contact-sprout { 0%,32% { opacity: 0; transform: translateY(6px) scale(.75); } 85%,100% { opacity: .85; transform: translateY(0) scale(1); } }
 .services-page .epilogue-signal { margin-top: 3rem; }
 @media (prefers-reduced-motion:no-preference) {
   html:not(.reduce-motion) .aurelia-hero[data-motion="true"] .aurelia-crew[data-pose="idle"] > :is([data-actor-pose="idle"],.aurelia-blink) { animation: aurelia-breathe 4.8s ease-in-out infinite; }

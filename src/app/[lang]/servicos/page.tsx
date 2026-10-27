@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ContactForm } from '@/components/ContactForm';
+import { ContactCinema } from '@/components/services/ContactCinema';
 import { contactConfig } from '@/lib/contact-config';
 import { EpilogueSignal } from '@/components/epilogue/EpilogueSignal';
 import { ReadingProgress } from '@/components/ReadingProgress';
@@ -79,7 +80,9 @@ export default async function Services({params,searchParams}:Props){
       <GreenhouseDusk copy={a.dusk}/>
       <CollaborationBeacon label={a.contact.relay}/>
       <p id="aurelia-channel-status" className="aurelia-channel-status" role="status"/>
-      <ContactForm copy={d.services} lang={lang} subject={subject} enabled={contact.enabled} siteKey={contact.enabled ? contact.siteKey : undefined}/>
+      <ContactCinema key={subject} copy={a.contact.cinema}>
+        <ContactForm copy={d.services} lang={lang} subject={subject} enabled={contact.enabled} siteKey={contact.enabled ? contact.siteKey : undefined}/>
+      </ContactCinema>
       <EpilogueSignal lang={lang} copy={beyondOrbit[lang]}/>
     </div></section>
     <AureliaEggs/><HomeChoreography/>
