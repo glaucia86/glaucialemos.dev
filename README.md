@@ -4,7 +4,7 @@
 
 <br />
 
-# glaucialemos.dev
+# [glaucialemos.dev](https://glaucialemos.dev/)
 
 ### *Engineering, AI and curiosity, explored through an original universe in pixel art.*
 
