@@ -6,7 +6,7 @@
 
 ### Glaucia Lemos's portfolio. A universe you can explore.
 
-Engineering, leadership and AI, brought to life through original pixel art.
+# [glaucialemos.dev](https://glaucialemos.dev/)
 
 [**Enter the galaxy →**](https://glaucialemos.dev/en) · [Explore the worlds](#worlds) · [Under the hood](#architecture) · [Run locally](#getting-started)
 
