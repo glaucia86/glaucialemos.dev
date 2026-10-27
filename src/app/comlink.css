@@ -26,16 +26,26 @@
 .comlink-fresh { position: fixed; z-index: 55; right: max(1rem, env(safe-area-inset-right)); top: calc(var(--header-height) + .75rem); margin: 0; padding: .45rem .7rem; opacity: 0; translate: 0 6px; pointer-events: none; background: var(--color-accent); color: var(--text-on-accent); font: 400 .58rem var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; transition: opacity .2s, translate .2s; }
 .comlink-fresh[data-show] { opacity: 1; translate: 0 0; }
 
-.comlink { --focus: var(--focus-inverse); width: min(460px, calc(100% - 2rem)); max-height: min(720px, calc(100dvh - 6rem)); margin: 5rem 1rem auto auto; padding: 0; border: 0; background: transparent; color: var(--text-inverse); overflow: visible; }
+.comlink { --focus: var(--focus-inverse); --comlink-height: min(720px, calc(100dvh - 6rem - env(safe-area-inset-top) - env(safe-area-inset-bottom))); width: min(460px, calc(100% - 2rem)); max-height: var(--comlink-height); margin: calc(5rem + env(safe-area-inset-top)) 1rem auto auto; padding: 0; border: 0; background: transparent; color: var(--text-inverse); overflow: visible; }
 .comlink::backdrop { background: color-mix(in srgb, var(--color-space-0) 70%, transparent); backdrop-filter: blur(2px); }
 .comlink[open] .comlink__panel { animation: comlink-open .28s steps(4); }
 @keyframes comlink-open { from { opacity: 0; translate: 0 18px; } }
 .comlink__panel {
   --frame: color-mix(in srgb, var(--energy-green) 50%, var(--color-space-line));
-  display: flex; flex-direction: column; gap: .9rem; max-height: inherit; padding: 1.25rem; overflow: auto; margin: 3px;
+  display: flex; flex-direction: column; gap: .9rem; max-height: calc(var(--comlink-height) - 6px); min-height: 0; padding: 1.25rem; overflow: hidden; margin: 3px;
   background: linear-gradient(180deg, color-mix(in srgb, var(--color-space-0) 85%, #06140b), var(--color-space-0));
   box-shadow: 0 -3px 0 0 var(--frame), 0 3px 0 0 var(--frame), -3px 0 0 0 var(--frame), 3px 0 0 0 var(--frame), 0 30px 80px color-mix(in srgb, var(--color-space-0) 80%, transparent);
 }
+.comlink__panel > :not(.comlink__scroll) { flex-shrink: 0; }
+.comlink__scroll {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin; scrollbar-color: var(--energy-green) var(--hud-line);
+}
+.comlink__scroll:focus-visible { outline: 2px solid var(--energy-green); outline-offset: 2px; }
+.comlink__scroll::-webkit-scrollbar { width: 6px; }
+.comlink__scroll::-webkit-scrollbar-track { background: var(--hud-line); }
+.comlink__scroll::-webkit-scrollbar-thumb { background: var(--energy-green); }
+.comlink__scroll > .comlink__reset { margin: 0 0 .9rem; }
 .comlink__head { position: relative; padding-right: 3rem; }
 .comlink__channel { display: flex; align-items: center; gap: .55rem; margin: 0 0 .35rem; color: var(--energy-green); font: 400 .58rem var(--font-pixel); letter-spacing: .14em; }
 .comlink__rec { width: 7px; height: 7px; background: var(--energy-red); animation: hud-blink 1.2s steps(1) infinite; }
@@ -65,8 +75,8 @@
 .comlink__text small { color: var(--text-muted); font-size: .8rem; line-height: 1.45; }
 
 @media (max-width: 640px) {
-  .comlink { width: 100%; max-width: none; max-height: 85dvh; margin: auto 0 0; }
-  .comlink__panel { margin: 0; padding: 1.25rem 1rem calc(1rem + env(safe-area-inset-bottom)); box-shadow: 0 -3px 0 0 var(--frame); }
+  .comlink { --comlink-height: min(85dvh, calc(100dvh - env(safe-area-inset-top) - 3px)); width: 100%; max-width: none; margin: auto 0 0; }
+  .comlink__panel { max-height: var(--comlink-height); margin: 0; padding: 1.25rem max(1rem, env(safe-area-inset-right)) calc(1rem + env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); box-shadow: 0 -3px 0 0 var(--frame); }
   .comlink-toggle__count { display: none; }
 }
 html.reduce-motion :is(.comlink-toggle, .comlink-toggle__tip, .comlink[open] .comlink__panel) { animation: none !important; }

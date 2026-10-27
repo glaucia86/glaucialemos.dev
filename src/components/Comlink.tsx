@@ -78,7 +78,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
 
   useEffect(() => { if (dialog.current?.open) dialog.current.close(); }, [pathname]);
 
-  function open() { setFeedback(""); setConfirming(false); dialog.current?.showModal(); play("blip"); }
+  function open() { setFeedback(""); setConfirming(false); dialog.current?.showModal(); input.current?.focus({ preventScroll: true }); play("blip"); }
   const wipe = () => {
     if (!confirming) { setConfirming(true); play("error"); return; }
     forget(); setConfirming(false); setFeedback(copy.resetDone); play("push");
@@ -124,11 +124,6 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <span>{copy.counter}: <b>{count}/{total}</b>{count === total && <em> · {copy.master}</em>}</span>
           <span className="comlink__bar" aria-hidden="true"><i style={{ transform: `scaleX(${count / total})` }} /></span>
         </p>
-        {remainingDiscoveries("curious-letter", found) === 0 && <button type="button" className="comlink__envelope" onClick={() => run("curious-letter")}><span aria-hidden="true">✉</span> {copy.letter.open}</button>}
-        {found.includes("epilogue-signal") && <Link className="comlink__envelope" href={`/${pathname.split("/")[1]}/alem-da-ultima-orbita`} onClick={() => dialog.current?.close()}>{copy.epilogue.revisit}</Link>}
-        {count > 0 && <button type="button" className="comlink__reset" data-confirming={confirming || undefined} onClick={wipe}>
-          <span aria-hidden="true">{confirming ? "!" : "⟲"}</span>{confirming ? copy.resetConfirm.replace("{n}", String(count)) : copy.reset}
-        </button>}
         <form className="comlink__terminal" onSubmit={submit}>
           <label className="sr-only" htmlFor="comlink-input">{copy.placeholder}</label>
           <span aria-hidden="true">&gt;</span>
@@ -136,14 +131,21 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <button type="submit">{copy.send}</button>
         </form>
         <p className="comlink__feedback" role="status" aria-live="polite">{feedback}</p>
-        <ul className="comlink__list">{list.map(({ id }) => {
-          const known = found.includes(id);
-          return <li key={id} data-found={known || undefined}>
-            <span className="comlink__icon" aria-hidden="true">{known ? "✦" : "?"}</span>
-            <span className="comlink__text"><b>{known ? copy.eggs[id].name : copy.hidden}</b><small>{copy.eggs[id].hint}</small></span>
-            {known && <button type="button" onClick={() => run(id)}>{copy.play}<span className="sr-only">: {copy.eggs[id].name}</span></button>}
-          </li>;
-        })}</ul>
+        <div className="comlink__scroll" tabIndex={0} role="region" aria-labelledby="comlink-title">
+          {remainingDiscoveries("curious-letter", found) === 0 && <button type="button" className="comlink__envelope" onClick={() => run("curious-letter")}><span aria-hidden="true">✉</span> {copy.letter.open}</button>}
+          {found.includes("epilogue-signal") && <Link className="comlink__envelope" href={`/${pathname.split("/")[1]}/alem-da-ultima-orbita`} onClick={() => dialog.current?.close()}>{copy.epilogue.revisit}</Link>}
+          {count > 0 && <button type="button" className="comlink__reset" data-confirming={confirming || undefined} onClick={wipe}>
+            <span aria-hidden="true">{confirming ? "!" : "⟲"}</span>{confirming ? copy.resetConfirm.replace("{n}", String(count)) : copy.reset}
+          </button>}
+          <ul className="comlink__list">{list.map(({ id }) => {
+            const known = found.includes(id);
+            return <li key={id} data-found={known || undefined}>
+              <span className="comlink__icon" aria-hidden="true">{known ? "✦" : "?"}</span>
+              <span className="comlink__text"><b>{known ? copy.eggs[id].name : copy.hidden}</b><small>{copy.eggs[id].hint}</small></span>
+              {known && <button type="button" onClick={() => run(id)}>{copy.play}<span className="sr-only">: {copy.eggs[id].name}</span></button>}
+            </li>;
+          })}</ul>
+        </div>
       </div>
     </dialog>
     <dialog ref={letter} className="curious-letter" data-lenis-prevent="" aria-labelledby="curious-letter-title" onClose={() => { if (letterOpener.current?.isConnected) letterOpener.current.focus({ preventScroll: true }); }}>
