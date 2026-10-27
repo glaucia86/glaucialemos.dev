@@ -283,7 +283,7 @@ Every variable is **optional**. The site runs without any of them.
 | Variable | Where | What it does |
 | --- | --- | --- |
 | `WEB3FORMS_ACCESS_KEY` | server only | Web3Forms access key used by the contact Server Action. Never sent to the browser. |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | browser (build time) | Public Turnstile widget key. The official script loads only when the contact form enters the viewport. |
+| `TURNSTILE_SITE_KEY` | server (rendered into the widget) | Turnstile widget key, public by design; read at request time, no `NEXT_PUBLIC_` needed. The official script loads only when the contact form enters the viewport. |
 | `TURNSTILE_SECRET_KEY` | server only | Secret used to verify the token through Cloudflare Siteverify before sending. |
 | `GITHUB_TOKEN` | server only | Raises the GitHub API rate limit used to rank repositories by stars. Without it, the site uses the public limit and falls back to `src/data/projetos.json`. |
 

@@ -44,7 +44,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
     const reset = () => { clearTimeout(replayTimer.current); letter.current?.close(); };
     let buffer = "";
     const typed = (event: KeyboardEvent) => {
-      if (event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
+      if (event.ctrlKey || event.altKey || event.metaKey || event.key?.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
       buffer = (buffer + normalizePhrase(event.key)).slice(-32);
       if (matchTail(buffer, ["curious-letter"])) { buffer = ""; openLetter(); }
     };

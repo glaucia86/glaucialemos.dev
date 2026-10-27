@@ -30,6 +30,16 @@ async function radio(page,phrase){
 }
 async function closeRadio(page){const close=page.locator('.comlink[open]');if(await close.count())await page.keyboard.press('Escape');}
 async function settleIntro(page){await page.keyboard.press('Escape');await page.waitForFunction(()=>document.documentElement.dataset.boot!=='pending');}
+// The form walks need → who → message; each "Continuar" validates only its own step.
+async function fillSteps(form,{service='consultoria',linkedin='https://www.linkedin.com/in/teste-local'}={}){
+  const next=form.locator('.contact-step__next:visible');
+  if(!(await form.locator('[data-step="0"]').isVisible()))await form.locator('.contact-step__back:visible').click();
+  if(!(await form.locator('[data-step="0"]').isVisible()))await form.locator('.contact-step__back:visible').click();
+  await form.locator(`[name=service][value="${service}"]`).check();await next.click();
+  await form.locator('[name=name]').fill('Teste local');await form.locator('[name=company]').fill('Empresa teste');await form.locator('[name=linkedin]').fill(linkedin);await next.click();
+  await form.locator('[name=message]').fill('Teste interceptado');await form.locator('[name=consent]').check();
+}
+async function closePortal(page){await page.keyboard.press('Escape');await expect(page.locator('.contact-portal')).not.toHaveAttribute('data-open','true');}
 try{
   await check('boot de Aurélia uma vez por sessão, Esc pula',async()=>{
     const {context,page,errors}=await open({reducedMotion:'no-preference'});
@@ -38,7 +48,7 @@ try{
   for(const lang of ['pt','en','es'])await check(`serviços reais, preço, CTAs e rádio em ${lang}`,async()=>{
     const {context,page,posts,errors}=await open({},lang);
     try{
-      await expect(page.locator('#services-title')).toHaveCount(1);await expect(page.locator('.chapter-tag')).toHaveCount(4);
+      await expect(page.locator('#services-title')).toHaveCount(1);await expect(page.locator('.chapter-tag')).toHaveCount(7);
       await expect(page.locator('main')).toHaveAttribute('data-sound-world','aurelia');
       await expect(page.locator('.aurelia-copy .actions a').first()).toHaveAttribute('href','#contato');
       await expect(page.locator('.aurelia-copy .actions a').last()).toHaveAttribute('href',`/${lang}/eventos`);
@@ -152,8 +162,11 @@ try{
   });
   for(const subject of ['workshop','mentoria','palestra','consultoria'])await check(`pré-preenchimento ${subject} preservado`,async()=>{
     const {context,page,posts}=await open({},'pt',`?assunto=${subject}#contato`);try{
-      await expect(page.locator('#contact-service')).toHaveValue(subject==='consultoria'?'consultoria':services.find(service=>service.id.startsWith(subject)).id);
+      // Arriving with #contato opens the portal; the subject still preselects the need.
+      await expect(page.locator('.contact-portal')).toHaveAttribute('data-open','true');await expect(page.locator('#contact-title')).toBeFocused();
+      await expect(page.locator('#contato [name=service]:checked')).toHaveValue(subject==='consultoria'?'consultoria':services.find(service=>service.id.startsWith(subject)).id);
       const text=page.locator('#contato textarea');await expect(text).toHaveValue(subject==='workshop'?'Gostaria de planejar um workshop para o meu time.':subject==='mentoria'?'Gostaria de conversar sobre mentoria.':subject==='consultoria'?'Gostaria de conversar sobre consultoria.':'Gostaria de convidar você para palestrar.');
+      await closePortal(page);await expect(page).not.toHaveURL(/#contato/);await expect(page).toHaveURL(new RegExp(`assunto=${subject}`));
       await page.locator('.aurelia-relay').click();await expect(page.locator('#contato h2')).toBeFocused();assert.deepEqual(posts,[]);
     }finally{await context.close();}
   });
@@ -162,14 +175,16 @@ try{
       const panel=page.locator('#contato'),disabled=await panel.getAttribute('data-contact-enabled')==='false';
       if(process.env.CONTACT_EXPECT)assert.equal(disabled,process.env.CONTACT_EXPECT==='disabled');
       const linkedin=panel.getByRole('link');await expect(linkedin).toHaveAttribute('href','https://www.linkedin.com/in/glaucialemos');await expect(linkedin).toHaveAttribute('target','_blank');await expect(linkedin).toHaveAttribute('rel','noopener');
-      await expect(panel.locator('select option')).toHaveCount(services.length+2);
+      await expect(panel.locator('[name=service][type=radio]')).toHaveCount(services.length+1);
       if(disabled){
         await expect(panel.locator('.form-notice')).toBeVisible();await expect(panel.getByRole('button',{name:/Enviar|Send/})).toBeDisabled();
         for(const name of ['name','company','service','message','linkedin','consent'])await expect(panel.locator(`[name="${name}"]`)).toBeDisabled();
         await panel.scrollIntoViewIfNeeded();assert.deepEqual(contact.challenges,[]);
       } else {
         assert.deepEqual(contact.challenges,[], 'Turnstile must wait for the form to enter the viewport');
-        await panel.scrollIntoViewIfNeeded();await expect.poll(()=>contact.challenges.length).toBe(1);
+        await panel.scrollIntoViewIfNeeded();await page.waitForTimeout(300);
+        assert.deepEqual(contact.challenges,[], 'Turnstile waits for the last step');
+        await fillSteps(panel.locator('form'));await expect.poll(()=>contact.challenges.length).toBe(1);
         await expect(panel.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
       }
       assert.deepEqual(contact.posts,[]);assert.deepEqual(contact.providers,[]);
@@ -190,45 +205,140 @@ try{
       await panel.scrollIntoViewIfNeeded();await expect(cinema).toHaveAttribute('data-cinema','ready');
       const form=panel.locator('form');
       if(await form.locator('[name=name]').isEnabled()){
-        await form.locator('[name=name]').fill('Teste local');await form.locator('[name=company]').fill('Empresa teste');
-        await form.locator('[name=service]').selectOption('consultoria');await form.locator('[name=message]').fill('Teste interceptado');
-        await form.locator('[name=linkedin]').fill('https://linkedin.com/in/teste-local');await form.locator('[name=consent]').check();
+        await fillSteps(form,{linkedin:'https://linkedin.com/in/teste-local'});
         await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
+        // An inline submission lifts the form into the portal: the signal climbs from the garden to the stars.
         await form.locator('[type=submit]').click();
+        await expect(page.locator('.contact-portal')).toHaveAttribute('data-open','true');
+        await expect(page.locator('.contact-launch')).toHaveAttribute('data-launch','delivered');
+        await expect(cinema).toHaveAttribute('data-prince','face-joy');
         await expect(form.getByRole('status')).toHaveText('Mensagem enviada. Obrigada!');
-        await expect(cinema).toHaveAttribute('data-cinema','celebrating');
         await expect(cinema).toHaveAttribute('data-cinema','success');
+        await expect(page.locator('.contact-launch')).not.toHaveAttribute('data-launch');
+        await expect(page.locator('#contact-title')).toBeFocused();
         await expect(cinema.locator('.contact-cinema__sprout')).toHaveCSS('opacity','0.85');
         assert.equal(contact.posts.length,1);
+        await page.screenshot({path:`${shots}/launch-ok-${viewport.width}.png`});
         // A preference change after success must preserve the final state, never replay it.
         await page.emulateMedia({reducedMotion:'reduce'});await expect(cinema).toHaveAttribute('data-paused','true');
         await page.emulateMedia({reducedMotion:'no-preference'});await expect(cinema).toHaveAttribute('data-paused','false');
         await expect(cinema).toHaveAttribute('data-cinema','success');
+        await expect(page.locator('.contact-portal')).toHaveAttribute('data-open','true');
+        // Failure: the signal falters and falls, the form comes back with its text and the alert.
+        contact.result={status:'error'};await fillSteps(form);await form.locator('[type=submit]').click();
+        await expect(page.locator('.contact-launch')).toHaveAttribute('data-launch','failed');
+        await expect(page.locator('.contact-launch')).not.toHaveAttribute('data-launch');
+        await expect(form.getByRole('alert')).toHaveText('Não foi possível enviar. Tente novamente.');
+        await expect(form.locator('[name=message]')).toHaveValue('Teste interceptado');await expect(form.locator('[type=submit]')).toBeFocused();
+        assert.equal(contact.posts.length,2);
+        await closePortal(page);
       }else console.log('SKIP animated submission: contact env vars missing; arrival covered');
       assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
       assert.deepEqual(contact.providers,[]);assert.deepEqual(errors,[]);
     }finally{await context.close();}
   });
-  await check('formulário: validação, foco, consentimento e estados da action (mock)',async()=>{
+  await check('formulário em 3 etapas: validação por etapa, foco, consentimento e estados da action (mock)',async()=>{
     const {context,page,posts,contact}=await open();try{
-      const form=page.locator('#contato form'),name=form.locator('[name=name]'),company=form.locator('[name=company]'),service=form.locator('[name=service]'),linkedin=form.locator('[name=linkedin]'),message=form.locator('[name=message]'),consent=form.locator('[name=consent]'),submit=form.locator('[type=submit]');
+      const panel=page.locator('#contato'),form=panel.locator('form'),name=form.locator('[name=name]'),company=form.locator('[name=company]'),linkedin=form.locator('[name=linkedin]'),message=form.locator('[name=message]'),consent=form.locator('[name=consent]'),submit=form.locator('[type=submit]');
+      const next=form.locator('.contact-step__next:visible'),back=form.locator('.contact-step__back:visible'),cinema=page.locator('.contact-cinema');
       if(!(await name.isEnabled())){console.log('SKIP enabled submission states: run a build with all 3 contact env vars; disabled state covered above');return;}
-      await submit.click();await expect(name).toBeFocused();await expect(name).toHaveAttribute('aria-invalid','true');await expect(name).toHaveAttribute('aria-describedby','contact-name-error');assert.deepEqual(posts,[]);
-      const fill=async()=>{await name.fill('Teste local');await company.fill('Empresa teste');await service.selectOption('consultoria');await message.fill('Teste interceptado');await linkedin.fill('https://www.linkedin.com/in/teste-local');await consent.check();};
-      await fill();await linkedin.fill('https://example.com');await submit.click();await expect(linkedin).toBeFocused();assert.deepEqual(posts,[]);
-      await linkedin.fill('https://linkedin.com/in/teste-local');await consent.uncheck();await submit.click();await expect(consent).toBeFocused();assert.deepEqual(posts,[]);
+      await expect(panel).toHaveAttribute('data-contact-step','0');await expect(form.locator('.contact-step:visible')).toHaveCount(1);await expect(form.locator('.contact-seeds li')).toHaveCount(3);
+      await next.click();await expect(form.locator('#contact-service-error')).toBeVisible();await expect(form.locator('[name=service]').first()).toBeFocused();
+      await expect(cinema).toHaveAttribute('data-prince','face-curious');assert.deepEqual(posts,[]);
+      await form.locator('[name=service][value=consultoria]').check();await next.click();
+      await expect(panel).toHaveAttribute('data-contact-step','1');await expect(name).toBeFocused();await expect(form.locator('.contact-seeds li').first()).toHaveAttribute('data-state','bloom');
+      // Enter on an earlier step validates and moves forward; it never submits a half-filled form.
+      await name.press('Enter');await expect(name).toHaveAttribute('aria-invalid','true');await expect(name).toHaveAttribute('aria-describedby','contact-name-error');await expect(name).toBeFocused();assert.deepEqual(posts,[]);
+      await name.fill('Teste local');await company.fill('Empresa teste');await linkedin.fill('https://example.com');await next.click();await expect(linkedin).toBeFocused();await expect(linkedin).toHaveAttribute('aria-invalid','true');
+      await linkedin.fill('https://linkedin.com/in/teste-local');await linkedin.press('Enter');await expect(panel).toHaveAttribute('data-contact-step','2');await expect(message).toBeFocused();
+      // Turnstile only mounts on the last step.
+      await expect.poll(()=>contact.challenges.length).toBe(1);
+      await back.click();await expect(panel).toHaveAttribute('data-contact-step','1');await expect(name).toHaveValue('Teste local');await next.click();
+      await message.fill('Teste interceptado');await submit.click();await expect(consent).toBeFocused();await expect(consent).toHaveAttribute('aria-invalid','true');assert.deepEqual(posts,[]);
       await consent.check();await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
       await submit.click();await expect(form.getByRole('status').filter({hasText:'Mensagem enviada.'})).toHaveText('Mensagem enviada. Obrigada!');assert.equal(posts.length,1);await expect(name).toHaveValue('');
-      await expect(page.locator('.contact-cinema')).toHaveAttribute('data-cinema','success');
-      await expect(page.locator('.contact-cinema')).toHaveAttribute('data-paused','true');
+      await expect(panel).toHaveAttribute('data-contact-step','0');
+      await expect(cinema).toHaveAttribute('data-cinema','success');await expect(cinema).toHaveAttribute('data-paused','true');
       await expect(page.locator('.contact-cinema__sprout')).toHaveCSS('animation-name','none');
-      await fill();contact.result={status:'error'};await submit.click();await expect(form.getByRole('alert')).toHaveText('Não foi possível enviar. Tente novamente.');await expect(company).toHaveValue('Empresa teste');
-      await expect(page.locator('.contact-cinema')).not.toHaveAttribute('data-cinema-success');
+      // Reduced motion: an inline submission never opens the portal or the launch; only the accessible states change.
+      await expect(page.locator('.contact-portal')).not.toHaveAttribute('data-open','true');
+      await fillSteps(form);contact.result={status:'error'};await submit.click();await expect(form.getByRole('alert')).toHaveText('Não foi possível enviar. Tente novamente.');await expect(company).toHaveValue('Empresa teste');
+      await expect(cinema).not.toHaveAttribute('data-cinema-success');
       contact.result={status:'captcha'};await submit.click();await expect(form.getByRole('alert')).toContainText('verificação de segurança');
       contact.result={status:'invalid',errors:{name:['Informe seu nome (até 120 caracteres).']},values:{name:'Teste local',company:'Empresa teste',service:'consultoria',message:'Teste interceptado',linkedin:'https://linkedin.com/in/teste-local',consent:true}};
-      await submit.click();await expect(name).toBeFocused();await expect(name).toHaveAttribute('aria-invalid','true');
-      contact.result={status:'unavailable'};await submit.click();await expect(submit).toBeDisabled();await expect(page.locator('.form-notice')).toBeVisible();
+      // A server-side error on an earlier field brings its step back.
+      await submit.click();await expect(panel).toHaveAttribute('data-contact-step','1');await expect(name).toBeFocused();await expect(name).toHaveAttribute('aria-invalid','true');
+      await next.click();contact.result={status:'unavailable'};await submit.click();await expect(submit).toBeDisabled();await expect(page.locator('.form-notice')).toBeVisible();
       assert.deepEqual(contact.providers,[]);
+    }finally{await context.close();}
+  });
+  for(const viewport of [{width:390,height:844},{width:1440,height:900}])await check(`portal do contato: abre do CTA, prende o foco, Esc e fechar devolvem a página (${viewport.width}px)`,async()=>{
+    const {context,page,errors,posts}=await open({viewport,reducedMotion:'no-preference'});try{
+      await settleIntro(page);
+      const cta=page.locator('.aurelia-copy .actions a[href="#contato"]'),portal=page.locator('.contact-portal'),close=page.locator('.contact-portal__close');
+      await cta.click();
+      await expect(portal).toHaveAttribute('data-open','true');await expect(portal).toHaveAttribute('role','dialog');await expect(portal).toHaveAttribute('aria-modal','true');
+      await expect(page.locator('html')).toHaveAttribute('data-contact-portal','open');await expect(page.locator('#contact-title')).toBeFocused();
+      assert.equal(await portal.evaluate(element=>typeof element.showPopover!=='function'||element.matches(':popover-open')),true);
+      await page.waitForTimeout(1600);
+      const box=await portal.boundingBox();assert.ok(box.width>=viewport.width-1&&box.height>=viewport.height-1,'portal em tela cheia');
+      await expect(page.locator('.contact-crew [data-face="glaucia:face-smile"]')).toHaveCSS('opacity','1');
+      await page.screenshot({path:`${shots}/portal-${viewport.width}.png`});
+      await page.keyboard.press('Shift+Tab');await expect(close).toBeFocused();
+      await page.keyboard.press('Shift+Tab');await expect(page.locator('#contato > a.button.secondary')).toBeFocused();
+      await page.keyboard.press('Tab');await expect(close).toBeFocused();
+      await page.keyboard.press('Escape');await expect(portal).not.toHaveAttribute('data-open','true');await expect(portal).not.toHaveAttribute('role','dialog');
+      await expect(page.locator('html')).not.toHaveAttribute('data-contact-portal','open');await expect(cta).toBeFocused();await expect(page).not.toHaveURL(/#contato/);
+      await cta.click();await expect(portal).toHaveAttribute('data-open','true');await close.click();await expect(portal).not.toHaveAttribute('data-open','true');
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual(posts,[]);assert.deepEqual(errors,[]);
+    }finally{await context.close();}
+  });
+  for(const viewport of [{width:390,height:844},{width:1440,height:900}])await check(`história da rolagem: órbitas, provas, floração, etapas, último sinal e transmissão (${viewport.width}px)`,async()=>{
+    const {context,page,errors,posts}=await open({viewport,reducedMotion:'no-preference'});try{
+      await settleIntro(page);
+      const at=async(selector,fraction)=>{await page.evaluate(([selector,fraction])=>{const track=document.querySelector(selector);const box=track.getBoundingClientRect();scrollTo(0,scrollY+box.top+(box.height-innerHeight)*fraction);},[selector,fraction]);await page.waitForTimeout(900);};
+      const orbit=page.locator('.orbit3d');await expect(orbit).toHaveAttribute('data-live','true');
+      await at('.orbit3d__track',.5);await expect(page.locator('.orbit3d__pillars li[data-active="true"]')).toHaveCount(1);
+      await at('.orbit3d__track',.98);await expect(orbit).toHaveAttribute('data-aligned','true');
+      await page.screenshot({path:`${shots}/story-orbits-${viewport.width}.png`});
+      await page.locator('.proof-sky').scrollIntoViewIfNeeded();await page.waitForTimeout(900);
+      await expect.poll(()=>page.locator('.proof-star[data-lit="true"]').count()).toBeGreaterThan(0);
+      await page.screenshot({path:`${shots}/story-proof-${viewport.width}.png`});
+      const bloom=page.locator('.bloom');await expect(bloom).toHaveAttribute('data-live','true');
+      for(const [i,fraction] of [[0,.2],[1,.5],[2,.95]]){
+        await at('.bloom__track',fraction);
+        await expect(page.locator(`.bloom__panels li:nth-child(${i+1})`)).toHaveAttribute('data-active','true');
+        await expect(page.locator(`.bloom__panels li:nth-child(${i+1}) a`)).toBeVisible();
+      }
+      await page.screenshot({path:`${shots}/story-bloom-${viewport.width}.png`});
+      await page.locator('.work-steps').scrollIntoViewIfNeeded();await at('.work-steps',1);
+      await expect.poll(()=>page.locator('.work-steps__step[data-lit="true"]').count()).toBeGreaterThan(0);
+      const finale=page.locator('.beacon-finale');await expect(finale).toHaveAttribute('data-live','true');
+      await at('.beacon-finale__track',.55);await expect(page.locator('.beacon-finale__call')).toBeVisible();
+      await page.screenshot({path:`${shots}/story-beacon-${viewport.width}.png`});
+      await page.locator('.beacon-finale__call a').click();await expect(page.locator('.contact-portal')).toHaveAttribute('data-open','true');await closePortal(page);
+      await at('.beacon-finale__track',.99);await expect(page.locator('.beacon-finale__continued')).toBeVisible();await expect(page.locator('.beacon-finale__offmap')).toBeVisible();
+      await page.waitForTimeout(1800);await page.screenshot({path:`${shots}/story-continued-${viewport.width}.png`});
+      await page.locator('.beacon-finale__offmap').click();
+      const transmission=page.locator('#sinal');await expect(transmission).toBeInViewport();
+      await expect(transmission.locator('.transmission__locked')).toContainText('mais 3 mundos');await expect(transmission.locator('.transmission__worlds li')).toHaveCount(5);
+      await page.screenshot({path:`${shots}/story-transmission-${viewport.width}.png`});
+      assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));assert.deepEqual(posts,[]);assert.deepEqual(errors,[]);
+    }finally{await context.close();}
+  });
+  await check('história sem movimento: tudo legível em lista, sem palcos fixos',async()=>{
+    const {context,page,errors}=await open();try{
+      for(const selector of ['.orbit3d','.proof-sky','.bloom','.work-steps','.beacon-finale'])await expect(page.locator(selector)).not.toHaveAttribute('data-live','true');
+      await expect(page.locator('.bloom__panels li:visible')).toHaveCount(services.length);
+      await expect(page.locator('.beacon-finale__call a[href="#contato"]')).toBeVisible();
+      await expect(page.locator('.beacon-finale__continued')).toBeVisible();await expect(page.locator('#sinal')).toBeVisible();
+      assert.deepEqual(errors,[]);
+    }finally{await context.close();}
+  });
+  await check('portal abre ao chegar de outra página com #contato, depois da intro',async()=>{
+    const {context,page,errors}=await open({reducedMotion:'no-preference'},'en','#contato');try{
+      await settleIntro(page);await expect(page.locator('.contact-portal')).toHaveAttribute('data-open','true');await expect(page.locator('#contact-title')).toBeFocused();
+      await closePortal(page);await expect(page).not.toHaveURL(/#contato/);assert.deepEqual(errors,[]);
     }finally{await context.close();}
   });
   for(const viewport of [{width:390,height:844},{width:768,height:1024},{width:1280,height:720},{width:1440,height:900}])await check(`enquadramento ${viewport.width}×${viewport.height}`,async()=>{
@@ -260,7 +370,10 @@ try{
       await invitation.scrollIntoViewIfNeeded();await expect(invitation).toBeVisible();await expect(invitation).not.toBeEmpty();
       await page.locator('.aurelia-copy .actions a[href="#contato"]').click();await expect(page).toHaveURL(/#contato$/);
       await expect(page.locator('#contato')).toHaveCount(1);await expect(page.locator('#contato h2')).toBeVisible();
-      await expect(page.locator('#contact-service')).toHaveValue(services[0].id);
+      await expect(page.locator(`#contact-service-${services[0].id}`)).toBeChecked();
+      // Without JS: one complete form, every step visible, no portal and no step buttons.
+      await expect(page.locator('#contato fieldset:visible')).toHaveCount(3);await expect(page.locator('.contact-step__next')).toHaveCount(0);
+      await expect(page.locator('.contact-portal')).not.toHaveAttribute('data-open','true');
       await expect(page.locator('#contact-message')).toHaveValue('Gostaria de planejar um workshop para o meu time.');
       await expect(page.locator('#contato form')).toHaveAttribute('method',/post/i);
       await expect(page.locator('#contato form')).not.toHaveAttribute('action',/^javascript:/);

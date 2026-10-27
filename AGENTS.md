@@ -201,7 +201,42 @@
   `pollination` (conectar os cards em ordem). Todos no Comlink PT/EN/ES e `AureliaEggs`; campos editáveis/diálogos/IME
   não capturam frases. Em celular, os dois atores oferecem as ações dos props sem alvos pequenos sobrepostos.
   Atlas do epílogo agora usa a placa de Aurélia e seis luas; elegibilidade do sinal segue três dos quatro mundos anteriores.
+  Portal do contato: `contact-portal.ts` (controlador) + `portal-sky.ts` (pétalas e sinal em pixel). O próprio `.contact-portal` (que envolve o
+  palco e o `ContactForm`) sobe para a top layer via `popover="manual"` + `role="dialog"`/`aria-modal`: nada é clonado nem movido; o `.contact-cinema__dock`
+  guarda a altura. Abre por clique em `a[href]` para `#contato` na mesma rota (captura em `window`; com outro `?assunto=` deixa navegar e o form novo
+  abre ao montar) e ao chegar com `#contato` (depois do boot). Íris por `clip-path`, foco no `#contact-title`, Tab preso, Esc/botão fecham, devolvem o
+  foco e tiram o hash. `html[data-contact-portal]` trava a rolagem (Lenis parado) e devolve o cursor nativo. Enviar com movimento abre o portal e
+  lança o sinal (`.contact-launch[data-launch=charging|delivered|failed]`); movimento reduzido não abre nem lança. O `ContactForm` tem 3 etapas
+  (`contactSteps`/`validateContactStep` em `contact-schema.ts`; necessidade em rádios) só depois da hidratação e com envio ativo; SSR/sem JS/desativado = formulário
+  único. Turnstile só monta na 3ª etapa. Painel expõe `data-contact-step`/`data-contact-flaw`; `crewReaction` acende um retrato aprovado de cada
+  (`ContactCrew` em `AureliaScene.tsx`, `data-glaucia`/`data-prince` no `.contact-cinema`). Testes: `tests/contact-portal.test.ts`.
+  História da rolagem (7 capítulos, copy em `src/i18n/aurelia-story.ts`, CSS em `src/app/aurelia-story.css`): `OrbitRings` (planeta e 3 anéis
+  em CSS 3D; a rolagem inclina, gira e acende Engenharia/Liderança/IA até as marcas se alinharem, `RING_CUES`/`ALIGN_CUE`), `ProofConstellation`
+  (números reais de `proofStars()` em `aurelia-records.ts`: eventos, cidades, países presenciais, artigos, anos desde `careerStart`, estrelas do
+  GitHub; contagem pelo `data-count` do `HomeChoreography`, linhas por DrawSVG), `GardenBloom` + `bloom-engine.ts` (uma flor em pixel por serviço,
+  semente → caule → folhas → botão → pétalas; painel ativo, inativos `inert`), `WorkSteps` (Conversa → Proposta → Prática, texto a revisar pela
+  Glaucia), `BeaconFinale` + `finale-sky.ts` (noite, feixe do sinalizador, 7 estrelas formam a flor de Aurélia, CTA `#contato` abre o portal,
+  créditos, "Continua…" em poeira estelar via `createStardust`, estrela fora do mapa → `#sinal`) e `EpilogueTransmission` (sempre visível:
+  sinal fraco com 3 luzes e os 5 mundos, ou o `EpilogueSignal` quando desbloqueado; o `EpilogueSignal` saiu da seção de colaboração).
+  Palcos são `position: sticky` (não pins) e só ganham altura/animação com `data-live` (movimento ligado); sem JS/reduzido = conteúdo em lista.
+  Testes: `tests/aurelia-story.test.ts`.
   Testes: `tests/aurelia.test.ts` e `tests/aurelia.browser.mjs` (somente a usuária executa). Ver resultados exatos e pendências
   de validação visual na seção “Retomada — Serviços/Aurélia” do handoff. Sem commit/build/servidor/navegador.
+- 404 (Maré Rubra, Coordenadas Perdidas): `src/app/[lang]/not-found.tsx` e `src/app/not-found.tsx` renderizam `RedTide`
+  (`src/components/notfound/RedTide.tsx`, idioma por `useParams`, `forcedLang` na raiz), CSS `src/app/red-tide.css`, copy `src/i18n/red-tide.ts`.
+  Placa em vídeo: fonte `GE-PL-07-red-tide.mp4` (8 s, com áudio; Glaucia e Prince de costas já estão no vídeo, então não há sprites
+  por cima). Web em `public/galaxia/scenes/red-tide/`: `background.webm`/`.mp4` (loop de 7 s, mudo, último segundo dissolvido em
+  pixels no começo via ffmpeg `xfade=pixelize`) e `poster.webp` (movimento reduzido/sem JS). `plasma-engine.ts`: brasas, poeira de
+  plasma na `WINDOW` e faixas de falha de sinal, mais `drawWarp` (salto para casa). Segredos (catálogo +2): `signal-recovered`
+  (Glaucia/console: radar no console do vídeo e `nearestRoute` em `src/lib/red-tide-routes.ts`, só rotas reais, nunca o epílogo) e
+  `paw-rescue` (Prince: o `lost-signal-beacon` sai da nebulosa até ele por MotionPath e o `navigation-portal-restored` abre; clicar
+  faz o salto). Props/poses gerados por `node scripts/build-galaxia-assets.mjs red-tide` (`POSES["red-tide"]`, `layout.json`). Vídeo e
+  plasma pausam fora da tela/aba. Testes: `tests/red-tide.test.ts`.
+  Episódio narrado (desenho, 29 s, narração em PT): `RedTideEpisode.tsx` abre por clique num `<dialog>` com TV CRT, som, controles e
+  legendas `episode.{pt,en,es}.vtt` (tempos estimados pelos silêncios do áudio; ajustar se preciso), `episode.webm/.mp4` (960 px, ~5 MB)
+  e `episode-poster.webp` em `public/galaxia/scenes/red-tide/`. A fonte atual `approved-source/GE-PL-07-red-tide.mp4` é o episódio
+  (sobrescreveu o clipe de 8 s do loop). Som da ponte: `ambience.ogg/.mp3` (áudio do clipe original, com a explosão, em loop com o
+  mesmo cruzamento) toca baixo (`AMBIENCE_VOLUME`) só com o som do cabeçalho ligado (`isSoundEnabled`/`SOUND_EVENT`, sem mexer no
+  `sfx.ts`), para em aba oculta e enquanto o `<dialog>` do episódio está aberto. Prompt do vídeo do epílogo: `docs/art/galaxia-encantada/prompts/GE-PL-08-beyond-orbit-video.md`.
 - Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
   `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).

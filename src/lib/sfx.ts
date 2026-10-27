@@ -1,4 +1,6 @@
 // Hybrid Web Audio: real world samples and synthesized UI, off by default, opt-in only.
+import { worldSound } from "./world-sound";
+import { syncMusic } from "./music";
 export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" | "error" | "success" | "levitate" | "deflect" | "rumble" | "splash" | "wind" | "ice" | "holo" | "r2" | "jawa" | "pod" | "cantina" | "sunset" | "zap" | "twinkle" | "lens" | "woof" | "beacon" | "ignite" | "launch" | "hangar" | "switch" | "hush" | "catch" | "wish" | "warp" | "pawstep" | "capsule" | "aurora" | "gust" | "scan" | "dust" | "sprout" | "bug"
   | "type" | "return" | "disk-in" | "disk-out" | "crt-on" | "dig" | "thread" | "letter" | "snow" | "gust-dust" | "scan-sweep" | "static" | "build" | "brush"
   | "chime" | "page" | "prism" | "scanner" | "echo" | "link" | "dusk" | "refract" | "facet"
@@ -175,6 +177,21 @@ let world: SoundWorld | undefined;
 let inView = true;
 let listening = false;
 let suspendTimer: ReturnType<typeof setTimeout> | undefined;
+export type AudioLevels = { music: number; effects: number };
+const LEVELS_KEY = 'galaxia-audio-levels';
+let audioLevels: AudioLevels | undefined;
+export function getAudioLevels(): AudioLevels {
+  if (audioLevels) return audioLevels;
+  let saved: Partial<AudioLevels> = {};
+  try { const parsed: unknown = JSON.parse(window.localStorage.getItem(LEVELS_KEY) || '{}'); if (parsed && typeof parsed === 'object') saved = parsed as Partial<AudioLevels>; } catch { /* Defaults also work without storage. */ }
+  const level = (value: unknown, fallback: number) => typeof value === 'number' && Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : fallback;
+  return audioLevels = { music: level(saved.music, .3), effects: level(saved.effects, 1) };
+}
+export function setAudioLevels(levels: AudioLevels) {
+  audioLevels = { music: Math.max(0, Math.min(1, levels.music)), effects: Math.max(0, Math.min(1, levels.effects)) };
+  try { window.localStorage.setItem(LEVELS_KEY, JSON.stringify(audioLevels)); } catch { /* Keep the current session usable. */ }
+  syncAudio();
+}
 type PlayOptions = { detune?: number; gain?: number };
 type Sample = { file: string; world: SoundWorld; gain: number; loop?: boolean; duration?: number; fallback: SoundKind };
 export const sampleBank: Partial<Record<SoundKind, Sample>> = {
@@ -325,6 +342,7 @@ function syncLoops() {
 
 function syncAudio() {
   clearTimeout(suspendTimer);
+  syncMusic({ world, enabled: isSoundEnabled(), visible: inView && !document.hidden, volume: getAudioLevels().music });
   if (!audible()) {
     if (context && master) {
       const now = context.currentTime;
@@ -340,7 +358,7 @@ function syncAudio() {
   const audio = audioContext();
   if (audio.state === "suspended") void audio.resume().catch(() => {});
   hold(master!.gain, audio.currentTime);
-  master!.gain.linearRampToValueAtTime(1, audio.currentTime + .08);
+  master!.gain.linearRampToValueAtTime(getAudioLevels().effects, audio.currentTime + .08);
   syncLoops();
 }
 
@@ -398,6 +416,7 @@ const noiseBuffer = (audio: AudioContext) => {
 // `detune` (cents) and `gain` (multiplier) vary a sound per play, so repeated keys never sound robotic.
 export function play(kind: SoundKind, options: PlayOptions = {}) {
   listen();
+  kind = worldSound(world, kind);
   const sample = sampleBank[kind];
   if (sample?.loop && sample.world === world) {
     desiredLoops.set(kind, options);

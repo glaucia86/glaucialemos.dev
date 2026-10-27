@@ -1,6 +1,6 @@
 export type HolonetCopy = {
   boot: { lines: [string, string, string, string]; granted: string; skip: string; label: string };
-  sound: { on: string; off: string };
+  sound: { on: string; off: string; settings: string; music: string; effects: string };
   hud: { channel: string; location: string; signal: string; ticker: [string, string, string, string, string, string]; scroll: string; push: string; force: string; touch: string; glaucia: string; prince: string; console: string; hangar: string; lantern: string; wish: string; lights: string; coordinates: string; countdown: [string, string, string, string] };
   telescope: { title: string; intro: string; close: string; hint: string; source: string };
   episodes: [string, string, string, string, string];
@@ -14,7 +14,7 @@ export type HolonetCopy = {
 export const holonet: Record<"pt" | "en" | "es", HolonetCopy> = {
   pt: {
     boot: { lines: ["OBSERVATÓRIO DAS PRIMEIRAS LUZES // calibrando lentes", "tripulação a bordo: GLAUCIA_LEMOS + PRINCE", "classe: principal software engineer · ai transformation lead · microsoft mvp", "mapeando {events} encontros em {countries} países"], granted: "CÉU LIMPO", skip: "Pular abertura", label: "Abertura do observatório" },
-    sound: { on: "Ligar sons", off: "Desligar sons" },
+    sound: { on: "Ligar sons", off: "Desligar sons", settings: "Controles de áudio", music: "Música", effects: "Efeitos e ambiente" },
     hud: { channel: "TRANSMISSÃO // GALÁXIA ENCANTADA", location: "OBSERVATÓRIO DAS PRIMEIRAS LUZES · TERRA", signal: "SINAL", ticker: ["AGENTES DE IA", "RAG", "SPEC-DRIVEN DEVELOPMENT", "TYPESCRIPT", "LIDERANÇA TÉCNICA", "MICROSOFT MVP"], scroll: "Role para decolar", push: "Clique na Glaucia, no Prince e nas luzes · pegue estrelas cadentes · segure o céu para decolar", force: "Ignição", touch: "Toque nos personagens e nas luzes · segure o céu para decolar", glaucia: "Glaucia: abrir o telescópio de carreira", prince: "Prince: seguir o faro", console: "Console do hangar", hangar: "Hangar da montanha", lantern: "Lanterna {n}: apagar ou acender", wish: "Estrelas", lights: "Luzes apagadas",  coordinates: "Coordenadas recebidas", countdown: ["3", "2", "1", "Decolar!"] },
     telescope: { title: "Telescópio de carreira", intro: "Cada estrela desta constelação é um capítulo real da minha trajetória.", close: "Voltar ao terraço", hint: "Passe o mouse, toque ou use Tab nas estrelas. Esc fecha.", source: "Fonte" },
     episodes: ["Capítulo 1 — A origem", "Capítulo 2 — A tripulante", "Capítulo 3 — O arquivo estelar", "Capítulo 4 — O mapa de constelações", "Capítulo 5 — Sua missão"],
@@ -26,7 +26,7 @@ export const holonet: Record<"pt" | "en" | "es", HolonetCopy> = {
   },
   en: {
     boot: { lines: ["FIRST LIGHT OBSERVATORY // calibrating lenses", "crew on board: GLAUCIA_LEMOS + PRINCE", "class: principal software engineer · ai transformation lead · microsoft mvp", "mapping {events} encounters in {countries} countries"], granted: "CLEAR SKIES", skip: "Skip intro", label: "Observatory start-up" },
-    sound: { on: "Turn sound on", off: "Turn sound off" },
+    sound: { on: "Turn sound on", off: "Turn sound off", settings: "Audio controls", music: "Music", effects: "Effects and ambience" },
     hud: { channel: "TRANSMISSION // ENCHANTED GALAXY", location: "FIRST LIGHT OBSERVATORY · EARTH", signal: "SIGNAL", ticker: ["AI AGENTS", "RAG", "SPEC-DRIVEN DEVELOPMENT", "TYPESCRIPT", "TECH LEADERSHIP", "MICROSOFT MVP"], scroll: "Scroll to lift off", push: "Click Glaucia, Prince and the lights · catch shooting stars · hold the sky to lift off", force: "Ignition", touch: "Tap the characters and the lights · hold the sky to lift off", glaucia: "Glaucia: open the career telescope", prince: "Prince: follow his nose", console: "Hangar console", hangar: "Mountain hangar", lantern: "Lantern {n}: switch off or on", wish: "Stars", lights: "Lights off",  coordinates: "Coordinates received", countdown: ["3", "2", "1", "Lift-off!"] },
     telescope: { title: "Career telescope", intro: "Every star in this constellation is a real chapter of my journey.", close: "Back to the terrace", hint: "Hover, tap or Tab through the stars. Esc closes.", source: "Source" },
     episodes: ["Chapter 1 — The origin", "Chapter 2 — The crew member", "Chapter 3 — The star archive", "Chapter 4 — The constellation map", "Chapter 5 — Your mission"],
@@ -38,7 +38,7 @@ export const holonet: Record<"pt" | "en" | "es", HolonetCopy> = {
   },
   es: {
     boot: { lines: ["OBSERVATORIO DE LAS PRIMERAS LUCES // calibrando lentes", "tripulación a bordo: GLAUCIA_LEMOS + PRINCE", "clase: principal software engineer · ai transformation lead · microsoft mvp", "mapeando {events} encuentros en {countries} países"], granted: "CIELO DESPEJADO", skip: "Saltar apertura", label: "Apertura del observatorio" },
-    sound: { on: "Activar sonidos", off: "Desactivar sonidos" },
+    sound: { on: "Activar sonidos", off: "Desactivar sonidos", settings: "Controles de audio", music: "Música", effects: "Efectos y ambiente" },
     hud: { channel: "TRANSMISIÓN // GALAXIA ENCANTADA", location: "OBSERVATORIO DE LAS PRIMERAS LUCES · TIERRA", signal: "SEÑAL", ticker: ["AGENTES DE IA", "RAG", "SPEC-DRIVEN DEVELOPMENT", "TYPESCRIPT", "LIDERAZGO TÉCNICO", "MICROSOFT MVP"], scroll: "Desplázate para despegar", push: "Clic en Glaucia, en Prince y en las luces · atrapa estrellas fugaces · mantén el cielo para despegar", force: "Ignición", touch: "Toca a los personajes y las luces · mantén el cielo para despegar", glaucia: "Glaucia: abrir el telescopio de carrera", prince: "Prince: seguir su olfato", console: "Consola del hangar", hangar: "Hangar de la montaña", lantern: "Farol {n}: apagar o encender", wish: "Estrellas", lights: "Luces apagadas",  coordinates: "Coordenadas recibidas", countdown: ["3", "2", "1", "¡Despegue!"] },
     telescope: { title: "Telescopio de carrera", intro: "Cada estrella de esta constelación es un capítulo real de mi trayectoria.", close: "Volver a la terraza", hint: "Pasa el ratón, toca o usa Tab en las estrellas. Esc cierra.", source: "Fuente" },
     episodes: ["Capítulo 1 — El origen", "Capítulo 2 — La tripulante", "Capítulo 3 — El archivo estelar", "Capítulo 4 — El mapa de constelaciones", "Capítulo 5 — Tu misión"],

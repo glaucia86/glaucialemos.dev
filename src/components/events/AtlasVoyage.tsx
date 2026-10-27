@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type CSSProperties } from "react";
+import { useRef } from "react";
 import { gsap, ScrollTrigger, CustomEase, useGSAP, SCRAMBLE_CHARS } from "@/lib/gsap";
 import { useMotionEnabled } from "@/lib/use-motion";
 import { play } from "@/lib/sfx";
@@ -10,8 +10,7 @@ import { ACTS, createVoyagePixels, span, viewAt, yearAt } from "./voyage-engine"
 
 type City = { lat: number; lon: number; first: number; count: number };
 type Year = { year: number; names: string[]; cities: number; remote: number };
-type Sprite = { src: string; style: CSSProperties };
-type Props = { plate: string; crew: Sprite[]; cities: City[]; years: Year[]; copy: AtlasCopy["voyage"]; locale: string };
+type Props = { cities: City[]; years: Year[]; copy: AtlasCopy["voyage"]; locale: string };
 
 const TOUCH = "(hover: none), (pointer: coarse), (max-width: 900px)";
 const CRACKS = ["M78 30 L64 12 L58 4", "M78 30 L92 14 L99 9", "M78 30 L96 38 L100 47", "M78 30 L70 46 L63 58", "M78 30 L84 52 L88 63", "M78 30 L60 30 L52 26", "M64 12 L70 8", "M70 46 L76 50", "M92 14 L94 24"];
@@ -21,7 +20,7 @@ const CRACKS = ["M78 30 L64 12 L58 4", "M78 30 L92 14 L99 9", "M78 30 L96 38 L10
 // Brazil → North America → the Caribbean → Athens → Rio while the in-person cities light up year by year, with the names of
 // that year's gatherings → warp → landing on the Atlas. Remote participations ride an orbit, never the ground.
 // Without JavaScript or with reduced motion, a static log of the years stands in.
-export function AtlasVoyage({ plate, crew, cities, years, copy, locale }: Props) {
+export function AtlasVoyage({ cities, years, copy, locale }: Props) {
   const root = useRef<HTMLElement>(null);
   const motion = useMotionEnabled();
   const format = new Intl.NumberFormat(locale);
@@ -90,20 +89,14 @@ export function AtlasVoyage({ plate, crew, cities, years, copy, locale }: Props)
     }
 
     CustomEase.create("voyage-push", "M0,0 C0.25,0 0.32,0.12 0.45,0.34 0.6,0.6 0.72,1 1,1");
-    const plane = q(".atlas-voyage__plane"); const crewEl = q(".atlas-voyage__crew");
     const tl = gsap.timeline({
       defaults: { ease: "none" },
       scrollTrigger: { trigger: q(".atlas-voyage__track"), start: "top top", end: "bottom bottom", scrub: touch ? .4 : .7, onUpdate: (self) => { progress = self.progress; render(); } },
     })
-      .fromTo(plane, { scale: 1 }, { scale: touch ? 1.8 : 2.3, transformOrigin: "78% 30%", ease: "voyage-push", duration: .3 }, 0)
-      .fromTo(crewEl, { yPercent: 0, scale: 1, autoAlpha: 1 }, { yPercent: 45, scale: 1.7, autoAlpha: 0, transformOrigin: "88% 100%", duration: .2 }, 0)
-      .fromTo(".atlas-voyage__shine", { xPercent: -120, autoAlpha: 0 }, { xPercent: 120, autoAlpha: 1, duration: .1 }, .12)
-      .to(".atlas-voyage__shine", { autoAlpha: 0, duration: .03 }, .22)
-      .fromTo(".atlas-voyage__cracks path", { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", stagger: .008, duration: .08 }, .18)
-      .to(".atlas-voyage__cracks", { autoAlpha: 0, duration: .04 }, .28)
-      .to(plane, { autoAlpha: 0, filter: "brightness(1.6)", duration: .06 }, .26)
-      .fromTo(globeCanvas, { autoAlpha: 0, scale: .45 }, { autoAlpha: 1, scale: 1, duration: .1, ease: "power2.out" }, .28)
-      .fromTo(".atlas-voyage__hud", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: .04 }, .32)
+      .fromTo(".atlas-voyage__cracks path", { drawSVG: "0% 0%" }, { drawSVG: "0% 100%", stagger: .006, duration: .07 }, 0)
+      .to(".atlas-voyage__cracks", { autoAlpha: 0, duration: .04 }, .12)
+      .fromTo(globeCanvas, { autoAlpha: 0, scale: .45 }, { autoAlpha: 1, scale: 1, duration: .1, ease: "power2.out" }, .1)
+      .fromTo(".atlas-voyage__hud", { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: .04 }, .16)
       .to(".atlas-voyage__hud", { autoAlpha: 0, duration: .04 }, .8)
       .to(globeCanvas, { scale: 2.8, autoAlpha: 0, duration: .14, ease: "power2.in" }, .8)
       .fromTo(".atlas-voyage__land", { autoAlpha: 0, letterSpacing: ".1em" }, { autoAlpha: 1, letterSpacing: ".6em", duration: .08 }, .86)
@@ -121,12 +114,6 @@ export function AtlasVoyage({ plate, crew, cities, years, copy, locale }: Props)
     <h2 id="atlas-voyage-title" className="sr-only">{copy.label}</h2>
     <div className="atlas-voyage__track" aria-hidden="true">
       <div className="atlas-voyage__frame">
-        <div className="atlas-voyage__scene">
-          <div className="atlas-plane atlas-voyage__plane" style={{ backgroundImage: `url(${plate})` }}>
-            <span className="atlas-voyage__crew">{crew.map((sprite) => <i key={sprite.src} style={{ ...sprite.style, backgroundImage: `url(${sprite.src})` }} />)}</span>
-          </div>
-          <span className="atlas-voyage__shine" />
-        </div>
         <svg className="atlas-voyage__cracks" viewBox="0 0 100 100" preserveAspectRatio="none" focusable="false">{CRACKS.map((path) => <path key={path} d={path} />)}</svg>
         <canvas className="atlas-voyage__globe" />
         <canvas className="atlas-voyage__pixels" />

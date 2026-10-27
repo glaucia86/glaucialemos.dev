@@ -11,8 +11,8 @@ export function AureliaEggs() {
   useEffect(() => {
     let buffer = "";
     const onKey = (event: KeyboardEvent) => {
-      if (event.isComposing || document.documentElement.dataset.boot === "pending" || event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1) return;
-      if ((event.target as Element | null)?.closest("input, textarea, select, [contenteditable]:not([contenteditable='false']), dialog")) return;
+      if (event.isComposing || document.documentElement.dataset.boot === "pending" || event.ctrlKey || event.metaKey || event.altKey || event.key?.length !== 1) return;
+      if ((event.target as Element | null)?.closest("input, textarea, select, [contenteditable]:not([contenteditable='false']), dialog, .contact-portal[data-open]")) return;
       buffer = (buffer + normalizePhrase(event.key)).slice(-24);
       const id = matchTail(buffer, PAGE_EGGS);
       if (id) { buffer = ""; emitEgg(id); }

@@ -65,6 +65,12 @@ const POSES = {
     "prince:B": ["front", "stand", "paw", "wag"],
     "prince:C": ["listen", "leap", "float", "back-sit"],
   },
+  // 07 (404, Maré Rubra): character sheets like 05. Glaucia: four busts, then hand-on-hip, front, profile, back (magenta,
+  // keyed by keyBackground). Prince: front without helmet, two helmeted side views, then four helmeted busts.
+  "red-tide": {
+    glaucia: ["bust-smile", "bust-neutral", "bust-think", "bust-wonder", "hip", "idle", "profile", "back"],
+    prince: ["front-bare", "side", "side-b", "face-idle", "face-tongue", "face-joy", "face-worried"],
+  },
 };
 // The pose a blink overlay is registered on (default: idle).
 const BLINK_BASE = { "earth-orbit": "hip" };

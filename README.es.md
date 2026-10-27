@@ -289,7 +289,7 @@ Todas son **opcionales**. El sitio funciona sin ninguna.
 | Variable | Dónde | Qué hace |
 | --- | --- | --- |
 | `WEB3FORMS_ACCESS_KEY` | solo servidor | Clave de Web3Forms usada por la Server Action de contacto. Nunca se envía al navegador. |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | navegador (build) | Clave pública del widget Turnstile. El script oficial solo carga cuando el formulario entra en pantalla. |
+| `TURNSTILE_SITE_KEY` | servidor (va al widget) | Clave del widget Turnstile, pública por naturaleza; se lee en el servidor, sin `NEXT_PUBLIC_`. El script oficial solo carga cuando el formulario entra en pantalla. |
 | `TURNSTILE_SECRET_KEY` | solo servidor | Secreto para validar el token mediante Siteverify de Cloudflare antes del envío. |
 | `GITHUB_TOKEN` | solo servidor | Aumenta el límite de la API de GitHub usada para ordenar los repositorios por estrellas. Sin ella, se usa el límite público, con `src/data/projetos.json` como respaldo. |
 

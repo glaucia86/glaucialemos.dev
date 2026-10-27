@@ -8,6 +8,7 @@ import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY, FINE_POINTER } from "@/lib/gsap";
 import { play } from "@/lib/sfx";
+import { blockMusic } from "@/lib/music";
 import { BEATS, CORE, CUES, DEPTH, STAR, cablePath, floatingFrame, poseStyle, starDelays, starNote, STATIC_FRAME, type DepthLayer, type OrbitActor, type OrbitPose } from "@/lib/beyond-orbit";
 import { createVeil, type Veil } from "./veil-engine";
 import { createVeilJump } from "./veil-jump";
@@ -214,6 +215,7 @@ export function BeyondOrbitMotion({ children, finale: ending, ambient, overlays,
     const touched: Element[] = [];
 
     const finish = () => {
+      blockMusic('epilogue-theater', false);
       timeline?.kill(); timeline = null;
       animations.forEach(animation => animation.cancel()); animations = [];
       stardust?.clear();
@@ -265,6 +267,7 @@ export function BeyondOrbitMotion({ children, finale: ending, ambient, overlays,
       if (pin.current) window.scrollTo({ top: pin.current.start, behavior: "smooth" });
       else scene.scrollIntoView({ behavior: "smooth", block: "center" });
       element.dataset.theater = "on";
+      blockMusic('epilogue-theater', true);
       listen();
       engine()?.start();
 

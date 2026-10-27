@@ -511,3 +511,7 @@ main.events-page { overflow: clip; }
 @media (prefers-reduced-motion: no-preference) {
   html:not(.reduce-motion) .atlas-hero[data-pose="hip"] .atlas-crew > .atlas-crew__blink { animation: crew-blink 4.6s steps(1) 1.3s infinite; }
 }
+/* The voyage opens as a tunnel vision on the window, clearly not the hero's framing. */
+.atlas-voyage__vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 55% 50% at 62% 34%, transparent 40%, color-mix(in srgb, var(--atlas-deep) 85%, transparent) 100%); }
+/* End of the pinned approach: the window's glass flares cyan-white before the voyage opens on it, cracking. */
+.atlas-glass-flash { position: absolute; z-index: 5; inset: 0; opacity: 0; visibility: hidden; pointer-events: none; background: radial-gradient(ellipse 60% 55% at 70% 32%, color-mix(in srgb, var(--color-white) 90%, transparent), color-mix(in srgb, var(--atlas-ice) 60%, transparent) 40%, color-mix(in srgb, var(--atlas-cyan) 30%, transparent) 70%, transparent); }

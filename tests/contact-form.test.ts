@@ -47,7 +47,7 @@ describe("contato SSR e configuração", () => {
   });
   it.each(['workshop', 'mentoria', 'palestra', 'consultoria'])('seleciona %s e mantém o formulário sem script externo no SSR', subject => {
     const html = renderToStaticMarkup(createElement(ContactForm, { copy: pt.services, lang: 'pt', enabled: true, siteKey: 'public-test', subject }));
-    expect(html).toContain(`value="${contactServiceId(subject)}" selected=""`);
+    expect(html).toMatch(new RegExp(`<input(?=[^>]*type="radio")(?=[^>]*checked="")[^>]*value="${contactServiceId(subject)}"`));
     expect(html).toMatch(/<input[^>]*id="contact-consent"[^>]*required=""/);
     expect(html).toContain('aria-describedby="contact-purpose"');
     expect(html).toContain('<noscript>');

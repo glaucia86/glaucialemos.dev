@@ -1,5 +1,36 @@
 # Handoff — Migração Galáxia Encantada
 
+## Próximo — Serviços (Aurélia) com efeito WOW e sons reais (itens 1–3 e 5 implementados, sem commit; item 4 em outra sessão)
+**Rodada 3 (27/10/2026):** giroscópio sci-fi (`OrbitGyroscope` + `gyro-engine.ts`) no lugar de `OrbitRings`/`RingAlignment`; eclipse
+(`PlanetEclipse` + `eclipse-engine.ts`, frase nova "eclipse", contrato `main[data-greenhouse="dusk"]` mantido) no lugar da estufa; enxame do
+Prince (`PrinceSwarm` + `swarm-engine.ts`) no lugar dos botões de polinização (`advancePollination` removido); final no terraço do hero à
+noite (`FinaleTerrace`), sem créditos, com letterbox/flare/rastros/tremor. Testes novos em `tests/aurelia-fx.test.ts`. Divisão com a outra
+sessão: ela cuida de sons e dos testes existentes (inclusive `tests/aurelia.browser.mjs`, que ainda cita estufa/anéis/polinização antigos).
+404 Maré Rubra montada com o vídeo da Glaucia (detalhes no `AGENTS.md`). O catálogo passou de 43 para 45 e a 404 deixou de ser
+"sinal fraco" no epílogo: os testes existentes que fixam essas contagens (`epilogue`, `beyond-orbit`, `eggs`, `voyage`,
+`journey-constellation`, `narrative-eggs`) ficam vermelhos de propósito e são da outra sessão. `404-demo.html` (Manus) aponta para
+arquivos que não vieram; `public/pixel/404-stormtrooper.jpg` só sai com confirmação.
+**Rodada 2 (27/10/2026):** a Glaucia achou a página simples e pediu um efeito muito forte, que leve a fechar serviços, e uma pista clara do
+epílogo no fim. Entraram: órbitas em 3D na rolagem, constelação de provas (só números do site), jardim que floresce (uma flor por serviço),
+"Como cultivamos" (texto das etapas **a confirmar com ela**), final com sinalizador + créditos + "Continua…" e a transmissão do epílogo sempre
+visível. Corrigido também o `keydown` sem `key` (autopreenchimento do Chrome) no Konami e nos ouvintes de frases. Lint, typecheck e 452 testes
+passando; `tests/aurelia.browser.mjs` ganhou os cenários da história (390/1440, com e sem movimento), **ainda não executados**.
+
+**Estado (26/10/2026):** portal, formulário em 3 etapas e lançamento prontos; lint, typecheck e `npm test` passando (40 arquivos, 438 testes).
+`tests/aurelia.browser.mjs` e `tests/responsiveness.browser.mjs` foram atualizados, mas **ainda não rodaram**: a Glaucia roda com o servidor dela.
+A chave do widget agora é `TURNSTILE_SITE_KEY` (lida só no servidor por `contactConfig()` e passada ao widget; sem `NEXT_PUBLIC_`).
+Sem as 3 chaves o contato fica desativado e o formulário fica único, como sem JS. Sons do portal/lançamento reutilizam tipos já existentes (`relay`, `launch`, `seed`,
+`greenhouse`, `error`, `bloom`): o `sfx.ts` ficou com a sessão de sons. Detalhes técnicos no `AGENTS.md` (seção Serviços, "Portal do contato").
+
+Branch `feat/atlas-eventos` (já contém toda a `feat/aurelia-servicos`). Não mexer no envio (Server Action + Zod + Turnstile + Web3Forms + LinkedIn, commit `643e7fa`); só na experiência. Base: `ContactCinema.tsx`, `contact-cinema.ts`, `ContactForm`, `aurelia.css`, `src/i18n/aurelia.ts`, samples em `public/sfx` + `CREDITS.md`.
+1. CTA que vira portal: os CTAs de contato abrem um portal de pétalas e luz em tela cheia (canvas pixel + GSAP); o formulário surge dentro. Sem JS: `#contato` normal. Esc/fechar, foco preso, `data-lenis-prevent`.
+2. Formulário em 3 etapas (mesma Server Action): necessidade (workshop/palestra/consultoria) → nome, empresa, LinkedIn obrigatório → mensagem + Turnstile + LGPD. Progresso em sementes, Glaucia e Prince reagindo, validação Zod por etapa nos 3 idiomas. Sem JS: formulário único.
+3. Lançamento da mensagem: ao enviar, um sinal sobe do jardim às estrelas em tela cheia com som; erro = o sinal falha e o form volta.
+4. Sons reais CC0 (Freesound CC0, Pixabay, Kenney; pedir aprovação antes de baixar; créditos em `public/sfx/CREDITS.md`): vento/nevasca (Nivéora), poeira (Marte), cristais (Lúmina), rádio/estática/órbita (Atlas), portal/florescer/lançamento (Aurélia), cometa/trovão (Observatório). Opt-in, curtos, < 60 KB, com tom sintetizado de reserva.
+5. Responsivo, movimento reduzido, teclado; testes unitários e de navegador com o dev da Glaucia; build só com o dev parado; sem commit sem pedido.
+
+Também pendente no Atlas: `zero-gravity` (pose `float` da 05C) e Prince `back-sit` no nascer do sol; rodar `tests/atlas.browser.mjs`, `tests/events-page.browser.mjs` e `tests/hero-ctas.browser.mjs` no navegador; remover `GE-DOG-05B-earth-orbit..jpg` (duplicado) com confirmação.
+
 ## Retomada — Atlas, rodada 2 (26/10/2026, branch `feat/atlas-eventos`, sem commit)
 Pronto e verificado (lint, typecheck, 292 testes; `tests/atlas.browser.mjs` e `tests/events-page.browser.mjs` passando no dev):
 composição I (os dois de frente), Terra viva, viagem de câmera 3D (todos os aparelhos), tablet da Glaucia, doca de ações, 3 segredos do

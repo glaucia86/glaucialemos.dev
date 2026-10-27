@@ -2,6 +2,7 @@ import type { Locale } from './config';
 
 export const contactCopy = {
   pt: {
+    steps: ['Do que seu time precisa?', 'Quem está chamando?', 'Sua mensagem'], stepOf: 'Etapa {n} de {total}', next: 'Continuar', back: 'Voltar',
     company: 'Empresa', service: 'Tipo de serviço', choose: 'Selecione um serviço',
     linkedinUrl: 'URL do seu LinkedIn', consent: 'Concordo com o uso dos meus dados para responder a este contato (LGPD).',
     purpose: 'Seus dados serão usados só para responder ao contato, sem cadastro em listas.',
@@ -19,6 +20,7 @@ export const contactCopy = {
     },
   },
   en: {
+    steps: ['What does your team need?', 'Who is reaching out?', 'Your message'], stepOf: 'Step {n} of {total}', next: 'Continue', back: 'Back',
     company: 'Company', service: 'Service type', choose: 'Select a service',
     linkedinUrl: 'Your LinkedIn URL', consent: 'I consent to the use of my data to respond to this inquiry (LGPD).',
     purpose: 'Your data will only be used to respond to your inquiry, without subscribing you to any lists.',
@@ -36,6 +38,7 @@ export const contactCopy = {
     },
   },
   es: {
+    steps: ['¿Qué necesita tu equipo?', '¿Quién nos escribe?', 'Tu mensaje'], stepOf: 'Paso {n} de {total}', next: 'Continuar', back: 'Volver',
     company: 'Empresa', service: 'Tipo de servicio', choose: 'Selecciona un servicio',
     linkedinUrl: 'URL de tu LinkedIn', consent: 'Acepto el uso de mis datos para responder a este contacto (LGPD).',
     purpose: 'Tus datos se usarán solo para responder al contacto, sin suscribirte a listas.',

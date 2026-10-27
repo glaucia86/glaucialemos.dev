@@ -41,6 +41,27 @@ export function AureliaScene(){
     </div>
   </div>;
 }
+/** The finale stands on the hero's own terrace, at night: same plate, same stage marks, Glaucia seen from behind. */
+export function FinaleTerrace(){
+  const plate={backgroundImage:`url(${aureliaScene.assets.background.src})`};
+  return <div className="finale-terrace" aria-hidden="true">
+    <div className="finale-terrace__plane finale-terrace__plate" style={plate}/>
+    <div className="finale-terrace__plane finale-terrace__actors">
+      <i className="finale-terrace__beacon" style={{...boxStyle(propBox(aureliaScene,'communication-beacon-active',74.5,93)),...sprite(props['communication-beacon-active'].src)}}/>
+      <i className="finale-terrace__prince" style={actorStyle('prince','front')}/>
+      <i className="finale-terrace__glaucia" style={actorStyle('glaucia','back')}/>
+    </div>
+  </div>;
+}
+export const CREW_FACES={glaucia:['face-smile','face-look','face-thoughtful','face-neutral'],prince:['face-idle','face-happy','face-curious','face-joy']} as const;
+/** Approved Aurélia portraits watching the contact form; the portal controller only switches which one is lit. */
+export function ContactCrew(){
+  return <div className="contact-crew" aria-hidden="true">
+    {(Object.keys(CREW_FACES) as (keyof typeof CREW_FACES)[]).map(actor=><span key={actor} className={`contact-crew__face contact-crew__face--${actor}`}>
+      {CREW_FACES[actor].map(face=><i key={face} data-face={`${actor}:${face}`} style={sprite((actors[actor] as Record<string,{src:string}>)[face].src)}/>)}
+    </span>)}
+  </div>;
+}
 export function AureliaHotspots({labels}:{labels:Record<keyof typeof HOTSPOTS,string>}){
   return <div className="aurelia-layer"><div className="aurelia-plane aurelia-plane--hot">
     {Object.entries(HOTSPOTS).map(([key,box])=>{

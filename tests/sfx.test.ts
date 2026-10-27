@@ -115,6 +115,14 @@ describe('hybrid audio lifecycle', () => {
   });
   afterEach(() => { sfx.setSoundEnabled(false); vi.restoreAllMocks(); vi.clearAllTimers(); vi.useRealTimers(); vi.unstubAllGlobals(); });
 
+  it('stores separate music and effects levels without turning sound on', () => {
+    sfx.setAudioLevels({ music: .2, effects: .7 });
+    expect(sfx.isSoundEnabled()).toBe(false);
+    expect(sfx.getAudioLevels()).toEqual({ music: .2, effects: .7 });
+    expect(JSON.parse(window.localStorage.getItem('galaxia-audio-levels')!)).toEqual({ music: .2, effects: .7 });
+    expect(request).not.toHaveBeenCalled();
+  });
+
   it.each([
     ['aurelia', 'garden-ambience', .08], ['observatory', 'observatory-ambience', .07],
     ['niveora', 'wind', .08], ['mars', 'mars-ambience', .07], ['lumina', 'lumina-ambience', .07],

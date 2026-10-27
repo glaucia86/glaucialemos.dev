@@ -220,5 +220,36 @@
       "radar-dish-small": 0.7,
       "radar-dish-large": 0.7
     }
+  },
+  "red-tide": {
+    "grid": 1,
+    "plateGrid": 0,
+    "colors": {
+      "actor": 160,
+      "prop": 128
+    },
+    "stages": {
+      "glaucia": {
+        "x": 76,
+        "y": 93,
+        "height": 46,
+        "reference": "back"
+      },
+      "prince": {
+        "x": 64,
+        "y": 93,
+        "height": 14,
+        "reference": "side"
+      }
+    },
+    "actorScale": {},
+    "props": {
+      "navigation-console-off": 0.6,
+      "navigation-console-restored": 0.6,
+      "navigation-portal-off": 0.7,
+      "navigation-portal-restored": 0.7,
+      "lost-signal-beacon": 0.45,
+      "coordinate-crystal": 0.4
+    }
   }
 }

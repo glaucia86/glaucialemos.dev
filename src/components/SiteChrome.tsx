@@ -8,7 +8,7 @@ import { SocialLinks } from "./SocialLinks";
 import { PageEffects } from "./PageEffects";
 import { SmoothScroll } from "./motion/SmoothScroll";
 import { FxLayer } from "./motion/FxLayer";
-import { isSoundEnabled, setSoundEnabled } from "@/lib/sfx";
+import { getAudioLevels, isSoundEnabled, setAudioLevels, setSoundEnabled } from "@/lib/sfx";
 import { KONAMI_GESTURES, discover, emitEgg, gestureOf, konamiStep, onEgg } from "@/lib/eggs";
 import { Comlink } from "./Comlink";
 
@@ -30,9 +30,11 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
   const menuRef = useRef<HTMLButtonElement>(null);
   const [reduced, setReduced] = useState<boolean | null>(null); const [egg, setEgg] = useState(false); const [menuOpen, setMenuOpen] = useState(false);
   const [sound, setSound] = useState(false); const [scrolled, setScrolled] = useState(false); const [comlinkSlot, setComlinkSlot] = useState<HTMLSpanElement | null>(null);
-  useEffect(() => { try { setReduced(localStorage.getItem("reduce-motion") === "true"); } catch { setReduced(false); } setSound(isSoundEnabled()); }, []);
+  const [audioOpen, setAudioOpen] = useState(false);
+  const [levels, setLevels] = useState({ music: .3, effects: 1 });
+  useEffect(() => { try { setReduced(localStorage.getItem("reduce-motion") === "true"); } catch { setReduced(false); } setSound(isSoundEnabled()); setLevels(getAudioLevels()); }, []);
   useEffect(() => { if (reduced === null) return; document.documentElement.classList.toggle("reduce-motion", reduced); try { localStorage.setItem("reduce-motion", String(reduced)); } catch { /* Browsing without storage still supports the control. */ } }, [reduced]);
-  useEffect(() => { const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]; let position = 0; const onKey = (event: KeyboardEvent) => { position = event.key.toLowerCase() === code[position]?.toLowerCase() ? position + 1 : 0; if (position === code.length) { emitEgg("star-map"); position = 0; } }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
+  useEffect(() => { const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]; let position = 0; const onKey = (event: KeyboardEvent) => { position = event.key?.toLowerCase() === code[position]?.toLowerCase() ? position + 1 : 0; if (position === code.length) { emitEgg("star-map"); position = 0; } }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
   // Konami on touch screens: swipe ↑ ↑ ↓ ↓ ← → ← → and tap twice.
   useEffect(() => {
     let position = 0; let start: { x: number; y: number; t: number } | null = null;
@@ -89,6 +91,14 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
         <button className="sound-toggle" type="button" aria-pressed={sound} aria-label={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} title={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} onClick={toggleSound}>
           <svg viewBox="0 0 16 16" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false"><path fill="currentColor" d="M2 6h3V5h1V4h1V3h1v10H7v-1H6v-1H5v-1H2z" />{sound ? <path fill="currentColor" d="M10 6h1v4h-1zM12 4h1v8h-1zM14 2h1v12h-1z" /> : <path fill="currentColor" d="M10 5h1v1h1v1h1V6h1V5h1v1h-1v1h-1v2h1v1h1v1h-1v-1h-1V9h-1v1h-1v1h-1v-1h1V9h1V7h-1V6h-1z" />}</svg>
         </button>
+        <div className="audio-settings" onKeyDown={event => { if (event.key === 'Escape' && audioOpen) { event.stopPropagation(); setAudioOpen(false); event.currentTarget.querySelector<HTMLButtonElement>('.audio-settings__toggle')?.focus(); } }}>
+          <button type="button" className="audio-settings__toggle" aria-expanded={audioOpen} aria-controls="audio-settings-panel" onClick={() => setAudioOpen(value => !value)}>{dictionary.holonet.sound.settings}</button>
+          <div id="audio-settings-panel" className="audio-settings__panel" hidden={!audioOpen}>
+            {(['music', 'effects'] as const).map(channel => <label key={channel}>{dictionary.holonet.sound[channel]} <output>{Math.round(levels[channel] * 100)}%</output>
+              <input type="range" min="0" max="100" value={Math.round(levels[channel] * 100)} onChange={event => { const next = { ...levels, [channel]: Number(event.target.value) / 100 }; setLevels(next); setAudioLevels(next); }} />
+            </label>)}
+          </div>
+        </div>
         <button className="motion-toggle" type="button" aria-pressed={Boolean(reduced)} onClick={() => setReduced((value) => !value)}>{reduced ? dictionary.motion.enable : dictionary.motion.reduce}</button>
       </div></nav>
       <div className="header-tools">

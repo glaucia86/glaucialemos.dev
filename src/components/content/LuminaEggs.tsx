@@ -11,7 +11,7 @@ export function LuminaEggs() {
   useEffect(() => {
     let buffer = "";
     const onKey = (event: KeyboardEvent) => {
-      if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1) return;
+      if (event.ctrlKey || event.metaKey || event.altKey || event.key?.length !== 1) return;
       if ((event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
       buffer = (buffer + normalizePhrase(event.key)).slice(-24);
       const id = matchTail(buffer, PAGE_EGGS);

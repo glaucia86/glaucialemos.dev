@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { gsap, ScrollTrigger, Draggable, useGSAP } from "@/lib/gsap";
-import { useMotionEnabled } from "@/lib/use-motion";
+import { gsap, ScrollTrigger, Draggable, useGSAP, HERO_OVERLAY } from "@/lib/gsap";
+import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
 import { play } from "@/lib/sfx";
@@ -48,6 +48,8 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
   const holoRef = useRef<Holo | null>(null);
   const controls = useRef<{ constellation: () => void; orbit: () => void } | null>(null);
   const pad = useRef<HTMLDivElement>(null);
+  // Same breakpoint and pattern as the other worlds: pinned hero + camera push only on wide, tall, fine-pointer screens.
+  const overlay = useMediaQuery(HERO_OVERLAY);
   const motion = useMotionEnabled();
   const format = new Intl.NumberFormat(locale);
 
@@ -252,7 +254,22 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
     addEventListener(CLEAR_CONSTELLATION, clearConstellation);
 
     // The camera voyage lives in its own sticky section right after the hero (AtlasVoyage): here the copy only drifts away.
-    gsap.fromTo(".atlas-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: .2, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true } });
+    // The approach, as on the other worlds: the hero stays pinned while the camera pushes into the window, then a flash of
+    // glass hands over to the voyage below (which opens on the cracking window). Elsewhere the hero simply drifts away.
+    const zoom = [q(".page-hero__image"), layer, q(".atlas-layer")];
+    if (overlay) {
+      gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: section, start: "top top", end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 } })
+        .to(zoom, { scale: 1.7, transformOrigin: "78% 30%", duration: .7 }, 0)
+        .fromTo(".atlas-copy", { xPercent: 0, autoAlpha: 1 }, { xPercent: -12, autoAlpha: 0, duration: .3 }, 0)
+        .fromTo([".hero-hud", ".atlas-readout", ".atlas-status"], { autoAlpha: 1 }, { autoAlpha: 0, duration: .2 }, 0)
+        .to(".page-hero__shade", { autoAlpha: .2, duration: .4 }, 0)
+        .fromTo(".atlas-glass-flash", { autoAlpha: 0 }, { autoAlpha: 1, duration: .12, ease: "power2.in" }, .82)
+        .to(".atlas-glass-flash", { autoAlpha: 0, duration: .06 }, .94);
+    } else {
+      gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: .6 } })
+        .fromTo(".atlas-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: 0 }, 0)
+        .fromTo(zoom, { scale: 1 }, { scale: 1.4, transformOrigin: "78% 30%" }, 0);
+    }
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 
@@ -271,7 +288,7 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
       hotspots.forEach((button) => { button.hidden = true; button.removeEventListener("click", onHot); });
       flight.kill(); stopFlight(); stopSatellite(); satellite.removeEventListener("click", catchSatellite); satellite.hidden = true; gsap.set(satellite, { clearProps: "all" });
     };
-  }, { scope: hero, dependencies: [motion], revertOnUpdate: true });
+  }, { scope: hero, dependencies: [motion, overlay], revertOnUpdate: true });
 
   // The tablet joystick: drag the knob (with a spring back) or use the arrow keys; Esc closes.
   useEffect(() => {
@@ -307,6 +324,7 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
     <span className="sky-vignette" aria-hidden="true" />
     <p className="atlas-status" role="status" aria-live="polite" />
     <p className="sky-touch-hint" aria-hidden="true"><span />{copy.touch}</p>
+    <span className="atlas-glass-flash" aria-hidden="true" />
     {/* Touch and small screens: the scene's hotspots are tiny there, so the same actions live in a dock under it. */}
     <div className="atlas-dock" role="group" aria-label={copy.dock.label}>
       {([["glaucia", copy.dock.tablet], ["holo", copy.dock.holo], ["prince", copy.dock.prince]] as const).map(([hot, label]) => <button key={hot} type="button" data-dock={hot} onClick={() => hero.current?.querySelector<HTMLButtonElement>(`.atlas-hot--${hot}`)?.click()}>{label}</button>)}

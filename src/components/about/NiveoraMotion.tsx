@@ -92,7 +92,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       let buffer = "";
       const typed = (event: KeyboardEvent) => {
         if (event.key === "Escape") { calmSound(); return; }
-        if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
+        if (event.ctrlKey || event.metaKey || event.altKey || event.key?.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
         buffer = (buffer + normalizePhrase(event.key)).slice(-24);
         const id = matchTail(buffer, HERO_EGGS); if (id) { buffer = ""; run(id); }
       };
@@ -384,7 +384,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     let buffer = "";
     const typed = (event: KeyboardEvent) => {
       if (event.key === "Escape") { calmDown(); return; }
-      if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
+      if (event.ctrlKey || event.metaKey || event.altKey || event.key?.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
       buffer = (buffer + normalizePhrase(event.key)).slice(-24);
       const id = matchTail(buffer, ABOUT_EGGS);
       if (id) { buffer = ""; emitEgg(id); }

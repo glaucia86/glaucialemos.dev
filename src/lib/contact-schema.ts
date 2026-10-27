@@ -41,6 +41,14 @@ export function contactSchema(lang: Locale) {
     consent: z.boolean({ error: errors.consent }).refine(value => value === true, errors.consent),
   });
 }
+// The staged form walks the same schema in three steps: need → who → message (+ Turnstile and LGPD).
+export const contactSteps = [['service'], ['name', 'company', 'linkedin'], ['message', 'consent']] as const satisfies readonly (readonly ContactField[])[];
+export const contactStepOf = (field: ContactField) => contactSteps.findIndex(step => (step as readonly ContactField[]).includes(field));
+export function validateContactStep(lang: Locale, step: number, values: ContactValues): ContactErrors {
+  const fields: readonly ContactField[] = contactSteps[step] ?? [];
+  const parsed = contactSchema(lang).pick(Object.fromEntries(fields.map(field => [field, true])) as Record<ContactField, true>).safeParse(values);
+  return parsed.success ? {} : parsed.error.flatten().fieldErrors as ContactErrors;
+}
 export function contactValues(data: FormData): ContactValues {
   const string = (name: string, max: number) => {
     const value = data.get(name);

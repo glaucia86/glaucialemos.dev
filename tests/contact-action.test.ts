@@ -12,7 +12,7 @@ function form() {
 const response = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status });
 beforeEach(() => {
   vi.stubEnv('WEB3FORMS_ACCESS_KEY', 'private-web3forms');
-  vi.stubEnv('NEXT_PUBLIC_TURNSTILE_SITE_KEY', 'public-site-key');
+  vi.stubEnv('TURNSTILE_SITE_KEY', 'public-site-key');
   vi.stubEnv('TURNSTILE_SECRET_KEY', 'private-turnstile');
   vi.stubGlobal('fetch', fetchMock); fetchMock.mockReset();
 });
@@ -24,7 +24,7 @@ describe('Server Action de contato', () => {
     expect(await submitContact(null, data)).toEqual({ status: 'ok' });
     expect(fetchMock).not.toHaveBeenCalled();
   });
-  it.each(['WEB3FORMS_ACCESS_KEY', 'NEXT_PUBLIC_TURNSTILE_SITE_KEY', 'TURNSTILE_SECRET_KEY'])('desabilita se falta %s', async key => {
+  it.each(['WEB3FORMS_ACCESS_KEY', 'TURNSTILE_SITE_KEY', 'TURNSTILE_SECRET_KEY'])('desabilita se falta %s', async key => {
     for (const value of [undefined, '', '   ']) {
       vi.stubEnv(key, value);
       expect(contactConfig().enabled).toBe(false);

@@ -17,7 +17,6 @@ import { EventLog } from "@/components/events/EventLog";
 import { SignalDeck } from "@/components/events/SignalDeck";
 import { AtlasEggs } from "@/components/events/AtlasEggs";
 import { AtlasVoyage } from "@/components/events/AtlasVoyage";
-import { boxStyle, poseBox } from "@/lib/scenes";
 import { OrbitalSunrise } from "@/components/events/OrbitalSunrise";
 import { LUMA_PROFILE, getUpcomingConnections } from "@/lib/luma";
 import { LOG_ID } from "@/components/events/atlas-events";
@@ -119,8 +118,7 @@ export default async function Events({ params, searchParams }: Props) {
     </div>
 
     {/* The camera voyage: from the navigation room, through the window, around the real globe, into the Atlas */}
-    <AtlasVoyage plate={atlasScene.assets.background.src} copy={a.voyage} locale={locale}
-      crew={[{ src: atlasScene.assets.actors.glaucia.hip.src, style: boxStyle(poseBox(atlasScene, "glaucia", "hip")) }, { src: atlasScene.assets.actors.prince.front.src, style: boxStyle(poseBox(atlasScene, "prince", "front")) }]}
+    <AtlasVoyage copy={a.voyage} locale={locale}
       cities={places.map(({ lat, lon, first: year, count: n }) => ({ lat, lon, first: year, count: n }))}
       years={timeline.map(({ year }) => ({ year, names: orbitOf(year, events).presencial.map((event) => event.nome), cities: places.filter((city) => city.first <= year).length, remote: timeline.filter((row) => row.year <= year).reduce((sum, row) => sum + row.remoto, 0) }))} />
 

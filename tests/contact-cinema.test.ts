@@ -52,7 +52,7 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe('ContactCinema — SSR', () => {
   it.each(['pt', 'en', 'es'] as const)('keeps the invitation and original form accessible without JS (%s)', lang => {
-    const html = renderToStaticMarkup(createElement(ContactCinema, { copy: aurelia[lang].contact.cinema },
+    const html = renderToStaticMarkup(createElement(ContactCinema, { copy: aurelia[lang].contact.cinema, portal: aurelia[lang].contact.portal },
       createElement(ContactForm, { copy: pt.services, lang, enabled: true, siteKey: 'test' })));
     expect(html).toContain(aurelia[lang].contact.cinema);
     expect(html).toContain('data-cinema="static"');

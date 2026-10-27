@@ -5,7 +5,8 @@ import { CYAN, GOLD, ICE, TEAL } from "./orbit-engine";
 
 export const PIXEL = 2;
 // Acts on the 0..1 progress of the sticky section.
-export const ACTS = { approach: [0, .2], glass: [.16, .32], globe: [.28, .82], warp: [.8, .95], land: [.94, 1] } as const;
+// The approach (pushing into the window) happens on the hero itself, so the plate is never shown twice.
+export const ACTS = { glass: [0, .14], globe: [.1, .82], warp: [.8, .95], land: [.94, 1] } as const;
 export const span = (value: number, [a, b]: readonly [number, number]) => Math.min(1, Math.max(0, (value - a) / (b - a)));
 
 // Where the 3D globe looks at each moment of act 3: Brazil → North America → the Caribbean → Athens → Rio.
@@ -41,7 +42,7 @@ export function createVoyagePixels(canvas: HTMLCanvasElement, { light = false } 
     context.clearRect(0, 0, width, height);
     const cx = width / 2; const cy = height / 2; const reach = Math.hypot(cx, cy);
     // Deep space behind the globe, with a slow twinkle that becomes streaks in the warp.
-    const space = span(progress, [.26, .32]) * (1 - span(progress, ACTS.land));
+    const space = 1 - span(progress, ACTS.land);
     const warp = span(progress, ACTS.warp);
     for (const star of stars) {
       const x = cx + Math.cos(star.a) * star.r * reach; const y = cy + Math.sin(star.a) * star.r * reach;

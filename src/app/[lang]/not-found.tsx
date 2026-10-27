@@ -1,6 +1,7 @@
-"use client";
-import { useParams } from "next/navigation";
-import { PageHero } from "@/components/PageHero";
-import { isLocale, defaultLocale } from "@/i18n/config";
-import { getDictionary } from "@/i18n/dictionaries";
-export default function NotFound() { const params = useParams<{ lang?: string }>(); const lang = params.lang && isLocale(params.lang) ? params.lang : defaultLocale; const d = getDictionary(lang); return <main id="main" className="not-found"><PageHero eyebrow="404" title={d.notFound.title} subtitle={d.notFound.body} image="/pixel/404-stormtrooper.jpg" imageAlt={d.notFound.heroImageAlt} primary={{ href: `/${lang}`, label: d.notFound.back }} /></main>; }
+import "../red-tide.css";
+import { RedTide } from "@/components/notfound/RedTide";
+
+// Maré Rubra: a real 404 (Next sets the status); the language comes from the URL on the client.
+export default function NotFound() {
+  return <RedTide />;
+}

@@ -1,5 +1,6 @@
 import '../../home.css';
 import '../../aurelia.css';
+import '../../aurelia-story.css';
 import '../../beyond-orbit.css';
 import type { Metadata } from 'next';
 import Image from 'next/image';
@@ -8,21 +9,26 @@ import { notFound } from 'next/navigation';
 import { ContactForm } from '@/components/ContactForm';
 import { ContactCinema } from '@/components/services/ContactCinema';
 import { contactConfig } from '@/lib/contact-config';
-import { EpilogueSignal } from '@/components/epilogue/EpilogueSignal';
 import { ReadingProgress } from '@/components/ReadingProgress';
 import { BootSequence } from '@/components/home/BootSequence';
 import { HudClock } from '@/components/home/HudClock';
 import { HomeChoreography } from '@/components/home/HomeChoreography';
 import { ChapterTag, ChapterJump } from '@/components/home/Chapter';
 import { DiscoveryCount } from '@/components/about/DiscoveryCount';
-import { AureliaScene, AureliaHotspots, aureliaScene } from '@/components/services/AureliaScene';
+import { AureliaScene, AureliaHotspots, ContactCrew, FinaleTerrace, aureliaScene } from '@/components/services/AureliaScene';
 import { AureliaMotion } from '@/components/services/AureliaMotion';
 import { AureliaEggs } from '@/components/services/AureliaEggs';
-import { RingAlignment } from '@/components/services/RingAlignment';
 import { ServiceGarden } from '@/components/services/ServiceGarden';
-import { GreenhouseDusk } from '@/components/services/GreenhouseDusk';
+import { PlanetEclipse } from '@/components/services/PlanetEclipse';
 import { CollaborationBeacon } from '@/components/services/CollaborationBeacon';
-import { gardenRecords } from '@/lib/aurelia-records';
+import { gardenRecords, proofStars } from '@/lib/aurelia-records';
+import { OrbitGyroscope } from '@/components/services/OrbitGyroscope';
+import { ProofConstellation } from '@/components/services/ProofConstellation';
+import { GardenBloom } from '@/components/services/GardenBloom';
+import { WorkSteps } from '@/components/services/WorkSteps';
+import { BeaconFinale } from '@/components/services/BeaconFinale';
+import { EpilogueTransmission } from '@/components/services/EpilogueTransmission';
+import { aureliaStory } from '@/i18n/aurelia-story';
 import { getServicos } from '@/lib/data';
 import { AURELIA_BOOT_KEY, bootScriptFor } from '@/lib/boot';
 import { beyondOrbit } from '@/i18n/beyond-orbit';
@@ -34,7 +40,9 @@ export async function generateMetadata({params}:Props):Promise<Metadata>{const {
 const code=(index:number)=>`◆ ${String(index+1).padStart(2,'0')}`;
 export default async function Services({params,searchParams}:Props){
   const {lang}=await params;if(!isLocale(lang))notFound();
-  const d=getDictionary(lang),a=d.aurelia,records=gardenRecords(getServicos());
+  const d=getDictionary(lang),a=d.aurelia,s=aureliaStory[lang],records=gardenRecords(getServicos());
+  // Seven chapters: hero, orbits, proof, garden, how we work, collaboration and the last signal.
+  const labels=[a.chapters[0],a.chapters[1],s.chapters.proof,a.chapters[2],s.chapters.steps,a.chapters[3],s.chapters.finale];
   const contact=contactConfig();
   const {assunto}=await searchParams;
   const subject=typeof assunto==='string'?assunto:null;
@@ -66,25 +74,38 @@ export default async function Services({params,searchParams}:Props){
       <div className="hero-bar" aria-hidden="true"><span className="hero-bar__caption"><span className="pixel-mark"/>{a.hero.caption}</span><span className="hero-bar__ticker"><span className="hero-bar__track">{[...ticker,...ticker].map((item,i)=><span key={i}>{item}<b>◆</b></span>)}</span></span><span className="hero-bar__scroll">{a.hero.scroll}<i/></span></div>
     </div>
     <section className="chapter chapter--orbits" id="orbitas" aria-labelledby="orbits-title"><div className="chapter__inner">
-      <div className="chapter-head"><div><ChapterTag code={code(1)} label={a.chapters[1]}/><h2 id="orbits-title" data-reveal="lines">{a.rings.title}</h2></div></div>
-      <RingAlignment copy={a.rings} lang={lang}/>
+      <div className="chapter-head"><div><ChapterTag code={code(1)} label={labels[1]}/><h2 id="orbits-title" data-reveal="lines">{a.rings.title}</h2></div></div>
+      <OrbitGyroscope copy={a.rings} story={s.orbit} lang={lang}/>
     </div></section>
-    <ChapterJump code={code(2)} label={a.chapters[2]}/>
+    <ChapterJump code={code(2)} label={labels[2]}/>
+    <section className="chapter chapter--proof" id="provas" aria-labelledby="proof-title"><div className="chapter__inner">
+      <div className="chapter-head"><div><ChapterTag code={code(2)} label={labels[2]}/><h2 id="proof-title" data-reveal="lines">{s.proof.title}</h2><p data-reveal="up">{s.proof.intro}</p></div></div>
+      <ProofConstellation stars={proofStars(lang)} copy={s.proof} locale={lang}/>
+    </div></section>
+    <ChapterJump code={code(3)} label={labels[3]}/>
     <section className="chapter chapter--garden" id="jardins" aria-labelledby="garden-title"><div className="chapter__inner">
-      <div className="chapter-head"><div><ChapterTag code={code(2)} label={a.chapters[2]}/><h2 id="garden-title" data-reveal="lines">{a.garden.title}</h2><p data-reveal="up">{a.garden.intro}</p></div></div>
-      <ServiceGarden records={records} copy={a.garden} lang={lang} price={d.services.price}/>
+      <div className="chapter-head"><div><ChapterTag code={code(3)} label={labels[3]}/><h2 id="garden-title" data-reveal="lines">{a.garden.title}</h2><p data-reveal="up">{a.garden.intro}</p></div></div>
+      <GardenBloom records={records} copy={s.bloom} lang={lang} price={d.services.price}/>
+      <h3 className="garden-compare">{s.bloom.compare}</h3>
+      <ServiceGarden records={records} copy={a.garden} lang={lang} price={d.services.price} princeFace={aureliaScene.assets.actors.prince['face-happy'].src}/>
     </div></section>
-    <ChapterJump code={code(3)} label={a.chapters[3]}/>
+    <ChapterJump code={code(4)} label={labels[4]}/>
+    <section className="chapter chapter--steps" id="como" aria-labelledby="steps-title"><div className="chapter__inner">
+      <div className="chapter-head"><div><ChapterTag code={code(4)} label={labels[4]}/><h2 id="steps-title" data-reveal="lines">{s.steps.title}</h2><p data-reveal="up">{s.steps.intro}</p></div></div>
+      <WorkSteps copy={s.steps}/>
+    </div></section>
+    <ChapterJump code={code(5)} label={labels[5]}/>
     <section className="chapter chapter--collaboration" aria-labelledby="collaboration-title"><div className="chapter__inner">
-      <div className="chapter-head"><div><ChapterTag code={code(3)} label={a.chapters[3]}/><h2 id="collaboration-title" data-reveal="lines">{a.contact.title}</h2><p data-reveal="up">{a.contact.intro}</p></div></div>
-      <GreenhouseDusk copy={a.dusk}/>
+      <div className="chapter-head"><div><ChapterTag code={code(5)} label={labels[5]}/><h2 id="collaboration-title" data-reveal="lines">{a.contact.title}</h2><p data-reveal="up">{a.contact.intro}</p></div></div>
+      <PlanetEclipse copy={a.dusk}/>
       <CollaborationBeacon label={a.contact.relay}/>
       <p id="aurelia-channel-status" className="aurelia-channel-status" role="status"/>
-      <ContactCinema key={subject} copy={a.contact.cinema}>
+      <ContactCinema key={subject} copy={a.contact.cinema} portal={a.contact.portal} crew={<ContactCrew/>}>
         <ContactForm copy={d.services} lang={lang} subject={subject} enabled={contact.enabled} siteKey={contact.enabled ? contact.siteKey : undefined}/>
       </ContactCinema>
-      <EpilogueSignal lang={lang} copy={beyondOrbit[lang]}/>
     </div></section>
+    <BeaconFinale copy={s.finale} terrace={<FinaleTerrace/>} tag={<ChapterTag code={code(6)} label={labels[6]}/>}/>
+    <div className="transmission-wrap"><EpilogueTransmission lang={lang} copy={s.transmission} epilogue={beyondOrbit[lang]}/></div>
     <AureliaEggs/><HomeChoreography/>
   </main>;
 }

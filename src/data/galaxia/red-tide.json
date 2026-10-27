@@ -1,0 +1,220 @@
+{
+  "scene": "red-tide",
+  "background": {
+    "src": "/galaxia/scenes/red-tide/background.webp",
+    "w": 1672,
+    "h": 941
+  },
+  "actors": {
+    "glaucia": {
+      "bust-smile": {
+        "src": "/galaxia/actors/glaucia/red-tide/bust-smile.webp",
+        "w": 303,
+        "h": 284,
+        "feetX": 151,
+        "px": [
+          222,
+          208
+        ]
+      },
+      "bust-neutral": {
+        "src": "/galaxia/actors/glaucia/red-tide/bust-neutral.webp",
+        "w": 306,
+        "h": 288,
+        "feetX": 153,
+        "px": [
+          225,
+          211
+        ]
+      },
+      "bust-think": {
+        "src": "/galaxia/actors/glaucia/red-tide/bust-think.webp",
+        "w": 311,
+        "h": 286,
+        "feetX": 155,
+        "px": [
+          228,
+          210
+        ]
+      },
+      "bust-wonder": {
+        "src": "/galaxia/actors/glaucia/red-tide/bust-wonder.webp",
+        "w": 306,
+        "h": 283,
+        "feetX": 153,
+        "px": [
+          225,
+          208
+        ]
+      },
+      "hip": {
+        "src": "/galaxia/actors/glaucia/red-tide/hip.webp",
+        "w": 279,
+        "h": 592,
+        "feetX": 156,
+        "px": [
+          205,
+          434
+        ]
+      },
+      "idle": {
+        "src": "/galaxia/actors/glaucia/red-tide/idle.webp",
+        "w": 228,
+        "h": 592,
+        "feetX": 107,
+        "px": [
+          167,
+          434
+        ]
+      },
+      "profile": {
+        "src": "/galaxia/actors/glaucia/red-tide/profile.webp",
+        "w": 146,
+        "h": 591,
+        "feetX": 58,
+        "px": [
+          107,
+          434
+        ]
+      },
+      "back": {
+        "src": "/galaxia/actors/glaucia/red-tide/back.webp",
+        "w": 225,
+        "h": 590,
+        "feetX": 111,
+        "px": [
+          165,
+          433
+        ]
+      }
+    },
+    "prince": {
+      "front-bare": {
+        "src": "/galaxia/actors/prince/red-tide/front-bare.webp",
+        "w": 296,
+        "h": 455,
+        "feetX": 146,
+        "px": [
+          82,
+          126
+        ]
+      },
+      "side": {
+        "src": "/galaxia/actors/prince/red-tide/side.webp",
+        "w": 555,
+        "h": 475,
+        "feetX": 317,
+        "px": [
+          154,
+          132
+        ]
+      },
+      "side-b": {
+        "src": "/galaxia/actors/prince/red-tide/side-b.webp",
+        "w": 533,
+        "h": 478,
+        "feetX": 281,
+        "px": [
+          148,
+          133
+        ]
+      },
+      "face-idle": {
+        "src": "/galaxia/actors/prince/red-tide/face-idle.webp",
+        "w": 362,
+        "h": 381,
+        "feetX": 185,
+        "px": [
+          100,
+          106
+        ]
+      },
+      "face-tongue": {
+        "src": "/galaxia/actors/prince/red-tide/face-tongue.webp",
+        "w": 358,
+        "h": 381,
+        "feetX": 181,
+        "px": [
+          99,
+          106
+        ]
+      },
+      "face-joy": {
+        "src": "/galaxia/actors/prince/red-tide/face-joy.webp",
+        "w": 372,
+        "h": 383,
+        "feetX": 187,
+        "px": [
+          103,
+          106
+        ]
+      },
+      "face-worried": {
+        "src": "/galaxia/actors/prince/red-tide/face-worried.webp",
+        "w": 370,
+        "h": 384,
+        "feetX": 166,
+        "px": [
+          103,
+          107
+        ]
+      }
+    }
+  },
+  "props": {
+    "coordinate-crystal": {
+      "src": "/galaxia/props/red-tide/coordinate-crystal.webp",
+      "w": 119,
+      "h": 136,
+      "px": [
+        48,
+        54
+      ]
+    },
+    "lost-signal-beacon": {
+      "src": "/galaxia/props/red-tide/lost-signal-beacon.webp",
+      "w": 147,
+      "h": 191,
+      "px": [
+        66,
+        86
+      ]
+    },
+    "navigation-console-off": {
+      "src": "/galaxia/props/red-tide/navigation-console-off.webp",
+      "w": 176,
+      "h": 165,
+      "px": [
+        106,
+        99
+      ]
+    },
+    "navigation-console-restored": {
+      "src": "/galaxia/props/red-tide/navigation-console-restored.webp",
+      "w": 200,
+      "h": 169,
+      "px": [
+        120,
+        101
+      ]
+    },
+    "navigation-portal-off": {
+      "src": "/galaxia/props/red-tide/navigation-portal-off.webp",
+      "w": 168,
+      "h": 148,
+      "px": [
+        118,
+        104
+      ]
+    },
+    "navigation-portal-restored": {
+      "src": "/galaxia/props/red-tide/navigation-portal-restored.webp",
+      "w": 217,
+      "h": 158,
+      "px": [
+        152,
+        111
+      ]
+    }
+  }
+}

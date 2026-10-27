@@ -6,4 +6,3 @@ export const serviceHref = (lang: Locale, subject: Subject) => `/${lang}/servico
 export const RING_START = [1, 2, 3] as const;
 export const turnRing = (value: number) => (value + 1) % 4;
 export const ringsAligned = (rings: readonly number[]) => rings.length === 3 && rings.every(value => value === 0);
-export const advancePollination = (current: number, index: number, total: number) => current >= total ? total : index === current ? current + 1 : index === 0 ? 1 : 0;

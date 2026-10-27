@@ -4,7 +4,7 @@ import { ServiceGarden } from '@/components/services/ServiceGarden';
 import { AureliaScene, HOTSPOTS } from '@/components/services/AureliaScene';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getServicos } from '@/lib/data';
-import { gardenRecords, serviceHref, servicePrice, advancePollination, turnRing, ringsAligned } from '@/lib/aurelia-records';
+import { gardenRecords, serviceHref, servicePrice, turnRing, ringsAligned } from '@/lib/aurelia-records';
 import { aurelia } from '@/i18n/aurelia';
 import { comlink } from '@/i18n/comlink';
 import { EGGS, matchPhrase, matchTail, normalizePhrase, type EggId } from '@/lib/eggs';
@@ -25,7 +25,7 @@ describe('Aurélia — registros e interações', () => {
   });
   it('renderiza todos os dados e links localizados sem depender de animação', () => {
     for (const lang of ['pt','en','es'] as const) {
-      const html=renderToStaticMarkup(createElement(ServiceGarden,{records:gardenRecords(),copy:aurelia[lang].garden,lang,price:servicePrice(getServicos()[0],lang)}));
+      const html=renderToStaticMarkup(createElement(ServiceGarden,{records:gardenRecords(),copy:aurelia[lang].garden,lang,price:servicePrice(getServicos()[0],lang),princeFace:SCENES.aurelia.assets.actors.prince['face-happy'].src}));
       for(const {service,subject} of gardenRecords()) {
         expect(html).toContain(service.titulo[lang]);
         expect(html).toContain(serviceHref(lang,subject));
@@ -35,15 +35,10 @@ describe('Aurélia — registros e interações', () => {
       expect(html).not.toContain('type="submit"');
     }
   });
-  it('alinha os anéis em quartos de volta e exige a ordem dos canteiros', () => {
+  it('alinha os anéis em quartos de volta', () => {
     expect(ringsAligned([1, 2, 3])).toBe(false);
     expect(ringsAligned([0, 0, 0])).toBe(true);
     expect(turnRing(3)).toBe(0);
-    expect(advancePollination(0, 2, 3)).toBe(0);
-    expect(advancePollination(1, 0, 3)).toBe(1);
-    expect(advancePollination(1, 1, 3)).toBe(2);
-    expect(advancePollination(2, 2, 3)).toBe(3);
-    expect(advancePollination(3, 2, 3)).toBe(3);
   });
 });
 describe('Aurélia — catálogo e idiomas', () => {
