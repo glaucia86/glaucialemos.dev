@@ -76,6 +76,9 @@ it.each(["pt", "en", "es"] as const)("renders an accessible static finale and lo
   }
   const redTide = voyage.slice(voyage.indexOf('data-world="notfound"'), voyage.indexOf("</ol>"));
   expect(redTide).toContain('data-charted="true"');
+  expect(redTide).toContain(copy.worlds.notfound);
+  expect(redTide).toContain('/galaxia/scenes/red-tide/poster.webp');
+  expect(redTide).toContain('--accent:#f07072;--glow:#ffbc78');
   expect(redTide).toContain(copy.found.replace("{found}", "0").replace("{total}", "2"));
   expect(redTide.match(/<i style=/g)).toHaveLength(2);
   for (const id of ["signal-recovered", "paw-rescue"] as const) expect(redTide).toContain(comlink[lang].eggs[id].hint);

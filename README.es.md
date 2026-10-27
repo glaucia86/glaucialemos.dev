@@ -2,462 +2,344 @@
 
 [English](README.md) · [Português](README.pt-BR.md) · **Español**
 
-<br />
+# Galáxia Encantada
 
-# glaucialemos.dev
+### El portafolio de Glaucia Lemos. Un universo por explorar.
 
-### *Ingeniería, IA y curiosidad en una expedición por un universo original en pixel art.*
+Ingeniería, liderazgo e IA cobran vida en un universo original de pixel art.
+
+[**Entra en la galaxia →**](https://glaucialemos.dev/es) · [Conoce los mundos](#worlds) · [La ingeniería por dentro](#architecture) · [Ejecútalo localmente](#getting-started)
 
 [![CI](https://github.com/glaucia86/glaucialemos.dev/actions/workflows/ci.yml/badge.svg)](https://github.com/glaucia86/glaucialemos.dev/actions/workflows/ci.yml)
-![Último commit](https://img.shields.io/github/last-commit/glaucia86/glaucialemos.dev?color=e07828&label=%C3%BAltima%20actualizaci%C3%B3n)
-![Tamaño](https://img.shields.io/github/repo-size/glaucia86/glaucialemos.dev?color=5a3d7e&label=carga)
-[![Stars](https://img.shields.io/github/stars/glaucia86/glaucialemos.dev?style=flat&color=893866&label=estrellas)](https://github.com/glaucia86/glaucialemos.dev/stargazers)
+![Next.js 15](https://img.shields.io/badge/Next.js-15-000000?logo=nextdotjs&logoColor=white)
+![React 19](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61DAFB)
+![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![Tres idiomas](https://img.shields.io/badge/idiomas-PT_·_EN_·_ES-893866)
 
-![Next.js](https://img.shields.io/badge/Next.js_15-000000?logo=nextdotjs&logoColor=white)
-![React](https://img.shields.io/badge/React_19-20232a?logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript_strict-3178C6?logo=typescript&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-0F172A?logo=tailwindcss&logoColor=38BDF8)
-![GSAP](https://img.shields.io/badge/GSAP_3-0AE448?logo=greensock&logoColor=black)
-![Zod](https://img.shields.io/badge/Zod_4-3E67B1?logo=zod&logoColor=white)
-![Vitest](https://img.shields.io/badge/Vitest-6E9F18?logo=vitest&logoColor=white)
-![Playwright](https://img.shields.io/badge/Playwright-2EAD33?logo=playwright&logoColor=white)
-![Node](https://img.shields.io/badge/Node.js_22-5FA04E?logo=nodedotjs&logoColor=white)
+<a href="https://glaucialemos.dev/es">
+  <img src="public/galaxia/scenes/earth-observatory/background.webp" alt="Observatorio en pixel art sobre una terraza frente al mar, bajo un cielo estrellado con auroras de colores" width="1000" />
+</a>
 
-![i18n](https://img.shields.io/badge/i18n-pt_·_en_·_es-5a3d7e)
-![a11y](https://img.shields.io/badge/a11y-respeta_movimiento_reducido-893866)
-![Pixel art](https://img.shields.io/badge/arte-pixel_art_en_capas-e07828)
-![Migración](https://img.shields.io/badge/Galáxia_Encantada-migración_en_curso-2ea44f)
-
-<br />
-
-<img src="public/galaxia/scenes/earth-observatory/background.webp" alt="Fondo aprobado en pixel art del Observatório das Primeiras Luzes, con auroras, montañas y una terraza iluminada por faroles" width="900" />
-
-<sub>Observatório das Primeiras Luzes — fondo aprobado de la Home. Glaucia, Prince y los objetos interactivos se renderizan en capas separadas.</sub>
+<sub>Observatório das Primeiras Luzes. El paisaje es la base; personajes, clima e interacciones son capas independientes.</sub>
 
 </div>
 
 ---
 
-> **Una expedición por la ingeniería, el conocimiento y la imaginación.**
->
-> **Galáxia Encantada** es la nueva identidad creativa del portafolio de Glaucia Lemos:
-> un universo espacial original en pixel art, con Glaucia y su perro, Prince, como
-> exploradores. Cada destino conecta el trabajo real en **ingeniería, liderazgo e IA**
-> con un mundo por descubrir, manteniendo accesible el contenido profesional.
+Una carrera se convierte en expedición. Los proyectos tienen su laboratorio en Marte. Los artículos habitan una biblioteca de cristales. Los eventos iluminan la Tierra vista desde la órbita.
 
-> [!IMPORTANT]
-> **Migración en curso:** la Home ya se ha migrado y aprobado. Sobre, Proyectos, Contenido,
-> Eventos, Servicios y la página 404 todavía conservan la identidad anterior y se migrarán
-> a continuación. Los destinos de abajo representan el plan de migración, no un rediseño
-> terminado de todas las rutas. El modo historia opcional también está planificado.
+**glaucialemos.dev** es el portafolio personal de Glaucia Lemos, construido como un universo original llamado **Galáxia Encantada**. Glaucia y su perro, **Prince**, acompañan a quienes lo visitan por seis mundos públicos, cada uno con su propia dirección artística, atmósfera y forma de contar una historia.
 
----
+Detrás de los escenarios hay repositorios, registros de trayectoria, publicaciones, participaciones en eventos y servicios reales. Puedes llegar por el trabajo, quedarte por el viaje y elegir cuánto movimiento y sonido acompañan la experiencia.
 
-## Índice
+> Este README presenta los paisajes y la ingeniería. Los descubrimientos te esperan en el sitio.
 
-- [Sobre el proyecto](#sobre-el-proyecto)
-- [Destacados](#destacados)
-- [Pipeline de arte](#pipeline-de-arte)
-- [Stack](#stack)
-- [Arquitectura](#arquitectura)
-- [Cómo ejecutar](#cómo-ejecutar)
-  - [Requisitos previos](#requisitos-previos)
-  - [Windows](#windows)
-  - [macOS](#macos)
-  - [Linux](#linux)
-  - [Variables de entorno](#variables-de-entorno)
-- [Scripts disponibles](#scripts-disponibles)
-- [Pruebas](#pruebas)
-- [Estructura del proyecto](#estructura-del-proyecto)
-- [Caza de easter eggs](#caza-de-easter-eggs)
-- [Para saber más](#para-saber-más)
-- [Créditos y dirección creativa](#créditos-y-dirección-creativa)
-- [Sobre mí](#sobre-mí)
+<a id="worlds"></a>
 
----
-
-## Sobre el proyecto
-
-**glaucialemos.dev** es el sitio personal y portafolio de **Glaucia Lemos**, Principal
-Software Engineer y AI Transformation Lead. **Galáxia Encantada** transforma el portafolio
-en una expedición por observatorios, mundos imaginarios y estaciones orbitales.
-La migración conserva las rutas existentes, los datos profesionales y los tres idiomas.
-
-| Ruta | Destino de Galáxia Encantada | Contenido | Estado de la migración |
-| --- | --- | --- | --- |
-| `/` | Entrada por idioma | Elige `/pt`, `/en` o `/es` según `Accept-Language` | Conservada |
-| `/[lang]` | Observatório das Primeiras Luzes (Tierra) | Presentación, telescopio de carrera, proyectos y contacto | Migrada y aprobada |
-| `/[lang]/sobre` | Nivéora, o Mundo Nevado das Auroras | Trayectoria profesional e hitos de carrera | Próxima |
-| `/[lang]/projetos` | Marte, Vale das Invenções | Datos de GitHub en vivo, repositorios y contribuciones | Planificada |
-| `/[lang]/conteudo` | Lúmina, a Biblioteca Viva | Artículos y recursos de aprendizaje | Planificada |
-| `/[lang]/eventos` | Atlas das Conexões (órbita de la Tierra) | Globo interactivo e historial de charlas | Planificada |
-| `/[lang]/servicos` | Aurélia, os Jardins Suspensos | Talleres, mentorías, charlas y contacto | Planificada |
-| `404` | Maré Rubra, Coordenadas Perdidas | Una ruta perdida y un camino de regreso | Planificada |
-
-La implementación sigue el [plan de migración](docs/galaxia-encantada/PLANO-MIGRACAO.md)
-página por página, con aprobación visual antes de continuar.
-
-## Destacados
-
-- **Cinematográfico, sin estorbar.** Timelines de GSAP (ScrollTrigger, SplitText, ScrambleText)
-  y el desplazamiento suave de Lenis mueven las escenas. La navegación nunca espera una animación.
-- **El movimiento te respeta.** `prefers-reduced-motion` *o* un botón manual dejan todas las
-  escenas estáticas, y la elección se mantiene en todas las pestañas. Sin JavaScript, el sitio
-  sigue siendo legible.
-- **Sonido solo con opt-in.** Los efectos se sintetizan en vivo con la Web Audio API. No hay
-  archivos de audio, y todo queda en silencio hasta que lo actives.
-- **Tres idiomas, un solo esquema de URL.** Cambiar de idioma reemplaza solo el primer segmento
-  de la URL, así que sigues en la misma página.
-- **Datos validados.** Cada JSON (eventos, proyectos, carrera, servicios) pasa por Zod al cargar.
-  Un registro inválido rompe el build en lugar de llegar a producción.
-- **GitHub en vivo.** `getTopRepos` ordena los repositorios por estrellas y revalida cada
-  24 horas. Si la API falla o tarda, se usa la copia local.
-- **Pixel art en capas.** Scripts de Node procesan fondos, poses y objetos aprobados.
-  Glaucia permanece anclada en la escena, parpadea y cambia de pose durante las interacciones.
-- **Un cielo por explorar.** La nueva Home tiene auroras, estrellas fugaces que se pueden
-  atrapar, faroles, un telescopio de carrera y el despegue de una nave, con Prince en los descubrimientos.
-- **Secretos accesibles.** Un registro único de easter eggs permite interactuar mediante
-  teclado, tacto y radio estelar. Los secretos se sustituyen a medida que se migra cada mundo.
-
-## Pipeline de arte
-
-Las imágenes fuente aprobadas están en [`docs/art/galaxia-encantada/approved-source`](docs/art/galaxia-encantada/approved-source).
-Cada escena separa el fondo, las poses de Glaucia y Prince y los objetos interactivos.
-El script recorta las poses, extrae la capa de parpadeo, registra los anclajes y exporta los
-assets en WebP junto con los metadatos de la escena.
-
-```bash
-node scripts/build-galaxia-assets.mjs earth-observatory --debug
-node scripts/build-galaxia-assets.mjs --manifest
-```
-
-Los archivos generados están en `public/galaxia/` y `src/data/galaxia/`. El manifiesto registra
-los hashes de las fuentes y las aprobaciones. La composición y los hotspots se definen en
-`src/lib/scenes.ts` y `src/components/home/ObservatoryScene.tsx`.
-
-## Stack
-
-| Capa | Elección | Por qué |
-| --- | --- | --- |
-| Framework | [Next.js 15](https://nextjs.org/) (App Router) | Páginas server-first, rutas por idioma, ISR para los datos de GitHub |
-| UI | [React 19](https://react.dev/) | Client Components solo donde hay interacción |
-| Lenguaje | [TypeScript](https://www.typescriptlang.org/) (strict) | Datos, diccionarios e ids de easter eggs tipados |
-| Estilos | [Tailwind CSS 4](https://tailwindcss.com/) + tokens semánticos | Tokens de marca compartidos y paletas propias para cada mundo |
-| Movimiento | [GSAP 3](https://gsap.com/) + [Lenis](https://lenis.darkroom.engineering/) | Scroll fijado, scrub y efectos de texto que funcionan en todos los navegadores |
-| Globo | [cobe](https://github.com/shuding/cobe) | Globo WebGL ligero para la página de Eventos |
-| Validación | [Zod 4](https://zod.dev/) | Schemas para todos los datos |
-| Pruebas | [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/) | Pruebas unitarias y suites en navegador real |
-| Fuentes | Geist, Geist Mono, Departure Mono | Alojadas localmente con `next/font/local` |
-| Formularios | [Web3Forms](https://web3forms.com/) + [Turnstile](https://developers.cloudflare.com/turnstile/) | Ningún e-mail personal en el código |
-
-## Arquitectura
-
-```mermaid
-flowchart LR
-    V([Visitante]) --> M{{src/middleware.ts<br/>Accept-Language}}
-    M -->|/pt · /en · /es| L["app/[lang]/layout.tsx<br/>SiteChrome + radio estelar"]
-    L --> P["Páginas en el servidor<br/>Home · Sobre · Proyectos<br/>Contenido · Eventos · Servicios"]
-    P --> D[("src/data/*.json<br/>validado con Zod")]
-    P --> G["lib/github.ts<br/>getTopRepos (ISR de 24 h)"]
-    G -.si falla.-> D
-    P --> C["Islas client<br/>escenas · globo · formulario"]
-    C --> MO["lib/gsap.ts + use-motion.ts<br/>useMotionEnabled()"]
-    C --> E["lib/eggs.ts<br/>emitEgg · onEgg · discover"]
-    C --> S["lib/sfx.ts<br/>Web Audio, opt-in"]
-    C --> A[Server Action + Turnstile]
-    A --> F[(Web3Forms)]
-```
-
-## Cómo ejecutar
-
-### Requisitos previos
-
-| Herramienta | Versión | Cómo comprobar |
-| --- | --- | --- |
-| [Node.js](https://nodejs.org/) | **22 o más reciente** (el CI usa 22) | `node -v` |
-| npm | viene con Node | `npm -v` |
-| [Git](https://git-scm.com/) | cualquier versión reciente | `git --version` |
-
-> [!TIP]
-> Un gestor de versiones ([nvm](https://github.com/nvm-sh/nvm), [nvm-windows](https://github.com/coreybutler/nvm-windows),
-> [fnm](https://github.com/Schniz/fnm) o [Volta](https://volta.sh/)) cambia a Node 22 con un solo comando.
-
-### Windows
-
-**1. Instala Node.js LTS y Git** (PowerShell, con [winget](https://learn.microsoft.com/windows/package-manager/winget/)):
-
-```powershell
-winget install OpenJS.NodeJS.LTS
-winget install Git.Git
-```
-
-Vuelve a abrir la terminal para que `node` y `git` estén en el `PATH`.
-
-**2. Clona e instala:**
-
-```powershell
-git clone https://github.com/glaucia86/glaucialemos.dev.git
-cd glaucialemos.dev
-npm ci
-Copy-Item .env.example .env.local
-```
-
-**3. Arranca el servidor de desarrollo:**
-
-```powershell
-npm run dev
-```
-
-Abre <http://localhost:3000>. Se te redirigirá a `/pt`, `/en` o `/es`.
-
-> [!NOTE]
-> En Windows, detener `npm run start` puede dejar el proceso `node` de Next escuchando en el puerto.
-> Si ves `EADDRINUSE`, búscalo y deténlo:
->
-> ```powershell
-> netstat -ano | findstr :3000
-> taskkill /PID <pid> /F
-> ```
-
-### macOS
-
-**1. Instala Node.js 22 y Git** (con [Homebrew](https://brew.sh/)):
-
-```bash
-brew install node@22 git
-echo 'export PATH="$(brew --prefix node@22)/bin:$PATH"' >> ~/.zshrc
-source ~/.zshrc
-```
-
-**2. Clona e instala:**
-
-```bash
-git clone https://github.com/glaucia86/glaucialemos.dev.git
-cd glaucialemos.dev
-npm ci
-cp .env.example .env.local
-```
-
-**3. Arranca el servidor de desarrollo:**
-
-```bash
-npm run dev
-```
-
-Abre <http://localhost:3000>.
-
-### Linux
-
-**1. Instala Node.js 22 con [nvm](https://github.com/nvm-sh/nvm)** (funciona en cualquier distro):
-
-```bash
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-source ~/.bashrc
-nvm install 22
-```
-
-Git: `sudo apt install git` (Debian/Ubuntu), `sudo dnf install git` (Fedora) o `sudo pacman -S git` (Arch).
-
-**2. Clona e instala:**
-
-```bash
-git clone https://github.com/glaucia86/glaucialemos.dev.git
-cd glaucialemos.dev
-npm ci
-cp .env.example .env.local
-```
-
-**3. Arranca el servidor de desarrollo:**
-
-```bash
-npm run dev
-```
-
-Abre <http://localhost:3000>.
-
-#### Build de producción (todos los sistemas)
-
-```bash
-npm run build
-npm run start -- --hostname 127.0.0.1 --port 3100
-```
-
-### Variables de entorno
-
-Todas son **opcionales**. El sitio funciona sin ninguna.
-
-| Variable | Dónde | Qué hace |
-| --- | --- | --- |
-| `WEB3FORMS_ACCESS_KEY` | solo servidor | Clave de Web3Forms usada por la Server Action de contacto. Nunca se envía al navegador. |
-| `TURNSTILE_SITE_KEY` | servidor (va al widget) | Clave del widget Turnstile, pública por naturaleza; se lee en el servidor, sin `NEXT_PUBLIC_`. El script oficial solo carga cuando el formulario entra en pantalla. |
-| `TURNSTILE_SECRET_KEY` | solo servidor | Secreto para validar el token mediante Siteverify de Cloudflare antes del envío. |
-| `GITHUB_TOKEN` | solo servidor | Aumenta el límite de la API de GitHub usada para ordenar los repositorios por estrellas. Sin ella, se usa el límite público, con `src/data/projetos.json` como respaldo. |
-
-El formulario requiere las tres variables de contacto; si falta cualquiera, los campos y el envío se deshabilitan y el botón de LinkedIn sigue disponible. Copia `.env.example` a `.env.local`, configura las claves y vuelve a compilar si cambias la clave pública o la configuración del formulario. No uses variables `NEXT_PUBLIC_*` para las dos claves del servidor. Configura el destinatario en Web3Forms sin incluir un correo personal en el repositorio.
-
-La Server Action valida el schema Zod compartido, descarta el honeypot, verifica Turnstile y envía a Web3Forms. [El uso de Web3Forms desde el servidor requiere un plan de pago y autorización de la IP del servidor](https://docs.web3forms.com/getting-started/api-reference). Autoriza el hostname del sitio en Turnstile. Sin JavaScript, el formulario conserva la Server Action, pero la verificación no puede ejecutarse; el enlace visible de LinkedIn es la alternativa. Los datos no se añaden a listas de correo.
-
-Ejecuta `node tests/aurelia.browser.mjs` contra el servidor elegido. `CONTACT_EXPECT=disabled` exige configuración ausente; `CONTACT_EXPECT=enabled` exige configuración completa (usa builds separados para comprobar ambos). El script simula ambos proveedores y el propio POST de la action, impidiendo envíos reales. Vitest simula fetch en el servidor para comprobar cada variable ausente, la validación y las respuestas de los proveedores.
-
-## Scripts disponibles
-
-| Comando | Qué hace |
-| --- | --- |
-| `npm run dev` | Servidor de desarrollo con hot reload |
-| `npm run build` | Build de producción (comprueba que aparezca `ƒ Middleware`) |
-| `npm run start` | Sirve el build de producción |
-| `npm run lint` | ESLint (`eslint-config-next`) |
-| `npm run typecheck` | `tsc --noEmit` |
-| `npm test` | Pruebas unitarias con Vitest |
-| `npm run test:browser` | Suites de Playwright contra un servidor de producción |
-
-## Pruebas
-
-Las mismas comprobaciones se ejecutan en [GitHub Actions](.github/workflows/ci.yml) en cada push y pull request:
-
-```bash
-npm run lint && npm run typecheck && npm test && npm run build
-```
-
-Las suites de navegador cubren los CTAs del hero, las escenas, el ciclo de vida, los eventos
-y las interacciones de las páginas. Algunas suites todavía describen páginas pendientes de migración.
-
-```bash
-npx playwright install chromium   # solo la primera vez
-npm run build
-npm run test:browser              # arranca un servidor en el puerto 3100 por ti
-```
-
-Para reutilizar un servidor que ya está en marcha, apunta las suites hacia él:
-
-```bash
-# macOS / Linux
-BASE_URL=http://127.0.0.1:3100 npm run test:browser
-```
-
-```powershell
-# Windows (PowerShell)
-$env:BASE_URL = "http://127.0.0.1:3100"
-npm run test:browser
-```
-
-## Estructura del proyecto
-
-```text
-glaucialemos.dev/
-├── .github/workflows/ci.yml   # lint · typecheck · pruebas · build
-├── docs/                      # notas de diseño, briefings de arte, capturas
-│   └── galaxia-encantada/      # plan de migración y handoff
-├── public/galaxia/            # fondos, personajes y objetos generados
-├── public/pixel/              # assets antiguos, sustituidos página por página
-├── scripts/                   # build-galaxia-assets y herramientas de arte
-├── src/
-│   ├── app/
-│   │   ├── [lang]/            # home, sobre, projetos, conteudo, eventos, servicos
-│   │   └── *.css              # tokens, UI pixel, estilos y efectos de las escenas
-│   ├── components/
-│   │   ├── home/              # Observatorio, cielo, telescopio de carrera, hiperespacio
-│   │   ├── about/             # componentes de carrera; próximo mundo por migrar
-│   │   ├── projects/          # archivo de repositorios y telemetría de GitHub
-│   │   └── motion/            # FxLayer, SmoothScroll
-│   ├── data/                  # eventos, proyectos, carrera, servicios (JSON + Zod)
-│   │   └── galaxia/           # metadatos generados de las escenas
-│   ├── i18n/                  # diccionarios pt · en · es
-│   ├── lib/                   # github, career, eggs, sfx, gsap, use-motion
-│   └── middleware.ts          # detección de idioma
-└── tests/                     # *.test.ts (Vitest) · *.browser.mjs (Playwright)
-```
-
-## Caza de easter eggs
-
-Abre la **radio estelar** en la cabecera para descubrir pistas, repetir los secretos y seguir
-tu progreso. También puedes escribir una palabra clave directamente en la página. La nueva
-Home tiene seis secretos locales y el mapa estelar global; las demás páginas conservan sus
-secretos actuales hasta que se migren.
-
-<details>
-<summary><b>Spoilers: algunas pistas para el Observatorio</b></summary>
-
-<br />
-
-| Dónde | Pista |
-| --- | --- |
-| Cualquier página | Un código clásico de la era de 8 bits, escrito o con gestos: ↑ ↑ ↓ ↓ ← → ← → B A |
-| Home | Glaucia tiene un telescopio con hitos reales de su carrera por explorar |
-| Home | Sigue el olfato de Prince para encontrar una señal |
-| Home | El hangar de la montaña y su consola están conectados |
-| Home | Mantén pulsado el cielo durante la cuenta regresiva para que despegue la nave |
-| Home | Apaga los cuatro faroles y mira hacia arriba |
-| Home | Atrapa tres estrellas fugaces y pide un deseo |
-
-</details>
-
-<sub>En el móvil, cada secreto tiene un gesto táctil equivalente. "Borrar memoria" en la radio estelar reinicia el progreso.</sub>
-
-## Para saber más
-
-| Documento | Tema |
-| --- | --- |
-| [`PLANO-MIGRACAO.md`](docs/galaxia-encantada/PLANO-MIGRACAO.md) | Dirección creativa, mundos y plan de migración de Galáxia Encantada (en portugués) |
-| [`HANDOFF.md`](docs/galaxia-encantada/HANDOFF.md) | Guía de implementación, preferencias y traspaso de contexto (en portugués) |
-| [`AGENTS.md`](AGENTS.md) | Convenciones de ingeniería y comandos de verificación actuales |
-| [`DESIGN-SYSTEM.md`](DESIGN-SYSTEM.md) | Paleta, tipografía, componentes, escenas (en portugués) |
-| [`DECISOES.md`](DECISOES.md) | Registro de decisiones de arquitectura y sus motivos (en portugués) |
-
-Los documentos antiguos de diseño todavía pueden describir la identidad anterior; el plan
-de migración y el código actual definen la nueva dirección.
-
-## Créditos y dirección creativa
-
-**Galáxia Encantada** es la dirección creativa original del portafolio, definida y aprobada
-por Glaucia Lemos. Los nuevos mundos cuentan con Glaucia, Prince y una nave concebida para
-este universo. Las imágenes fuente se producen con ayuda de IA en Grok Image y se revisan
-antes de integrarlas; su procedencia y las aprobaciones se registran en el manifiesto de assets.
-
-La migración incorpora la nueva identidad página por página. Los assets y las referencias
-restantes de la versión anterior se eliminarán conforme se migre y revise cada página.
-Pide autorización antes de reutilizar las imágenes o los textos del proyecto.
-
----
-
-## Sobre mí
+## Seis mundos. Un viaje conectado.
 
 <table>
   <tr>
-    <td align="center" width="200">
-      <img src="https://github.com/glaucia86.png" alt="Foto de Glaucia Lemos" width="150" />
-      <br />
-      <sub>Ingeniera, educadora y exploradora de Galáxia Encantada</sub>
+    <td width="50%" valign="top">
+      <a href="https://glaucialemos.dev/es"><img src="public/galaxia/scenes/earth-observatory/background.webp" alt="El Observatorio: una terraza frente al mar bajo un cielo de auroras" width="480" /></a>
+      <h3>01 · Observatório das Primeiras Luzes</h3>
+      <p><b>Inicio · Tierra</b><br />Una presentación de la ingeniera, su trabajo y la tripulación, bajo un cielo con vida propia.</p>
     </td>
-    <td>
-      <h3>Glaucia Lemos</h3>
-      <p><b>Principal Software Engineer · AI Transformation Lead @ Itaú Unibanco</b></p>
-      <p>
-        Lidero la adopción de IA generativa y agéntica en squads de ingeniería: SDLC con IA, RAG,
-        context engineering y Spec-Driven Development.
-      </p>
-      <p>
-        Microsoft MVP, OpenAI Codex Ambassador, Devin Ambassador y coautora en Packt. Pasé más de
-        seis años como Developer Advocate en Microsoft y llegué a más de 100.000 desarrolladores con
-        charlas, talleres y proyectos open source de JavaScript, TypeScript e IA.
-      </p>
-      <p>
-        <a href="https://www.youtube.com/@GlauciaLemos"><img src="https://img.shields.io/badge/YouTube-FF0000?logo=youtube&logoColor=white" alt="YouTube" /></a>
-        <a href="https://www.linkedin.com/in/glaucialemos"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-        <a href="https://x.com/glaucia_lemos86"><img src="https://img.shields.io/badge/X-000000?logo=x&logoColor=white" alt="X" /></a>
-        <a href="https://www.instagram.com/glaucia.lemos.dev"><img src="https://img.shields.io/badge/Instagram-E4405F?logo=instagram&logoColor=white" alt="Instagram" /></a>
-        <a href="https://github.com/glaucia86"><img src="https://img.shields.io/badge/GitHub-181717?logo=github&logoColor=white" alt="GitHub" /></a>
-      </p>
+    <td width="50%" valign="top">
+      <a href="https://glaucialemos.dev/es/sobre"><img src="public/galaxia/scenes/niveora/background.webp" alt="Nivéora: paisaje nevado con una estación de expedición y auroras" width="480" /></a>
+      <h3>02 · Nivéora</h3>
+      <p><b>Sobre mí · El mundo de la nieve y las auroras</b><br />Etapas de trayectoria, hitos y un diario de expedición formado por años de ingeniería y educación.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://glaucialemos.dev/es/projetos"><img src="public/galaxia/scenes/mars-lab/background.webp" alt="Marte: una base de investigación en un valle de rocas rojas" width="480" /></a>
+      <h3>03 · Marte, Vale das Invenções</h3>
+      <p><b>Proyectos · El valle de las invenciones</b><br />Un laboratorio de repositorios de código abierto, telemetría de GitHub, contribuciones y experimentos de ingeniería.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://glaucialemos.dev/es/conteudo"><img src="public/galaxia/scenes/lumina/background.webp" alt="Lúmina: una biblioteca rodeada de cristales luminosos" width="480" /></a>
+      <h3>04 · Lúmina, a Biblioteca Viva</h3>
+      <p><b>Contenido · La biblioteca viva</b><br />Artículos organizados por año, idioma y plataforma, con colecciones seleccionadas y conexiones entre publicaciones.</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <a href="https://glaucialemos.dev/es/eventos"><img src="public/galaxia/scenes/earth-orbit/background.webp" alt="Atlas: una sala de observación orbital con vistas a la Tierra" width="480" /></a>
+      <h3>05 · Atlas das Conexões</h3>
+      <p><b>Eventos · Órbita terrestre</b><br />Un globo interactivo, un diario de eventos y las próximas conexiones. La presencia física y la participación remota cuentan historias distintas.</p>
+    </td>
+    <td width="50%" valign="top">
+      <a href="https://glaucialemos.dev/es/servicos"><img src="public/galaxia/scenes/aurelia/background.webp" alt="Aurélia: jardines colgantes y una terraza en un paisaje alienígena luminoso" width="480" /></a>
+      <h3>06 · Aurélia, os Jardins Suspensos</h3>
+      <p><b>Servicios · Los jardines colgantes</b><br />Talleres, mentorías, charlas y una experiencia cinematográfica de contacto para la próxima colaboración.</p>
     </td>
   </tr>
 </table>
 
+Estos son los destinos públicos implementados. Incluso una URL perdida tiene su propio escenario: **Maré Rubra**, la experiencia de error 404.
+
+| Página | Ruta |
+| --- | --- |
+| Entrada por idioma | `/` → `/pt`, `/en` o `/es`, según `Accept-Language` |
+| Inicio | `/[lang]` |
+| Sobre mí | `/[lang]/sobre` |
+| Proyectos | `/[lang]/projetos` |
+| Contenido | `/[lang]/conteudo` |
+| Eventos | `/[lang]/eventos` |
+| Servicios | `/[lang]/servicos` |
+| Coordenadas perdidas | Rutas inexistentes → 404 localizado |
+
+Los slugs de las rutas son iguales en los tres idiomas. El selector de idioma conserva la ruta de la página.
+
+<a id="experience"></a>
+
+## Lo que da vida a la galaxia
+
+- **Una atmósfera propia en cada mundo.** Los motores de Canvas dibujan estrellas, auroras, nieve, polvo, luz de cristales y pétalos. Las transiciones de desplazamiento siguen el lenguaje visual de cada escenario.
+- **Un elenco compuesto por capas.** Poses aprobadas, sprites transparentes, capas de parpadeo y objetos anclados sitúan a Glaucia y Prince dentro de cada escena.
+- **Movimiento con dirección.** GSAP coordina timelines, texto, trazados SVG, arrastre y coreografías de desplazamiento. Lenis comparte su ticker; los ciclos de las escenas se pausan fuera de pantalla o cuando la pestaña está oculta.
+- **Una banda sonora para el viaje.** Cada mundo principal tiene su música, junto con ambientes, efectos grabados y sonidos sintetizados con Web Audio. El audio empieza apagado; música y efectos tienen controles de volumen separados.
+- **Contenido profesional para consultar.** Búsqueda de repositorios, estanterías de artículos, etapas de trayectoria, diario de eventos y detalles de servicios siguen siendo centrales en cada página.
+- **El contacto forma parte de la escena.** Aurélia abre el formulario en un portal, guía el proceso en tres pasos y representa visualmente el resultado del envío. La solicitud real pasa por una Server Action con validación.
+- **Exploración a tu ritmo.** La radio Comlink del encabezado hace accesible la exploración opcional mediante teclado y toque, con progreso guardado localmente.
+
+<a id="architecture"></a>
+
+## La ingeniería detrás de los escenarios
+
+**Las páginas del App Router de Next.js obtienen y preparan el contenido en el servidor. Los Client Components añaden interacción, animación y medios del navegador alrededor de ese contenido.** Los módulos de dominio transforman registros en líneas de tiempo, estanterías, telemetría y mapas; los componentes de cada mundo dan identidad visual a esos registros.
+
+```mermaid
+flowchart TD
+    V["Visitante"] --> M["src/middleware.ts<br/>Negociación de idioma en /"]
+    M --> L["app/[lang]/layout.tsx<br/>Metadatos localizados + SiteChrome"]
+    L --> P["Páginas en el servidor<br/>Contenido, registros y composición"]
+    D["JSON local + esquemas Zod"] --> P
+    R["GitHub · YouTube · Luma<br/>Revalidación en 24 h + respaldo local"] --> P
+    P --> C["Client Components"]
+    C --> W["Escenas de los mundos<br/>Arte por capas · Canvas · cobe"]
+    C --> A["Movimiento y audio<br/>GSAP · Lenis · Web Audio"]
+    C --> U["Controles del visitante<br/>Idioma · Movimiento · Sonido"]
+    C --> F["Formulario de contacto"]
+    F --> S["Server Action<br/>Honeypot + validación Zod"]
+    S --> T["Verificación Turnstile"]
+    T --> E["Entrega mediante Web3Forms"]
+```
+
+| Límite | Responsabilidad |
+| --- | --- |
+| `src/app/[lang]/` | Páginas localizadas, metadatos, renderizado en el servidor y composición |
+| `src/lib/data.ts` + `types.ts` | Validar los registros locales con Zod antes de llegar a la interfaz |
+| `src/lib/*-records.ts` | Derivar el contenido factual de cada mundo a partir de esos registros |
+| `src/lib/scenes.ts` + `src/data/galaxia/` | Geometría de escenas, anclajes de poses y metadatos de los recursos generados |
+| `src/lib/gsap.ts`, `motion.ts`, `use-motion.ts` | Configuración de animaciones, preferencias y ciclo de visibilidad |
+| `src/lib/sfx.ts` + `music.ts` | Efectos, ambientes, música y preferencias de volumen, siempre opcionales |
+| `src/app/actions/contact.ts` | Validar y entregar las solicitudes de contacto en el servidor |
+
+No hay una base de datos de la aplicación que aprovisionar. Los datos editoriales y las instantáneas de respaldo viven en el repositorio; las preferencias y el progreso de exploración se guardan en el navegador del visitante.
+
+### Stack
+
+| Capa | Implementación |
+| --- | --- |
+| Aplicación | Next.js 15 · React 19 · TypeScript con `strict` habilitado |
+| Presentación | Tailwind CSS 4 · tokens semánticos de CSS · estilos propios por mundo |
+| Movimiento | GSAP 3 · `@gsap/react` · ScrollTrigger · SplitText · DrawSVG · Draggable · Lenis |
+| Gráficos | Motores Canvas 2D · SVG · CSS 3D · globo WebGL con cobe |
+| Audio y vídeo | Web Audio API · audio/vídeo HTML · efectos Ogg/MP3 · vídeo WebM/MP4 |
+| Contenido y formularios | Zod 4 · React Server Actions · Cloudflare Turnstile · Web3Forms |
+| Verificación | ESLint · TypeScript · Vitest · Playwright |
+| Fuentes | Geist · Geist Mono · Departure Mono, servidas localmente con `next/font/local` |
+
+### Registros reales e integraciones con respaldo
+
+| Fuente | Qué alimenta | Si falla la red |
+| --- | --- | --- |
+| GitHub | Clasificación y archivo de repositorios, perfil y telemetría de contribuciones | Instantáneas locales de proyectos y GitHub |
+| RSS público de YouTube | Última publicación larga del canal, con filtro de Shorts | `src/data/youtube.json` |
+| Endpoint público del perfil de Luma | Próximos eventos organizados | `src/data/luma.json`, filtrado a fechas futuras |
+| JSON local seleccionado | Trayectoria, artículos, historial de eventos, contribuciones y servicios | Disponible directamente en el repositorio |
+
+Las integraciones de red revalidan los datos cada 24 horas. El endpoint de Luma no está documentado; el respaldo local forma parte de la integración. Su script de instantáneas informa de eventos ausentes del historial seleccionado sin añadirlos automáticamente.
+
+**El mapa representa la presencia con precisión:** los eventos remotos son señales, nunca marcadores de ciudades visitadas. Los países con participación presencial se cuentan por separado de los representados remotamente. Eventos utiliza filtros GET que también funcionan sin JavaScript; la versión mejorada actualiza los resultados en la misma página.
+
+<a id="accessibility"></a>
+
+## Hecho para quien está a los controles
+
+- La preferencia del sistema `prefers-reduced-motion` y la elección manual del sitio controlan las animaciones.
+- El HTML del servidor empieza con contenido legible; el movimiento se activa tras la hidratación. Los diseños con movimiento reducido conservan la información de forma estática.
+- La interfaz incluye salto al contenido, foco visible, controles etiquetados y alternativas táctiles.
+- El portal de contacto gestiona el foco, admite Escape y devuelve el foco al cerrarse.
+- Los diálogos y paneles señalados mantienen su desplazamiento nativo mientras Lenis gestiona la página.
+- El sonido empieza apagado. Música y ambientes responden a la visibilidad de la página; las preferencias de audio persisten localmente.
+- El formulario de contacto se presenta completo antes de la hidratación y pasa a tres pasos cuando está habilitado. **El envío requiere JavaScript para Turnstile**; LinkedIn sigue disponible como alternativa de contacto.
+
+Navegador, teclado, tecnologías de asistencia y revisión visual siguen formando parte de la validación.
+
+<a id="getting-started"></a>
+
+## Ejecuta la expedición localmente
+
+Utiliza **Node.js 22**, la versión definida en CI, y npm.
+
+```bash
+git clone https://github.com/glaucia86/glaucialemos.dev.git
+cd glaucialemos.dev
+npm ci
+npm run dev
+```
+
+Abre [localhost:3000](http://localhost:3000). La raíz selecciona un idioma; también puedes abrir `/pt`, `/en` o `/es` directamente.
+
+### Configuración opcional del entorno
+
+El portafolio funciona sin credenciales. El envío de contacto necesita las tres claves de contacto.
+
+```bash
+# macOS / Linux
+cp .env.example .env.local
+```
+
+```powershell
+# Windows / PowerShell
+Copy-Item .env.example .env.local
+```
+
+| Variable | Finalidad |
+| --- | --- |
+| `WEB3FORMS_ACCESS_KEY` | Credencial del servidor para entregar el contacto |
+| `TURNSTILE_SECRET_KEY` | Credencial del servidor para verificar el desafío |
+| `TURNSTILE_SITE_KEY` | Clave pública del widget, leída por el servidor y enviada al componente |
+| `GITHUB_TOKEN` | Token opcional del servidor para ampliar el límite de la API de GitHub; añádelo a `.env.local` si lo necesitas |
+
+Mantén las credenciales del servidor fuera de las variables `NEXT_PUBLIC_*`. Reinicia el servidor local tras cambiar el entorno. Sin las claves de contacto, los campos y el envío quedan deshabilitados y LinkedIn permanece disponible.
+
+Autoriza tu hostname en Turnstile y configura el destinatario en Web3Forms. La integración actual envía desde el servidor; [Web3Forms exige un plan de pago y autorización de las IP del servidor para este uso](https://docs.web3forms.com/getting-started/api-reference).
+
+<a id="verification"></a>
+
+## Verificación y producción
+
+| Comando | Finalidad |
+| --- | --- |
+| `npm run dev` | Desarrollo local |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript sin emitir JavaScript |
+| `npm test` | Suites unitarias de Vitest |
+| `npm run build` | Build de producción |
+| `npm run start` | Servir un build de producción existente |
+| `npm run test:browser` | Ejecutor de navegador; inicia el servidor de producción si `BASE_URL` no está definido |
+
+[GitHub Actions](.github/workflows/ci.yml) ejecuta instalación, lint, typecheck, pruebas unitarias y build en los pushes a `main` y `feat/**` y en las PR dirigidas a `main`. Las suites de navegador se ejecutan por separado.
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run build
+```
+
+**Detén el servidor de desarrollo antes del build:** ambos usan `.next`. La salida de producción debe incluir `ƒ Middleware`.
+
+Para verificar en el navegador, ejecuta estos comandos por tu cuenta después del build:
+
+```bash
+npx playwright install chromium
+npm run test:browser -- atlas aurelia
+```
+
+El ejecutor acepta nombres de suites y normalmente utiliza el puerto `3100`. Para reutilizar tu propio servidor, define `BASE_URL`:
+
+```bash
+# macOS / Linux
+BASE_URL=http://127.0.0.1:3100 node tests/atlas.browser.mjs
+```
+
+```powershell
+# Windows / PowerShell
+$env:BASE_URL = "http://127.0.0.1:3100"
+node tests/atlas.browser.mjs
+```
+
+Las pruebas de contacto en el navegador simulan la entrega. La revisión manual de imagen y sonido complementa las suites automáticas. En Windows, comprueba `netstat -ano` si un servidor Next detenido sigue ocupando el puerto.
+
+<a id="art-pipeline"></a>
+
+## Del arte aprobado a una escena viva
+
+```text
+Fuentes aprobadas → recorte y limpieza del fondo → cuadrícula y paleta
+                 → capas WebP transparentes + JSON de la escena
+                 → composición anclada + movimiento + atmósfera en Canvas
+```
+
+El pipeline Node/Sharp conserva los fondos aprobados mientras procesa las capas de personajes y objetos. Los metadatos de las escenas mantienen dimensiones lógicas, dimensiones de los píxeles exportados y anclajes, para que un cambio de pose siga unido al punto correcto de la composición.
+
+```bash
+node scripts/build-galaxia-assets.mjs niveora --debug
+node scripts/build-galaxia-assets.mjs --manifest
+```
+
+| Ubicación | Función |
+| --- | --- |
+| `docs/art/galaxia-encantada/approved-source/` | Fondos, hojas de personajes y objetos aprobados |
+| `docs/art/galaxia-encantada/manifest.json` | Inventario de fuentes con hashes SHA-256 |
+| `src/data/galaxia/layout.json` | Cuadrícula, paletas, escalas y posiciones por escena |
+| `public/galaxia/` | Fondos, sprites, objetos y medios exportados |
+| `src/data/galaxia/` | Metadatos generados y consumidos por la aplicación |
+
+Los recursos generados están versionados, por lo que ejecutar el sitio no requiere regenerar el arte.
+
+<a id="project-map"></a>
+
+## Encuentra tu camino en el repositorio
+
+```text
+src/
+├── app/
+│   ├── [lang]/          Páginas y layouts localizados
+│   ├── actions/         Server Action de contacto
+│   └── *.css            Tokens, estilos de mundos e interfaz compartida
+├── components/          Escenas, secciones de página y controles compartidos
+│   └── motion/          Desplazamiento suave y efectos de interacción compartidos
+├── data/                Registros seleccionados, instantáneas y metadatos de escenas
+├── i18n/                Diccionarios y textos de mundos en PT, EN y ES
+├── lib/                 Dominio, integraciones y controladores del navegador
+└── middleware.ts        Negociación de idioma en la raíz
+public/
+├── galaxia/             Arte y medios de las escenas
+├── music/               Bandas sonoras de los mundos
+└── sfx/                 Efectos grabados y ambientes
+scripts/                 Pipeline de recursos y mantenimiento de instantáneas
+tests/                   Pruebas unitarias y suites de navegador de ejecución manual
+```
+
+Para mantenimiento, comienza por [AGENTS.md](AGENTS.md) y el [handoff de implementación](docs/galaxia-encantada/HANDOFF.md). El [sistema de diseño](DESIGN-SYSTEM.md), el [registro de decisiones](DECISOES.md) y el [plan de migración](docs/galaxia-encantada/PLANO-MIGRACAO.md) conservan la historia del proyecto; las entradas antiguas pueden describir un diseño anterior. Los documentos de mantenimiento incluyen detalles de implementación de la narrativa.
+
+<a id="credits"></a>
+
+## Hecho por Glaucia. Explorado con Prince.
+
+**Glaucia Lemos** conecta ingeniería de software, educación técnica, liderazgo e IA. Este portafolio reúne ese trabajo en un universo con identidad visual propia y un copiloto de cuatro patas.
+
+[GitHub](https://github.com/glaucia86) · [LinkedIn](https://www.linkedin.com/in/glaucialemos) · [YouTube](https://www.youtube.com/@GlauciaLemos) · [Próximos eventos](https://luma.com/user/glaucia_lemos86)
+
+Dirección creativa y aprobación: **Glaucia Lemos**. El arte de los mundos se produjo con asistencia de IA mediante Grok Image y se revisó antes de integrarse.
+
+- Los efectos grabados y los ambientes tienen sus propias [fuentes y créditos CC0](public/sfx/CREDITS.md).
+- La música de los mundos se creó en Manus y se proporcionó para este proyecto; sus [notas de uso](public/music/CREDITS.md) son independientes de los efectos CC0.
+- Departure Mono es de Helena Zhang, bajo [SIL OFL 1.1](src/app/fonts/DepartureMono-LICENSE.txt).
+- Solicita autorización antes de reutilizar el arte o los textos del portafolio; las licencias de recursos de terceros no conceden derechos generales sobre todo el proyecto.
+
 <div align="center">
 
-<br />
+**El código está aquí. El viaje te espera.**
 
-**Si esta expedición te inspiró, [deja una estrella](https://github.com/glaucia86/glaucialemos.dev/stargazers).**
+[Explora Galáxia Encantada →](https://glaucialemos.dev/es)
 
-<sub>Galáxia Encantada · Sigue explorando.</sub>
+<sub>glaucialemos.dev · Sigue explorando.</sub>
 
 </div>

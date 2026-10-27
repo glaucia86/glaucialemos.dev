@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { existsSync } from "node:fs";
 import { EGGS, type EggId, type EggPage } from "@/lib/egg-catalog";
 import { DESTINATIONS } from "@/lib/journey-constellation";
 import { VOYAGE_WORLDS, mix, paletteAt, worldReport } from "@/lib/voyage";
@@ -50,6 +51,13 @@ describe("a viagem", () => {
     expect(paletteAt(1)).toEqual(VOYAGE_WORLDS.at(-1)!.palette);
     expect(paletteAt(-3)).toEqual(paletteAt(0));
     for (let step = 0; step <= 100; step++) expect(paletteAt(step / 100).accent).toMatch(/^#[0-9a-f]{6}$/);
+  });
+  it("ends at Red Tide with its current 404 poster and palette, without a revisit route", () => {
+    const world = VOYAGE_WORLDS.find((world) => world.page === "notfound")!;
+    const palette = { base: "#0d0612", accent: "#f07072", glow: "#ffbc78" };
+    expect(world).toMatchObject({ path: null, plate: "/galaxia/scenes/red-tide/poster.webp", palette });
+    expect(existsSync(`public${world.plate}`)).toBe(true);
+    expect(paletteAt(1)).toEqual(palette);
   });
   it.each(["pt", "en", "es"] as const)("has a complete voyage in %s, with a name and hint for every secret", (lang) => {
     const copy = beyondOrbit[lang];
