@@ -131,7 +131,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <button type="submit">{copy.send}</button>
         </form>
         <p className="comlink__feedback" role="status" aria-live="polite">{feedback}</p>
-        <div className="comlink__scroll" tabIndex={0} role="region" aria-labelledby="comlink-title">
+        <div className="comlink__scroll" data-lenis-prevent="" tabIndex={0} role="region" aria-labelledby="comlink-title">
           {remainingDiscoveries("curious-letter", found) === 0 && <button type="button" className="comlink__envelope" onClick={() => run("curious-letter")}><span aria-hidden="true">✉</span> {copy.letter.open}</button>}
           {found.includes("epilogue-signal") && <Link className="comlink__envelope" href={`/${pathname.split("/")[1]}/alem-da-ultima-orbita`} onClick={() => dialog.current?.close()}>{copy.epilogue.revisit}</Link>}
           {count > 0 && <button type="button" className="comlink__reset" data-confirming={confirming || undefined} onClick={wipe}>
