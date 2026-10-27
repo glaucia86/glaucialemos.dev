@@ -79,8 +79,8 @@ html[data-boot="pending"] .boot--atlas { background: radial-gradient(ellipse at 
 
 /* Glaucia and Prince: idle and side are always visible (server, no JS, reduced motion); other poses replace them. */
 .atlas-crew > i, .atlas-prince > i { opacity: 0; }
-.atlas-crew:not([data-acting]) > .atlas-crew__pose--idle,
-.atlas-prince:not([data-acting]) > .atlas-prince__pose--front-bare,
+.atlas-crew:not([data-acting]) > .atlas-crew__pose--hip,
+.atlas-prince:not([data-acting]) > .atlas-prince__pose--front,
 .atlas-crew > [data-active], .atlas-prince > [data-active] { opacity: 1; }
 .hero-scene-layer--atlas[data-paused="true"] * { animation-play-state: paused !important; }
 .atlas-hero[data-motion="false"] .atlas-plane *,
@@ -506,3 +506,8 @@ main.events-page { overflow: clip; }
   .atlas-status { bottom: calc(56.25vw + 60px - 3.4rem); }
 }
 @media (max-width: 480px) { .atlas-dock button { flex: 1 1 0; } }
+/* 05B: Glaucia blinks on her rest pose (hand on hip); the overlay only shows while that pose is on. */
+.atlas-crew__blink { position: absolute; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .atlas-hero[data-pose="hip"] .atlas-crew > .atlas-crew__blink { animation: crew-blink 4.6s steps(1) 1.3s infinite; }
+}

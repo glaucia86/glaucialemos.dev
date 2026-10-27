@@ -36,7 +36,7 @@ describe("epilogue eligibility", () => {
   });
   it.each(["pt", "en", "es"])("maps the route in %s", lang => {
     expect(pageOf(`/${lang}/alem-da-ultima-orbita`)).toBe("epilogue");
-    expect(EGGS).toHaveLength(37);
+    expect(EGGS).toHaveLength(43);
   });
 });
 
@@ -74,8 +74,8 @@ it.each(["pt", "en", "es"] as const)("renders an accessible static finale and lo
   for (const egg of EGGS.filter((egg) => egg.page === "services" && egg.id !== "epilogue-signal")) {
     expect(gardens).toContain(comlink[lang].eggs[egg.id].hint);
   }
-  expect(voyage.split(copy.faint)).toHaveLength(3);
-  expect(html.match(/data-uncharted="true"/g)).toHaveLength(2);
+  expect(voyage.split(copy.faint)).toHaveLength(2);
+  expect(html.match(/data-uncharted="true"/g)).toHaveLength(1);
   expect(html).toContain("/galaxia/scenes/beyond-orbit/ambient.webp");
   expect(html.match(/class="beyond-orbit__node"/g)).toHaveLength(EGGS.length);
   expect(comlink[lang].epilogue.signalLocked).toBe(copy.signalLocked);

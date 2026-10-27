@@ -74,13 +74,14 @@ describe("A Última Luz", () => {
     const credits = html.slice(0, html.indexOf('class="beyond-orbit__post"'));
     const post = html.slice(html.indexOf('class="beyond-orbit__post"'));
     const badges = credits.match(/class="beyond-orbit__world-badges">(.*?)<\/span>/)![1];
-    expect(badges.match(/<img /g)).toHaveLength(5);
+    expect(badges.match(/<img /g)).toHaveLength(6);
     expect(badges).toContain(SCENES.aurelia.assets.background.src);
     expect(credits).toContain(copy.worlds.services);
-    expect(credits).toContain(copy.mapped.replace("{total}", "37"));
+    expect(credits).toContain(copy.mapped.replace("{total}", "43"));
     for (const actor of ["glaucia", "prince"] as const) expect(credits).toContain(SCENES["beyond-orbit"].assets.actors[actor]["float-idle"].src);
     expect(post).not.toContain(copy.worlds.services);
-    expect(post).toContain(`<li>${copy.worlds.events}</li><li>${copy.worlds.notfound}</li>`);
+    expect(post).toContain(`<li>${copy.worlds.notfound}</li>`);
+    expect(post).not.toContain(`<li>${copy.worlds.events}</li>`);
   });
   it("keeps the last star on the Veil and clear of both actors", () => {
     const scene = SCENES["beyond-orbit"];

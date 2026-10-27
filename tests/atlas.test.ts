@@ -124,7 +124,7 @@ describe("cena do Atlas", () => {
       expect(box.left + box.width).toBeLessThanOrEqual(100);
       expect(box.top + box.height).toBeLessThanOrEqual(100);
     }
-    const glaucia = poseBox(scene, "glaucia", "idle"); const prince = poseBox(scene, "prince", "front-bare");
+    const glaucia = poseBox(scene, "glaucia", "idle"); const prince = poseBox(scene, "prince", "front");
     expect(prince.left).toBeGreaterThan(PEDESTAL.x);
     expect(glaucia.left).toBeGreaterThan(prince.left + prince.width / 2);
     // Acting, Prince turns his side view, which looks left: toward the hologram.

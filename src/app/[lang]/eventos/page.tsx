@@ -120,7 +120,7 @@ export default async function Events({ params, searchParams }: Props) {
 
     {/* The camera voyage: from the navigation room, through the window, around the real globe, into the Atlas */}
     <AtlasVoyage plate={atlasScene.assets.background.src} copy={a.voyage} locale={locale}
-      crew={[{ src: atlasScene.assets.actors.glaucia.idle.src, style: boxStyle(poseBox(atlasScene, "glaucia", "idle")) }, { src: atlasScene.assets.actors.prince["front-bare"].src, style: boxStyle(poseBox(atlasScene, "prince", "front-bare")) }]}
+      crew={[{ src: atlasScene.assets.actors.glaucia.hip.src, style: boxStyle(poseBox(atlasScene, "glaucia", "hip")) }, { src: atlasScene.assets.actors.prince.front.src, style: boxStyle(poseBox(atlasScene, "prince", "front")) }]}
       cities={places.map(({ lat, lon, first: year, count: n }) => ({ lat, lon, first: year, count: n }))}
       years={timeline.map(({ year }) => ({ year, names: orbitOf(year, events).presencial.map((event) => event.nome), cities: places.filter((city) => city.first <= year).length, remote: timeline.filter((row) => row.year <= year).reduce((sum, row) => sum + row.remoto, 0) }))} />
 
@@ -135,7 +135,7 @@ export default async function Events({ params, searchParams }: Props) {
         <div className="atlas-board">
           <div className="atlas-board__globe">
             <AtlasGlobe markers={markers} orbits={orbits} labels={a.globe} readout={a.readout} pedestal={{ off: props["globe-pedestal-off"].src, on: props["globe-pedestal-activated"].src }}
-              base={{ cidade: base.cidade, lat: base.lat, lon: base.lon, count: base.count }} prince={atlasScene.assets.actors.prince.side.src} princeCopy={a.prince} path={path} />
+              base={{ cidade: base.cidade, lat: base.lat, lon: base.lon, count: base.count }} prince={atlasScene.assets.actors.prince.listen.src} princeCopy={a.prince} path={path} />
             <ul className="atlas-legend">
               <li data-kind="city"><i aria-hidden="true" />{a.globe.legendCity}</li>
               <li data-kind="signal"><i aria-hidden="true" />{a.globe.legendSignal}</li>
@@ -185,7 +185,7 @@ export default async function Events({ params, searchParams }: Props) {
         </div></div>
         <SignalDeck years={timeline} path={path} copy={a.signals} formats={a.formats} languages={a.languages} types={d.events.types}
           byLanguage={count((event) => event.idioma, ["pt-BR", "en", "es"] as const)} byType={count((event) => event.tipo, ["palestra", "workshop", "organizacao"] as const)} byFormat={count((event) => event.formato, ["presencial", "remoto"] as const)}
-          radars={{ small: props["radar-dish-small"].src, large: props["radar-dish-large"].src }} prince={atlasScene.assets.actors.prince.side.src}
+          radars={{ small: props["radar-dish-small"].src, large: props["radar-dish-large"].src }} prince={atlasScene.assets.actors.prince.listen.src}
           firstSignal={firstRemote} princeCopy={a.prince} />
       </div>
     </section>

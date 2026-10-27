@@ -179,8 +179,8 @@ for (const [width, height] of [[1920, 1080], [1440, 900], [1366, 768], [768, 102
   const { context, page, errors } = await open({ viewport: { width, height }, ...touch });
   const layout = await page.evaluate(() => {
     const hero = document.querySelector(".atlas-hero").getBoundingClientRect();
-    const glaucia = document.querySelector(".atlas-crew__pose--idle").getBoundingClientRect();
-    const prince = document.querySelector(".atlas-prince__pose--front-bare").getBoundingClientRect();
+    const glaucia = document.querySelector(".atlas-crew__pose--hip").getBoundingClientRect();
+    const prince = document.querySelector(".atlas-prince__pose--front").getBoundingClientRect();
     return { overflow: document.documentElement.scrollWidth > innerWidth, glaucia: glaucia.right <= hero.right + 1 && glaucia.bottom <= hero.bottom + 1 && glaucia.width > 0, prince: prince.left >= hero.left - 1 && prince.width > 0 };
   });
   assert.deepEqual(layout, { overflow: false, glaucia: true, prince: true });
@@ -193,7 +193,7 @@ for (const [width, height] of [[1920, 1080], [1440, 900], [1366, 768], [768, 102
 await check("sem JavaScript: cena em repouso, textos e diário completos", async () => {
   const { context, page } = await open({ javaScriptEnabled: false });
   assert.ok(await visible(page, "h1#events-title"));
-  assert.ok(await visible(page, ".atlas-crew__pose--idle"));
+  assert.ok(await visible(page, ".atlas-crew__pose--hip"));
   assert.equal(await page.locator(".log__entry").count(), events.length);
   assert.ok(await visible(page, ".atlas-countries"));
   await page.screenshot({ path: `${shots}/nojs-1440.png`, fullPage: true });
