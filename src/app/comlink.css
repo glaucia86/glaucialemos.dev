@@ -1,7 +1,8 @@
 /* Star radio — the secret channel that makes every Easter egg reachable on desktop, phone and tablet. Lives in the header. */
 .comlink__envelope { display: flex; align-items: center; gap: .7rem; width: 100%; min-height: 48px; margin: 1rem 0; padding: .8rem; border: 1px solid #ffd27a; background: #202137; color: #fff2c8; font: .65rem/1.8 var(--font-pixel); text-align: left; cursor: pointer; }
 .comlink__envelope > span { font: 1.8rem monospace; }
-.curious-letter { width: min(620px, calc(100% - 2rem)); max-height: calc(100dvh - 3rem); padding: 0; border: 2px solid #88cbe9; background: #0c1b2e; color: #e9f6ff; overflow: auto; box-shadow: 6px 6px 0 #233951; }
+.curious-letter { width: min(620px, calc(100% - 2rem)); max-height: calc(100dvh - 3rem); padding: 0; border: 2px solid #88cbe9; background: #0c1b2e; color: #e9f6ff; overflow: hidden; box-shadow: 6px 6px 0 #233951; }
+.curious-letter__scroll-frame { max-height: calc(100dvh - 3rem - 4px); }
 .curious-letter::backdrop { background: #050d1bd9; }
 .curious-letter__paper { padding: clamp(1.25rem, 5vw, 3rem); background: repeating-linear-gradient(0deg, transparent 0 31px, #88cbe90c 31px 32px); }
 .curious-letter h2 { color: #fff2c8; font: clamp(1rem, 3vw, 1.4rem)/1.7 var(--font-pixel); }
@@ -36,16 +37,37 @@
   background: linear-gradient(180deg, color-mix(in srgb, var(--color-space-0) 85%, #06140b), var(--color-space-0));
   box-shadow: 0 -3px 0 0 var(--frame), 0 3px 0 0 var(--frame), -3px 0 0 0 var(--frame), 3px 0 0 0 var(--frame), 0 30px 80px color-mix(in srgb, var(--color-space-0) 80%, transparent);
 }
-.comlink__panel > :not(.comlink__scroll) { flex-shrink: 0; }
+.comlink__panel > :not(.comlink__scroll-frame) { flex-shrink: 0; }
+.comlink__scroll-frame { position: relative; display: flex; flex: 1 1 auto; min-height: 0; }
+/* Keep the fade off the scrollbar and let pointer/keyboard input reach the list. */
+.comlink__scroll-frame::after {
+  content: ""; position: absolute; inset: auto 12px 0 0; height: 24px; pointer-events: none;
+  background: linear-gradient(transparent, var(--color-space-0)); opacity: 0;
+}
+.comlink__scroll-frame[data-more]::after { opacity: 1; }
+.curious-letter__scroll-frame::after { background: linear-gradient(transparent, #0c1b2e); }
+/* Paint independently of native overlay scrollbar visibility; input stays native. */
+.comlink__mini-bar { position: absolute; z-index: 1; right: 0; top: 0; bottom: 0; width: 6px; border-radius: 3px; background: var(--hud-line); pointer-events: none; }
+.comlink__mini-bar[hidden] { display: none; }
+.comlink__mini-bar i { display: block; width: 100%; height: var(--thumb-h, 0px); translate: 0 var(--thumb-t, 0px); border-radius: 3px; background: var(--energy-green); }
 .comlink__scroll {
-  flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto; min-width: 0; min-height: 0; -webkit-overflow-scrolling: touch;
+}
+.comlink__scroll {
+  overflow-y: scroll; overscroll-behavior: contain; scrollbar-gutter: stable;
   scrollbar-width: thin; scrollbar-color: var(--energy-green) var(--hud-line);
 }
 .comlink__scroll:focus-visible { outline: 2px solid var(--energy-green); outline-offset: 2px; }
-.comlink__scroll::-webkit-scrollbar { width: 6px; }
-.comlink__scroll::-webkit-scrollbar-track { background: var(--hud-line); }
-.comlink__scroll::-webkit-scrollbar-thumb { background: var(--energy-green); }
-.comlink__scroll > .comlink__reset { margin: 0 0 .9rem; }
+.comlink__scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+.comlink__scroll::-webkit-scrollbar-track { background: var(--hud-line); border-radius: 3px; }
+.comlink__scroll::-webkit-scrollbar-thumb { background: var(--energy-green); border-radius: 3px; min-height: 24px; }
+.comlink__scroll::-webkit-scrollbar-thumb:hover, .comlink__scroll::-webkit-scrollbar-thumb:active { background: color-mix(in srgb, var(--energy-green) 80%, white); }
+@supports selector(::-webkit-scrollbar) {
+  /* Non-auto standard values override the native 6px pseudo-elements in Chromium. */
+  .comlink__scroll { scrollbar-width: auto; scrollbar-color: auto; }
+}
+.comlink__scroll-content { display: flow-root; }
+.comlink__scroll-content > .comlink__reset { margin: 0 0 .9rem; }
 .comlink__head { position: relative; padding-right: 3rem; }
 .comlink__channel { display: flex; align-items: center; gap: .55rem; margin: 0 0 .35rem; color: var(--energy-green); font: 400 .58rem var(--font-pixel); letter-spacing: .14em; }
 .comlink__rec { width: 7px; height: 7px; background: var(--energy-red); animation: hud-blink 1.2s steps(1) infinite; }
