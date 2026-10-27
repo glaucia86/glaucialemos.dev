@@ -46,7 +46,6 @@ html body dialog {
   overflow: auto; overscroll-behavior: contain;
 }
 html body dialog.comlink { margin-block: max(1rem, env(safe-area-inset-top)); }
-html body .comlink__panel { max-height: none; overflow: visible; }
 html body .telescope { padding: 1rem; }
 
 @media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
