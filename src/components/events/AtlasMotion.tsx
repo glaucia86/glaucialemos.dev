@@ -94,7 +94,7 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
     let keyboard = false;
     const fromKeyboard = () => { keyboard = !!document.activeElement?.matches(".atlas-hot:focus-visible, .comlink *"); };
     const show = (next: Reading) => { setReading(next); setFace(0); if (keyboard) requestAnimationFrame(() => readoutTitle.current?.focus({ preventScroll: true })); };
-    setPose("idle"); setPrince("front-bare"); setStage("idle");
+    setPose("hip"); setPrince("front"); setStage("idle");
     hotspots.forEach((button) => { button.hidden = false; });
 
     // The hologram loads cobe on demand; without WebGL the pedestal keeps its CSS glow.
@@ -161,13 +161,13 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
     const idleLoop = () => {
       if (stage === "idle") {
         restTurn++;
-        if (restTurn % 2) { setPose("profile"); later(() => { if (stage === "idle") setPose(restTurn % 4 === 1 ? "hip" : "idle"); }, 2600); }
-        setPrince(restTurn % 3 === 0 ? "side" : "front-bare");
+        if (restTurn % 2) { setPose("profile"); later(() => { if (stage === "idle") setPose(restTurn % 4 === 1 ? "idle" : "hip"); }, 2600); }
+        setPrince(restTurn % 3 === 0 ? "listen" : "front");
       }
       later(idleLoop, 6200);
     };
     later(idleLoop, 4200);
-    const settle = () => { setPose("idle"); setPrince("front-bare"); orb.dataset.orb = "idle"; setStage("idle"); };
+    const settle = () => { setPose("hip"); setPrince("front"); orb.dataset.orb = "idle"; setStage("idle"); };
 
     const intro = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } })
       .from(".atlas-copy > *", { autoAlpha: 0, y: 24, duration: .8, stagger: .08 })
@@ -179,13 +179,13 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
     const constellationRoute = () => {
       if (stage !== "idle") return;
       fromKeyboard(); setStage("trace"); discover("constellation-route");
-      setPose("profile"); play("holo"); buzz([15, 30, 15]);
+      setPose("trace"); play("holo"); buzz([15, 30, 15]);
       say(copy.status.tracing, 4200);
       holoEl.dataset.holo = "unfold";
       orbit.beam(pct(SPOTS.hand), pct(SPOTS.holo), 1.2);
       orbit.constellation(PROJECTION, stars, 4400, (index) => play("star", { detune: index * 35 }));
-      later(() => { setPose("hip"); say(copy.status.traced); play("citylights"); show({ kind: "constellation" }); orbit.sparks(pct(SPOTS.holo), 18); }, 4700);
-      later(() => { setStage("idle"); setPose("idle"); }, 6400);
+      later(() => { setPose("cheer"); say(copy.status.traced); play("citylights"); show({ kind: "constellation" }); orbit.sparks(pct(SPOTS.holo), 18); }, 4700);
+      later(() => { setStage("idle"); setPose("hip"); }, 6400);
     };
 
     // ——— Prince sniffs a signal, the navigation orb lights up and the hologram turns to the event's origin ———
@@ -194,16 +194,16 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
       fromKeyboard(); setStage("visor"); discover("dog-navigation");
       orbit.clearConstellation(); holoEl.dataset.holo = "idle";
       const event = nextEvent();
-      setPrince("side"); play("woof"); buzz([20, 30, 20]);
+      setPrince("stand"); play("woof"); buzz([20, 30, 20]);
       say(copy.status.sniffing);
-      later(() => { orb.dataset.orb = "active"; play("visor"); orbit.ring(pct(SPOTS.orb), 2, 10, CYAN); }, 450);
+      later(() => { setPrince("paw"); orb.dataset.orb = "active"; play("visor"); orbit.ring(pct(SPOTS.orb), 2, 10, CYAN); }, 450);
       later(() => orbit.beam(pct(SPOTS.orb), pct(SPOTS.holo), 1.8), 700);
       later(() => {
         if (event.lat !== null && event.lon !== null) {
           holo?.focus(event.lat, event.lon, () => { orbit.ring(pct(SPOTS.holo), 3, 12, GOLD); orbit.sparks(pct(SPOTS.holo), 14); });
           say(copy.status.locked); play("citylights");
         } else { orbit.ring(pct(SPOTS.orb), 4, 22, CYAN); say(copy.status.signal); play("radar"); }
-        setPrince("side-b");
+        setPrince("wag");
       }, 1200);
       later(() => show({ kind: "visor", event }), 1900);
       later(() => setFace(1), 2500);
@@ -220,7 +220,7 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
       later(() => { holoEl.dataset.holo = "idle"; setStage("idle"); emitEgg("orbital-trail"); }, 1500);
     };
 
-    const openTablet = () => { if (stage !== "idle") return; setPose("profile"); play("holo"); setTablet(true); };
+    const openTablet = () => { if (stage !== "idle") return; setPose("tablet"); play("holo"); setTablet(true); };
     controls.current = { constellation: () => { setTablet(false); constellationRoute(); }, orbit: () => { setTablet(false); holoOrbit(); } };
     const actions: Record<string, () => void> = { glaucia: openTablet, prince: dogNavigation, orb: dogNavigation, holo: holoOrbit };
     const replays: Record<string, () => void> = { "constellation-route": constellationRoute, "dog-navigation": dogNavigation };
@@ -238,10 +238,10 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
       const at = { u: parseFloat(satellite.style.left) / 100, v: parseFloat(satellite.style.top) / 100 };
       play("catch"); play("woof"); buzz([25, 30, 25]);
       say(copy.prince.caught);
-      setPrince("side"); orb.dataset.orb = "active";
+      setPrince("leap"); orb.dataset.orb = "active";
       orbit.beam(pct(SPOTS.orb), at, 1.4); orbit.sparks(at, 18, GOLD); orbit.ring(at, 2, 10, GOLD);
       gsap.to(satellite, { scale: 0, rotation: 200, duration: .6, ease: "back.in(2)" });
-      later(() => { setPrince("side-b"); show({ kind: "postcard", event: nextCard() }); play("citylights"); }, 1300);
+      later(() => { setPrince("wag"); show({ kind: "postcard", event: nextCard() }); play("citylights"); }, 1300);
       later(() => { settle(); flight.restart(true); }, 3600);
     };
     satellite.addEventListener("click", catchSatellite);

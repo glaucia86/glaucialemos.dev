@@ -6,7 +6,7 @@ import { SCENES, boxStyle, poseBox, type Box } from "@/lib/scenes";
 export const atlasScene = SCENES["earth-orbit"];
 const { props, actors } = atlasScene.assets;
 
-// Only approved poses. GE-GL-05 has no blink and no action pose yet (GE-GL-05B / GE-DOG-05B were requested).
+// Approved poses of GE-GL-05/05B and GE-DOG-05/05B/05C. The blink was drawn on the hand-on-hip pose, Glaucia's rest pose.
 // Approved composition I: both face the visitor at rest. Prince stands right of the hologram (front view, no helmet, the
 // only front view of GE-DOG-05) and turns his side view — which looks left, at the hologram — when he acts.
 // Glaucia alternates her front views and turns her profile (also looking left: at Prince and the hologram).
@@ -15,7 +15,7 @@ export const PRINCE_POSES = ["front", "stand", "paw", "wag", "listen", "leap", "
 export type GlauciaPose = (typeof GLAUCIA_POSES)[number];
 export type PrincePose = (typeof PRINCE_POSES)[number];
 
-const glaucia = Object.fromEntries(GLAUCIA_POSES.map((pose) => [pose, poseBox(atlasScene, "glaucia", pose)])) as Record<GlauciaPose, Box>;
+const glaucia = Object.fromEntries([...GLAUCIA_POSES, "blink"].map((pose) => [pose, poseBox(atlasScene, "glaucia", pose)])) as Record<GlauciaPose | "blink", Box>;
 const prince = Object.fromEntries(PRINCE_POSES.map((pose) => [pose, poseBox(atlasScene, "prince", pose)])) as Record<PrincePose, Box>;
 
 const W = atlasScene.assets.background.w; const H = atlasScene.assets.background.h;
@@ -87,6 +87,7 @@ export function AtlasScene({ holoLabel }: { holoLabel: string }) {
       </span>
       <span className="atlas-crew">
         {GLAUCIA_POSES.map((name) => <i key={name} data-actor-pose={name} className={`atlas-crew__pose atlas-crew__pose--${name}`} style={pose("glaucia", name, glaucia[name])} />)}
+        <i className="atlas-crew__blink" style={pose("glaucia", "blink", glaucia.blink)} />
       </span>
       <canvas className="atlas-sky atlas-sky--front" />
     </div>
