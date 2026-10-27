@@ -55,7 +55,7 @@ export function mountContactCinema({ root, panel, canvas, typed, motion, celebra
     lastStatus = panel.dataset.contactStatus;
     if (lastStatus === 'ok') {
       root.dataset.cinemaSuccess = 'true';
-      if (motion) begin('success'); else settle();
+      if (motion) begin('success'); else { settle(); celebrate(); }
     } else {
       delete root.dataset.cinemaSuccess;
       if (phase === 'success' || root.dataset.cinema === 'success') settle();

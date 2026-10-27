@@ -67,6 +67,7 @@ export function AureliaMotion({children,copy,records,lang}:{children:ReactNode;c
       if(disposed)return;
       bloom.pause();relay.pause();settle();discover(id);pending.current=id;
       if(!motion){
+        play(id==='garden-bloom'?'garden-bloom':'relay');
         pending.current=null;
         if(id==='garden-bloom'){section.dataset.bloom='true';reveal();}
         else {section.dataset.beacon='true';contact();}

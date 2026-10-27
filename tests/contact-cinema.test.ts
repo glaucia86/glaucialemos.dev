@@ -109,12 +109,12 @@ describe('ContactCinema — lifecycle', () => {
     }
     expect(h.root.dataset.cinema).toBe('success'); expect(frames.size).toBe(0); h.dispose();
   });
-  it('reduced motion shows final copy and sprout without frames, intersection or sound', () => {
+  it('reduced motion shows final copy and sprout without frames; sound remains opt-in independently', () => {
     const h = harness(false); h.status('ok');
     expect(h.root.dataset.cinema).toBe('success'); expect(h.root.dataset.cinemaSuccess).toBe('true');
     expect(h.typed.textContent).toContain('próxima semente');
     expect(intersections).toHaveLength(0); expect(resizes).toHaveLength(0); expect(frames.size).toBe(0);
-    expect(h.ctx.fillRect).not.toHaveBeenCalled(); expect(h.celebrate).not.toHaveBeenCalled(); h.dispose();
+    expect(h.ctx.fillRect).not.toHaveBeenCalled(); expect(h.celebrate).toHaveBeenCalledTimes(1); h.dispose();
   });
   it('cleanup settles mid-celebration, disconnects observers and ignores queued callbacks', () => {
     const h = harness(); h.visible(true); h.status('ok'); tick(300);
