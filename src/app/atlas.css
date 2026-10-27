@@ -1,0 +1,517 @@
+/* Events — Atlas das Conexões (Earth orbit). Chapter chrome, HUD, hero jump and boot come from home.css;
+   scene data comes from src/lib/scenes.ts. Gold = in person (a city light); cyan = remote (a signal), everywhere. */
+.events-page {
+  --atlas-night: #071022; --atlas-deep: #040a18; --atlas-cobalt: #205fad; --atlas-cyan: #4bdfff; --atlas-teal: #50ddbf;
+  --atlas-gold: #f7c36c; --atlas-ice: #dff8ff;
+  --atlas-frame: color-mix(in srgb, var(--atlas-cyan) 40%, var(--color-space-line));
+}
+
+/* ——— 0. Intro ——— */
+html[data-boot="pending"] .boot--atlas { background: radial-gradient(ellipse at 50% 120%, #0f2b55, var(--color-space-0) 70%); }
+.boot--atlas .boot__frame {
+  --frame: color-mix(in srgb, var(--atlas-cyan) 60%, transparent);
+  background: color-mix(in srgb, var(--color-space-0) 80%, var(--atlas-night)); color: var(--atlas-ice); text-shadow: 0 0 8px color-mix(in srgb, var(--atlas-cyan) 45%, transparent);
+  box-shadow: 0 -3px 0 0 var(--frame), 0 3px 0 0 var(--frame), -3px 0 0 0 var(--frame), 3px 0 0 0 var(--frame), 0 0 80px color-mix(in srgb, var(--atlas-cobalt) 30%, transparent), inset 0 0 60px color-mix(in srgb, var(--atlas-gold) 6%, transparent);
+}
+.boot--atlas .boot__brand span { color: var(--atlas-gold); }
+.boot--atlas .boot__block { background: var(--atlas-cobalt); }
+.boot--atlas .boot__block:nth-child(3n) { background: var(--atlas-cyan); }
+.boot--atlas .boot__block:nth-child(5n) { background: var(--atlas-gold); }
+.boot--atlas .boot__granted { color: var(--color-white); text-shadow: 0 0 14px var(--atlas-cyan), 0 0 28px var(--atlas-gold); }
+.boot--atlas .boot__crest { display: block; width: 56px; height: 56px; margin: 0 0 1.25rem; filter: drop-shadow(0 0 10px color-mix(in srgb, var(--atlas-cyan) 60%, transparent)); }
+.boot--atlas .boot__crest-px { fill: var(--atlas-ice); opacity: 0; }
+
+/* ——— 1. Hero ——— */
+.atlas-hero-wrap { background: var(--color-space-0); }
+/* The plate is always a whole 16:9 picture. Wide and tall screens: the hero is the plate's height (capped by the viewport)
+   and the copy sits over its quiet left wall. Everything else: copy on top, the full 16:9 scene below it. */
+.atlas-hero { --scene-x: 80%; --scene-y: 100%; }
+.atlas-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
+.events-page .atlas-hero { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
+.events-page .atlas-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
+.atlas-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 580px); }
+.events-page .atlas-hero h1 { margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--atlas-night) 80%, transparent); }
+.events-page .atlas-hero h1 span { display: inline; color: transparent; background: linear-gradient(90deg, var(--atlas-gold), var(--atlas-teal) 50%, var(--atlas-cyan) 90%); -webkit-background-clip: text; background-clip: text; -webkit-box-decoration-break: clone; box-decoration-break: clone; text-shadow: none; }
+.atlas-hero .page-hero__subtitle { margin-top: 1.1rem; font-size: clamp(1rem, 1.25vw, 1.12rem); }
+.atlas-hero .page-hero__extra { margin-top: .9rem; font-size: .92rem; }
+.atlas-hero .actions { margin-top: 1.6rem; }
+@media (min-width: 1200px) and (min-height: 680px) and (hover: hover) and (pointer: fine) { .page-hero.atlas-hero .page-hero__shade { background: var(--hero-overlay-left); } }
+
+/* Scene plane: the plate's cover projection anchored on the ground (the crop eats sky, never the feet). */
+.hero-scene-layer--atlas, .atlas-layer { container-type: size; }
+.atlas-layer { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; }
+.atlas-plane { position: absolute; width: max(100cqw, 177.777778cqh); height: max(100cqh, 56.25cqw); left: var(--scene-x); top: var(--scene-y); transform: translate(calc(-1 * var(--scene-x)), calc(-1 * var(--scene-y))); }
+.atlas-plane > * { position: absolute; display: block; }
+.atlas-plane i { display: block; }
+.atlas-sky { inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.atlas-hero :is(.page-hero__image, .hero-scene-layer, .atlas-layer) { transform-origin: 78% 32%; }
+:is(.atlas-crew > i, .atlas-prince > i, .atlas-orb > i:not(.atlas-orb__glow)) { position: absolute; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; }
+.atlas-crew, .atlas-prince, .atlas-orb { inset: 0; pointer-events: none; }
+
+/* The projection beam and the hologram: the real globe, rendered small and scaled up in pixels. */
+.atlas-beam { background: linear-gradient(to top, color-mix(in srgb, var(--atlas-cyan) 38%, transparent), color-mix(in srgb, var(--atlas-cyan) 6%, transparent) 85%, transparent); clip-path: polygon(38% 100%, 62% 100%, 100% 0, 0 0); mix-blend-mode: screen; opacity: .55; pointer-events: none; }
+.atlas-holo { pointer-events: none; transition: opacity .4s steps(4), filter .3s steps(3); }
+.atlas-holo__globe { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; border-radius: 50%; opacity: .92; filter: drop-shadow(0 0 10px color-mix(in srgb, var(--atlas-cyan) 55%, transparent)); }
+/* Without the globe (no JavaScript or no WebGL) the pedestal still projects a pixel ring. */
+.atlas-holo__ring { position: absolute; left: 6%; right: 6%; top: 6%; bottom: 6%; border-radius: 50%; box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--atlas-cyan) 55%, transparent), 0 0 24px color-mix(in srgb, var(--atlas-cyan) 30%, transparent); background: radial-gradient(circle at 40% 35%, color-mix(in srgb, var(--atlas-cyan) 22%, transparent), transparent 60%); }
+.atlas-holo[data-ready="true"] .atlas-holo__ring { background: none; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--atlas-cyan) 25%, transparent); }
+.atlas-holo__scan { position: absolute; left: 4%; right: 4%; top: 50%; height: 2px; background: color-mix(in srgb, var(--atlas-ice) 70%, transparent); box-shadow: 0 0 8px var(--atlas-cyan); opacity: .45; }
+.atlas-holo[data-holo="unfold"] { opacity: .12; }
+.atlas-holo[data-holo="whirl"] { filter: brightness(1.5) drop-shadow(0 0 14px var(--atlas-cyan)); }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .atlas-hero[data-motion="true"] .atlas-holo__scan { animation: atlas-scan 3.2s steps(24) infinite; }
+  html:not(.reduce-motion) .atlas-hero[data-motion="true"] .atlas-beam { animation: atlas-flicker 2.6s steps(3) infinite alternate; }
+}
+@keyframes atlas-scan { 0% { top: 8%; opacity: 0; } 15% { opacity: .5; } 85% { opacity: .5; } 100% { top: 92%; opacity: 0; } }
+@keyframes atlas-flicker { from { opacity: .4; } to { opacity: .65; } }
+
+/* The navigation orb (Prince's visor): idle by his side; active, it opens its ring and glows. */
+.atlas-orb > i { opacity: 0; }
+.atlas-orb[data-orb="idle"] .atlas-orb__idle, .atlas-orb[data-orb="active"] .atlas-orb__active { opacity: 1; }
+.atlas-orb__glow { position: absolute; background: radial-gradient(circle, color-mix(in srgb, var(--atlas-cyan) 55%, transparent), transparent 65%); mix-blend-mode: screen; scale: 1.8; }
+.atlas-orb[data-orb="active"] .atlas-orb__glow { opacity: .9; }
+.atlas-orb[data-orb="active"] .atlas-orb__active { filter: drop-shadow(0 0 6px var(--atlas-cyan)); }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .atlas-hero[data-motion="true"] .atlas-orb { animation: atlas-bob 2.4s steps(4) infinite alternate; }
+  html:not(.reduce-motion) .atlas-orb[data-orb="active"] .atlas-orb__glow { animation: atlas-flicker .5s steps(2) infinite alternate; }
+}
+@keyframes atlas-bob { from { translate: 0 0; } to { translate: 0 -.6%; } }
+
+/* Glaucia and Prince: idle and side are always visible (server, no JS, reduced motion); other poses replace them. */
+.atlas-crew > i, .atlas-prince > i { opacity: 0; }
+.atlas-crew:not([data-acting]) > .atlas-crew__pose--hip,
+.atlas-prince:not([data-acting]) > .atlas-prince__pose--front,
+.atlas-crew > [data-active], .atlas-prince > [data-active] { opacity: 1; }
+.hero-scene-layer--atlas[data-paused="true"] * { animation-play-state: paused !important; }
+.atlas-hero[data-motion="false"] .atlas-plane *,
+.atlas-hero[data-motion="false"] .atlas-hot::before { animation: none !important; transition: none !important; }
+.atlas-hero .sky-vignette { background: radial-gradient(ellipse at 74% 60%, transparent 32%, color-mix(in srgb, var(--color-space-0) 78%, transparent) 100%); }
+.atlas-hero:not([data-stage="idle"]) .sky-vignette { opacity: .5; }
+
+/* Hotspots: invisible pixel brackets until hovered or focused; a blinking marker shows where to click. */
+.atlas-plane--hot { pointer-events: none; }
+.atlas-hot { position: absolute; min-width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.atlas-hot[hidden] { display: none; }
+.atlas-hot::after { content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity var(--duration-fast); background:
+  linear-gradient(var(--atlas-cyan) 0 0) 0 0 / 10px 2px no-repeat, linear-gradient(var(--atlas-cyan) 0 0) 0 0 / 2px 10px no-repeat,
+  linear-gradient(var(--atlas-cyan) 0 0) 100% 0 / 10px 2px no-repeat, linear-gradient(var(--atlas-cyan) 0 0) 100% 0 / 2px 10px no-repeat,
+  linear-gradient(var(--atlas-cyan) 0 0) 0 100% / 10px 2px no-repeat, linear-gradient(var(--atlas-cyan) 0 0) 0 100% / 2px 10px no-repeat,
+  linear-gradient(var(--atlas-cyan) 0 0) 100% 100% / 10px 2px no-repeat, linear-gradient(var(--atlas-cyan) 0 0) 100% 100% / 2px 10px no-repeat; }
+.atlas-hot--holo { border-radius: 50%; }
+.atlas-hot:hover::after, .atlas-hot:focus-visible::after { opacity: 1; }
+.atlas-hot:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 4px; }
+:is(.atlas-hot--glaucia, .atlas-hot--prince, .atlas-hot--holo)::before { content: ""; position: absolute; left: 50%; top: -6%; width: 6px; height: 6px; background: var(--atlas-gold); box-shadow: 0 0 8px var(--atlas-gold); animation: hud-blink 1.6s steps(1) infinite; }
+.atlas-hot--prince::before { animation-delay: .5s; }
+.atlas-hot--holo::before { top: 4%; animation-delay: 1.1s; background: var(--atlas-cyan); box-shadow: 0 0 8px var(--atlas-cyan); }
+.atlas-hero:not([data-stage="idle"]) .atlas-hot::before { display: none; }
+
+/* Status caption and the HUD: a signal meter whose bars rise in turn. */
+.atlas-status { position: absolute; z-index: 1; right: calc(max(var(--gutter), (100vw - var(--content-width)) / 2 - 1.5rem) + 1.75rem); top: 4.4rem; margin: 0; padding: .4rem .6rem; opacity: 0; visibility: hidden; pointer-events: none; background: color-mix(in srgb, var(--atlas-night) 82%, transparent); color: var(--atlas-ice); font: 400 .66rem/1 var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; text-shadow: 0 0 10px var(--atlas-cyan); box-shadow: 0 -2px 0 0 var(--atlas-gold), 0 2px 0 0 var(--atlas-gold), -2px 0 0 0 var(--atlas-gold), 2px 0 0 0 var(--atlas-gold); }
+.atlas-status:empty { display: none; }
+.atlas-hud .hud-location, .atlas-hud .hud-hint { color: var(--atlas-cyan); }
+.atlas-hud .hud-hint::before { background: var(--atlas-gold); }
+.atlas-signal-hud { left: 1.75rem; right: auto; top: 2.6rem; }
+.atlas-signal-hud > span { display: inline-flex; align-items: center; gap: .6rem; }
+.atlas-signal-meter { display: inline-flex; align-items: end; gap: 2px; height: 12px; }
+.atlas-signal-meter i { width: 3px; background: var(--atlas-cyan); box-shadow: 0 0 6px var(--atlas-cyan); }
+.atlas-signal-meter i:nth-child(1) { height: 3px; } .atlas-signal-meter i:nth-child(2) { height: 5px; } .atlas-signal-meter i:nth-child(3) { height: 7px; } .atlas-signal-meter i:nth-child(4) { height: 9px; background: var(--atlas-gold); } .atlas-signal-meter i:nth-child(5) { height: 12px; background: var(--atlas-gold); }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .atlas-signal-meter i { animation: hud-blink 2.5s steps(1) infinite; } }
+.atlas-signal-meter i:nth-child(2) { animation-delay: .3s; } .atlas-signal-meter i:nth-child(3) { animation-delay: .6s; } .atlas-signal-meter i:nth-child(4) { animation-delay: .9s; } .atlas-signal-meter i:nth-child(5) { animation-delay: 1.2s; }
+.atlas-hero-wrap .hero-bar__track b { color: var(--atlas-gold); }
+.atlas-discoveries { position: relative; margin: 0; padding: .9rem 1.5rem; background: var(--color-space-1); color: var(--atlas-cyan); font: .65rem/1.8 var(--font-pixel); text-align: center; }
+
+/* The visor and the constellation: over the sky on wide screens, between the copy and the scene elsewhere. */
+.atlas-readout { position: relative; z-index: 3; display: grid; gap: .55rem; width: min(390px, calc(100% - 2 * var(--gutter))); margin: 0 auto 1.25rem; padding: 1rem 1.15rem; background: color-mix(in srgb, var(--atlas-night) 93%, transparent); color: var(--text-inverse);
+  box-shadow: 0 -2px 0 0 var(--atlas-cyan), 0 2px 0 0 var(--atlas-cyan), -2px 0 0 0 var(--atlas-cyan), 2px 0 0 0 var(--atlas-cyan), 0 0 40px color-mix(in srgb, var(--atlas-cyan) 18%, transparent); }
+.atlas-readout[hidden] { display: none; }
+.atlas-readout[data-kind="constellation"] { box-shadow: 0 -2px 0 0 var(--atlas-gold), 0 2px 0 0 var(--atlas-gold), -2px 0 0 0 var(--atlas-gold), 2px 0 0 0 var(--atlas-gold), 0 0 40px color-mix(in srgb, var(--atlas-gold) 18%, transparent); }
+.atlas-readout p { margin: 0; }
+.atlas-readout__visor { display: grid; grid-template-columns: 64px minmax(0, 1fr); align-items: center; gap: .8rem; }
+/* Prince's face in the visor: the approved busts of GE-DOG-05, cycling neutral → tongue → joy. */
+.atlas-readout__face { position: relative; width: 64px; height: 64px; background: radial-gradient(circle, color-mix(in srgb, var(--atlas-cyan) 25%, transparent), transparent 70%), var(--atlas-deep); box-shadow: inset 0 0 0 2px var(--atlas-cyan); overflow: hidden; }
+.atlas-readout__face i { position: absolute; inset: 4px; background: no-repeat 50% 100% / contain; image-rendering: pixelated; opacity: 0; }
+.atlas-readout__face i[data-on] { opacity: 1; }
+.atlas-readout__face::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, transparent 0 2px, color-mix(in srgb, var(--atlas-cyan) 14%, transparent) 2px 3px); pointer-events: none; }
+.atlas-readout__kicker { color: var(--atlas-cyan); font: 400 .58rem var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+.atlas-readout[data-kind="constellation"] .atlas-readout__kicker { color: var(--atlas-gold); }
+.atlas-readout__place { margin-top: .3rem !important; color: var(--atlas-ice); font-size: .84rem; line-height: 1.4; }
+.atlas-readout__place[data-format="presencial"]::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: .45rem; background: var(--atlas-gold); box-shadow: 0 0 6px var(--atlas-gold); }
+.atlas-readout__place[data-format="remoto"]::before { content: ""; display: inline-block; width: 6px; height: 6px; margin-right: .45rem; border: 2px solid var(--atlas-cyan); border-radius: 50%; }
+.atlas-readout__title { font: 400 clamp(.86rem, 1.2vw, 1rem)/1.4 var(--font-pixel); overflow-wrap: anywhere; outline-offset: 4px; color: var(--text-heading); }
+.atlas-readout__title a { color: var(--text-heading); text-decoration: none; }
+.atlas-readout__title a:hover, .atlas-readout__title a:focus-visible { color: var(--atlas-cyan); }
+.atlas-readout__note { color: var(--text-inverse-muted); font-size: .84rem; line-height: 1.5; }
+.atlas-readout__data { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; margin: 0; }
+.atlas-readout__data div { display: flex; flex-direction: column-reverse; }
+.atlas-readout__data dt { color: var(--text-inverse-muted); font-size: .7rem; }
+.atlas-readout__data dd { margin: 0; color: var(--atlas-ice); font: 400 .7rem var(--font-pixel); }
+.atlas-readout__stars summary { min-height: 44px; display: flex; align-items: center; color: var(--atlas-gold); font: 400 .58rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
+.atlas-readout__stars ol { display: grid; gap: .25rem; max-height: 180px; margin: 0; padding: 0 .4rem 0 1.6rem; overflow-y: auto; font-size: .82rem; }
+.atlas-readout__stars li { display: flex; justify-content: space-between; gap: .75rem; }
+.atlas-readout__stars li::marker { color: var(--atlas-gold); font: 400 .55rem var(--font-pixel); }
+.atlas-readout__stars b { color: var(--atlas-gold); font: 400 .58rem var(--font-pixel); }
+.atlas-readout__actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+:is(.atlas-readout__actions, .atlas-orbit-card__actions) :is(a, button), .log__apply, .log__clear { display: inline-flex; align-items: center; min-height: 44px; padding: .45rem .75rem; border: 1px solid var(--atlas-frame); border-radius: 0; background: transparent; color: var(--text-heading); font: 400 .56rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+:is(.atlas-readout__actions, .atlas-orbit-card__actions) :is(a, button):hover, :is(.atlas-readout__actions, .atlas-orbit-card__actions) :is(a, button):focus-visible, .log__apply:hover, .log__clear:hover { border-color: var(--atlas-gold); color: var(--atlas-gold); }
+/* Wide screens: the card floats over the window's starry sky (top right), clear of the copy and of the crew. */
+@media (min-width: 1200px) and (min-height: 680px) and (hover: hover) and (pointer: fine) {
+  .atlas-readout { position: absolute; right: calc(max(var(--gutter), (100vw - var(--content-width)) / 2 - 1.5rem) + 1.75rem); top: 6.6rem; width: min(380px, 27vw); max-height: calc(100% - 8rem); overflow-y: auto; margin: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .atlas-readout:not([hidden]) { animation: atlas-in .3s steps(3) both; } }
+@keyframes atlas-in { from { opacity: 0; clip-path: inset(0 0 100% 0); } to { opacity: 1; clip-path: inset(0); } }
+
+/* The hero jump, Atlas style: a night dive ending in a cyan-gold flash. */
+.hero-jump--atlas .hero-jump__canvas { background: radial-gradient(circle at 50% 64%, color-mix(in srgb, #0f2b55 50%, transparent), var(--atlas-deep) 80%); }
+.hero-jump--atlas .hero-jump__label { color: var(--atlas-night); text-shadow: 0 0 18px var(--atlas-ice), 0 0 2px var(--color-white); }
+.hero-jump--atlas .hero-jump__flash { background: radial-gradient(circle, var(--color-white) 0 30%, var(--atlas-ice) 55%, var(--atlas-cyan) 80%, var(--atlas-gold)); }
+.hero-jump--atlas .hero-jump__year { position: absolute; right: 2.5rem; top: 5.5rem; margin: 0; opacity: 0; visibility: hidden; color: var(--atlas-gold); font: 400 clamp(1.4rem, 3vw, 2.6rem) var(--font-pixel); letter-spacing: .08em; text-shadow: 0 0 18px color-mix(in srgb, var(--atlas-gold) 60%, transparent); }
+.hero-jump--atlas .hero-jump__readouts { position: absolute; left: 2.5rem; top: 5.5rem; display: grid; gap: .45rem; margin: 0; pointer-events: none; }
+.hero-jump--atlas .hero-jump__readouts span { opacity: 0; visibility: hidden; color: var(--atlas-ice); font: 400 clamp(.6rem, 1vw, .8rem) var(--font-pixel); letter-spacing: .16em; text-transform: uppercase; text-shadow: 0 0 10px var(--atlas-cyan); white-space: nowrap; }
+.hero-jump--atlas .hero-jump__readouts span:first-child { color: var(--atlas-ice); }
+.hero-jump--atlas .hero-jump__readouts span:nth-child(2) { color: var(--atlas-gold); }
+.hero-jump--atlas .hero-jump__readouts span:nth-child(3) { color: var(--atlas-cyan); }
+
+/* ——— Chapter jumps: orbital trails instead of hyperspace ——— */
+.events-page .chapter-jump__streaks i { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--atlas-cobalt) 80%, transparent) 40%, var(--atlas-ice) 70%, transparent); }
+.events-page .chapter-jump__streaks i:nth-child(3n) { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--atlas-cyan) 70%, transparent) 50%, transparent); }
+.events-page .chapter-jump__streaks i:nth-child(3n + 1) { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--atlas-gold) 70%, transparent) 50%, transparent); }
+.events-page .chapter-tag__ep { background: var(--atlas-cyan); color: var(--atlas-night); }
+
+/* ——— 2. The globe ——— */
+.atlas-board { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3.5rem); align-items: start; }
+.atlas-board__globe { display: grid; gap: 1rem; justify-items: center; }
+.atlas-globe { position: relative; display: grid; justify-items: center; gap: .75rem; width: min(100%, 560px); }
+/* The canvas sets the stage's height and the pedestal follows in flow, so the toolbar and the legend never overlap it. */
+.atlas-globe__stage { position: relative; display: grid; justify-items: center; width: 100%; }
+.atlas-globe .globe { position: relative; z-index: 1; display: block; width: 88%; aspect-ratio: 1; margin: 6% auto 0; cursor: grab; touch-action: none; border-radius: 50%; }
+.atlas-globe .globe[data-dragging="true"] { cursor: grabbing; }
+.atlas-globe .globe:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 6px; }
+.atlas-globe:not([data-ready]) .atlas-globe__stage::before { content: ""; position: absolute; z-index: 0; left: 6%; right: 6%; top: 6%; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle at 38% 34%, color-mix(in srgb, var(--atlas-cyan) 26%, transparent), color-mix(in srgb, var(--atlas-cobalt) 30%, transparent) 45%, var(--atlas-night) 72%); box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--atlas-cyan) 30%, transparent); }
+.atlas-globe .globe-fallback { position: relative; z-index: 1; width: 88%; aspect-ratio: 1; margin: 6% auto 0; padding: 30% 12% 0; color: var(--text-inverse-muted); text-align: center; }
+/* The odometer: 32 pixel ticks around the globe light up as it is turned by hand. */
+.atlas-globe__odometer { position: absolute; z-index: 2; left: 3%; right: 3%; top: 3%; aspect-ratio: 1; container-type: size; pointer-events: none; }
+.atlas-globe__odometer[hidden] { display: none; }
+.atlas-globe__odometer i { position: absolute; left: 50%; top: 50%; width: 4px; height: 9px; background: color-mix(in srgb, var(--atlas-cobalt) 70%, transparent); transform: translate(-50%, -50%) rotate(var(--a)) translateY(-50cqh); }
+.atlas-globe__odometer i[data-on] { background: var(--atlas-gold); box-shadow: 0 0 6px var(--atlas-gold); }
+/* A year's orbit: a dashed gold ellipse around the globe with a satellite riding it. */
+.atlas-globe__orbit { position: absolute; z-index: 2; left: 0; right: 0; top: -6%; aspect-ratio: 1; border-radius: 50%; border: 2px dashed var(--atlas-gold); transform: rotate(-14deg) scaleY(.32); opacity: 0; pointer-events: none; transition: opacity .3s steps(3); }
+.atlas-globe__orbit i { position: absolute; inset: 0; }
+.atlas-globe__orbit i::after { content: ""; position: absolute; left: 50%; top: -9px; width: 10px; height: 18px; translate: -50% 0; background: var(--atlas-ice); box-shadow: -8px 0 0 var(--atlas-cobalt), 8px 0 0 var(--atlas-cobalt), 0 0 12px var(--atlas-gold); }
+.atlas-globe[data-orbit] .atlas-globe__orbit { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .atlas-globe[data-orbit] .atlas-globe__orbit i { animation: atlas-orbit 5s linear infinite; } }
+@keyframes atlas-orbit { to { rotate: 360deg; } }
+/* The pedestal prop (GE-PROP-05) holds the globe: off until WebGL is up, then lit. */
+.atlas-pedestal { position: relative; z-index: 0; width: 46%; aspect-ratio: 172 / 125; margin-top: -14%; pointer-events: none; }
+.atlas-pedestal i { position: absolute; inset: 0; background: no-repeat 50% 100% / contain; image-rendering: pixelated; }
+.atlas-pedestal__on { opacity: 0; }
+.atlas-pedestal[data-on] .atlas-pedestal__on { opacity: 1; filter: drop-shadow(0 0 12px color-mix(in srgb, var(--atlas-cyan) 60%, transparent)); }
+.atlas-pedestal[data-on] .atlas-pedestal__off { opacity: 0; }
+.atlas-globe .globe-toolbar { display: grid; justify-items: center; gap: .6rem; text-align: center; }
+.atlas-globe .globe-toolbar[hidden] { display: none; }
+.atlas-globe .globe-toolbar p { margin: 0; color: var(--text-inverse-muted); font-size: .78rem; }
+.atlas-globe__percent { color: var(--atlas-gold) !important; font: 400 .58rem var(--font-pixel) !important; letter-spacing: .12em; }
+.atlas-globe .globe-toolbar > div { display: flex; gap: .5rem; justify-content: center; }
+.atlas-globe .globe-toolbar button { min-height: 44px; padding: .45rem .8rem; border: 1px solid var(--atlas-frame); border-radius: 0; background: var(--color-space-1); color: var(--text-heading); font: 400 .56rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.atlas-globe .globe-toolbar button:hover:not(:disabled) { border-color: var(--atlas-cyan); color: var(--atlas-cyan); }
+.atlas-globe .globe-toolbar button:disabled { opacity: .45; cursor: default; }
+.atlas-orbit-card { display: grid; gap: .55rem; width: 100%; padding: 1rem 1.15rem; background: var(--color-space-1); text-align: left; box-shadow: 0 -2px 0 0 var(--atlas-gold), 0 2px 0 0 var(--atlas-gold), -2px 0 0 0 var(--atlas-gold), 2px 0 0 0 var(--atlas-gold), 0 0 40px color-mix(in srgb, var(--atlas-gold) 16%, transparent); }
+.atlas-orbit-card[hidden] { display: none; }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .atlas-orbit-card:not([hidden]) { animation: atlas-in .35s steps(3) both; } }
+.atlas-orbit-card p { margin: 0; }
+.atlas-orbit-card__kicker { color: var(--atlas-gold); font: 400 .7rem var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+.atlas-orbit-card__note { color: var(--text-inverse-muted); font-size: .86rem; line-height: 1.5; }
+.atlas-orbit-card__list { display: grid; gap: .35rem; max-height: 220px; margin: 0; padding: 0; overflow-y: auto; list-style: none; }
+.atlas-orbit-card__list li { display: grid; padding-left: .7rem; box-shadow: inset 2px 0 0 var(--atlas-gold); }
+.atlas-orbit-card__signals .atlas-orbit-card__list li { box-shadow: inset 2px 0 0 var(--atlas-cyan); }
+.atlas-orbit-card__list a { color: var(--text-heading); font-size: .88rem; line-height: 1.4; }
+.atlas-orbit-card__list small { color: var(--text-inverse-muted); font-size: .76rem; }
+.atlas-orbit-card__signals summary { display: flex; align-items: center; gap: .5rem; min-height: 44px; color: var(--atlas-cyan); font: 400 .56rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; cursor: pointer; }
+.atlas-orbit-card__ring { width: 10px; height: 10px; border: 2px solid var(--atlas-cyan); border-radius: 50%; }
+.atlas-orbit-card__actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.atlas-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem 1.4rem; margin: 0; padding: 0; list-style: none; color: var(--text-inverse-muted); font-size: .8rem; }
+.atlas-legend li { display: inline-flex; align-items: center; gap: .5rem; }
+:is(.atlas-legend, .atlas-countries) [data-kind="city"] > i, .atlas-countries li[data-kind="city"]::before { content: ""; width: 8px; height: 8px; background: var(--atlas-gold); box-shadow: 0 0 8px var(--atlas-gold); }
+:is(.atlas-legend, .atlas-countries) [data-kind="signal"] > i, .atlas-countries li[data-kind="signal"]::before { content: ""; width: 8px; height: 8px; border: 2px solid var(--atlas-cyan); border-radius: 50%; }
+.atlas-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin: 0 0 1.75rem; background: var(--hud-line); border: 1px solid var(--hud-line); }
+.atlas-stats > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: .4rem; min-height: 96px; padding: 1rem; background: var(--color-space-1); }
+.atlas-stats > div:first-child { grid-column: 1 / -1; }
+.atlas-stats dt { color: var(--text-inverse-muted); font: 400 .55rem/1.5 var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; }
+.atlas-stats dd { margin: 0; color: var(--atlas-ice); font: 400 clamp(1.3rem, 2.2vw, 2rem)/1.1 var(--font-pixel); text-shadow: 0 0 24px color-mix(in srgb, var(--atlas-cyan) 40%, transparent); white-space: nowrap; }
+.atlas-stats > div:nth-child(2) dd, .atlas-stats > div:nth-child(4) dd, .atlas-stats > div:nth-child(5) dd { color: var(--atlas-gold); text-shadow: 0 0 24px color-mix(in srgb, var(--atlas-gold) 40%, transparent); }
+.atlas-stats > div:nth-child(3) dd { color: var(--atlas-cyan); }
+.atlas-countries h3 { margin: 0 0 .9rem; font: 400 .72rem var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; }
+.atlas-countries__label { display: flex; align-items: center; gap: .5rem; margin: 0 0 .5rem !important; color: var(--text-inverse-muted) !important; font: 400 .55rem var(--font-pixel) !important; letter-spacing: .08em; text-transform: uppercase; }
+.atlas-countries ul { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; margin: 0 0 1.1rem; padding: 0; list-style: none; color: var(--text-inverse); font-size: .9rem; }
+.atlas-countries li { display: inline-flex; align-items: center; gap: .5rem; }
+.atlas-countries summary { min-height: 44px; display: flex; align-items: center; color: var(--atlas-cyan); font: 400 .58rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.atlas-countries details p { font-size: .84rem; line-height: 1.6; color: var(--text-inverse-muted); }
+
+/* ——— 3. Logbook ——— */
+.log { display: grid; gap: 1rem; scroll-margin-top: 120px; }
+.log__form { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(0, 2fr) auto; align-items: end; gap: .75rem; padding: 1rem; background: var(--color-space-1); box-shadow: 0 -2px 0 0 var(--hud-line), 0 2px 0 0 var(--hud-line), -2px 0 0 0 var(--hud-line), 2px 0 0 0 var(--hud-line); }
+.log__field { display: grid; gap: .4rem; color: var(--text-inverse-muted); font: 400 .55rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
+.log__field :is(select, input) { width: 100%; min-height: 46px; padding: .55rem .7rem; border: 1px solid var(--color-space-line); border-radius: 0; background: var(--color-space-0); color: var(--text-heading); font: 400 .95rem var(--font-mono); letter-spacing: 0; text-transform: none; }
+.log__field :is(select, input):focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 2px; border-color: var(--atlas-cyan); }
+.log__buttons { display: flex; gap: .5rem; }
+.log__apply[hidden] { display: none; }
+.log__count { margin: 0 !important; color: var(--atlas-ice) !important; font: 400 .62rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
+.log__empty { color: var(--text-muted); }
+.log__year { margin: 0; border: 0; }
+.log__year summary { display: flex; align-items: center; gap: 1rem; min-height: 56px; padding: .6rem 0; border-bottom: 1px solid var(--hud-line); cursor: pointer; list-style: none; color: var(--text-inverse-muted); font-size: .86rem; }
+.log__year summary::-webkit-details-marker { display: none; }
+.log__year summary:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 2px; }
+.log__year-label { color: var(--text-heading); font: 400 1.25rem var(--font-pixel); letter-spacing: .04em; }
+/* One pixel per gathering of the year: gold in person, cyan remote. */
+.log__meter { display: flex; flex-wrap: wrap; gap: 2px; max-width: 220px; }
+.log__meter i { width: 5px; height: 5px; background: var(--atlas-gold); }
+.log__meter i[data-format="remoto"] { background: transparent; box-shadow: inset 0 0 0 1px var(--atlas-cyan); }
+.log__expand { margin-left: auto; color: var(--atlas-cyan); font: 400 1rem var(--font-pixel); transition: rotate .2s steps(2); }
+.log__year[open] .log__expand { rotate: 45deg; }
+.log__year ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin: 1rem 0 1.75rem; padding: 0; list-style: none; }
+.log__entry { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 1rem 1.1rem; background: var(--color-space-1); scroll-margin-top: 120px; border-left: 3px solid var(--atlas-gold); box-shadow: 0 2px 0 0 var(--hud-line), 2px 0 0 0 var(--hud-line), 0 -2px 0 0 var(--hud-line); transition: transform var(--duration-normal) var(--ease-out); }
+.log__entry[data-format="remoto"] { border-left: 3px dashed var(--atlas-cyan); }
+.log__entry:hover { transform: translateY(-2px); }
+.log__entry[data-found] { box-shadow: 0 2px 0 0 var(--atlas-gold), 2px 0 0 0 var(--atlas-gold), 0 -2px 0 0 var(--atlas-gold), 0 0 36px color-mix(in srgb, var(--atlas-gold) 30%, transparent); }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .log__entry[data-found] { animation: atlas-found .5s steps(1) 3; } }
+@keyframes atlas-found { 50% { box-shadow: 0 2px 0 0 var(--hud-line), 2px 0 0 0 var(--hud-line), 0 -2px 0 0 var(--hud-line); } }
+.log__entry > div { display: grid; gap: .45rem; min-width: 0; }
+.log__entry strong { color: var(--text-heading); font-weight: 600; line-height: 1.45; overflow-wrap: anywhere; }
+.log__tags { display: flex; flex-wrap: wrap; gap: .35rem .8rem; margin: 0 !important; color: var(--text-inverse-muted) !important; font: 400 .52rem/1.6 var(--font-pixel) !important; letter-spacing: .06em; text-transform: uppercase; }
+.log__badge { display: inline-flex; align-items: center; gap: .4rem; color: var(--atlas-gold); }
+.log__badge i { width: 7px; height: 7px; background: var(--atlas-gold); box-shadow: 0 0 6px var(--atlas-gold); }
+.log__badge[data-format="remoto"] { color: var(--atlas-cyan); }
+.log__badge[data-format="remoto"] i { background: transparent; border: 2px solid var(--atlas-cyan); border-radius: 50%; box-shadow: none; }
+.log__place { color: var(--text-inverse-muted); font-size: .82rem; }
+.log__entry > a { flex-shrink: 0; display: inline-flex; align-items: center; min-height: 44px; color: var(--text-inverse-muted); font-size: .78rem; }
+.log__entry > a:hover, .log__entry > a:focus-visible { color: var(--atlas-cyan); }
+.log__note { margin-top: 1.5rem !important; color: var(--text-inverse-muted) !important; font-size: .82rem !important; }
+
+/* ——— 4. Signals ——— */
+.signals { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(1.5rem, 3vw, 2.5rem); align-items: start; }
+.signal-timeline, .signal-meter { margin: 0; padding: 1.25rem; background: var(--color-space-1); box-shadow: 0 -2px 0 0 var(--hud-line), 0 2px 0 0 var(--hud-line), -2px 0 0 0 var(--hud-line), 2px 0 0 0 var(--hud-line); }
+.signal-timeline figcaption, .signal-meter figcaption { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; margin-bottom: 1rem; color: var(--text-heading); font: 400 .72rem var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; }
+.signal-timeline figcaption small { color: var(--text-inverse-muted); font: 400 .55rem var(--font-pixel); letter-spacing: .06em; }
+.signal-timeline ol { display: grid; grid-template-columns: repeat(var(--years), minmax(0, 1fr)); align-items: end; gap: .4rem; height: 240px; margin: 0; padding: 0 0 .25rem; list-style: none; border-bottom: 2px solid var(--atlas-frame); }
+.signal-timeline li { height: 100%; }
+.signal-timeline a { display: grid; grid-template-rows: auto 1fr auto; justify-items: center; align-items: end; gap: .35rem; height: 100%; min-height: 44px; color: var(--text-inverse-muted); text-decoration: none; }
+.signal-timeline__count { color: var(--atlas-ice); font: 400 .58rem var(--font-pixel); }
+.signal-timeline__bar { display: flex; flex-direction: column; justify-content: flex-end; width: min(30px, 80%); height: 100%; }
+.signal-timeline__bar i { display: block; width: 100%; height: calc(var(--h) * 100%); }
+.signal-timeline__present { background: repeating-linear-gradient(180deg, var(--atlas-gold) 0 4px, color-mix(in srgb, var(--atlas-gold) 70%, #6b4a10) 4px 6px); box-shadow: 0 0 12px color-mix(in srgb, var(--atlas-gold) 30%, transparent); }
+.signal-timeline__remote { background: repeating-linear-gradient(180deg, transparent 0 2px, color-mix(in srgb, var(--atlas-cyan) 80%, transparent) 2px 4px); box-shadow: inset 0 0 0 1px var(--atlas-cyan); }
+.signal-timeline__year { font: 400 .55rem var(--font-pixel); }
+.signal-timeline a:hover, .signal-timeline a:focus-visible { color: var(--atlas-cyan); }
+.signal-timeline a:hover .signal-timeline__bar, .signal-timeline a:focus-visible .signal-timeline__bar { filter: brightness(1.3) drop-shadow(0 0 8px var(--atlas-cyan)); }
+.signal-timeline a:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 2px; }
+.signal-meters { position: relative; display: grid; gap: 1rem; align-content: start; }
+.signal-meter ul { display: grid; gap: .55rem; margin: 0; padding: 0; list-style: none; }
+.signal-meter li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) 2.5rem; align-items: center; gap: .6rem; color: var(--text-inverse); font-size: .86rem; }
+/* A signal bar: segmented, scaled by the count. */
+.signal-meter li i { height: 10px; width: calc(var(--w) * 100%); min-width: 4px; background: repeating-linear-gradient(90deg, var(--tone) 0 6px, transparent 6px 8px); box-shadow: 0 0 10px color-mix(in srgb, var(--tone) 35%, transparent); }
+.signal-meter li b { color: var(--atlas-ice); font: 400 .66rem var(--font-pixel); text-align: right; }
+.signal-radar { position: absolute; width: 64px; aspect-ratio: 1; background: no-repeat 50% 100% / contain; image-rendering: pixelated; pointer-events: none; }
+.signal-radar--large { right: -.5rem; top: -4.2rem; width: 72px; }
+.signal-radar--small { left: -.5rem; bottom: -4.4rem; }
+.signal-radar::after { content: ""; position: absolute; left: 30%; top: 10%; width: 12px; height: 12px; border: 2px solid var(--atlas-cyan); border-radius: 50%; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .signal-radar::after { animation: atlas-ping 2.4s steps(6) infinite; } }
+.signal-radar--small::after { animation-delay: 1.2s !important; }
+@keyframes atlas-ping { 0% { opacity: .9; scale: .4; } 100% { opacity: 0; scale: 3.2; } }
+
+/* ——— 5. Next connection ——— */
+.chapter--orbit::before { background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--atlas-cyan) 40%, transparent), color-mix(in srgb, var(--atlas-cobalt) 55%, transparent) 30%, transparent 65%) !important; box-shadow: 0 -2px 0 color-mix(in srgb, var(--atlas-teal) 50%, transparent) !important; }
+.orbit-sky { background: linear-gradient(to bottom, var(--color-space-0) 0%, #06142b 55%, #0b2346 85%, #10306a 100%); opacity: .85; }
+.orbit-sky__earth { position: absolute; left: -15%; right: -15%; bottom: -78%; height: 100%; border-radius: 50%; background: radial-gradient(ellipse at 50% 8%, #1d5fa8, #0b2a55 40%, #06142b 70%); box-shadow: 0 -3px 0 var(--atlas-teal), 0 -8px 24px color-mix(in srgb, var(--atlas-cyan) 40%, transparent); }
+.orbit-sky__ring { position: absolute; left: 10%; right: 10%; bottom: 10%; height: 30%; border-radius: 50%; border: 2px dashed color-mix(in srgb, var(--atlas-gold) 55%, transparent); transform: rotate(-6deg); }
+.chapter--orbit .credits h2 { filter: drop-shadow(0 0 36px color-mix(in srgb, var(--atlas-cyan) 50%, transparent)); }
+.events-page .orbit-note { margin: 2rem auto 0 !important; color: var(--text-inverse-muted) !important; font-size: .86rem !important; }
+.events-page .orbit-hint { margin: 2.5rem auto 0 !important; color: var(--atlas-cyan) !important; font: 400 .62rem/1.8 var(--font-pixel) !important; letter-spacing: .08em; }
+.events-page .orbit-end { margin: 1rem auto 0 !important; color: var(--text-inverse-muted) !important; font: 400 .6rem var(--font-pixel) !important; letter-spacing: .14em; text-transform: uppercase; }
+
+/* ——— Responsive ——— */
+@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
+  .events-page .atlas-hero { display: block; min-height: 0; padding-bottom: 56.25%; }
+  .events-page .atlas-hero .page-hero__content { padding-block: 4.5rem 2rem; }
+  .atlas-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 720px); }
+  .events-page .atlas-hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); }
+  .atlas-hero :is(.page-hero__image, .hero-scene-layer--atlas, .atlas-layer, .page-hero__shade) { top: auto !important; bottom: 0; left: 0; right: 0; width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; }
+  .atlas-hero .page-hero__shade { background: var(--hero-overlay-scene); }
+  .atlas-status { top: auto; bottom: calc(56.25vw - 3.4rem); }
+  .atlas-hero .hud-hint { display: none; }
+}
+@media (max-width: 1100px) {
+  .atlas-board, .signals { grid-template-columns: 1fr; }
+  .log__form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .log__field--search { grid-column: 1 / -1; }
+  .signal-radar { display: none; }
+}
+@media (max-width: 900px) {
+  .atlas-hud .atlas-signal-hud { display: none; }
+  .log__year ul { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .log__form { grid-template-columns: 1fr; }
+  .log__meter { display: none; }
+  .atlas-stats > div { min-height: 84px; }
+  .signal-timeline ol { height: 190px; gap: .2rem; }
+  .signal-timeline__count { font-size: .48rem; }
+  .signal-timeline__year { font-size: .46rem; writing-mode: vertical-rl; rotate: 180deg; }
+  .signal-meter li { grid-template-columns: 6rem minmax(0, 1fr) 2rem; }
+}
+
+/* ——— Reduced motion: the composition stays, effects stop ——— */
+html.reduce-motion :is(.atlas-signal-meter i, .atlas-holo__scan, .atlas-beam, .atlas-orb, .signal-radar::after, .atlas-globe__orbit i) { animation: none; }
+@media (prefers-reduced-motion: reduce) { :is(.atlas-signal-meter i, .atlas-holo__scan, .atlas-beam, .atlas-orb, .atlas-globe__orbit i) { animation: none; } }
+.atlas-hero[data-motion="false"] .hud-hint { display: none; }
+.reading-progress--atlas .reading-progress__track { border-radius: 0; background: var(--atlas-night); border: 1px solid var(--atlas-cobalt); }
+.reading-progress--atlas .reading-progress__fill { background: linear-gradient(to bottom, var(--atlas-gold), var(--atlas-teal) 50%, var(--atlas-cyan)); box-shadow: inset 3px 0 var(--atlas-ice); }
+.reading-progress__satellite { position: absolute; width: 16px; height: 16px; bottom: 0; left: 50%; translate: -50% 0; image-rendering: pixelated; }
+
+/* ——— The camera voyage (AtlasVoyage): a sticky frame driven by the scroll, on every device ——— */
+/* The global `main { overflow: hidden }` would break position: sticky. */
+main.events-page { overflow: clip; }
+.atlas-voyage { position: relative; background: var(--atlas-deep); }
+.atlas-voyage__track { display: none; }
+.atlas-voyage[data-live] .atlas-voyage__track { display: block; height: 320svh; }
+.atlas-voyage[data-live] .atlas-voyage__static { display: none; }
+.atlas-voyage__frame { position: sticky; top: var(--header-height); height: calc(100svh - var(--header-height)); overflow: hidden; background: radial-gradient(ellipse at 50% 55%, #0b1d3a, var(--atlas-deep) 70%); }
+.atlas-voyage__scene { position: absolute; inset: 0; container-type: size; overflow: hidden; }
+.atlas-voyage__plane { --scene-x: 78%; --scene-y: 60%; background: no-repeat 0 0 / 100% 100%; will-change: transform; }
+.atlas-voyage__crew { position: absolute; inset: 0; }
+.atlas-voyage__crew i { position: absolute; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; }
+.atlas-voyage__shine { position: absolute; inset: -10% 30%; background: linear-gradient(105deg, transparent 35%, color-mix(in srgb, var(--atlas-ice) 35%, transparent) 50%, transparent 65%); mix-blend-mode: screen; opacity: 0; pointer-events: none; }
+.atlas-voyage__cracks { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.atlas-voyage__cracks path { fill: none; stroke: var(--atlas-ice); stroke-width: .25; vector-effect: non-scaling-stroke; stroke-width: 2px; filter: drop-shadow(0 0 4px var(--atlas-cyan)); }
+.atlas-voyage__globe { position: absolute; left: 50%; top: 50%; width: min(86vmin, 900px); aspect-ratio: 1; translate: -50% -50%; opacity: 0; filter: drop-shadow(0 0 40px color-mix(in srgb, var(--atlas-cobalt) 60%, transparent)); }
+.atlas-voyage__pixels { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.atlas-voyage__hud { position: absolute; left: clamp(1rem, 4vw, 3rem); right: clamp(1rem, 4vw, 3rem); bottom: clamp(1rem, 5vh, 3rem); display: grid; gap: .5rem; opacity: 0; pointer-events: none; }
+.atlas-voyage__hud p { margin: 0; }
+.atlas-voyage__year { color: var(--atlas-gold); font: 400 clamp(2.4rem, 8vw, 6rem)/1 var(--font-pixel); text-shadow: 0 0 30px color-mix(in srgb, var(--atlas-gold) 55%, transparent); }
+.atlas-voyage__count { color: var(--atlas-ice); font: 400 clamp(.6rem, 1.2vw, .85rem) var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+.atlas-voyage__marquee { max-width: 70ch; min-height: 3.2em; color: var(--text-inverse-muted); font: 400 clamp(.78rem, 1.1vw, .95rem)/1.6 var(--font-mono); }
+.atlas-voyage__land { position: absolute; left: 50%; top: 50%; translate: -50% -50%; margin: 0; opacity: 0; color: var(--atlas-ice); font: 400 clamp(.9rem, 2vw, 1.4rem) var(--font-pixel); letter-spacing: .2em; text-transform: uppercase; white-space: nowrap; text-shadow: 0 0 18px var(--atlas-cyan); }
+.atlas-voyage__flash { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: radial-gradient(circle, var(--color-white) 0 30%, var(--atlas-ice) 55%, var(--atlas-cyan) 80%, var(--atlas-gold)); }
+/* Without JavaScript or with reduced motion: a static log of the voyage, one line per year. */
+.atlas-voyage__static { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; max-width: var(--content-width); margin: 0 auto; padding: 2rem var(--gutter); list-style: none; }
+.atlas-voyage__static li { display: grid; gap: .3rem; padding: .8rem; background: var(--color-space-1); color: var(--text-inverse-muted); font-size: .8rem; }
+.atlas-voyage__static b { color: var(--atlas-gold); font: 400 .9rem var(--font-pixel); }
+@media (hover: none), (pointer: coarse), (max-width: 900px) {
+  .atlas-voyage[data-live] .atlas-voyage__track { height: 220svh; }
+  .atlas-voyage__globe { width: min(92vmin, 620px); }
+  .atlas-voyage__marquee { -webkit-line-clamp: 3; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+}
+
+/* ——— Prince's secrets ——— */
+/* runaway-satellite: a pixel satellite flying across the window (plate percent), a 44 px target. */
+.atlas-satellite { position: absolute; z-index: 3; left: 101%; top: 22%; width: max(44px, 3%); aspect-ratio: 1; padding: 6px; translate: -50% -50%; border: 0; background: transparent; cursor: pointer; pointer-events: auto; opacity: 0; filter: drop-shadow(0 0 6px var(--atlas-cyan)); touch-action: manipulation; }
+.atlas-satellite[hidden] { display: none; }
+.atlas-satellite svg { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+.atlas-satellite:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 2px; opacity: 1; }
+.atlas-hero[data-motion="false"] .atlas-satellite { opacity: 1; }
+/* paw-stamp: Prince beside the pedestal; the paw lands in the middle of the globe, on his base. */
+.atlas-globe__prince { position: absolute; z-index: 3; right: 2%; bottom: 4%; width: 18%; aspect-ratio: 549 / 476; padding: 0; border: 0; background: no-repeat 50% 100% / contain; image-rendering: pixelated; cursor: pointer; }
+.atlas-globe__prince:hover, .atlas-globe__prince:focus-visible { filter: drop-shadow(0 0 8px var(--atlas-gold)); }
+.atlas-globe__prince:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 4px; }
+.atlas-globe__paw { position: absolute; z-index: 3; left: 50%; top: calc(6% + 44%); width: 12%; aspect-ratio: 1; translate: -50% -50%; scale: 0; pointer-events: none;
+  background: radial-gradient(circle at 50% 66%, var(--atlas-gold) 0 30%, transparent 31%), radial-gradient(circle at 22% 34%, var(--atlas-gold) 0 11%, transparent 12%), radial-gradient(circle at 42% 18%, var(--atlas-gold) 0 11%, transparent 12%), radial-gradient(circle at 62% 18%, var(--atlas-gold) 0 11%, transparent 12%), radial-gradient(circle at 80% 34%, var(--atlas-gold) 0 11%, transparent 12%);
+  filter: drop-shadow(0 0 10px var(--atlas-gold)); transition: scale .35s cubic-bezier(.3, 1.8, .5, 1); }
+.atlas-globe__paw[data-on] { scale: 1; }
+.atlas-base-card { display: grid; gap: .55rem; width: 100%; padding: 1rem 1.15rem; background: var(--color-space-1); text-align: left; box-shadow: 0 -2px 0 0 var(--atlas-gold), 0 2px 0 0 var(--atlas-gold), -2px 0 0 0 var(--atlas-gold), 2px 0 0 0 var(--atlas-gold); }
+.atlas-base-card p { margin: 0; }
+/* prince-antenna: the dish and Prince share one button; listening, the cyan half of each year lights in turn. */
+.prince-antenna { position: relative; display: grid; gap: .6rem; justify-items: start; }
+.prince-antenna__button { position: relative; display: flex; align-items: end; gap: .5rem; min-height: 96px; padding: .4rem .6rem; border: 1px dashed var(--atlas-frame); background: transparent; cursor: pointer; }
+.prince-antenna__button:hover, .prince-antenna__button:focus-visible { border-color: var(--atlas-cyan); }
+.prince-antenna__button:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 3px; }
+.prince-antenna__dish { width: 78px; aspect-ratio: 129 / 134; background: no-repeat 50% 100% / contain; image-rendering: pixelated; }
+.prince-antenna__prince { width: 74px; aspect-ratio: 549 / 476; background: no-repeat 50% 100% / contain; image-rendering: pixelated; }
+.prince-antenna__waves { position: absolute; left: 30px; top: 6px; }
+.prince-antenna__waves i { position: absolute; width: 14px; height: 14px; border: 2px solid var(--atlas-cyan); border-radius: 50%; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .prince-antenna__waves i { animation: atlas-ping 2.4s steps(6) infinite; }
+  html:not(.reduce-motion) .prince-antenna[data-state="decoding"] .prince-antenna__waves i { animation-duration: .7s; }
+}
+.prince-antenna__waves i:nth-child(2) { animation-delay: .8s !important; } .prince-antenna__waves i:nth-child(3) { animation-delay: 1.6s !important; }
+.prince-antenna__status { min-height: 1.2em; margin: 0 !important; color: var(--atlas-cyan) !important; font: 400 .56rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
+.prince-antenna__card { display: grid; gap: .45rem; padding: .9rem 1rem; background: var(--color-space-1); box-shadow: 0 -2px 0 0 var(--atlas-cyan), 0 2px 0 0 var(--atlas-cyan), -2px 0 0 0 var(--atlas-cyan), 2px 0 0 0 var(--atlas-cyan); }
+.prince-antenna__card p { margin: 0; }
+.prince-antenna__kicker { color: var(--atlas-cyan); font: 400 .56rem var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; }
+.prince-antenna__title a { color: var(--text-heading); font-size: .92rem; }
+.prince-antenna__note { color: var(--text-inverse-muted); font-size: .82rem; }
+.prince-antenna__card button { justify-self: start; min-height: 44px; padding: .4rem .7rem; border: 1px solid var(--atlas-frame); background: transparent; color: var(--text-heading); font: 400 .54rem var(--font-pixel); text-transform: uppercase; cursor: pointer; }
+.signals[data-listening] .signal-timeline__remote { box-shadow: inset 0 0 0 1px var(--atlas-cyan), 0 0 14px var(--atlas-cyan); background: var(--atlas-cyan); }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .signals[data-listening] .signal-timeline li .signal-timeline__remote { animation: atlas-listen .5s steps(3) both; }
+  html:not(.reduce-motion) .signals[data-listening] .signal-timeline li:nth-child(n) .signal-timeline__remote { animation-delay: calc(var(--i, 0) * 90ms); }
+}
+@keyframes atlas-listen { from { opacity: .1; } to { opacity: 1; } }
+
+/* ——— Final: the orbital sunrise ——— */
+.chapter--orbit { min-height: 150svh; align-content: end; padding-bottom: calc(var(--section-space) * 1.4); }
+.chapter--orbit::before { display: none; }
+.orbit-sky { opacity: 1 !important; background: none !important; }
+.orbit-sunrise { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+/* Glaucia seen from behind, in silhouette with a rim of dawn light, watching the Sun break over the limb. */
+.orbit-watchers { position: absolute; z-index: 1; left: 50%; top: 66%; width: clamp(70px, 8vw, 120px); aspect-ratio: 230 / 601; translate: -50% -100%; pointer-events: none; }
+.orbit-watchers i { position: absolute; inset: 0; background: no-repeat 50% 100% / contain; image-rendering: pixelated; filter: brightness(.15) saturate(.4) drop-shadow(0 -2px 0 color-mix(in srgb, var(--atlas-gold) 85%, transparent)) drop-shadow(0 0 10px color-mix(in srgb, var(--atlas-gold) 45%, transparent)); }
+.chapter--orbit .credits { position: relative; z-index: 2; margin-top: 70svh; padding: clamp(1.5rem, 4vw, 2.5rem); background: color-mix(in srgb, var(--atlas-night) 72%, transparent); backdrop-filter: blur(3px); box-shadow: 0 -2px 0 0 var(--atlas-frame), 0 2px 0 0 var(--atlas-frame), -2px 0 0 0 var(--atlas-frame), 2px 0 0 0 var(--atlas-frame); }
+.orbit-upcoming { display: grid; gap: .6rem; width: min(560px, 100%); margin: 2rem auto 0; text-align: left; }
+.orbit-upcoming h3 { margin: 0; color: var(--atlas-gold); font: 400 .72rem var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+.orbit-upcoming ul { display: grid; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+.orbit-upcoming li { display: grid; gap: .2rem; padding: .7rem .9rem; background: var(--color-space-1); border-left: 3px solid var(--atlas-gold); }
+.orbit-upcoming li[data-format="remoto"] { border-left: 3px dashed var(--atlas-cyan); }
+.orbit-upcoming time { color: var(--atlas-ice); font: 400 .58rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; }
+.orbit-upcoming li a { color: var(--text-heading); }
+.orbit-upcoming small, .orbit-upcoming p { margin: 0 !important; color: var(--text-inverse-muted) !important; font-size: .86rem !important; }
+.orbit-upcoming__profile { justify-self: start; display: inline-flex; align-items: center; min-height: 44px; color: var(--atlas-cyan); }
+@media (max-width: 640px) { .chapter--orbit { min-height: 130svh; } .chapter--orbit .credits { margin-top: 55svh; } }
+
+/* ——— Glaucia's navigation tablet: a pixel holo-panel that drives the hologram ——— */
+.atlas-tablet { position: absolute; z-index: 4; right: calc(max(var(--gutter), (100vw - var(--content-width)) / 2 - 1.5rem) + 1.75rem); top: 6.6rem; display: grid; gap: .7rem; width: min(320px, calc(100% - 2 * var(--gutter))); padding: 1rem; background: color-mix(in srgb, var(--atlas-night) 90%, transparent); color: var(--text-inverse); box-shadow: 0 -2px 0 0 var(--atlas-cyan), 0 2px 0 0 var(--atlas-cyan), -2px 0 0 0 var(--atlas-cyan), 2px 0 0 0 var(--atlas-cyan), 0 0 40px color-mix(in srgb, var(--atlas-cyan) 22%, transparent); }
+@media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .atlas-tablet { animation: atlas-in .3s steps(3) both; } }
+.atlas-tablet::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, transparent 0 2px, color-mix(in srgb, var(--atlas-cyan) 6%, transparent) 2px 3px); }
+.atlas-tablet__title { margin: 0; padding-right: 2.5rem; color: var(--atlas-cyan); font: 400 .62rem var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+.atlas-tablet__pad { position: relative; height: 96px; background: radial-gradient(circle, color-mix(in srgb, var(--atlas-cyan) 16%, transparent), transparent 70%), var(--atlas-deep); box-shadow: inset 0 0 0 1px var(--atlas-frame); touch-action: none; cursor: grab; }
+.atlas-tablet__pad::before, .atlas-tablet__pad::after { content: ""; position: absolute; background: color-mix(in srgb, var(--atlas-cyan) 30%, transparent); }
+.atlas-tablet__pad::before { left: 50%; top: 8px; bottom: 8px; width: 1px; } .atlas-tablet__pad::after { top: 50%; left: 8px; right: 8px; height: 1px; }
+.atlas-tablet__pad:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 2px; }
+.atlas-tablet__knob { position: absolute; z-index: 1; left: calc(50% - 16px); top: calc(50% - 16px); width: 32px; height: 32px; background: var(--atlas-gold); box-shadow: 0 0 14px var(--atlas-gold), inset -4px -4px 0 color-mix(in srgb, #000 25%, transparent); clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%); }
+.atlas-tablet__row { display: flex; flex-wrap: wrap; gap: .4rem; }
+.atlas-tablet button, .atlas-dock button { min-height: 44px; padding: .4rem .7rem; border: 1px solid var(--atlas-frame); border-radius: 0; background: var(--color-space-1); color: var(--text-heading); font: 400 .54rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.atlas-tablet button:hover, .atlas-tablet button:focus-visible, .atlas-dock button:hover, .atlas-dock button:focus-visible { border-color: var(--atlas-cyan); color: var(--atlas-cyan); }
+.atlas-tablet__action { border-color: var(--atlas-gold) !important; color: var(--atlas-gold) !important; }
+.atlas-tablet__year { display: grid; gap: .3rem; color: var(--text-inverse-muted); font: 400 .52rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
+.atlas-tablet__year select { min-height: 44px; padding: .4rem .6rem; border: 1px solid var(--color-space-line); border-radius: 0; background: var(--color-space-0); color: var(--text-heading); font: 400 .9rem var(--font-mono); }
+.atlas-tablet__close { position: absolute; z-index: 1; right: .5rem; top: .5rem; width: 44px; padding: 0 !important; font-size: 1rem !important; }
+/* The dock under the scene (touch / small screens only). */
+.atlas-dock { display: none; }
+@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
+  .atlas-dock { position: absolute; z-index: 3; left: 0; right: 0; bottom: .6rem; display: flex; justify-content: center; flex-wrap: wrap; gap: .4rem; padding: 0 var(--gutter); }
+  .atlas-dock button { background: color-mix(in srgb, var(--atlas-night) 85%, transparent); }
+  .atlas-hero .sky-touch-hint { display: none !important; }
+  .atlas-tablet { position: relative; right: auto; top: auto; margin: 0 auto 1rem; }
+}
+@media (max-width: 480px) { .atlas-dock button { flex: 1 1 40%; } }
+/* The sunrise fills the section's first screen; the invitation sits below the horizon, on the Earth's night ground. */
+.chapter--orbit { background: #06142b; }
+.chapter--orbit .orbit-sky { inset: 0 0 auto 0 !important; height: 100svh; }
+.orbit-watchers { top: 78svh; }
+.chapter--orbit .credits { margin-top: 84svh; }
+@media (max-width: 640px) { .chapter--orbit .credits { margin-top: 82svh; } .orbit-watchers { width: 64px; } }
+/* Touch / small screens: the dock gets its own strip under the scene instead of covering it. */
+@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
+  .events-page .atlas-hero { padding-bottom: calc(56.25% + 60px); }
+  .atlas-hero :is(.page-hero__image, .hero-scene-layer--atlas, .atlas-layer, .page-hero__shade) { bottom: 60px !important; }
+  .atlas-dock { bottom: 8px; flex-wrap: nowrap; gap: .3rem; }
+  .atlas-dock button { flex: 1 1 0; min-width: 0; padding: .4rem .3rem; font-size: .48rem; }
+  .atlas-status { bottom: calc(56.25vw + 60px - 3.4rem); }
+}
+@media (max-width: 480px) { .atlas-dock button { flex: 1 1 0; } }
+/* 05B: Glaucia blinks on her rest pose (hand on hip); the overlay only shows while that pose is on. */
+.atlas-crew__blink { position: absolute; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .atlas-hero[data-pose="hip"] .atlas-crew > .atlas-crew__blink { animation: crew-blink 4.6s steps(1) 1.3s infinite; }
+}
+/* The voyage opens as a tunnel vision on the window, clearly not the hero's framing. */
+.atlas-voyage__vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 55% 50% at 62% 34%, transparent 40%, color-mix(in srgb, var(--atlas-deep) 85%, transparent) 100%); }
+/* End of the pinned approach: the window's glass flares cyan-white before the voyage opens on it, cracking. */
+.atlas-glass-flash { position: absolute; z-index: 5; inset: 0; opacity: 0; visibility: hidden; pointer-events: none; background: radial-gradient(ellipse 60% 55% at 70% 32%, color-mix(in srgb, var(--color-white) 90%, transparent), color-mix(in srgb, var(--atlas-ice) 60%, transparent) 40%, color-mix(in srgb, var(--atlas-cyan) 30%, transparent) 70%, transparent); }

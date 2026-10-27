@@ -1,5 +1,203 @@
 # Handoff — Migração Galáxia Encantada
 
+## Próximo — Serviços (Aurélia) com efeito WOW e sons reais (itens 1–3 e 5 implementados, sem commit; item 4 em outra sessão)
+**Rodada 3 (27/10/2026):** giroscópio sci-fi (`OrbitGyroscope` + `gyro-engine.ts`) no lugar de `OrbitRings`/`RingAlignment`; eclipse
+(`PlanetEclipse` + `eclipse-engine.ts`, frase nova "eclipse", contrato `main[data-greenhouse="dusk"]` mantido) no lugar da estufa; enxame do
+Prince (`PrinceSwarm` + `swarm-engine.ts`) no lugar dos botões de polinização (`advancePollination` removido); final no terraço do hero à
+noite (`FinaleTerrace`), sem créditos, com letterbox/flare/rastros/tremor. Testes novos em `tests/aurelia-fx.test.ts`. Divisão com a outra
+sessão: ela cuida de sons e dos testes existentes (inclusive `tests/aurelia.browser.mjs`, que ainda cita estufa/anéis/polinização antigos).
+404 Maré Rubra montada com o vídeo da Glaucia (detalhes no `AGENTS.md`). O catálogo passou de 43 para 45 e a 404 deixou de ser
+"sinal fraco" no epílogo. **Correção do CI quality (27/10/2026, run `40463148739`):** as 14 falhas eram expectativas antigas nos testes
+`epilogue`, `beyond-orbit`, `eggs`, `voyage`, `journey-constellation` e `narrative-eggs`. Atualizados para os 45 segredos, os dois segredos
+da Maré Rubra e todos os mundos mapeados; mantida a cobertura de mundos sem segredos com um catálogo de teste. Validação local:
+lint, typecheck e 486 testes passando (44 arquivos). Correção sem commit/push, build ou navegador. `404-demo.html` (Manus) aponta para
+arquivos que não vieram; `public/pixel/404-stormtrooper.jpg` só sai com confirmação.
+**Rodada 2 (27/10/2026):** a Glaucia achou a página simples e pediu um efeito muito forte, que leve a fechar serviços, e uma pista clara do
+epílogo no fim. Entraram: órbitas em 3D na rolagem, constelação de provas (só números do site), jardim que floresce (uma flor por serviço),
+"Como cultivamos" (texto das etapas **a confirmar com ela**), final com sinalizador + créditos + "Continua…" e a transmissão do epílogo sempre
+visível. Corrigido também o `keydown` sem `key` (autopreenchimento do Chrome) no Konami e nos ouvintes de frases. Lint, typecheck e 452 testes
+passando; `tests/aurelia.browser.mjs` ganhou os cenários da história (390/1440, com e sem movimento), **ainda não executados**.
+
+**Estado (26/10/2026):** portal, formulário em 3 etapas e lançamento prontos; lint, typecheck e `npm test` passando (40 arquivos, 438 testes).
+`tests/aurelia.browser.mjs` e `tests/responsiveness.browser.mjs` foram atualizados, mas **ainda não rodaram**: a Glaucia roda com o servidor dela.
+A chave do widget agora é `TURNSTILE_SITE_KEY` (lida só no servidor por `contactConfig()` e passada ao widget; sem `NEXT_PUBLIC_`).
+Sem as 3 chaves o contato fica desativado e o formulário fica único, como sem JS. Sons do portal/lançamento reutilizam tipos já existentes (`relay`, `launch`, `seed`,
+`greenhouse`, `error`, `bloom`): o `sfx.ts` ficou com a sessão de sons. Detalhes técnicos no `AGENTS.md` (seção Serviços, "Portal do contato").
+
+Branch `feat/atlas-eventos` (já contém toda a `feat/aurelia-servicos`). Não mexer no envio (Server Action + Zod + Turnstile + Web3Forms + LinkedIn, commit `643e7fa`); só na experiência. Base: `ContactCinema.tsx`, `contact-cinema.ts`, `ContactForm`, `aurelia.css`, `src/i18n/aurelia.ts`, samples em `public/sfx` + `CREDITS.md`.
+1. CTA que vira portal: os CTAs de contato abrem um portal de pétalas e luz em tela cheia (canvas pixel + GSAP); o formulário surge dentro. Sem JS: `#contato` normal. Esc/fechar, foco preso, `data-lenis-prevent`.
+2. Formulário em 3 etapas (mesma Server Action): necessidade (workshop/palestra/consultoria) → nome, empresa, LinkedIn obrigatório → mensagem + Turnstile + LGPD. Progresso em sementes, Glaucia e Prince reagindo, validação Zod por etapa nos 3 idiomas. Sem JS: formulário único.
+3. Lançamento da mensagem: ao enviar, um sinal sobe do jardim às estrelas em tela cheia com som; erro = o sinal falha e o form volta.
+4. Sons reais CC0 (Freesound CC0, Pixabay, Kenney; pedir aprovação antes de baixar; créditos em `public/sfx/CREDITS.md`): vento/nevasca (Nivéora), poeira (Marte), cristais (Lúmina), rádio/estática/órbita (Atlas), portal/florescer/lançamento (Aurélia), cometa/trovão (Observatório). Opt-in, curtos, < 60 KB, com tom sintetizado de reserva.
+5. Responsivo, movimento reduzido, teclado; testes unitários e de navegador com o dev da Glaucia; build só com o dev parado; sem commit sem pedido.
+
+Também pendente no Atlas: `zero-gravity` (pose `float` da 05C) e Prince `back-sit` no nascer do sol; rodar `tests/atlas.browser.mjs`, `tests/events-page.browser.mjs` e `tests/hero-ctas.browser.mjs` no navegador; remover `GE-DOG-05B-earth-orbit..jpg` (duplicado) com confirmação.
+
+## Retomada — Atlas, rodada 2 (26/10/2026, branch `feat/atlas-eventos`, sem commit)
+Pronto e verificado (lint, typecheck, 292 testes; `tests/atlas.browser.mjs` e `tests/events-page.browser.mjs` passando no dev):
+composição I (os dois de frente), Terra viva, viagem de câmera 3D (todos os aparelhos), tablet da Glaucia, doca de ações, 3 segredos do
+Prince, nascer do sol orbital, próximas conexões do Luma, DevDay Exchange Rio (41 presentes) adicionado, fonte do Codex SP trocada para a
+página presencial, rolagem do rádio corrigida em todas as páginas, botões do globo sem sobrepor a legenda, a parábola agora é a Antena
+do Prince. Detalhes no AGENTS.md (seção Eventos, "Rodada 2").
+
+**Pendências**
+1. **Folhas 05B atualizadas** (substituem os prompts abaixo). Anexar GE-MASTER-GL/DOG, GE-GL-05/GE-DOG-05 e GE-PL-05.
+   - `GE-GL-05B-earth-orbit.png`: as poses da lista anterior (`blink`, `operate`, `trace`, `cheer`) e mais **(5) TABLET**: "three-quarter-left,
+     holding a small glowing captain tablet in both hands at chest height, looking down at it, gentle smile".
+   - `GE-DOG-05B-earth-orbit.png`: o mesmo Prince **com capacete**: **(1) FRONT**: "facing the viewer, sitting, helmet on, happy" (vai
+     substituir a frente sem capacete); (2) SNIFF; (3) PAW (pata erguida pressionando um botão flutuante); (4) WAG; (5) **LISTEN**: "ears perked,
+     head tilted, looking up"; (6) **LEAP**: "jumping up-left chasing something"; (7) **FLOAT**: "floating in zero gravity, legs spread, ears
+     up, delighted"; (8) **BACK-SIT**: "seen from behind, sitting, looking at the horizon". Voltado para a esquerda (ele fica à direita do
+     holograma), mesma escala e mesma linha de base das poses de perfil.
+   - Ao chegar: integrar no pipeline; `zero-gravity` (frases "gravidade/gravity/gravedad", segurar o Prince) entra no catálogo (38); o Prince de
+     costas acompanha a Glaucia no nascer do sol; o tablet ganha a pose da Glaucia segurando.
+2. Órfãos removidos com a confirmação da Glaucia: `eventos-grogu.jpg`, `events.css`, `EventGlobe`/`GlobeLoader`/`EventHistory`,
+   `events-ui.ts` e `night-dive.ts` (a entrada do Grogu saiu também do mapa do `HeroScene`).
+3. `npm run build` com o dev parado.
+
+## Retomada — Atlas das Conexões em `/[lang]/eventos` (26/10/2026, branch `feat/atlas-eventos`, sem commit)
+
+**Pronto e verificado** (lint, typecheck, 288 testes unitários; com o `npm run dev` da Glaucia: `tests/atlas.browser.mjs`,
+`tests/events-page.browser.mjs` e `tests/hero-ctas.browser.mjs` passando, capturas em `%TEMP%\atlas` nos 5 tamanhos). Detalhes
+técnicos no `AGENTS.md` (seção Eventos).
+- Decisões da Glaucia: 2 registros corrigidos para remotos (CloudOuest Virtual Conference e Reactor Brasil Webinar, 2020); poses via
+  folhas extras 05B; globo "nos dois" (holograma no hero + globo grande no capítulo 2); salto "Mergulho noturno"; `orbital-trail` = uma
+  volta por ano; `constellation-route` = Glaucia traça no holograma; `dog-navigation` = um evento por vez; separar presencial/remoto;
+  filtro por URL sem JS; Eventos conta no epílogo; composição A aprovada.
+- Números (sempre de `eventos.json`): 134 eventos, 79 presenciais, 55 remotos, 20 cidades, 7 países com presença, 9 representados.
+
+**Pendências**
+1. **Folhas 05B** (a GE-GL-05 é folha de personagem, sem piscar nem pose de ação). Prompts para o Grok (anexar GE-MASTER-GL/DOG,
+   GE-GL-05/GE-DOG-05 e GE-PL-05):
+   - `GE-GL-05B-earth-orbit.png`: "Extra four-pose sheet for the SAME Glaucia of the attached GE-GL-05 sheet: identical face, hair,
+     teal/green jacket with coral trims, navy cargo trousers, boots, identical scale and the same feet baseline as the front-neutral pose
+     of GE-GL-05. Solid flat #FF00FF background (or true alpha), full bodies, generous spacing, no props, no hologram drawn. Left to right:
+     (1) BLINK: exactly the front-neutral pose of GE-GL-05 with eyes closed, nothing else changed; (2) OPERATE: three-quarter-left, both
+     hands raised in front of the chest, palms open as if rotating an invisible floating globe, focused smile; (3) TRACE: three-quarter-left,
+     right arm extended up-left with the index finger drawing a line in the air, other hand relaxed; (4) CHEER: three-quarter-left, delighted
+     smile, one fist raised at shoulder height. Same pixel density and palette as GE-GL-05, crisp pixels, no text, no logos."
+   - `GE-DOG-05B-earth-orbit.png`: "Extra five-pose sheet for the SAME Pomeranian Prince of GE-DOG-05, wearing the SAME blue/gold/white
+     space suit WITH the round glass helmet and antenna of the side poses, same scale and paws baseline as those side poses. White or
+     transparent background, full bodies, generous spacing, no props. Facing left / three-quarter-left: (1) STAND: calm three-quarter-left
+     standing; (2) SNIFF: nose down toward the floor, inquisitive; (3) PAW: front-left paw raised high as if pressing a floating button;
+     (4) WAG: happy, tongue out, tail mid-wag; (5) SIT-UP: sitting, looking up and slightly left. Real dog anatomy, crisp pixels, same
+     palette, no text."
+   - Ao chegar: `POSES["earth-orbit"]["glaucia:B"] = ["blink", "operate", "trace", "cheer"]` e `["prince:B"] = ["stand", "sniff", "paw",
+     "wag", "sit-up"]`, `SHEET_NORMALIZATION` (referências `idle`/`side`), `node scripts/build-galaxia-assets.mjs earth-orbit --debug`,
+     `--manifest`; em `AtlasScene` acrescentar as poses e o piscar (sobreposição em `idle`); em `AtlasMotion`: constelação `profile`→`trace`→`cheer`,
+     holograma `operate`, visor `sniff`→`paw`→`wag`, hover do Prince abana.
+2. **Arquivos órfãos, a remover só com confirmação da Glaucia:** `public/pixel/eventos-grogu.jpg`, `src/app/events.css` (já fora do
+   `globals.css`), `src/components/{EventGlobe,GlobeLoader,EventHistory}.tsx`, `src/i18n/events-ui.ts`. Chaves antigas de `d.events`
+   (`countryNote`, `mapNote`, `countriesTitle`, `labels`, `languageBreakdown`, `typeBreakdown`, `history`) ainda são usadas pela Home
+   (`labels`) e podem ser enxugadas depois.
+3. `npm run build` (com o dev parado) para confirmar `/[lang]/eventos` como `ƒ` e o `ƒ Middleware`.
+
+## Roteiro original — `/[lang]/eventos`: Atlas das Conexões (cena `earth-orbit`, 05)
+
+**Estado ao entregar (26/10/2026):** `main` em `3630b43` (PR #11 do epílogo mergeado), árvore limpa. Home, Sobre, Projetos,
+Conteúdo e o epílogo estão migrados. Eventos ainda usa o tema antigo: `PageHero` com `public/pixel/eventos-grogu.jpg`
+(Grogu, Star Wars), `GlobeLoader`/`EventGlobe`, `EventHistory`, estatísticas e breakdowns. Crie a branch
+`feat/atlas-eventos` a partir da `main`.
+
+### O que ler antes
+1. `AGENTS.md` (padrões de cena, segredos, sons, verificação e as armadilhas do epílogo).
+2. `docs/galaxia-encantada/PLANO-MIGRACAO.md` §4.5 (cena, **regra factual**, aceite), §8 (segredos 18–20), §3.4 (nave),
+   e as fichas de arte das linhas ~854/921/988/1055 e da tabela de cenas (~1179).
+3. A página atual `src/app/[lang]/eventos/page.tsx` e `src/components/{EventGlobe,GlobeLoader,EventHistory,EventMap}.tsx`,
+   `src/i18n/events-ui.ts`, `getEventos/getEventStats/getEventCountries` em `src/lib/data.ts` e `src/data/eventos.json`.
+4. A página mais parecida já migrada como molde: Conteúdo/Lúmina (`src/app/[lang]/conteudo/page.tsx`, `LuminaScene`,
+   `LuminaMotion`, `prism-engine.ts`, `crystal-jump.ts`, `lumina-records.ts`, `tests/lumina*.{test.ts,browser.mjs}`).
+
+### Arte já aprovada (em `docs/art/galaxia-encantada/approved-source`)
+- `GE-PL-05-earth-orbit.png`: sala de navegação com janela para a Terra à direita, pedestal circular iluminado no chão
+  (palco natural dos atores, ~70–85 % x, ~75 % y), parede escura à esquerda para o texto. Sem personagens.
+- `GE-GL-05-earth-orbit.png`: **folha de personagem**, não de poses: 4 bustos em cima e 4 corpos inteiros embaixo
+  (frente com mão na cintura, frente neutra, perfil, costas), **fundo magenta sólido, sem alpha**. O pipeline só tem
+  `keyWhite` (fundo branco) e `keyDark` (props): será preciso um `keyMagenta` (ou chave genérica por cor do canto) e
+  separar os corpos inteiros dos bustos (os bustos podem ficar como reserva/retratos). Não redesenhe nada.
+- `GE-DOG-05-earth-orbit.png`: Prince com traje azul/dourado; fundo branco. Linha de cima: frente sem capacete, dois de
+  perfil com capacete e antena; linha de baixo: 4 bustos de capacete (neutro, língua, olhos fechados, neutro). `keyWhite`
+  serve; o capacete é translúcido, então confira se o vidro não some com a chave (talvez `LIGHT_FRINGE`-like).
+- Props em `props/earth-orbit/`: `globe-pedestal-off`, `globe-pedestal-activated`, `orb-navigation-idle`,
+  `orb-navigation-active`, `radar-dish-small`, `radar-dish-large` (passam por `keyDark`).
+- Se faltarem poses de ação (operar o globo, Prince apontando o painel), peça à Glaucia uma folha extra
+  (`GE-GL-05B-earth-orbit.png`, `GE-DOG-05B-earth-orbit.png`), como foi feito em Nivéora/Lúmina. **Não fabrique poses
+  com CSS.**
+
+### Pipeline
+- `earth-orbit` já está em `SCENES` do script; faltam `POSES["earth-orbit"]`, `ANCHORS`, entrada em
+  `src/data/galaxia/layout.json` (grid 1, plateGrid 0, cores 160/128, palcos, escala dos props) e a cena em
+  `src/lib/scenes.ts` (paleta azul-ciano/âmbar).
+- `node scripts/build-galaxia-assets.mjs earth-orbit --debug` → `public/galaxia/**` + `src/data/galaxia/earth-orbit.json`;
+  `--preview` gera as variantes A/B/C no `%TEMP%` para aprovar escala e posição antes de integrar.
+- Atualize o `manifest.json` com `--manifest` se adicionar fontes.
+
+### Experiência proposta (validar com a Glaucia antes de implementar)
+- **Hero:** mesmo padrão dos mundos (texto à esquerda, atores à direita sobre o pedestal, `BootSequence variant`
+  própria com chave `atlas-boot`, `ReadingProgress`), pin + salto próprio no `HERO_OVERLAY` (ideia: "órbita de
+  conexões" — rotas de luz entre cidades sobre a curvatura da Terra, luzes das cidades acendendo, sem copiar outros saltos).
+  Motor em pixel próprio (`orbit-engine.ts`: satélites, auroras na borda, luzes de cidade piscando, estrelas).
+- **Produto intacto (aceite do plano):** `EventGlobe` arrastável, histórico filtrável, contagens, países e **legenda de
+  participações remotas**. Filtro e lista completos sem JS. Os números vêm sempre de `eventos.json`.
+- **Regra factual:** evento remoto **não** é país visitado. Nenhum texto, rota ou animação pode sugerir viagem física
+  que não aconteceu; marque remoto/presencial se o dataset tiver o dado, senão não invente.
+- **Segredos (3, ids do plano):** `orbital-trail` (trilha orbital destaca um conjunto real de eventos),
+  `constellation-route` (conexões do globo formam um desenho original, sem mover geolocalizações),
+  `dog-navigation` (Prince aciona o visor e destaca a origem de um evento real). Registre em `src/lib/egg-catalog.ts`
+  (`page: "events"`), nomes/dicas em `src/i18n/comlink.ts` nos 3 idiomas, gesto de toque equivalente e frases digitadas.
+  Ao registrar, o Atlas deixa de ser "sinal fraco" no epílogo automaticamente (constelação, atlas e pós-créditos leem
+  `EGGS`); confira `tests/journey-constellation.test.ts`, `tests/voyage.test.ts` e o `EGGS).toHaveLength(31)` de
+  `tests/epilogue.test.ts`, que vai mudar de propósito.
+- **Sons:** voz `hover-atlas`/`click-atlas` (adicione `atlas` a `SoundWorld`/`WORLDS` em `sfx.ts`), sons de segredo
+  ≤ 0,6 s e gain ≤ 0,08 por tom (`tests/holonet.test.ts`).
+- Remova a dependência do Grogu (`public/pixel/eventos-grogu.jpg` e textos/alt) só depois que a nova cena estiver no ar;
+  `tests/social.test.ts` proíbe Twitch em `src`.
+
+### Armadilhas já conhecidas (aprendidas no epílogo)
+- `main { overflow: hidden }` global quebra `position: sticky`: use `overflow: clip` na página se usar sticky.
+- `PageEffects` anima toda `section` de `main:not(.home-page):not(.beyond-orbit)` com `transform`, o que anula pins.
+  Dê à página a classe `home-page` (padrão dos mundos, que reusam `home.css` + `HomeChoreography`) ou exclua-a do seletor.
+- Não aninhe pins (seções fixadas dentro de um hero fixado). Pin abaixo do menu: `start: "top top+=<altura do menu>"`.
+- Cópias de uma imagem LCP via `next/image` sem `priority` geram aviso: use `background-image` para camadas de efeito.
+- `gsap.set([])` avisa "target not found": guarde arrays vazios.
+- Depois de criar componentes client com o `npm run dev` aberto, o erro "Cannot read properties of undefined
+  (reading 'call')" é cache do dev: reinicie o dev.
+
+### Verificação
+- `npm run lint`, `npm run typecheck`, `npm test`; `npm run build` só com o dev parado.
+- Navegador: a Glaucia sobe o servidor (`npm run dev` ou `npm run start -- --hostname 127.0.0.1 --port 3100`). Com o
+  servidor dela no ar e o pedido dela, dá para auditar com Playwright (script inline via
+  `node --input-type=module`, capturas em `%TEMP%`) em 1920×1080, 1440×900, 1366×768, 768×1024 e 390×844, conferindo
+  console, rolagem horizontal, cortes da cena e vazios. Crie `tests/atlas.browser.mjs` no padrão dos outros.
+- Atualize `AGENTS.md` (seção da página) e este handoff ao final. Sem push/merge sem autorização.
+## Retomada — Serviços/Aurélia (26/10/2026)
+- **Aurélia no epílogo:** nome completo/carta PT/EN/ES, seis dicas sugestivas compartilhadas com o Comlink e som de chegada próprio; placa/paleta, seis luas, constelação e insígnia conferidas no padrão de Lúmina, retratos preservados, sinal fraco/pós-créditos só Eventos e 404; elegibilidade intacta (três entre Home/Sobre/Projetos/Conteúdo). Lint, typecheck e npm test passaram (33 arquivos, 297 testes); roteiro `tests/epilogue.browser.mjs` ampliado e sintaxe validada, execução visual pela usuária pendente; sem build, servidor, navegador ou commit.
+- **Correção após verificação de produção:** alvo do Prince limitado à cabeça/peito, com borda inferior acima do sinalizador; mínimo de 44 px cresce para cima. Sinalizador centralizado no prop, estufa com expansão para a esquerda. Em ≤700 px, ações duplicadas dos props ficam nos atores; Prince centralizado no frontal. Geometria calculada em 768/1280/1440 mantém separação vertical de 4,32/7,2/8,1 px entre Prince e sinalizador. O teste de navegador agora verifica tamanho, interseção com a arte e ausência de sobreposição dos alvos em 390/768/1280/1440.
+- **Investigação da reação:** GSAP 3.15.0 isolado executou `paw` por 1,1 s e voltou a `front`, inclusive replay e pausa/retomada; não foi reproduzido defeito na timeline, e `AureliaMotion` não precisou de nova alteração nesta rodada. O teste agora aguarda `data-motion=true` e cena ativa (os hotspots também existem no primeiro passe estático da hidratação), registra as transições antes do clique por MutationObserver e verifica pose espelhada visível por ≥900 ms, retorno frontal e foco no contato. Essas hipóteses de corrida/perda do estado transitório ainda precisam de confirmação no navegador de produção pela usuária.
+- **Verificação desta correção:** lint, typecheck e npm test passaram (33 arquivos, 287 testes); `node --check tests/aurelia.browser.mjs` e `git diff --check` passaram. Sem build, servidor, navegador ou commit. Reexecutar `node tests/aurelia.browser.mjs` após atualizar o build de produção.
+- **Branch:** `feat/aurelia-servicos`, sem commit/push/merge/deploy. `/[lang]/servicos` migrou para Aurélia em PT/EN/ES. Eventos e 404 continuam no tema anterior.
+- **Estrutura:** quatro capítulos no padrão de Lúmina: hero com `AureliaScene`/`AureliaMotion`, anéis orbitais, canteiros com os serviços reais e canal de colaboração. `home.css`, `HomeChoreography`, `ChapterTag`/`ChapterJump`, `BootSequence variant="aurelia"` (`aurelia-boot`), `ReadingProgress variant="aurelia"`, `data-sound-world="aurelia"` e copy `d.aurelia`. Nenhuma dependência nova.
+- **Contratos preservados:** `ContactForm.tsx` e `EpilogueSignal.tsx` não foram alterados. Metadata, `formId`, validação, estados de sucesso/erro, links `?assunto=workshop|mentoria|palestra#contato`, CTAs `#contato`/Eventos e regra dos três mundos continuam. Os dados vêm de `getServicos()`: títulos, descrições e preço sob consulta. Nada foi inventado sobre clientes, entregas, resultados ou depoimentos.
+- **Arte:** executado `node scripts/build-galaxia-assets.mjs aurelia --debug`. Placa `GE-PL-06-aurelia.png` preservada, grid 1, 160 cores de ator/128 de props. A sheet da Glaucia tem fundo magenta e poses reais `idle` (mão no quadril), `relaxed`, `side`, `back` + quatro retratos. Não contém regador/gesto de transmissão. O pipeline faz key exclusivo da 06 e deriva uma pequena camada de pálpebras para `blink`. Prince: `front`, `stand`, `paw` + retratos. Sem inventar poses de regar/tocar. Estufa e sinalizador são props aprovados já presentes na pasta da cena.
+- **Prince frontal:** repouso/SSR/reduced motion em `front`, hotspot no recorte frontal; `paw` espelhada só nos 1,1 s do `beacon-relay`, voltando a `front`. Âncora (77;93) e escala de `stand` preservadas (frontal 1,3% mais alto); testes unitários/navegador atualizados; lint, typecheck e npm test passaram (33 arquivos, 287 testes), sintaxe do teste de navegador conferida; validação visual pela usuária pendente.
+- **Composição:** Glaucia (88;93;h47), Prince (77;93;h14); estufa (69;92), sinalizador (74,5;93). Prévia raster examinada em `/tmp/aurelia-composition.png` e `/tmp/aurelia-mobile.png`; **não são screenshots do site**. Frente da Glaucia segue a arte recebida; perfil entra brevemente na floração. O sinalizador fica na frente da pata do Prince.
+- **Movimento:** `garden-engine.ts` usa canvas 2D pixelado (pétalas, esporos, vapor e reflexos; pixel 2; até 160 partículas), pausa via `observeMotionActivity` fora de tela/aba e destrói RAF/observer. `petal-jump.ts` desenha uma espiral apenas quando a rolagem muda. Pin/zoom só no `HERO_OVERLAY` (1200×680 + hover/fine pointer); compacto empilha texto e placa 16:9. Respiração/piscar CSS pausados com a cena. Movimento reduzido mantém o resultado estático; troca de preferência durante a interação conserva o desfecho.
+- **Seis segredos novos:** catálogo total 37; Serviços tem sete IDs contando `epilogue-signal`. O atlas do epílogo usa a placa/paleta de Aurélia e seis luas próprias; a ponte não conta como lua nem amplia a elegibilidade do epílogo.
+| ID | Mouse/toque | Teclado | Frases PT / EN / ES (também no Comlink) |
+|---|---|---|---|
+| `garden-bloom` | Glaucia ou estufa do hero; revela um serviço, replay alterna os três | Tab até Glaucia, Enter/Espaço; “Outra possibilidade” para replay | `florescer` / `garden bloom` / `florecer` |
+| `beacon-relay` | Prince, sinalizador do hero ou botão do canal; pata aciona luz, rola até contato e foca o título | Tab até o botão, Enter/Espaço | `sinalizador` / `beacon` / `baliza` |
+| `ring-alignment` | Girar cada anel até marca no alto; início [1,2,3], 3/2/1 cliques respectivamente | Tab/Enter/Espaço nos três botões | `anéis` / `rings` / `anillos` |
+| `seed-vault` | Abrir o `<details>` “Cofre de sementes” sob os cards; botão/replay alterna serviço | Tab até summary, Enter/Espaço | `sementes` / `seeds` / `semillas` |
+| `greenhouse-dusk` | Slider de luz ≤20%; botão restaura | Tab até slider, Home/setas; Esc restaura | `estufa` / `greenhouse` / `invernadero` |
+| `pollination` | Botões dos cards 01→02→03; fora de ordem reinicia | Tab/Enter/Espaço na mesma ordem | `polinizar` / `pollinate` / `polinizar jardín` |
+- Em telas ≤700 px, os hotspots duplicados de estufa/sinalizador ficam ocultos; Glaucia/Prince oferecem as mesmas ações com alvos de toque separados. Frases ignoram input, textarea, select, contenteditable, diálogos, composição IME e boot pendente. Registro/replay/reset usam apenas o store existente. Nenhum segredo escreve em campos, envia formulário ou cria pedido. Os links de serviço são ações explícitas de pré-preenchimento.
+- **Revisão estática:** corrigidos conflito de especificidade do título (coluna de 44%) e retomada de timeline iniciada com a cena inativa. Controles puros em `aurelia-controls.ts` evitam importar datasets/dictionaries nos componentes de anéis/cards. Sons opt-in novos com gain ≤0,08 e duração total por tom ≤0,6s.
+- **Verificação:** `npm run lint`, `npm run typecheck`, `npm test` passaram (33 arquivos, 280 testes). `tests/aurelia.test.ts` cobre records, SSR dos serviços, preço/assuntos, catálogo/i18n, assets alpha/croma, layout, motor/cancelamento de RAF e progresso do salto. Testes de contagem/atlas/sons atualizados. Sintaxe de `aurelia.browser.mjs`, `hero-scenes.browser.mjs`, `epilogue.browser.mjs` verificada com `node --check`.
+- **Ambiente:** no início faltavam GSAP/Lenis já declarados; não se usou rede nem mocks para contornar isso. As versões corretas passaram a estar disponíveis no ambiente (`gsap 3.15.0`, `@gsap/react 2.1.2`, `lenis 1.3.23`), e as verificações completas foram reexecutadas com sucesso. `package.json`/lockfile intactos.
+- **Pendente para a Glaucia:** build (com dev parado) e navegador. Não foi iniciado servidor nem executado Playwright. Rodar `node tests/aurelia.browser.mjs` contra o servidor escolhido (`BASE_URL`, padrão 3100). O script cobre PT/EN/ES, mouse/teclado/toque, rádio/frases, reduced motion, no-JS, pin/resize, pausa fora da cena, retorno de rota, assuntos e gate do epílogo. Formspree é interceptado; casos de validação/sucesso/erro precisam de `NEXT_PUBLIC_FORMSPREE_ID` configurado no build e são explicitamente pulados se ausente.
+- Conferir no site: recorte/piscar, tamanho/posição de props, enquadramento em 390/768/1280/1440, foco/leitor de tela, comportamento em aba oculta, ritmo e áudio, LCP/CLS/INP. Nada disso foi medido no navegador. Resumo completo em `/tmp/aurelia-summary.md`.
+
 ## Retomada — Auditoria Playwright do epílogo (26/10/2026)
 
 - **Como:** a Glaucia subiu o `npm run dev`; o agente rodou Playwright contra `localhost:3000` (1920×1080, 1440×900, 1366×768, 1280×720, 768×1024, 390×844; antes/depois de `last-light`). Capturas em `%TEMP%/bo-audit*`.

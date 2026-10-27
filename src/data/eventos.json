@@ -1,5 +1,17 @@
 [
   {
+    "nome": "DevDay Exchange Community: Rio de Janeiro — destaques do OpenAI DevDay 2026 com Codex",
+    "ano": 2026,
+    "cidade": "Rio de Janeiro",
+    "pais": "Brasil",
+    "lat": -22.9068,
+    "lon": -43.1729,
+    "idioma": "pt-BR",
+    "tipo": "organizacao",
+    "publico": "41 (Presencial)",
+    "fonte": "https://luma.com/wzk8q92k"
+  },
+  {
     "nome": "Codex Community Meetup Rio — From PRD to Production: AI PDLC com Codex",
     "ano": 2026,
     "cidade": "Rio de Janeiro",
@@ -57,7 +69,7 @@
     "idioma": "pt-BR",
     "tipo": "organizacao",
     "publico": "Não informado",
-    "fonte": "https://luma.com/56vdjyl6"
+    "fonte": "https://luma.com/ayg5q20m"
   },
   {
     "nome": "AgentCon Rio de Janeiro — Do Spec ao Harness",
@@ -686,10 +698,10 @@
   {
     "nome": "Reactor Brasil - Webinar",
     "ano": 2020,
-    "cidade": "Rio de Janeiro",
+    "cidade": "Online",
     "pais": "Brasil",
-    "lat": -22.9068,
-    "lon": -43.1729,
+    "lat": null,
+    "lon": null,
     "idioma": "en",
     "tipo": "palestra",
     "publico": "≈50",
@@ -722,10 +734,10 @@
   {
     "nome": "CloudOuest Virtual Conference",
     "ano": 2020,
-    "cidade": "Paris",
+    "cidade": "Online",
     "pais": "França",
-    "lat": 48.8566,
-    "lon": 2.3522,
+    "lat": null,
+    "lon": null,
     "idioma": "pt-BR",
     "tipo": "workshop",
     "publico": "≈500",

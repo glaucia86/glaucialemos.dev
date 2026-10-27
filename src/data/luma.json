@@ -1,0 +1,51 @@
+{
+  "saved": "2026-10-26T20:13:36.359Z",
+  "future": [],
+  "past": [
+    {
+      "id": "evt-jIb9KyysdVKEIVN",
+      "name": "DevDay Exchange Community: Rio de Janeiro",
+      "start": "2026-10-24T12:00:00.000Z",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "format": "presencial",
+      "url": "https://luma.com/wzk8q92k"
+    },
+    {
+      "id": "evt-g3AtU7QLFbqQ4Jj",
+      "name": "Codex Community Meetup – Rio de Janeiro",
+      "start": "2026-09-19T13:00:00.000Z",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "format": "presencial",
+      "url": "https://luma.com/4hudcuqo"
+    },
+    {
+      "id": "evt-UClFQtVYtDjn9AL",
+      "name": "Codex Community Meetup: São Paulo",
+      "start": "2026-05-27T20:30:00.000Z",
+      "city": null,
+      "country": null,
+      "format": "remoto",
+      "url": "https://luma.com/56vdjyl6"
+    },
+    {
+      "id": "evt-PPnuy0tzwk8MVct",
+      "name": "Codex Community Meetup – São Paulo [Presencial]",
+      "start": "2026-05-27T20:30:00.000Z",
+      "city": "São Paulo",
+      "country": "Brazil",
+      "format": "presencial",
+      "url": "https://luma.com/ayg5q20m"
+    },
+    {
+      "id": "evt-7dHNdsFczd6DZUn",
+      "name": "Codex Community Meetup: Rio de Janeiro",
+      "start": "2026-05-16T13:00:00.000Z",
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "format": "presencial",
+      "url": "https://luma.com/1fzq5u6f"
+    }
+  ]
+}

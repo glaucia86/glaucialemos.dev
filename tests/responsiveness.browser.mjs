@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { chromium, webkit, devices } from "playwright";
+import { mockContact } from "./contact-browser-mocks.mjs";
 
 const base = process.env.BASE_URL ?? "http://127.0.0.1:3100";
 const output = "test-results/responsiveness";
@@ -155,13 +156,24 @@ for (const engine of (process.env.BROWSER_ENGINE === "webkit" ? [webkit] : [chro
           if (await select.count() && await select.locator("option").count() > 1) await select.selectOption({ index: 1 });
         }
         if (route === "servicos") {
-          await page.route("https://formspree.io/**", intercepted => intercepted.fulfill({ status: 200, contentType: "application/json", body: "{}" }));
+          await mockContact(page, base);
           const name = page.locator('[name="name"]');
           if (await name.isEnabled()) {
+            // Three steps: need → who → message.
+            await page.locator('[name="service"][value="consultoria"]').check();
+            await page.locator(".contact-step__next:visible").click();
             await name.fill("Responsive layout test");
-            await page.locator('[name="email"]').fill("responsive@example.com");
+            await page.locator('[name="company"]').fill("Responsive test");
+            await page.locator('[name="linkedin"]').fill("https://linkedin.com/in/responsive-test");
+            await page.locator(".contact-step__next:visible").click();
+            await page.locator('[name="consent"]').check();
             await page.locator('[name="message"]').fill("Long message ".repeat(80));
             await page.locator('.contact-panel button[type="submit"]').click();
+            // With motion the submission lifts the form into the full-screen portal; close it before the radio.
+            if (await page.locator('.contact-portal[data-open]').count()) {
+              await page.waitForTimeout(4000);
+              await page.keyboard.press("Escape");
+            }
           } else assert.ok(await page.locator(".form-notice").isVisible());
         }
         await page.evaluate(() => scrollTo(0, 0));

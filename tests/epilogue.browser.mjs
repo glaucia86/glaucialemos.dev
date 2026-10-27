@@ -7,6 +7,12 @@ const base = process.env.BASE_URL ?? "http://127.0.0.1:3100";
 const key = "galaxia-encantada:eggs:v2";
 const route = "alem-da-ultima-orbita";
 const eligible = ["focus-lens", "paw-tracks", "rover-scan"];
+const gardenSecrets = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination"];
+const gardens = {
+  pt: { name: "Aurélia, os Jardins Suspensos", allFound: "Todas as luas encontradas!", next: ["Atlas das Conexões", "Maré Rubra"], commands: ["florescer", "sinalizador", "anéis", "sementes", "estufa", "polinizar"] },
+  en: { name: "Aurélia, the Hanging Gardens", allFound: "Every moon found!", next: ["Atlas of Connections", "Red Tide"], commands: ["garden bloom", "beacon", "rings", "seeds", "greenhouse", "pollinate"] },
+  es: { name: "Aurélia, los Jardines Colgantes", allFound: "¡Todas las lunas encontradas!", next: ["Atlas de las Conexiones", "Marea Roja"], commands: ["florecer", "baliza", "anillos", "semillas", "invernadero", "polinizar jardín"] },
+};
 const copy = {
   pt: { title: "Além da Última Órbita", command: "Além da última órbita", locked: "mais 3 mundos", elsewhere: "Serviços", back: "Voltar ao Observatório", revisit: "Revisitar o epílogo" },
   en: { title: "Beyond the Last Orbit", command: "Beyond the Last Orbit", locked: "3 more worlds", elsewhere: "Services", back: "Back to the Observatory", revisit: "Revisit the epilogue" },
@@ -51,6 +57,9 @@ for (const [lang, text] of Object.entries(copy)) {
     await page.keyboard.press("Escape");
     await seed(page, ["focus-lens", "wish", "dog-signal"]);
     await expect(page.locator(".epilogue-signal")).toHaveCount(0);
+    // All six garden secrets still cannot replace the third original world.
+    await seed(page, [...eligible.slice(0, 2), ...gardenSecrets]);
+    await expect(page.locator(".epilogue-signal")).toHaveCount(0);
     await seed(page, eligible);
     await expect(page.locator(".epilogue-signal button")).toBeVisible();
     await command(page, text.command);
@@ -80,6 +89,56 @@ for (const [lang, text] of Object.entries(copy)) {
     await expect(page.locator(".comlink__feedback")).toContainText(text.elsewhere);
   });
 }
+
+for (const [lang, text] of Object.entries(gardens)) await check(`${lang}: Aurélia moons, hints, credits, radio and reset`, async context => {
+  const page = await context.newPage();
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto(`${base}/${lang}/${route}`);
+  const planet = page.locator('.beyond-orbit__world-stop[data-world="services"]');
+  const badge = page.locator('.beyond-orbit__world-badges img[src="/galaxia/scenes/aurelia/background.webp"]');
+  await expect(planet).toHaveAttribute("data-charted", "true");
+  await expect(planet.getByRole("heading")).toHaveText(text.name);
+  await expect(planet.locator(".beyond-orbit__planet")).toHaveCSS("--accent", "#87e4c1");
+  await expect(planet.locator(".beyond-orbit__planet")).toHaveCSS("--surface", "url(/galaxia/scenes/aurelia/background.webp)");
+  await expect(planet.locator(".beyond-orbit__moons i")).toHaveCount(6);
+  await expect(page.locator('.beyond-orbit__world-stop[data-charted="true"]')).toHaveCount(5);
+  await expect(page.locator(".beyond-orbit__post li")).toHaveText(text.next);
+  await expect(page.locator(".beyond-orbit__world[data-uncharted]")).toHaveCount(2);
+  await expect(page.locator(".beyond-orbit__letter")).toContainText("Aurélia");
+  await planet.locator("summary").click();
+  for (const [index, transmission] of text.commands.entries()) {
+    await expect(planet.locator(".beyond-orbit__hints li").nth(index)).toBeVisible();
+    await expect(planet.locator(".beyond-orbit__hints li").nth(index)).toContainText(transmission);
+  }
+  for (const count of [0, 2, 6]) {
+    await seed(page, ["first-page", "last-light", ...gardenSecrets.slice(0, count)]);
+    await expect(planet.locator(".beyond-orbit__moons i[data-found]")).toHaveCount(count);
+    await expect(planet.locator(".beyond-orbit__hints li")).toHaveCount(6 - count);
+    await expect(planet.locator(".beyond-orbit__moon-list li")).toHaveCount(count);
+    await expect(badge).toHaveCount(count ? 1 : 0);
+    for (const id of gardenSecrets.slice(0, count)) await expect(page.locator(`[data-node="${id}"]`)).toHaveAttribute("data-lit", "true");
+    if (count === 6) await expect(planet.locator(".beyond-orbit__planet-count")).toHaveText(text.allFound);
+    else await expect(planet.locator(".beyond-orbit__planet-count")).toContainText(new RegExp(`${count} (de|of) 6`));
+  }
+  // The signal is a constellation star, never a seventh moon.
+  await seed(page, ["first-page", "last-light", ...gardenSecrets, "epilogue-signal"]);
+  await expect(planet.locator(".beyond-orbit__moons i")).toHaveCount(6);
+  await expect(page.locator('[data-node="epilogue-signal"]')).toHaveAttribute("data-lit", "true");
+  await page.reload();
+  await expect(planet.locator(".beyond-orbit__moons i[data-found]")).toHaveCount(6);
+  await expect(badge).toHaveCount(1);
+  await reset(page); await page.keyboard.press("Escape");
+  await expect(planet.locator(".beyond-orbit__moons i[data-found]")).toHaveCount(0);
+  await expect(planet.locator(".beyond-orbit__hints li")).toHaveCount(6);
+  await expect(badge).toHaveCount(0);
+  await expect(page.locator(".beyond-orbit__node[data-lit]")).toHaveCount(0);
+  const hints = await planet.locator(".beyond-orbit__hints li").allTextContents();
+  await planet.getByRole("link").click();
+  await expect(page).toHaveURL(`${base}/${lang}/servicos`);
+  await expect(page.locator(".epilogue-signal")).toHaveCount(0);
+  await page.locator(".comlink-toggle").click();
+  for (const hint of hints) await expect(page.locator(".comlink__list")).toContainText(hint);
+});
 
 for (const width of [390, 1440]) await check(`${width}: direct link, layout, keyboard, resize and motion preference`, async context => {
   const page = await context.newPage();
@@ -210,6 +269,14 @@ for (const lang of Object.keys(copy)) await check(`${lang}: no JavaScript keeps 
     await expect(page.locator('[data-orbit-actor="glaucia"] span')).toBeVisible();
     await expect(page.locator('[data-orbit-actor="prince"] span')).toBeVisible();
     await expect(page.getByRole("link", { name: copy[lang].back, exact: true })).toHaveAttribute("href", `/${lang}`);
+    const planet = page.locator('.beyond-orbit__world-stop[data-world="services"]');
+    await expect(planet.getByRole("heading")).toHaveText(gardens[lang].name);
+    await expect(planet.locator(".beyond-orbit__moons i")).toHaveCount(6);
+    await planet.locator("summary").click();
+    await expect(planet.locator(".beyond-orbit__hints li")).toHaveCount(6);
+    await expect(planet.locator(".beyond-orbit__hints li").first()).toBeVisible();
+    await expect(page.locator('.beyond-orbit__world-badges img[src="/galaxia/scenes/aurelia/background.webp"]')).toHaveCount(1);
+    await expect(page.locator(".beyond-orbit__post li")).toHaveText(gardens[lang].next);
   } finally { await context.close(); }
 });
 
@@ -226,7 +293,7 @@ for (const width of [390, 1440]) await check(`${width}: "A Última Luz" plays as
   const page = await context.newPage();
   await page.setViewportSize({ width, height: width < 1200 ? 844 : 900 });
   await page.goto(`${base}/pt/${route}`);
-  await seed(page, ["focus-lens", "paw-tracks", "rover-scan", "first-page"]);
+  await seed(page, ["focus-lens", "paw-tracks", "rover-scan", "first-page", "garden-bloom"]);
   const experience = page.locator(".beyond-orbit__experience");
   await expect(experience).toHaveAttribute("data-motion", "on");
   await expect(page.locator(".beyond-orbit__voyage")).toBeHidden();
@@ -236,17 +303,21 @@ for (const width of [390, 1440]) await check(`${width}: "A Última Luz" plays as
   await expect(page.locator(".beyond-orbit__skip")).toBeVisible();
   await expect(experience).toHaveAttribute("data-beat", "nova", { timeout: 4000 });
   await expect(experience).toHaveAttribute("data-beat", "constellation", { timeout: 6000 });
-  // The four seeded secrets plus last-light itself.
-  await expect.poll(() => page.locator(".beyond-orbit__node[data-on]").count()).toBe(5);
+  // The five seeded secrets plus last-light itself.
+  await expect.poll(() => page.locator(".beyond-orbit__node[data-on]").count()).toBe(6);
+  await expect(page.locator('[data-node="garden-bloom"]')).toHaveAttribute("data-on", "");
   await expect(experience).toHaveAttribute("data-beat", "slam", { timeout: 8000 });
   await expect(experience).toHaveAttribute("data-beat", "credits", { timeout: 8000 });
   await expect(page.locator(".beyond-orbit__roll-track dt").first()).toHaveText("Direção, roteiro e código");
+  await expect(page.locator('.beyond-orbit__roll-track .beyond-orbit__world-badges img[src="/galaxia/scenes/aurelia/background.webp"]')).toHaveCount(1);
   await page.screenshot({ path: `docs/screenshots/epilogue/credits-${width}.png` });
+  await expect(experience).toHaveAttribute("data-beat", "post", { timeout: 12000 });
+  await expect(page.locator(".beyond-orbit__roll-track .beyond-orbit__post li")).toHaveText(gardens.pt.next);
   await page.locator(".beyond-orbit__skip").click();
   await expect(experience).not.toHaveAttribute("data-theater", "on");
   await expect(page.locator("#epilogue-finale")).toBeVisible();
-  await expect(page.locator(".beyond-orbit__credits")).toContainText(/5 de \d+ segredos/);
-  await expect(page.locator(".beyond-orbit__post")).toContainText("Aurélia");
+  await expect(page.locator(".beyond-orbit__credits")).toContainText(/6 de 37 segredos/);
+  await expect(page.locator(".beyond-orbit__post li")).toHaveText(gardens.pt.next);
   assert.equal(await page.locator(".beyond-orbit__roll-track").evaluate(el => el.childElementCount), 0);
   // Esc also ends a replay at once.
   await page.locator(".beyond-orbit__star").click();
@@ -280,7 +351,7 @@ for (const width of [390, 1440]) await check(`${width}: "A Última Luz" plays as
   }
   await expect(page.locator(".beyond-orbit__credits-run")).toHaveAttribute("data-cinema", "on");
   await expect(page.locator('[data-world="home"] .beyond-orbit__moons i[data-found]')).toHaveCount(1);
-  await expect(page.locator('[data-world="services"]')).not.toHaveAttribute("data-charted", /.*/);
+  await expect(page.locator('[data-world="services"]')).toHaveAttribute("data-charted", "true");
   if (width >= 1200) await expect(page.locator(".beyond-orbit__atlas")).toHaveAttribute("data-flight", "on");
   else await expect(page.locator(".beyond-orbit__atlas")).not.toHaveAttribute("data-flight", /.*/);
   if (width < 1200) {

@@ -83,6 +83,11 @@ body::before {
 .header-tools select, .motion-toggle, .sound-toggle { min-height: 36px; border-radius: 0; border: 1px solid var(--hud-line); background: var(--surface-glass); font: 400 .66rem var(--font-pixel); letter-spacing: .04em; color: var(--text-inverse-muted); }
 .sound-toggle { display: inline-grid; place-items: center; width: 36px; padding: 0; cursor: pointer; }
 .sound-toggle[aria-pressed="true"] { color: var(--energy-blue); border-color: var(--energy-blue); box-shadow: 0 0 12px color-mix(in srgb, var(--energy-blue) 40%, transparent); }
+.audio-settings { position: relative; }
+.audio-settings__toggle { min-height: 36px; padding: .4rem .6rem; border: 1px solid var(--hud-line); background: var(--surface-glass); color: var(--text-inverse-muted); font: 400 .66rem var(--font-pixel); cursor: pointer; }
+.audio-settings__panel { position: absolute; z-index: 20; top: calc(100% + .5rem); right: 0; width: min(250px, 80vw); padding: 1rem; background: var(--color-space-0); border: 1px solid var(--hud-line); box-shadow: 0 8px 30px #0008; }
+.audio-settings__panel label { display: grid; grid-template-columns: 1fr auto; gap: .5rem; margin-block: .5rem; color: var(--text-inverse-muted); font-size: .8rem; }
+.audio-settings__panel input { grid-column: 1 / -1; width: 100%; accent-color: var(--energy-blue); }
 .header-tools :is(select, button):hover { color: var(--text-heading); border-color: var(--color-primary-400); }
 .menu-toggle { border-radius: 0; }
 @media (max-width: 900px) {

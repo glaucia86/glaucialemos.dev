@@ -14,7 +14,8 @@ export function SmoothScroll() {
   const pathname = usePathname();
   useEffect(() => {
     if (!motion) return;
-    const lenis = new Lenis({ lerp: .11, wheelMultiplier: .9, anchors: { offset: -80 }, autoRaf: false });
+    // Open dialogs (the star radio, the letter, the telescope) and marked panels scroll natively, never the page behind them.
+    const lenis = new Lenis({ lerp: .11, wheelMultiplier: .9, anchors: { offset: -80 }, autoRaf: false, prevent: (node) => !!node.closest("dialog, [data-lenis-prevent]") });
     window.__lenis = lenis;
     if (document.documentElement.dataset.boot === "pending") lenis.stop();
     lenis.on("scroll", ScrollTrigger.update);

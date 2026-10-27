@@ -147,7 +147,7 @@ os hashes das fontes e as aprovações. A composição e os hotspots são defini
 | Validação | [Zod 4](https://zod.dev/) | Schemas para todos os dados |
 | Testes | [Vitest](https://vitest.dev/) + [Playwright](https://playwright.dev/) | Testes unitários e suítes em navegador real |
 | Fontes | Geist, Geist Mono, Departure Mono | Hospedadas localmente com `next/font/local` |
-| Formulários | [Formspree](https://formspree.io/) | Nenhum e-mail pessoal no código |
+| Formulários | [Web3Forms](https://web3forms.com/) + [Turnstile](https://developers.cloudflare.com/turnstile/) | Nenhum e-mail pessoal no código |
 
 ## Arquitetura
 
@@ -163,7 +163,8 @@ flowchart LR
     C --> MO["lib/gsap.ts + use-motion.ts<br/>useMotionEnabled()"]
     C --> E["lib/eggs.ts<br/>emitEgg · onEgg · discover"]
     C --> S["lib/sfx.ts<br/>Web Audio, opt-in"]
-    C --> F[(Formspree)]
+    C --> A[Server Action + Turnstile]
+    A --> F[(Web3Forms)]
 ```
 
 ## Como executar
@@ -286,8 +287,16 @@ Todas são **opcionais**. O site roda sem nenhuma delas.
 
 | Variável | Onde | O que faz |
 | --- | --- | --- |
-| `NEXT_PUBLIC_FORMSPREE_ID` | navegador | ID do formulário no Formspree. O envio vai para `https://formspree.io/f/<id>`. Sem ela, o formulário avisa que o envio está indisponível e bloqueia o envio. |
+| `WEB3FORMS_ACCESS_KEY` | só servidor | Chave do Web3Forms usada pela Server Action de contato. Nunca enviada ao navegador. |
+| `TURNSTILE_SITE_KEY` | servidor (vai para o widget) | Chave do widget Turnstile, pública por natureza; lida no servidor, sem `NEXT_PUBLIC_`. O script oficial só carrega quando o formulário entra na tela. |
+| `TURNSTILE_SECRET_KEY` | só servidor | Segredo para validar o token pelo Siteverify da Cloudflare antes do envio. |
 | `GITHUB_TOKEN` | só servidor | Aumenta o limite da API do GitHub usada para ordenar os repositórios por estrelas. Sem ela, vale o limite público, com `src/data/projetos.json` como reserva. |
+
+O formulário exige as três variáveis de contato; se qualquer uma faltar, campos e envio ficam desabilitados e o botão do LinkedIn continua disponível. Copie `.env.example` para `.env.local`, configure as chaves e refaça o build ao alterar a chave pública ou a configuração do formulário. Não coloque as duas chaves de servidor em variáveis `NEXT_PUBLIC_*`. Configure o destinatário no Web3Forms, sem inserir e-mail pessoal no repositório.
+
+A Server Action valida o schema Zod compartilhado, descarta o honeypot, verifica Turnstile e envia ao Web3Forms. [O uso do Web3Forms pelo servidor exige plano pago e liberação do IP do servidor](https://docs.web3forms.com/getting-started/api-reference). Autorize o hostname do site no Turnstile. Sem JavaScript, o formulário mantém a Server Action, mas a verificação de segurança não pode rodar; o link visível do LinkedIn é a alternativa. Dados de contato não são cadastrados em listas.
+
+Execute `node tests/aurelia.browser.mjs` contra o servidor escolhido. `CONTACT_EXPECT=disabled` exige configuração ausente; `CONTACT_EXPECT=enabled` exige configuração completa (use builds separados para conferir ambos). O script simula os dois provedores e o próprio POST da action, impedindo envio real. O Vitest simula fetch no servidor para testar cada variável ausente, validação e respostas dos provedores.
 
 ## Scripts disponíveis
 

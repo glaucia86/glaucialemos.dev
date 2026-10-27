@@ -4,6 +4,8 @@ import { chromium, expect } from "@playwright/test";
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
+// The Atlas intro covers the hero for a few seconds; this suite clicks its CTA, so it starts with the intro seen.
+await page.addInitScript(() => sessionStorage.setItem("atlas-boot", "done"));
 const baseURL = process.env.BASE_URL || "http://127.0.0.1:3100";
 const github = "https://github.com/glaucia86";
 const linkedin = "https://www.linkedin.com/in/glaucialemos";
@@ -29,7 +31,7 @@ try {
       ["/sobre", "#trajetoria", linkedin],
       ["/projetos", github, "#projetos"],
       ["/conteudo", "#artigos", youtube],
-      ["/eventos", `/${lang}/servicos?assunto=palestra#contato`, "#eventos"],
+      ["/eventos", `/${lang}/servicos?assunto=palestra#contato`, "#diario"],
       ["/pagina-inexistente", `/${lang}`, null],
     ];
     for (const [route, primary, secondary] of routes) {
@@ -83,36 +85,21 @@ try {
 
   for (const width of [320, 390, 640]) {
     await page.setViewportSize({ width, height: 900 });
-    await page.goto(`${baseURL}/pt/eventos`);
-    await expect(page.locator(".hologram-ring")).toBeHidden();
-    await expect(page.locator(".hologram-glow")).toBeHidden();
-
+    // Atlas das Conexões on small screens: the copy first, then the whole 16:9 plate with the crew and the hologram.
     for (const lang of ["pt", "en", "es"]) {
       await page.goto(`${baseURL}/${lang}/eventos`);
       await page.locator(".page-hero__image").evaluate((image) => image.decode());
       const eventsComposition = await page.locator(".page-hero").evaluate((hero) => {
-        const image = hero.querySelector(".page-hero__image");
-        const box = image.getBoundingClientRect();
+        const box = hero.querySelector(".page-hero__image").getBoundingClientRect();
         const text = hero.querySelector(".page-hero__content").getBoundingClientRect();
         const frame = hero.getBoundingClientRect();
-        const scale = Math.max(box.width / image.naturalWidth, box.height / image.naturalHeight);
-        const width = image.naturalWidth * scale;
-        const height = image.naturalHeight * scale;
-        const [x, y] = getComputedStyle(image).objectPosition.split(" ").map(parseFloat);
-        const left = box.x + (box.width - width) * x / 100;
-        const top = box.y + (box.height - height) * y / 100;
-        // Bounds of the complete hologram and Grogu in the reference image.
-        const sceneVisible = left + width * .585 >= frame.left && left + width * .92 <= frame.right
-          && top + height * .31 >= text.bottom && top + height * .83 <= frame.bottom;
         return {
-          belowText: box.top >= text.bottom,
-          sceneVisible,
-          shade: getComputedStyle(hero.querySelector(".page-hero__shade")).backgroundImage,
+          belowText: box.top >= text.bottom - 1,
+          wholePlate: Math.abs(box.width / box.height - 16 / 9) < .02 && box.left >= frame.left - 1 && box.right <= frame.right + 1,
           noOverflow: document.documentElement.scrollWidth <= window.innerWidth,
         };
       });
-      assert.ok(eventsComposition.belowText && eventsComposition.sceneVisible && eventsComposition.noOverflow, `Eventos ${lang}, ${width}px: ${JSON.stringify(eventsComposition)}`);
-      assert.equal(eventsComposition.shade, composition.shade);
+      assert.ok(eventsComposition.belowText && eventsComposition.wholePlate && eventsComposition.noOverflow, `Eventos ${lang}, ${width}px: ${JSON.stringify(eventsComposition)}`);
     }
   }
   console.log("PASS: hero CTAs, social footer and keyboard focus in pt/en/es, external link attributes, localized contact prefill, 404 and Projects/Events mobile scenes at 320/390/640px.");

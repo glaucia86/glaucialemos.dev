@@ -26,7 +26,7 @@ describe("easter eggs", () => {
     expect(pageOf("/pt/rota-perdida")).toBe("notfound");
     expect(pageOf("/pt/projetos/qualquer-coisa")).toBe("notfound");
     expect(eggsFor("home").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "focus-lens", "launch-charge", "dog-signal", "hangar-check", "dark-sky", "wish"]);
-    expect(eggsFor("notfound").map((egg) => egg.id)).toEqual(["star-map", "curious-letter"]);
+    expect(eggsFor("notfound").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "signal-recovered", "paw-rescue"]);
     expect(eggsFor("about").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "paw-tracks", "memory-capsule", "whiteout", "aurora-prism", "snowdrift", "between-lines", "borrowed-star"]);
     expect(new Set(EGGS.flatMap((egg) => egg.phrases)).size).toBe(EGGS.flatMap((egg) => egg.phrases).length);
   });

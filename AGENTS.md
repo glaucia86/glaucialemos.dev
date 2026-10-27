@@ -27,16 +27,20 @@
   Enquadramento: `.beyond-orbit__frame` mostra o palco 16:9 `.beyond-orbit__scene` como cover (tela inteira abaixo do menu
   no desktop, 4:5 em retrato, 16:9 nos demais); sobreposições de tela (vinheta, barras, rolo, pista, "Pular") ficam na moldura.
   `epilogue-signal` em Serviços exige descobertas em três mundos distintos
-  (Home/Sobre/Projetos/Conteúdo), helpers em `src/lib/epilogue.ts`. Catálogo (31) em `src/lib/egg-catalog.ts`, reexportado
+  (Home/Sobre/Projetos/Conteúdo), helpers em `src/lib/epilogue.ts`. Catálogo (37) em `src/lib/egg-catalog.ts`, reexportado
   por `eggs.ts`. `last-light` revela o final e permite replay; SSR/no-JS/reduced motion mantêm copy visível. Comlink tem
   comandos PT/EN/ES e revisita; persistência/reset continuam únicos. Testes: `tests/epilogue.test.ts` e
   `tests/beyond-orbit.test.ts` e `tests/epilogue.browser.mjs` (navegador somente pela usuária). Retomada atual no início do handoff.
 
 - Handoff da migração: `docs/galaxia-encantada/HANDOFF.md` (comece pela seção “Retomada”).
+- Eventos (Atlas das Conexões) está na branch `feat/atlas-eventos`, aguardando as folhas GE-GL-05B/GE-DOG-05B (prompts no HANDOFF).
+- Migração Galáxia Encantada (Home, Sobre, Projetos, Conteúdo e o epílogo na `main`; o tema Star Wars está congelado em
+  `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração página a página: Home
+  (Observatório), Sobre (Nivéora), Projetos (Marte), Conteúdo (Lúmina) e Eventos (Atlas) migradas; Serviços e 404 ainda usam Star Wars.
 - Migração Galáxia Encantada (Home, Sobre e Projetos já na `main`; Conteúdo/Lúmina na branch `feat/lumina-conteudo`; o tema
   Star Wars está congelado em `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração
-  página a página: Home (Observatório), Sobre (Nivéora), Projetos (Marte) e Conteúdo (Lúmina) migradas; Eventos, Serviços e
-  404 ainda usam Star Wars.
+  página a página: Home (Observatório), Sobre (Nivéora), Projetos (Marte), Conteúdo (Lúmina) e Serviços (Aurélia) migradas; Eventos e
+  404 ainda usam Star Wars. Aurélia está em `feat/aurelia-servicos`, com validação de navegador pendente.
 - Arte-fonte aprovada (Grok) em `docs/art/galaxia-encantada/approved-source` (`GE-PL-0X` placas, `GE-GL-0X` Glaucia,
   `GE-DOG-0X` Prince, `GE-MASTER-*`, `props/<cena>`). `manifest.json` com sha256: `node scripts/build-galaxia-assets.mjs --manifest`.
   Assets web por cena: `node scripts/build-galaxia-assets.mjs <scene-id> [--debug]` gera `public/galaxia/**` e
@@ -70,7 +74,7 @@
   na porta. Confira com `netstat -ano` antes de reiniciar.
 - Motion: GSAP/Lenis via `src/lib/gsap.ts` e `src/lib/use-motion.ts`. Respeite `useMotionEnabled()`.
 - Sons: `src/lib/sfx.ts`, sempre opt-in, curtos (≤ 0,6 s) e sem loops; ruído filtrado (`wave: "noise"`), `play(kind, { detune, gain })` e `MIN_GAP`.
-  Hover/clique por mundo via `data-sound-world` no `<main>` (`observatory`, `niveora`, `mars`), lido pelo `FxLayer`.
+  Hover/clique por mundo via `data-sound-world` no `<main>` (`observatory`, `niveora`, `mars`, `lumina`, `atlas`), lido pelo `FxLayer`.
 - Middleware fica em `src/middleware.ts`: com `src/app`, o Next ignora um `middleware.ts` na raiz.
   Confira que o build lista `ƒ Middleware`.
 - Repositórios: `getTopRepos` (`src/lib/github.ts`) busca o ranking por estrelas no GitHub, revalidado a cada 24 h (sem custo extra; `GITHUB_TOKEN` opcional);
@@ -139,5 +143,100 @@
   em Conteúdo), pula Shorts (`HEAD /shorts/{id}`: 200 = Short; falhou → `#shorts`/`#YouTubeShorts`) e cai em `src/data/youtube.json`
   (`node scripts/snapshot-youtube.mjs`). O iframe `youtube-nocookie` só nasce depois de ligar (clique/toque/Enter, comando "tv"/"play"/"assistir").
   Testes: `tests/lumina.test.ts`, `tests/youtube.test.ts`, `tests/lumina.browser.mjs`.
+- Eventos (Atlas das Conexões, órbita da Terra): `src/app/[lang]/eventos/page.tsx` + `src/app/atlas.css` (`className="home-page events-page"`,
+  `data-sound-world="atlas"`; o antigo `events.css` saiu do `globals.css`). Textos em `src/i18n/atlas.ts` (`d.atlas`). **Regra factual**: formato
+  derivado de `cidade === "Online"` (remoto, nunca tem lat/lon) em `src/lib/atlas-records.ts`; presencial = luz de cidade (ouro), remoto =
+  anel de sinal (ciano), nunca ponto no mapa; sem arcos cidade→cidade. 134 eventos: 79 presenciais / 55 remotos, 20 cidades, 7 países com
+  presença, 9 "representados" (África do Sul e França só por remoto). CloudOuest Virtual e Reactor Brasil Webinar (2020) foram corrigidos
+  para remotos a pedido da Glaucia. Diário = formulário GET (`?ano=&formato=&tipo=&idioma=&q=`, `src/lib/atlas-filters.ts`), a página lê
+  `searchParams` (é `ƒ`) e filtra sem JS; com JS filtra na hora e faz `replaceState`. Cena: `src/components/events/AtlasScene.tsx` (composição A
+  aprovada: Glaucia (90; 87) de frente, Prince de perfil (64; 84), holograma `HOLO` sobre o pedestal da placa (75,5; 58), orbe de navegação
+  (60; 66); `HOTSPOTS` glaucia/holo/prince/orb), `AtlasMotion.tsx`, `holo-globe.ts` (cobe a ½ resolução, pixelado, marcadores só presenciais),
+  `orbit-engine.ts` (estrelas só em `inSky`, acima de `limb(u)`; satélites; aurora; brilhos de cidade; anéis; feixe; constelação no canvas de
+  trás, em projeção equirretangular recortada `VIEW`), salto `night-dive.ts` (disco ortográfico, cidades por ano, remotos numa coroa orbital
+  fora do disco). Capítulos: Atlas (`AtlasGlobe.tsx`: globo grande no prop `globe-pedestal`, odômetro de 32 marcas que só conta rotação
+  manual), Diário (`EventLog.tsx`), Sinais (`SignalDeck.tsx`, links `?ano=#diario` com `data-log-year`), convite. Segredos: `orbital-trail`
+  (uma volta manual = órbita de um ano, do mais recente; o holograma do hero gira e "lança" o globo via `emitEgg`), `constellation-route`
+  (Glaucia de perfil, holograma se desdobra, 20 estrelas pela 1ª presença, "A Tecelã", legenda "não rotas de viagem"), `dog-navigation`
+  (orbe idle→active, busto do Prince no visor `face-idle/tongue/joy`, holograma gira até a cidade ou radar para remoto; `visorQueue`).
+  Eventos conta no `epilogue-signal`. Pipeline: GE-GL-05 tem fundo magenta → `keyBackground`/`keyChroma` (chave global + despill por excesso
+  de magenta, preserva o coral); poses `bust-*`, `hip`, `idle`, `profile`, `back`; Prince `front-bare` (sem capacete, fora do palco), `side`,
+  `side-b`, `face-*`. Sem piscar nem pose de ação até chegarem as 05B (não imitar com CSS). Boot `atlas-boot`, `ReadingProgress variant="atlas"`
+  (satélite). Testes: `tests/atlas.test.ts`, `tests/atlas.browser.mjs` (capturas em `%TEMP%\atlas`), `tests/events-page.browser.mjs`.
+  Rodada 2 (26/10/2026): composição I aprovada (Glaucia (92; 88) e Prince `front-bare` (84; 86,5) de frente para quem visita, à
+  direita do holograma; o Prince vira `side`, que olha para o holograma, ao atuar; orbe em (79,5; 64,5)). Terra viva: o pipeline gera
+  `earth-mask.webp` (`EARTH_MASK` no script) e o `orbit-engine` desenha nuvens, terminador e luzes só na máscara. O salto saiu do hero:
+  `AtlasVoyage.tsx` + `voyage-engine.ts` formam uma seção sticky para todos os aparelhos (`main.events-page { overflow: clip }`; 320svh no
+  desktop, 220svh no toque), em 5 atos (`ACTS`): aproximação com paralaxe → vidro (DrawSVG + estilhaços) → globo cobe girando por `WAYPOINTS`
+  com cidades por ano e nomes reais → warp → pouso. Sem JS ou com movimento reduzido, entra uma lista estática de anos. Tablet da Glaucia
+  (hotspot da Glaucia): joystick com Draggable, regiões, ano no holograma (`holo.show`), Constelação e Órbita. Doca de ações (`.atlas-dock`)
+  numa faixa abaixo da cena no toque/telas pequenas. Segredos do Prince: `prince-antenna` (`PrinceAntenna.tsx` em Sinais, decodifica o
+  primeiro sinal remoto), `paw-stamp` (Prince ao lado do globo, gira até a cidade com mais encontros e carimba), `runaway-satellite`
+  (satélite DOM com MotionPath no céu do hero; a orbe busca um cartão-postal presencial real). Atlas = 6 segredos, catálogo = 37.
+  `zero-gravity` só entra com a pose `float` da 05B. Final: `OrbitalSunrise.tsx` (céu de 100svh guiado pela rolagem, Glaucia `back` em
+  silhueta, convite abaixo do horizonte, "Próximas conexões" do Luma). Luma: `src/lib/luma.ts` (endpoint público `events-hosting`,
+  revalida em 24 h, cai em `src/data/luma.json`); `node scripts/snapshot-luma.mjs` atualiza o snapshot e só **relata** eventos que faltam
+  no `eventos.json` (`LUMA_SAME_EVENT` trata a transmissão de SP como o mesmo evento). O Lenis ignora `dialog`/`[data-lenis-prevent]`
+  (opção `prevent`), o que destrava a rolagem do rádio no site todo. Plugins GSAP registrados em `src/lib/gsap.ts`: MotionPath,
+  Physics2D, Draggable, Inertia, CustomEase/Wiggle/Bounce, Text. Testes: `tests/luma.test.ts`.
+- Serviços (Aurélia, os Jardins Suspensos): `src/app/[lang]/servicos/page.tsx` + `src/app/aurelia.css`,
+  `className="home-page services-page"`, `data-sound-world="aurelia"`, copy PT/EN/ES em `src/i18n/aurelia.ts` (`d.aurelia`).
+  Quatro capítulos: hero, órbitas, canteiros de serviços e colaboração/contato. `ContactForm` e `EpilogueSignal` intactos;
+  metadata, `formId`, preço sob consulta e assuntos `workshop`/`mentoria`/`palestra` preservados. Registros em
+  `src/lib/aurelia-records.ts` vêm de `getServicos()`; controles puros separados em `aurelia-controls.ts` para não levar
+  datasets/dictionaries ao bundle dos controles. Nenhum segredo escreve ou envia o formulário; o sinalizador apenas
+  rola até `#contato` e foca seu título. Pré-preenchimento continua por links explícitos com `?assunto=...#contato`.
+  Pipeline: `node scripts/build-galaxia-assets.mjs aurelia --debug`; placa 06 intacta, grid 1, 160/128 cores. Glaucia tem
+  fundo magenta (key exclusivo de Aurélia), retratos `face-*` e poses reais `idle` (mão no quadril), `relaxed`, `side`, `back`.
+  Não há gesto de regar/receber transmissão na sheet; `blink` é uma pequena sobreposição de pálpebras derivada de `idle`,
+  não uma pose nomeada incorretamente. Prince: `front`, `stand`, `paw`, retratos `face-*`. Palco: Glaucia (88;93;h47),
+  Prince (77;93;h14); estufa em (69;92), sinalizador em (74,5;93). Repouso/SSR/reduced motion em `front`; `paw` espelhada só no relay (1,1 s), depois `front`; hotspot frontal, escala de `stand` preservada. `AureliaScene` usa `SCENES.aurelia` e caixas na placa.
+  `AureliaMotion` usa `useGSAP`, `HERO_OVERLAY` 1200×680/fine pointer, `observeMotionActivity`, estado final estático no
+  movimento reduzido, respiração/piscar pausados fora da tela/aba. `garden-engine.ts` (pétalas, esporos, vapor, reflexos;
+  pixels 2, até 160 partículas); `petal-jump.ts` (espiral de pétalas guiada pela rolagem, sem RAF próprio).
+  `BootSequence variant="aurelia"`, chave `aurelia-boot`; `ReadingProgress variant="aurelia"`; sons opt-in ≤0,08/≤0,6s.
+  Seis segredos novos (37 no catálogo, 7 em Serviços contando a ponte): `garden-bloom` (Glaucia/estufa → serviço real),
+  `beacon-relay` (Prince/sinalizador/botão do canal → contato), `ring-alignment` (três anéis, alinhar marcas no alto),
+  `seed-vault` (`<details>` sob os cards; replay alterna serviço), `greenhouse-dusk` (luz ≤20%; botão/Esc restauram),
+  `pollination` (conectar os cards em ordem). Todos no Comlink PT/EN/ES e `AureliaEggs`; campos editáveis/diálogos/IME
+  não capturam frases. Em celular, os dois atores oferecem as ações dos props sem alvos pequenos sobrepostos.
+  Atlas do epílogo agora usa a placa de Aurélia e seis luas; elegibilidade do sinal segue três dos quatro mundos anteriores.
+  Portal do contato: `contact-portal.ts` (controlador) + `portal-sky.ts` (pétalas e sinal em pixel). O próprio `.contact-portal` (que envolve o
+  palco e o `ContactForm`) sobe para a top layer via `popover="manual"` + `role="dialog"`/`aria-modal`: nada é clonado nem movido; o `.contact-cinema__dock`
+  guarda a altura. Abre por clique em `a[href]` para `#contato` na mesma rota (captura em `window`; com outro `?assunto=` deixa navegar e o form novo
+  abre ao montar) e ao chegar com `#contato` (depois do boot). Íris por `clip-path`, foco no `#contact-title`, Tab preso, Esc/botão fecham, devolvem o
+  foco e tiram o hash. `html[data-contact-portal]` trava a rolagem (Lenis parado) e devolve o cursor nativo. Enviar com movimento abre o portal e
+  lança o sinal (`.contact-launch[data-launch=charging|delivered|failed]`); movimento reduzido não abre nem lança. O `ContactForm` tem 3 etapas
+  (`contactSteps`/`validateContactStep` em `contact-schema.ts`; necessidade em rádios) só depois da hidratação e com envio ativo; SSR/sem JS/desativado = formulário
+  único. Turnstile só monta na 3ª etapa. Painel expõe `data-contact-step`/`data-contact-flaw`; `crewReaction` acende um retrato aprovado de cada
+  (`ContactCrew` em `AureliaScene.tsx`, `data-glaucia`/`data-prince` no `.contact-cinema`). Testes: `tests/contact-portal.test.ts`.
+  História da rolagem (7 capítulos, copy em `src/i18n/aurelia-story.ts`, CSS em `src/app/aurelia-story.css`): `OrbitRings` (planeta e 3 anéis
+  em CSS 3D; a rolagem inclina, gira e acende Engenharia/Liderança/IA até as marcas se alinharem, `RING_CUES`/`ALIGN_CUE`), `ProofConstellation`
+  (números reais de `proofStars()` em `aurelia-records.ts`: eventos, cidades, países presenciais, artigos, anos desde `careerStart`, estrelas do
+  GitHub; contagem pelo `data-count` do `HomeChoreography`, linhas por DrawSVG), `GardenBloom` + `bloom-engine.ts` (uma flor em pixel por serviço,
+  semente → caule → folhas → botão → pétalas; painel ativo, inativos `inert`), `WorkSteps` (Conversa → Proposta → Prática, texto a revisar pela
+  Glaucia), `BeaconFinale` + `finale-sky.ts` (noite, feixe do sinalizador, 7 estrelas formam a flor de Aurélia, CTA `#contato` abre o portal,
+  créditos, "Continua…" em poeira estelar via `createStardust`, estrela fora do mapa → `#sinal`) e `EpilogueTransmission` (sempre visível:
+  sinal fraco com 3 luzes e os 5 mundos, ou o `EpilogueSignal` quando desbloqueado; o `EpilogueSignal` saiu da seção de colaboração).
+  Palcos são `position: sticky` (não pins) e só ganham altura/animação com `data-live` (movimento ligado); sem JS/reduzido = conteúdo em lista.
+  Testes: `tests/aurelia-story.test.ts`.
+  Testes: `tests/aurelia.test.ts` e `tests/aurelia.browser.mjs` (somente a usuária executa). Ver resultados exatos e pendências
+  de validação visual na seção “Retomada — Serviços/Aurélia” do handoff. Sem commit/build/servidor/navegador.
+- 404 (Maré Rubra, Coordenadas Perdidas): `src/app/[lang]/not-found.tsx` e `src/app/not-found.tsx` renderizam `RedTide`
+  (`src/components/notfound/RedTide.tsx`, idioma por `useParams`, `forcedLang` na raiz), CSS `src/app/red-tide.css`, copy `src/i18n/red-tide.ts`.
+  Placa em vídeo: fonte `GE-PL-07-red-tide.mp4` (8 s, com áudio; Glaucia e Prince de costas já estão no vídeo, então não há sprites
+  por cima). Web em `public/galaxia/scenes/red-tide/`: `background.webm`/`.mp4` (loop de 7 s, mudo, último segundo dissolvido em
+  pixels no começo via ffmpeg `xfade=pixelize`) e `poster.webp` (movimento reduzido/sem JS). `plasma-engine.ts`: brasas, poeira de
+  plasma na `WINDOW` e faixas de falha de sinal, mais `drawWarp` (salto para casa). Segredos (catálogo +2): `signal-recovered`
+  (Glaucia/console: radar no console do vídeo e `nearestRoute` em `src/lib/red-tide-routes.ts`, só rotas reais, nunca o epílogo) e
+  `paw-rescue` (Prince: o `lost-signal-beacon` sai da nebulosa até ele por MotionPath e o `navigation-portal-restored` abre; clicar
+  faz o salto). Props/poses gerados por `node scripts/build-galaxia-assets.mjs red-tide` (`POSES["red-tide"]`, `layout.json`). Vídeo e
+  plasma pausam fora da tela/aba. Testes: `tests/red-tide.test.ts`.
+  Episódio narrado (desenho, 29 s, narração em PT): `RedTideEpisode.tsx` abre por clique num `<dialog>` com TV CRT, som, controles e
+  legendas `episode.{pt,en,es}.vtt` (tempos estimados pelos silêncios do áudio; ajustar se preciso), `episode.webm/.mp4` (960 px, ~5 MB)
+  e `episode-poster.webp` em `public/galaxia/scenes/red-tide/`. A fonte atual `approved-source/GE-PL-07-red-tide.mp4` é o episódio
+  (sobrescreveu o clipe de 8 s do loop). Som da ponte: `ambience.ogg/.mp3` (áudio do clipe original, com a explosão, em loop com o
+  mesmo cruzamento) toca baixo (`AMBIENCE_VOLUME`) só com o som do cabeçalho ligado (`isSoundEnabled`/`SOUND_EVENT`, sem mexer no
+  `sfx.ts`), para em aba oculta e enquanto o `<dialog>` do episódio está aberto. Prompt do vídeo do epílogo: `docs/art/galaxia-encantada/prompts/GE-PL-08-beyond-orbit-video.md`.
 - Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
   `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).

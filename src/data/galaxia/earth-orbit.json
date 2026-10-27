@@ -1,0 +1,355 @@
+{
+  "scene": "earth-orbit",
+  "background": {
+    "src": "/galaxia/scenes/earth-orbit/background.webp",
+    "w": 1672,
+    "h": 941
+  },
+  "earthMask": {
+    "src": "/galaxia/scenes/earth-orbit/earth-mask.webp",
+    "w": 418,
+    "h": 235
+  },
+  "actors": {
+    "glaucia": {
+      "bust-smile": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/bust-smile.webp",
+        "w": 290,
+        "h": 280,
+        "feetX": 145,
+        "px": [
+          207,
+          200
+        ]
+      },
+      "bust-neutral": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/bust-neutral.webp",
+        "w": 292,
+        "h": 282,
+        "feetX": 145,
+        "px": [
+          209,
+          202
+        ]
+      },
+      "bust-think": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/bust-think.webp",
+        "w": 297,
+        "h": 282,
+        "feetX": 148,
+        "px": [
+          212,
+          202
+        ]
+      },
+      "bust-wonder": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/bust-wonder.webp",
+        "w": 289,
+        "h": 277,
+        "feetX": 143,
+        "px": [
+          207,
+          198
+        ]
+      },
+      "hip": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/hip.webp",
+        "w": 270,
+        "h": 605,
+        "feetX": 148,
+        "px": [
+          193,
+          433
+        ]
+      },
+      "idle": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/idle.webp",
+        "w": 230,
+        "h": 605,
+        "feetX": 112,
+        "px": [
+          165,
+          433
+        ]
+      },
+      "profile": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/profile.webp",
+        "w": 152,
+        "h": 602,
+        "feetX": 66,
+        "px": [
+          109,
+          431
+        ]
+      },
+      "back": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/back.webp",
+        "w": 230,
+        "h": 601,
+        "feetX": 114,
+        "px": [
+          165,
+          430
+        ]
+      },
+      "blink": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/blink.webp",
+        "w": 270,
+        "h": 605,
+        "feetX": 148,
+        "px": [
+          193,
+          433
+        ]
+      },
+      "operate": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/operate.webp",
+        "w": 241,
+        "h": 603,
+        "feetX": 154,
+        "px": [
+          172,
+          431
+        ]
+      },
+      "trace": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/trace.webp",
+        "w": 296,
+        "h": 602,
+        "feetX": 192,
+        "px": [
+          212,
+          431
+        ]
+      },
+      "cheer": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/cheer.webp",
+        "w": 218,
+        "h": 604,
+        "feetX": 117,
+        "px": [
+          156,
+          432
+        ]
+      },
+      "tablet": {
+        "src": "/galaxia/actors/glaucia/earth-orbit/tablet.webp",
+        "w": 207,
+        "h": 605,
+        "feetX": 121,
+        "px": [
+          148,
+          433
+        ]
+      }
+    },
+    "prince": {
+      "front-bare": {
+        "src": "/galaxia/actors/prince/earth-orbit/front-bare.webp",
+        "w": 283,
+        "h": 455,
+        "feetX": 141,
+        "px": [
+          84,
+          135
+        ]
+      },
+      "side": {
+        "src": "/galaxia/actors/prince/earth-orbit/side.webp",
+        "w": 549,
+        "h": 476,
+        "feetX": 329,
+        "px": [
+          163,
+          141
+        ]
+      },
+      "side-b": {
+        "src": "/galaxia/actors/prince/earth-orbit/side-b.webp",
+        "w": 515,
+        "h": 474,
+        "feetX": 298,
+        "px": [
+          153,
+          141
+        ]
+      },
+      "face-idle": {
+        "src": "/galaxia/actors/prince/earth-orbit/face-idle.webp",
+        "w": 372,
+        "h": 402,
+        "feetX": 187,
+        "px": [
+          111,
+          119
+        ]
+      },
+      "face-tongue": {
+        "src": "/galaxia/actors/prince/earth-orbit/face-tongue.webp",
+        "w": 368,
+        "h": 402,
+        "feetX": 185,
+        "px": [
+          109,
+          119
+        ]
+      },
+      "face-joy": {
+        "src": "/galaxia/actors/prince/earth-orbit/face-joy.webp",
+        "w": 380,
+        "h": 402,
+        "feetX": 186,
+        "px": [
+          113,
+          119
+        ]
+      },
+      "face-idle-b": {
+        "src": "/galaxia/actors/prince/earth-orbit/face-idle-b.webp",
+        "w": 371,
+        "h": 403,
+        "feetX": 173,
+        "px": [
+          110,
+          120
+        ]
+      },
+      "front": {
+        "src": "/galaxia/actors/prince/earth-orbit/front.webp",
+        "w": 427,
+        "h": 491,
+        "feetX": 173,
+        "px": [
+          127,
+          146
+        ]
+      },
+      "stand": {
+        "src": "/galaxia/actors/prince/earth-orbit/stand.webp",
+        "w": 456,
+        "h": 476,
+        "feetX": 211,
+        "px": [
+          135,
+          141
+        ]
+      },
+      "paw": {
+        "src": "/galaxia/actors/prince/earth-orbit/paw.webp",
+        "w": 490,
+        "h": 482,
+        "feetX": 279,
+        "px": [
+          146,
+          143
+        ]
+      },
+      "wag": {
+        "src": "/galaxia/actors/prince/earth-orbit/wag.webp",
+        "w": 487,
+        "h": 492,
+        "feetX": 224,
+        "px": [
+          145,
+          146
+        ]
+      },
+      "listen": {
+        "src": "/galaxia/actors/prince/earth-orbit/listen.webp",
+        "w": 420,
+        "h": 476,
+        "feetX": 193,
+        "px": [
+          125,
+          141
+        ]
+      },
+      "leap": {
+        "src": "/galaxia/actors/prince/earth-orbit/leap.webp",
+        "w": 450,
+        "h": 468,
+        "feetX": 376,
+        "px": [
+          134,
+          139
+        ]
+      },
+      "float": {
+        "src": "/galaxia/actors/prince/earth-orbit/float.webp",
+        "w": 396,
+        "h": 517,
+        "feetX": 165,
+        "px": [
+          118,
+          154
+        ]
+      },
+      "back-sit": {
+        "src": "/galaxia/actors/prince/earth-orbit/back-sit.webp",
+        "w": 366,
+        "h": 481,
+        "feetX": 213,
+        "px": [
+          109,
+          143
+        ]
+      }
+    }
+  },
+  "props": {
+    "globe-pedestal-activated": {
+      "src": "/galaxia/props/earth-orbit/globe-pedestal-activated.webp",
+      "w": 172,
+      "h": 125,
+      "px": [
+        172,
+        125
+      ]
+    },
+    "globe-pedestal-off": {
+      "src": "/galaxia/props/earth-orbit/globe-pedestal-off.webp",
+      "w": 166,
+      "h": 122,
+      "px": [
+        166,
+        122
+      ]
+    },
+    "orb-navigation-active": {
+      "src": "/galaxia/props/earth-orbit/orb-navigation-active.webp",
+      "w": 152,
+      "h": 186,
+      "px": [
+        84,
+        102
+      ]
+    },
+    "orb-navigation-idle": {
+      "src": "/galaxia/props/earth-orbit/orb-navigation-idle.webp",
+      "w": 102,
+      "h": 97,
+      "px": [
+        56,
+        53
+      ]
+    },
+    "radar-dish-large": {
+      "src": "/galaxia/props/earth-orbit/radar-dish-large.webp",
+      "w": 129,
+      "h": 134,
+      "px": [
+        90,
+        94
+      ]
+    },
+    "radar-dish-small": {
+      "src": "/galaxia/props/earth-orbit/radar-dish-small.webp",
+      "w": 115,
+      "h": 140,
+      "px": [
+        81,
+        98
+      ]
+    }
+  }
+}

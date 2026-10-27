@@ -1,0 +1,58 @@
+import type { Locale } from './config';
+
+export const contactCopy = {
+  pt: {
+    steps: ['Do que seu time precisa?', 'Quem está chamando?', 'Sua mensagem'], stepOf: 'Etapa {n} de {total}', next: 'Continuar', back: 'Voltar',
+    company: 'Empresa', service: 'Tipo de serviço', choose: 'Selecione um serviço',
+    linkedinUrl: 'URL do seu LinkedIn', consent: 'Concordo com o uso dos meus dados para responder a este contato (LGPD).',
+    purpose: 'Seus dados serão usados só para responder ao contato, sem cadastro em listas.',
+    linkedin: 'Fale comigo no LinkedIn', consultancy: 'Consultoria', workshop: 'Workshop', mentoring: 'Mentoria', talk: 'Palestra',
+    consultancyMessage: 'Gostaria de conversar sobre consultoria.',
+    captcha: 'Conclua a verificação de segurança. Se ela expirou ou falhou, tente novamente.',
+    captchaLoading: 'Carregando verificação de segurança…', retry: 'Tentar verificação novamente',
+    noScript: 'A verificação de segurança precisa de JavaScript. Você também pode falar comigo no LinkedIn.',
+    invalid: 'Revise os campos indicados antes de enviar.',
+    errors: {
+      name: 'Informe seu nome (até 120 caracteres).', company: 'Informe sua empresa (até 160 caracteres).',
+      service: 'Selecione um serviço da lista.', message: 'Escreva sua mensagem (até 5.000 caracteres).',
+      linkedin: 'Use uma URL de perfil como https://www.linkedin.com/in/seu-perfil.',
+      consent: 'É necessário consentir com o uso dos dados para responder ao contato.',
+    },
+  },
+  en: {
+    steps: ['What does your team need?', 'Who is reaching out?', 'Your message'], stepOf: 'Step {n} of {total}', next: 'Continue', back: 'Back',
+    company: 'Company', service: 'Service type', choose: 'Select a service',
+    linkedinUrl: 'Your LinkedIn URL', consent: 'I consent to the use of my data to respond to this inquiry (LGPD).',
+    purpose: 'Your data will only be used to respond to your inquiry, without subscribing you to any lists.',
+    linkedin: 'Contact me on LinkedIn', consultancy: 'Consulting', workshop: 'Workshop', mentoring: 'Mentoring', talk: 'Speaking engagement',
+    consultancyMessage: 'I would like to discuss consulting.',
+    captcha: 'Complete the security check. If it expired or failed, please try again.',
+    captchaLoading: 'Loading security check…', retry: 'Retry security check',
+    noScript: 'The security check requires JavaScript. You can also contact me on LinkedIn.',
+    invalid: 'Review the indicated fields before sending.',
+    errors: {
+      name: 'Enter your name (up to 120 characters).', company: 'Enter your company (up to 160 characters).',
+      service: 'Select a service from the list.', message: 'Write your message (up to 5,000 characters).',
+      linkedin: 'Use a profile URL such as https://www.linkedin.com/in/your-profile.',
+      consent: 'Consent is required to use your data to respond to your inquiry.',
+    },
+  },
+  es: {
+    steps: ['¿Qué necesita tu equipo?', '¿Quién nos escribe?', 'Tu mensaje'], stepOf: 'Paso {n} de {total}', next: 'Continuar', back: 'Volver',
+    company: 'Empresa', service: 'Tipo de servicio', choose: 'Selecciona un servicio',
+    linkedinUrl: 'URL de tu LinkedIn', consent: 'Acepto el uso de mis datos para responder a este contacto (LGPD).',
+    purpose: 'Tus datos se usarán solo para responder al contacto, sin suscribirte a listas.',
+    linkedin: 'Habla conmigo en LinkedIn', consultancy: 'Consultoría', workshop: 'Taller', mentoring: 'Mentoría', talk: 'Conferencia',
+    consultancyMessage: 'Me gustaría conversar sobre consultoría.',
+    captcha: 'Completa la verificación de seguridad. Si caducó o falló, inténtalo de nuevo.',
+    captchaLoading: 'Cargando verificación de seguridad…', retry: 'Reintentar la verificación',
+    noScript: 'La verificación de seguridad requiere JavaScript. También puedes contactarme en LinkedIn.',
+    invalid: 'Revisa los campos indicados antes de enviar.',
+    errors: {
+      name: 'Indica tu nombre (hasta 120 caracteres).', company: 'Indica tu empresa (hasta 160 caracteres).',
+      service: 'Selecciona un servicio de la lista.', message: 'Escribe tu mensaje (hasta 5.000 caracteres).',
+      linkedin: 'Usa una URL de perfil como https://www.linkedin.com/in/tu-perfil.',
+      consent: 'Debes aceptar el uso de tus datos para responder al contacto.',
+    },
+  },
+} satisfies Record<Locale, unknown>;

@@ -1,0 +1,94 @@
+/* 404 — Maré Rubra, Coordenadas Perdidas. The video plate covers the hero (anchored on the crew), copy on the dark left. */
+.red-tide-page { --rt-night: #0d0612; --rt-crimson: #9b2e48; --rt-coral: #f07072; --rt-rose: #f6a0a5; --rt-gold: #ffbc78; --rt-cyan: #00e5ff;
+  background: var(--rt-night); color: #ffe6de; overflow: clip; }
+.red-tide-page [hidden] { display: none !important; }
+.red-tide { position: relative; min-height: calc(100svh - var(--header-height)); display: grid; align-items: center; isolation: isolate; overflow: hidden; }
+.red-tide__frame { position: absolute; inset: 0; z-index: 0; container-type: size; --scene-x: 76%; --scene-y: 100%; }
+.red-tide__plane { position: absolute; width: max(100cqw,177.777778cqh); height: max(100cqh,56.25cqw); left: var(--scene-x); top: var(--scene-y); translate: calc(-1 * var(--scene-x)) calc(-1 * var(--scene-y));
+  background: url(/galaxia/scenes/red-tide/poster.webp) 0 0 / 100% 100% no-repeat; }
+.red-tide__plane > * { position: absolute; }
+.red-tide__video,.red-tide__plasma { inset: 0; width: 100%; height: 100%; object-fit: fill; }
+.red-tide__plasma { z-index: 1; pointer-events: none; image-rendering: pixelated; mix-blend-mode: screen; }
+.red-tide__shade { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg,#0d0612f2 0,#0d0612cc 30%,#0d061233 55%,transparent 70%); }
+.red-tide__hud { position: absolute; inset: 1.5rem; z-index: 2; pointer-events: none; color: var(--rt-coral); font: .62rem/1.6 var(--font-pixel); letter-spacing: .16em; text-transform: uppercase; }
+.red-tide__hud .hud-corner { border-color: var(--rt-coral); }
+.red-tide__lost { position: absolute; top: .5rem; right: 1.5rem; margin: 0; color: var(--rt-rose); }
+.red-tide__route { position: absolute; bottom: .5rem; right: 1.5rem; margin: 0; max-width: 46ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.red-tide__route b { color: var(--rt-gold); }
+.red-tide__copy { position: relative; z-index: 3; display: grid; justify-items: start; gap: 1rem; width: min(560px,calc(100% - 2 * var(--gutter))); margin-left: clamp(1.25rem,7vw,7rem); padding-block: clamp(3rem,8vh,6rem); }
+.red-tide__world { margin: 0; color: var(--rt-gold); font: .72rem/1.5 var(--font-pixel); letter-spacing: .22em; text-transform: uppercase; }
+.red-tide__code { position: relative; margin: 0; color: #ff4d3a; font: clamp(4.5rem,13vw,10rem)/.9 var(--font-pixel); letter-spacing: .04em; text-shadow: 3px 0 var(--rt-cyan),-3px 0 #ff2e63; }
+.red-tide h1 { margin: 0; color: #ffe6de; font-size: clamp(1.9rem,3.6vw,3rem); line-height: 1.08; letter-spacing: -.02em; }
+.red-tide__body { margin: 0; color: #f3c7bd; font-size: clamp(1rem,1.4vw,1.15rem); line-height: 1.7; max-width: 46ch; }
+.red-tide .actions { margin-top: .5rem; }
+.red-tide .button.primary { background: #ff4d3a; color: var(--rt-night); box-shadow: 0 0 0 2px var(--rt-night),0 0 28px #ff4d3a88; }
+.red-tide__worlds p { margin: .5rem 0; color: var(--rt-rose); font: .62rem/1.6 var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; }
+.red-tide__worlds ul { display: flex; flex-wrap: wrap; gap: .4rem .9rem; margin: 0; padding: 0; list-style: none; }
+.red-tide__worlds a { display: inline-flex; align-items: center; min-height: 36px; color: #ffe6de; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #f0707288; }
+.red-tide__worlds a:hover { color: var(--rt-gold); }
+.red-tide__touch { margin: 0; color: #c99a92; font-size: .85rem; }
+.red-tide__hot { z-index: 3; min-width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; cursor: pointer; touch-action: manipulation; }
+.red-tide__hot::after { content: ''; position: absolute; inset: 0; border: 1px solid var(--rt-coral); opacity: 0; transition: opacity .2s; }
+.red-tide__hot:is(:hover,:focus-visible)::after { opacity: 1; }
+.red-tide__hot:focus-visible { outline: 3px solid var(--focus-inverse); }
+/* signal-recovered: the consoles in the video wake up under a radar sweep. */
+.red-tide__console { z-index: 2; left: 87%; top: 53%; width: 13%; height: 25%; pointer-events: none; opacity: 0; background: linear-gradient(180deg,#00e5ff22,transparent); box-shadow: inset 0 0 30px #00e5ff55; transition: opacity .5s; overflow: hidden; }
+.red-tide__console b { position: absolute; inset: -40%; background: conic-gradient(from 0deg,#00e5ff66,transparent 22%); }
+.red-tide[data-console="on"] .red-tide__console { opacity: 1; }
+/* paw-rescue: the lost beacon leaves the nebula for Prince; the navigation portal opens on the deck. */
+.red-tide__beacon { z-index: 2; left: 67.5%; top: 76%; width: 4%; aspect-ratio: 147 / 191; translate: -50% -50%; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; opacity: 0; visibility: hidden; filter: drop-shadow(0 0 8px var(--rt-gold)); pointer-events: none; }
+.red-tide[data-beacon="home"] .red-tide__beacon { opacity: 1; visibility: visible; }
+.red-tide__portal { z-index: 3; left: 53%; bottom: 3%; width: 12%; aspect-ratio: 217 / 158; translate: -50% 0; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; opacity: 0; visibility: hidden; pointer-events: none; filter: drop-shadow(0 0 14px var(--rt-coral)); }
+.red-tide[data-portal="open"] .red-tide__portal { opacity: 1; visibility: visible; pointer-events: auto; }
+.red-tide__portal:focus-visible { outline: 3px solid var(--focus-inverse); }
+.red-tide__panel { display: grid; gap: .75rem; width: 100%; outline: none; }
+.red-tide__readout { display: grid; grid-template-columns: 56px minmax(0,1fr); gap: 1rem; align-items: start; padding: 1rem 1.1rem; background: #1a0b12e6; box-shadow: 0 -2px 0 0 var(--rt-coral),0 2px 0 0 var(--rt-coral),-2px 0 0 0 var(--rt-coral),2px 0 0 0 var(--rt-coral),0 0 24px #f0707233; }
+.red-tide__readout > i { width: 56px; height: 56px; background: no-repeat 50% 50% / contain; image-rendering: pixelated; }
+.red-tide__readout p { margin: 0 0 .6rem; color: #f3c7bd; }
+.red-tide__readout .red-tide__kicker { color: var(--rt-gold); font: .62rem/1.6 var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+.red-tide__warp { position: fixed; inset: 0; z-index: 2147483000; width: 100vw; height: 100vh; pointer-events: none; image-rendering: pixelated; display: none; }
+.red-tide__warp[data-on] { display: block; }
+@media (prefers-reduced-motion:no-preference) {
+  html:not(.reduce-motion) .red-tide__code { animation: red-tide-glitch 3.2s steps(1) infinite; }
+  html:not(.reduce-motion) .red-tide__console b { animation: red-tide-sweep 2.4s linear infinite; }
+  html:not(.reduce-motion) .red-tide[data-beacon="home"] .red-tide__beacon { animation: red-tide-bob 2.2s ease-in-out infinite; }
+  html:not(.reduce-motion) .red-tide[data-portal="open"] .red-tide__portal { animation: red-tide-portal 1.8s steps(6) infinite; }
+}
+.red-tide[data-paused="true"] * { animation-play-state: paused !important; }
+@keyframes red-tide-glitch { 0%,88%,100% { translate: 0; text-shadow: 3px 0 var(--rt-cyan),-3px 0 #ff2e63; } 90% { translate: -6px 2px; text-shadow: -8px 0 var(--rt-cyan),8px 0 #ff2e63; } 94% { translate: 5px -2px; } }
+@keyframes red-tide-sweep { to { rotate: 360deg; } }
+@keyframes red-tide-bob { 50% { translate: -50% calc(-50% - 6px); } }
+@keyframes red-tide-portal { 50% { filter: drop-shadow(0 0 24px var(--rt-coral)) brightness(1.2); } }
+/* The episode: a CRT that powers on, with the cartoon, sound, controls and captions. */
+.red-tide-page .red-tide__episode { display: inline-flex; gap: .9rem; align-items: center; min-height: 64px; padding: .4rem 1.1rem .4rem .4rem; color: #ffe6de; background: #1a0b12e6; border: 1px solid var(--rt-coral); text-align: left; cursor: pointer; transition: box-shadow .3s, translate .2s; }
+.red-tide-page .red-tide__episode:hover { box-shadow: 0 0 26px #f0707266; translate: 0 -2px; }
+.red-tide__episode i { position: relative; display: grid; place-items: center; width: 92px; aspect-ratio: 16 / 9; background: no-repeat 50% 50% / cover; box-shadow: 0 0 0 2px var(--rt-coral); }
+.red-tide__episode b { color: #fff; font-size: 1.2rem; text-shadow: 0 0 10px #000; }
+.red-tide__episode span { display: grid; gap: .2rem; font-weight: 700; }
+.red-tide__episode small { color: var(--rt-gold); font: .58rem/1.4 var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+.red-tide-episode { width: min(1040px,calc(100% - 2rem)); max-height: calc(100dvh - 2rem); margin: auto; padding: 0; border: 0; background: transparent; color: #ffe6de; overflow: visible; }
+.red-tide-episode::backdrop { background: #0d0612e6; }
+.red-tide-episode__tv { padding: clamp(.75rem,2vw,1.5rem); background: linear-gradient(180deg,#2a1219,#12070b); border-radius: 18px; box-shadow: 0 0 0 3px #3b1a22,0 0 0 6px #0d0612,0 30px 80px #000c,0 0 60px #f0707233; }
+.red-tide-episode__head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: .75rem; }
+.red-tide-episode h2 { margin: 0; color: var(--rt-gold); font: clamp(.7rem,1.6vw,.85rem)/1.5 var(--font-pixel); letter-spacing: .12em; text-transform: uppercase; }
+.red-tide-episode__close { min-height: 44px; padding: .5rem .9rem; color: #ffe6de; background: transparent; border: 1px solid var(--rt-coral); cursor: pointer; }
+.red-tide-episode__screen { position: relative; overflow: hidden; border-radius: 14px / 18px; background: #000; box-shadow: inset 0 0 40px #000; }
+.red-tide-episode__screen video { display: block; width: 100%; max-height: calc(100dvh - 9rem); aspect-ratio: 1264 / 720; background: #000; }
+.red-tide-episode__glass { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg,#ffffff08 0 1px,transparent 1px 3px),radial-gradient(ellipse at 50% 40%,transparent 60%,#0008); }
+.red-tide-episode__note { margin: .75rem 0 0; color: #c99a92; font-size: .85rem; }
+@media (prefers-reduced-motion:no-preference) {
+  html:not(.reduce-motion) .red-tide-episode[data-crt=on] .red-tide-episode__screen { animation: red-tide-crt-on .55s cubic-bezier(.2,.8,.2,1) both; }
+}
+@keyframes red-tide-crt-on { 0% { clip-path: inset(49.5% 0 49.5% 0); filter: brightness(3); } 45% { clip-path: inset(49.5% 0 49.5% 0); } 100% { clip-path: inset(0); filter: none; } }
+html:has(.red-tide-episode[open]) :is(.fx-cursor,.fx-trail) { visibility: hidden; }
+/* Reduced motion: the poster stands in for the video. */
+@media (prefers-reduced-motion:reduce) { .red-tide__video,.red-tide__plasma { display: none; } .red-tide * { animation: none !important; transition: none !important; } }
+html.reduce-motion .red-tide__video,html.reduce-motion .red-tide__plasma { display: none; }
+html.reduce-motion .red-tide * { animation: none !important; transition: none !important; }
+@media (max-width:900px) {
+  .red-tide { align-items: start; }
+  .red-tide__frame { --scene-x: 74%; }
+  .red-tide__shade { background: linear-gradient(180deg,#0d0612f5 0,#0d0612d9 45%,#0d061266 70%,transparent 88%); }
+  .red-tide__copy { margin: 0 auto; padding-block: 2.5rem 42svh; }
+  .red-tide__hud { display: none; }
+}

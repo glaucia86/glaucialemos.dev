@@ -4,13 +4,15 @@ import { DESTINATIONS } from "@/lib/journey-constellation";
 import { VOYAGE_WORLDS, mix, paletteAt, worldReport } from "@/lib/voyage";
 import { beyondOrbit } from "@/i18n/beyond-orbit";
 import { comlink } from "@/i18n/comlink";
+import { SCENES } from "@/lib/scenes";
 
 describe("a viagem", () => {
   it("visits every destination in order, with the approved plate of each migrated world", () => {
     expect(VOYAGE_WORLDS.map((world) => world.page)).toEqual([...DESTINATIONS]);
     for (const world of VOYAGE_WORLDS) {
       const report = worldReport(world.page, []);
-      if (["home", "about", "projects", "content"].includes(world.page)) expect(world.plate).toMatch(/^\/galaxia\/scenes\/.+\/background\.webp$/);
+      if (["home", "about", "projects", "content", "events"].includes(world.page)) expect(world.plate).toMatch(/^\/galaxia\/scenes\/.+\/background\.webp$/);
+      if (["home", "about", "projects", "content", "services"].includes(world.page)) expect(world.plate).toMatch(/^\/galaxia\/scenes\/.+\/background\.webp$/);
       expect(report.charted).toBe(report.total > 0);
     }
   });
@@ -19,9 +21,28 @@ describe("a viagem", () => {
     expect(home.found).toEqual(["focus-lens", "wish"]);
     expect(home.total).toBe(EGGS.filter((egg) => egg.page === "home").length);
     expect(home.found.length + home.missing.length).toBe(home.total);
-    expect(worldReport("services", ["epilogue-signal"])).toMatchObject({ total: 0, charted: false });
+    expect(worldReport("events", [])).toMatchObject({ total: 6, charted: true });
+    expect(worldReport("services", ["epilogue-signal"])).toMatchObject({ total: 6, charted: true, found: [] });
+    expect(worldReport("notfound", ["paw-rescue", "paw-rescue", "epilogue-signal", "unknown"])).toEqual({
+      total: 2, charted: true, found: ["paw-rescue"], missing: ["signal-recovered"],
+    });
     const later = [...EGGS, { id: "orbital-trail" as EggId, page: "events" as EggPage }];
-    expect(worldReport("events", [], later)).toMatchObject({ total: 1, charted: true });
+    expect(worldReport("events", [], later)).toMatchObject({ total: 7, charted: true });
+  });
+  it("gives Aurélia its own plate, palette and six moons, with every destination charted", () => {
+    const ids = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination"];
+    const world = VOYAGE_WORLDS.find((world) => world.page === "services")!;
+    expect(world).toMatchObject({ path: "/servicos", plate: SCENES.aurelia.assets.background.src, palette: SCENES.aurelia.palette });
+    expect(paletteAt(VOYAGE_WORLDS.indexOf(world) / (VOYAGE_WORLDS.length - 1))).toEqual(SCENES.aurelia.palette);
+    expect(worldReport("services", []).missing).toEqual(ids);
+    for (const count of [0, 1, 6]) {
+      const found = ids.slice(0, count);
+      expect(worldReport("services", [...found, ...found, "epilogue-signal", "first-page", "unknown"])).toEqual({
+        total: 6, charted: true, found, missing: ids.slice(count),
+      });
+    }
+    expect(VOYAGE_WORLDS.filter((world) => worldReport(world.page, []).charted)).toHaveLength(7);
+    expect(VOYAGE_WORLDS.filter((world) => !worldReport(world.page, []).charted).map((world) => world.page)).toEqual([]);
   });
   it("blends palettes continuously between worlds", () => {
     expect(mix("#000000", "#ffffff", .5)).toBe("#808080");
@@ -32,6 +53,8 @@ describe("a viagem", () => {
   });
   it.each(["pt", "en", "es"] as const)("has a complete voyage in %s, with a name and hint for every secret", (lang) => {
     const copy = beyondOrbit[lang];
+    expect(copy.worlds.services).toBe({ pt: "Aurélia, os Jardins Suspensos", en: "Aurélia, the Hanging Gardens", es: "Aurélia, los Jardines Colgantes" }[lang]);
+    expect(copy.letter.some((line) => line.includes("Aurélia"))).toBe(true);
     expect(copy.letter.length).toBeGreaterThanOrEqual(5);
     for (const key of ["voyage", "letterTitle", "signature", "atlasTitle", "atlasIntro", "moons", "missing", "seeHint", "revisitWorld", "faint", "allFound", "nextStar", "nextBody", "replay"] as const) expect(copy[key].length, key).toBeGreaterThan(0);
     expect(copy.revisitWorld).toContain("{world}");

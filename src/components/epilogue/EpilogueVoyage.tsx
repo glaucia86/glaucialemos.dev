@@ -16,7 +16,7 @@ import { VOYAGE_WORLDS, paletteAt, worldReport } from "@/lib/voyage";
 import { EpilogueCredits } from "./EpilogueCredits";
 import { createVoyage } from "./voyage-engine";
 
-const VOICE: Partial<Record<string, string>> = { home: "observatory", about: "niveora", projects: "mars", content: "lumina" };
+const VOICE: Partial<Record<string, string>> = { home: "observatory", about: "niveora", projects: "mars", content: "lumina", services: "aurelia" };
 
 // "A Viagem": revealed after the last light. Deep space keeps flying behind a letter from the crew, the atlas of
 // worlds (planets whose moons are the secrets found there), the credits and the invitation to the next star.

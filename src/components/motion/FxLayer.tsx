@@ -1,18 +1,43 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { gsap, FINE_POINTER } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
-import { play, uiSound } from "@/lib/sfx";
+import { play, uiSound, setSoundWorld } from "@/lib/sfx";
 
 const INTERACTIVE = "a, button, [role='button'], summary, select, label[for]";
 
 // One delegated layer for the targeting cursor, magnetic controls and UI blips.
 export function FxLayer() {
+  const pathname = usePathname();
   const motion = useMotionEnabled();
   const fine = useMediaQuery(FINE_POINTER);
   const cursor = useRef<HTMLDivElement>(null);
   const trail = useRef<HTMLDivElement>(null);
+
+  // Audio follows the page, including reduced motion. Do not put this behind the cursor's motion gate.
+  useEffect(() => {
+    let page: HTMLElement | null = null;
+    let soundWorld: string | undefined;
+    const intersection = new IntersectionObserver(entries => {
+      for (const entry of entries) if (entry.target === page) setSoundWorld(page?.dataset.soundWorld, entry.isIntersecting);
+    });
+    const bind = () => {
+      const next = document.querySelector<HTMLElement>("main");
+      if (next === page && next?.dataset.soundWorld === soundWorld) return;
+      intersection.disconnect();
+      page = next;
+      soundWorld = page?.dataset.soundWorld;
+      setSoundWorld(soundWorld, false);
+      if (page) intersection.observe(page);
+    };
+    // Also covers a streamed <main> and client-side route replacement.
+    const mutations = new MutationObserver(bind);
+    mutations.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-sound-world"] });
+    bind();
+    return () => { mutations.disconnect(); intersection.disconnect(); setSoundWorld(undefined, false); };
+  }, [pathname]);
 
   useEffect(() => {
     let last: Element | null = null;

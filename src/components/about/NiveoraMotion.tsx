@@ -5,7 +5,7 @@ import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY, FINE_POINTER } from "@/lib/
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
-import { play } from "@/lib/sfx";
+import { play, stop } from "@/lib/sfx";
 import { bringIntoView, buzz, discover, emitEgg, matchTail, normalizePhrase, onEgg, getFoundSnapshot, subscribeFound, RESET_EVENT, type EggId } from "@/lib/eggs";
 import type { NiveoraCopy } from "@/i18n/niveora";
 import { createSnow, type UV } from "./snow-engine";
@@ -69,6 +69,8 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     // Reduced motion still exposes every hero secret, with immediate results and no acting/particles.
     if (!motion) {
       let pendingReset = false;
+      let stormSoundTimer: ReturnType<typeof setTimeout> | undefined;
+      const calmSound = () => { clearTimeout(stormSoundTimer); stop("blizzard"); };
       const reveal = () => {
         capsuleFound.current = true; capsule.dataset.capsule = "found";
         if (capsuleButton) capsuleButton.hidden = false;
@@ -77,7 +79,11 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
         discover(id);
         if (id === "paw-tracks") { reveal(); status.textContent = labels.status.found; }
         if (id === "memory-capsule") { reveal(); dispatchEvent(new Event(CAPSULE_OPEN)); }
-        if (id === "whiteout") status.textContent = labels.status.calm;
+        if (id === "whiteout") {
+          status.textContent = labels.status.calm;
+          clearTimeout(stormSoundTimer); play("blizzard"); play("thunder");
+          stormSoundTimer = setTimeout(calmSound, WHITEOUT_MS);
+        }
         if (id === "aurora-prism") status.textContent = labels.status.prism;
         status.style.opacity = "1"; status.style.visibility = "visible";
       };
@@ -85,7 +91,8 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       const click = (event: Event) => run(ids[(event.currentTarget as HTMLElement).dataset.hot!]);
       let buffer = "";
       const typed = (event: KeyboardEvent) => {
-        if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
+        if (event.key === "Escape") { calmSound(); return; }
+        if (event.ctrlKey || event.metaKey || event.altKey || event.key?.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
         buffer = (buffer + normalizePhrase(event.key)).slice(-24);
         const id = matchTail(buffer, HERO_EGGS); if (id) { buffer = ""; run(id); }
       };
@@ -101,9 +108,9 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       const afterClose = () => { if (pendingReset) { pendingReset = false; syncMemory(); } };
       addEventListener(CAPSULE_CLOSED, afterClose);
       const stopMemory = subscribeFound(syncMemory);
-      const stop = onEgg(HERO_EGGS, run); addEventListener("keydown", typed);
+      const stopEggs = onEgg(HERO_EGGS, run); addEventListener("keydown", typed);
       return () => {
-        disposed = true; stop(); stopMemory(); removeEventListener(CAPSULE_CLOSED, afterClose); removeEventListener("keydown", typed);
+        disposed = true; calmSound(); stopEggs(); stopMemory(); removeEventListener(CAPSULE_CLOSED, afterClose); removeEventListener("keydown", typed);
         hotspots.forEach((button) => { button.hidden = true; button.removeEventListener("click", click); });
         tracks.forEach((track) => { delete track.dataset.on; });
         delete section.dataset.stage; delete capsule.dataset.capsule;
@@ -265,7 +272,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     const tempTo = (value: number, duration: number) => gsap.to(degrees, { value, duration, ease: "steps(12)", onUpdate: writeTemp, overwrite: true });
     const calmDown = () => {
       if (!storm) return;
-      storm = false; clearStorm();
+      storm = false; clearStorm(); stop("blizzard");
       shakePending = true;
       snow.blizzard(false); tempTo(TEMP, 2.4);
       page.dataset.whiteout = "ending";
@@ -280,7 +287,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       shakePending = false; shakeStarted = null;
       page.dataset.whiteout = "true"; station.dataset.on = "true";
       snow.blizzard(true); snow.gust(); tempTo(TEMP_STORM, 3);
-      [0, 900, 2000, 3400, 5000].forEach((delay) => stormLater(() => play("gust"), delay));
+      play("blizzard"); play("thunder");
       buzz([60, 80, 60]);
       calm.hidden = false;
       say(labels.status.whiteout);
@@ -377,7 +384,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     let buffer = "";
     const typed = (event: KeyboardEvent) => {
       if (event.key === "Escape") { calmDown(); return; }
-      if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
+      if (event.ctrlKey || event.metaKey || event.altKey || event.key?.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
       buffer = (buffer + normalizePhrase(event.key)).slice(-24);
       const id = matchTail(buffer, ABOUT_EGGS);
       if (id) { buffer = ""; emitEgg(id); }
@@ -430,7 +437,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     return () => {
       disposed = true; active = false; cancelAnimationFrame(actorRaf);
       cancelIntro(); stopActivity(); snow.destroy(); jump?.destroy();
-      clearTimers(); stopEggs(); stopMemory(); removeEventListener(RESET_EVENT, resetMemory); clearTimeout(statusTimer); clearTimeout(fadeTracks); clearStorm(); storm = false;
+      clearTimers(); stopEggs(); stopMemory(); removeEventListener(RESET_EVENT, resetMemory); clearTimeout(statusTimer); clearTimeout(fadeTracks); clearStorm(); stop("blizzard"); storm = false;
       clearInterval(breathing);
       const animated = [status, crew, prince, degrees];
       gsap.killTweensOf(animated);

@@ -1,3 +1,5 @@
+import { play } from "@/lib/sfx";
+
 // Pixel-art sky for the observatory. Two low-resolution canvases share the plate's coordinates (u, v in 0..1):
 // "back" sits behind the crew (stars, aurora, Milky Way, meteors) and "front" above it (trails, sparks, hearts,
 // smoke, constellations). Everything is a true pixel, upscaled with `image-rendering: pixelated`.
@@ -44,6 +46,7 @@ export function createSky({ back, front }: { back: HTMLCanvasElement; front: HTM
   const px = (uv: UV) => ({ x: uv.u * width, y: uv.v * height });
 
   const spawnMeteor = (from?: UV) => {
+    if (running) play("comet");
     const start = from ? px(from) : { x: width * (.35 + Math.random() * .6), y: height * (.02 + Math.random() * .18) };
     // Slow and bright enough to be caught: ~120–180 screen px/s, on screen for 2.2–3 s.
     const speed = 40 + Math.random() * 20;

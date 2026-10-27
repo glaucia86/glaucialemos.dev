@@ -21,8 +21,8 @@ export const REGIONS: Record<EggPage, Region> = {
 };
 export const MIN_GAP = 26;
 
-// Secrets that belong to the epilogue's own story even though they live on another page: Aurélia is not charted yet
-// just because the signal to this page is hidden there.
+// Secrets that belong to the epilogue's own story even though they live on another page: the signal alone does not
+// chart Aurélia. Its six garden secrets supply the atlas moons; the bridge still has its own constellation star.
 export const BRIDGES: ReadonlySet<EggId> = new Set<EggId>(["epilogue-signal"]);
 
 function hash(text: string) {

@@ -13,6 +13,13 @@
 
 ---
 
+## Estado de implementação — 26/10/2026
+
+Home/Observatório, Sobre/Nivéora, Projetos/Marte, Conteúdo/Lúmina e o epílogo já têm implementação autoral.
+Serviços/Aurélia foi implementada em `feat/aurelia-servicos`, com seis segredos novos, ContactForm preservado e arte 06.
+Lint, typecheck e 280 testes passaram. A validação visual e o build estão pendentes: nenhum servidor ou navegador foi iniciado. Detalhes em `HANDOFF.md`, seção “Retomada — Serviços/Aurélia”.
+Eventos e 404 permanecem no tema anterior. As tabelas [C]/[P] abaixo são o snapshot/plano original, não o status atual.
+
 ## GUIA OPERACIONAL — COMO USAR ESTE MARKDOWN COM DEVIN E GROK IMAGE
 
 **Fonte de verdade:** este documento v2 consolida decisões anteriores, auditoria e os prompts de arte. O `AGENTS.md` e o checkout atual prevalecem em detalhes técnicos de execução. As seções 18–22 foram adicionadas especificamente para criar os assets no Grok e integrá-los via Devin; a seção 16 contém prompts de kickoff e continuação prontos para copiar.
@@ -196,6 +203,11 @@ A navegação principal mantém seis páginas. A página 404 é uma experiência
 **Aceite:** três segredos; globo arrastável; filtro e lista completos mesmo sem JavaScript; datasets e estatísticas corretos; legenda sobre participações remotas mantida.
 
 ### 4.6 `/[lang]/servicos` — Aurélia, os Jardins Suspensos
+
+**Implementação (26/10/2026):** página migrada na branch `feat/aurelia-servicos`; seis segredos concretos:
+`garden-bloom`, `beacon-relay`, `ring-alignment`, `seed-vault`, `greenhouse-dusk`, `pollination`.
+Substituem as sugestões `collaboration-beacon`/`garden-seed` da seção 8.3; `epilogue-signal` permanece como ponte.
+Validação visual/execução completa pendentes; consultar a Retomada no handoff.
 
 **Cena:** estação orbital fictícia com jardins e plantas emissoras de luz, vista para um planeta de anéis inventado. **À direita:** Glaucia recebe uma transmissão; cachorro aciona um sinalizador. **À esquerda:** serviços, oficinas, mentorias e CTA de contato.
 

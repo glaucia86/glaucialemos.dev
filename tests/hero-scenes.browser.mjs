@@ -12,7 +12,9 @@ try {
     await page.setViewportSize({ width, height: 900 });
     for (const route of ["/pt", "/pt/servicos"]) {
       await page.goto(`${baseURL}${route}`, { waitUntil: "domcontentloaded" });
-      const plane = page.locator(".scene-image-plane");
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(() => document.documentElement.dataset.boot !== "pending");
+      const plane = page.locator(route === "/pt/servicos" ? ".hero-scene-layer--aurelia .aurelia-plane" : ".scene-image-plane");
       await plane.waitFor({ state: "attached", timeout: 10000 });
       await page.waitForFunction(() => document.querySelector(".motion-toggle")?.getAttribute("aria-pressed") === "false");
       const alignment = await plane.evaluate((element) => {
@@ -44,50 +46,10 @@ try {
           assert.ok(safe, `${route}, ${width}px: ${pose} overlaps the copy`);
         }
       } else {
-        assert.equal(await page.locator(".saber-hilt").count(), 0, "Use the image's single hilt");
-        const saber = await plane.evaluate((element) => {
-          const assembly = element.querySelector(".saber-assembly");
-          const blade = element.querySelector(".saber-blade");
-          for (const animation of element.getAnimations({ subtree: true })) {
-            animation.pause();
-            animation.currentTime = 3000;
-          }
-          const plane = element.getBoundingClientRect();
-          const style = getComputedStyle(assembly);
-          const matrix = new DOMMatrix(style.transform);
-          const length = parseFloat(style.width) / plane.width * 1024;
-          return {
-            x: parseFloat(style.left) / plane.width * 1024,
-            y: parseFloat(style.top) / plane.height * 576,
-            length, tipX: matrix.a * length, tipY: matrix.b * length,
-            scale: new DOMMatrix(getComputedStyle(blade).transform).a,
-            origin: getComputedStyle(blade).transformOrigin,
-          };
-        });
-        assert.ok(Math.abs(saber.x - 718) < .1 && Math.abs(saber.y - 335) < .1, JSON.stringify(saber));
-        assert.ok(Math.abs(saber.length - 200) < .1 && saber.tipX < -130 && saber.tipY < -130, JSON.stringify(saber));
-        assert.equal(saber.scale, 1);
-        assert.ok(saber.origin.startsWith("0px "));
-        for (const time of [0, 5400]) {
-          const scale = await page.locator(".saber-blade").evaluate((blade, time) => {
-            blade.getAnimations()[0].currentTime = time;
-            return new DOMMatrix(getComputedStyle(blade).transform).a;
-          }, time);
-          assert.equal(scale, 0, `Blade must be off at ${time}ms`);
-        }
-        if (width <= 900) {
-          const visible = await plane.evaluate((element) => {
-            const plane = element.getBoundingClientRect();
-            const hero = element.closest(".page-hero");
-            const frame = hero.getBoundingClientRect();
-            const text = hero.querySelector(".page-hero__content").getBoundingClientRect();
-            // Vader's head and feet in reference-image coordinates.
-            return [150, 545].every((y) => {
-              const point = { x: plane.x + plane.width * 820 / 1024, y: plane.y + plane.height * y / 576 };
-              return point.x > frame.left && point.x < frame.right && point.y > text.bottom && point.y < frame.bottom;
-            });
-          });
-          assert.ok(visible, `${width}px: Vader must be visible below the text`);
+        assert.equal(await page.locator(".aurelia-hot").count(), 4);
+        assert.equal(await page.locator(".saber-assembly").count(), 0);
+        for (const actor of [".aurelia-crew", ".aurelia-prince"]) {
+          assert.equal(await plane.locator(actor).count(), 1);
         }
       }
 
@@ -117,7 +79,7 @@ try {
       await page.emulateMedia({ reducedMotion: "no-preference" });
     }
   }
-  console.log("PASS: image alignment, stones, saber, mobile composition and visible static scenes with both reduced-motion preferences at 5 viewport widths.");
+  console.log("PASS: image alignment, actors, mobile composition and visible static scenes with both reduced-motion preferences at 5 viewport widths.");
 } finally {
   await browser.close();
 }

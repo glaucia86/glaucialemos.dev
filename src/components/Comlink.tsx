@@ -15,14 +15,51 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
   const page = pageOf(pathname);
   const list = eggsFor(page);
   const dialog = useRef<HTMLDialogElement>(null);
+  const scroll = useRef<HTMLDivElement>(null);
+  const scrollContent = useRef<HTMLDivElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const letter = useRef<HTMLDialogElement>(null);
+  const letterScroll = useRef<HTMLDivElement>(null);
+  const letterContent = useRef<HTMLDivElement>(null);
   const letterOpener = useRef<HTMLElement | null>(null);
   const replayTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const found = useDiscoveries();
   const [fresh, setFresh] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [confirming, setConfirming] = useState(false);
+  useEffect(() => {
+    const cleanups = [[scroll.current, scrollContent.current], [letterScroll.current, letterContent.current]].map(([viewport, content]) => {
+      const frame = viewport?.parentElement;
+      const bar = frame?.querySelector<HTMLDivElement>(".comlink__mini-bar");
+      if (!viewport || !content || !frame || !bar) return;
+      const update = () => {
+        const { clientHeight, scrollHeight, scrollTop } = viewport;
+        const trackH = frame.clientHeight;
+        const overflow = scrollHeight > clientHeight && clientHeight > 0;
+        bar.hidden = !overflow;
+        frame.toggleAttribute("data-more", overflow && scrollHeight > clientHeight + scrollTop + 1);
+        if (!overflow) {
+          bar.style.removeProperty("--thumb-h");
+          bar.style.removeProperty("--thumb-t");
+          return;
+        }
+        const ratio = clientHeight / scrollHeight;
+        const thumbH = Math.min(trackH, Math.max(24, ratio * trackH));
+        const progress = Math.max(0, Math.min(1, scrollTop / (scrollHeight - clientHeight || 1)));
+        bar.style.setProperty("--thumb-h", `${thumbH}px`);
+        bar.style.setProperty("--thumb-t", `${progress * (trackH - thumbH)}px`);
+      };
+      // Catch dialog opening, viewport resizing, fonts and discoveries in both dialogs.
+      const observer = new ResizeObserver(update);
+      observer.observe(frame);
+      observer.observe(viewport);
+      observer.observe(content);
+      viewport.addEventListener("scroll", update, { passive: true });
+      update();
+      return () => { observer.disconnect(); viewport.removeEventListener("scroll", update); };
+    });
+    return () => cleanups.forEach(cleanup => cleanup?.());
+  }, []);
   useEffect(() => {
     if (remainingDiscoveries("curious-letter", found) > 0) letter.current?.close();
   }, [found]);
@@ -44,7 +81,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
     const reset = () => { clearTimeout(replayTimer.current); letter.current?.close(); };
     let buffer = "";
     const typed = (event: KeyboardEvent) => {
-      if (event.ctrlKey || event.altKey || event.metaKey || event.key.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
+      if (event.ctrlKey || event.altKey || event.metaKey || event.key?.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
       buffer = (buffer + normalizePhrase(event.key)).slice(-32);
       if (matchTail(buffer, ["curious-letter"])) { buffer = ""; openLetter(); }
     };
@@ -78,7 +115,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
 
   useEffect(() => { if (dialog.current?.open) dialog.current.close(); }, [pathname]);
 
-  function open() { setFeedback(""); setConfirming(false); dialog.current?.showModal(); play("blip"); }
+  function open() { setFeedback(""); setConfirming(false); dialog.current?.showModal(); input.current?.focus({ preventScroll: true }); play("blip"); }
   const wipe = () => {
     if (!confirming) { setConfirming(true); play("error"); return; }
     forget(); setConfirming(false); setFeedback(copy.resetDone); play("push");
@@ -113,7 +150,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
       <span className="comlink-toggle__count" aria-hidden="true">{count}/{total}</span>
     </button>, slot)}
     <p className="comlink-fresh" role="status" aria-live="polite" data-show={fresh || undefined}>{fresh ? copy.fresh : ""}</p>
-    <dialog ref={dialog} className="comlink" aria-labelledby="comlink-title" onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
+    <dialog ref={dialog} className="comlink" data-lenis-prevent="" aria-labelledby="comlink-title" onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="comlink__panel">
         <header className="comlink__head">
           <p className="comlink__channel" aria-hidden="true"><span className="comlink__rec" />{copy.channel}</p>
@@ -124,11 +161,6 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <span>{copy.counter}: <b>{count}/{total}</b>{count === total && <em> · {copy.master}</em>}</span>
           <span className="comlink__bar" aria-hidden="true"><i style={{ transform: `scaleX(${count / total})` }} /></span>
         </p>
-        {remainingDiscoveries("curious-letter", found) === 0 && <button type="button" className="comlink__envelope" onClick={() => run("curious-letter")}><span aria-hidden="true">✉</span> {copy.letter.open}</button>}
-        {found.includes("epilogue-signal") && <Link className="comlink__envelope" href={`/${pathname.split("/")[1]}/alem-da-ultima-orbita`} onClick={() => dialog.current?.close()}>{copy.epilogue.revisit}</Link>}
-        {count > 0 && <button type="button" className="comlink__reset" data-confirming={confirming || undefined} onClick={wipe}>
-          <span aria-hidden="true">{confirming ? "!" : "⟲"}</span>{confirming ? copy.resetConfirm.replace("{n}", String(count)) : copy.reset}
-        </button>}
         <form className="comlink__terminal" onSubmit={submit}>
           <label className="sr-only" htmlFor="comlink-input">{copy.placeholder}</label>
           <span aria-hidden="true">&gt;</span>
@@ -136,22 +168,39 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <button type="submit">{copy.send}</button>
         </form>
         <p className="comlink__feedback" role="status" aria-live="polite">{feedback}</p>
-        <ul className="comlink__list">{list.map(({ id }) => {
-          const known = found.includes(id);
-          return <li key={id} data-found={known || undefined}>
-            <span className="comlink__icon" aria-hidden="true">{known ? "✦" : "?"}</span>
-            <span className="comlink__text"><b>{known ? copy.eggs[id].name : copy.hidden}</b><small>{copy.eggs[id].hint}</small></span>
-            {known && <button type="button" onClick={() => run(id)}>{copy.play}<span className="sr-only">: {copy.eggs[id].name}</span></button>}
-          </li>;
-        })}</ul>
+        <div className="comlink__scroll-frame">
+          <div ref={scroll} className="comlink__scroll" data-lenis-prevent="" tabIndex={0} role="region" aria-labelledby="comlink-title">
+            <div ref={scrollContent} className="comlink__scroll-content">
+              {remainingDiscoveries("curious-letter", found) === 0 && <button type="button" className="comlink__envelope" onClick={() => run("curious-letter")}><span aria-hidden="true">✉</span> {copy.letter.open}</button>}
+              {found.includes("epilogue-signal") && <Link className="comlink__envelope" href={`/${pathname.split("/")[1]}/alem-da-ultima-orbita`} onClick={() => dialog.current?.close()}>{copy.epilogue.revisit}</Link>}
+              {count > 0 && <button type="button" className="comlink__reset" data-confirming={confirming || undefined} onClick={wipe}>
+                <span aria-hidden="true">{confirming ? "!" : "⟲"}</span>{confirming ? copy.resetConfirm.replace("{n}", String(count)) : copy.reset}
+              </button>}
+              <ul className="comlink__list">{list.map(({ id }) => {
+                const known = found.includes(id);
+                return <li key={id} data-found={known || undefined}>
+                  <span className="comlink__icon" aria-hidden="true">{known ? "✦" : "?"}</span>
+                  <span className="comlink__text"><b>{known ? copy.eggs[id].name : copy.hidden}</b><small>{copy.eggs[id].hint}</small></span>
+                  {known && <button type="button" onClick={() => run(id)}>{copy.play}<span className="sr-only">: {copy.eggs[id].name}</span></button>}
+                </li>;
+              })}</ul>
+            </div>
+          </div>
+          <div className="comlink__mini-bar" aria-hidden="true" hidden><i /></div>
+        </div>
       </div>
     </dialog>
-    <dialog ref={letter} className="curious-letter" aria-labelledby="curious-letter-title" onClose={() => { if (letterOpener.current?.isConnected) letterOpener.current.focus({ preventScroll: true }); }}>
-      <div className="curious-letter__paper">
-        <span className="curious-letter__seal" aria-hidden="true">✦</span>
-        <h2 id="curious-letter-title">{copy.letter.title}</h2>
-        <p>{copy.letter.body}</p><p className="curious-letter__signature">{copy.letter.signature}</p>
-        <button type="button" autoFocus onClick={() => letter.current?.close()}>{copy.letter.close}</button>
+    <dialog ref={letter} className="curious-letter" data-lenis-prevent="" aria-labelledby="curious-letter-title" onClose={() => { if (letterOpener.current?.isConnected) letterOpener.current.focus({ preventScroll: true }); }}>
+      <div className="comlink__scroll-frame curious-letter__scroll-frame">
+        <div ref={letterScroll} className="comlink__scroll" data-lenis-prevent="" tabIndex={0} role="region" aria-labelledby="curious-letter-title">
+          <div ref={letterContent} className="curious-letter__paper">
+            <span className="curious-letter__seal" aria-hidden="true">✦</span>
+            <h2 id="curious-letter-title">{copy.letter.title}</h2>
+            <p>{copy.letter.body}</p><p className="curious-letter__signature">{copy.letter.signature}</p>
+            <button type="button" autoFocus onClick={() => letter.current?.close()}>{copy.letter.close}</button>
+          </div>
+        </div>
+        <div className="comlink__mini-bar" aria-hidden="true" hidden><i /></div>
       </div>
     </dialog>
   </>;

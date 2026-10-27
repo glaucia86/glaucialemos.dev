@@ -305,7 +305,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
     };
     let buffer = "";
     const typed = (event: KeyboardEvent) => {
-      if (event.key.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
+      if (event.key?.length !== 1 || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true'], dialog")) return;
       buffer = (buffer + normalizePhrase(event.key)).slice(-24);
       const id = matchTail(buffer, HOME_EGGS);
       if (id) { buffer = ""; replays[id](); }

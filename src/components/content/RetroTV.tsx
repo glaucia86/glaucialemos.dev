@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motionAllowed } from "@/lib/use-motion";
 import { bringIntoView, buzz, discover, onEgg } from "@/lib/eggs";
 import { play } from "@/lib/sfx";
+import { blockMusic } from "@/lib/music";
 import type { LuminaCopy } from "@/i18n/lumina";
 import type { LatestVideo } from "@/lib/youtube";
 import { createStatic } from "./tv-static";
@@ -27,6 +28,7 @@ export function RetroTV({ video, copy, locale }: Props) {
   const aired = copy.aired.replace("{date}", date);
   useEffect(() => setReady(true), []);
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
+  useEffect(() => { blockMusic('retro-tv', power === 'on'); return () => blockMusic('retro-tv', false); }, [power]);
 
   const turnOn = () => {
     if (power !== "off") return;
