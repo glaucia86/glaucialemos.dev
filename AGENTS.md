@@ -33,10 +33,10 @@
   `tests/beyond-orbit.test.ts` e `tests/epilogue.browser.mjs` (navegador somente pela usuária). Retomada atual no início do handoff.
 
 - Handoff da migração: `docs/galaxia-encantada/HANDOFF.md` (comece pela seção “Retomada”).
-- Migração Galáxia Encantada (Home, Sobre e Projetos já na `main`; Conteúdo/Lúmina na branch `feat/lumina-conteudo`; o tema
-  Star Wars está congelado em `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração
-  página a página: Home (Observatório), Sobre (Nivéora), Projetos (Marte) e Conteúdo (Lúmina) migradas; Eventos, Serviços e
-  404 ainda usam Star Wars.
+- Eventos (Atlas das Conexões) está na branch `feat/atlas-eventos`, aguardando as folhas GE-GL-05B/GE-DOG-05B (prompts no HANDOFF).
+- Migração Galáxia Encantada (Home, Sobre, Projetos, Conteúdo e o epílogo na `main`; o tema Star Wars está congelado em
+  `archive/star-wars`). Plano completo em `docs/galaxia-encantada/PLANO-MIGRACAO.md`. Migração página a página: Home
+  (Observatório), Sobre (Nivéora), Projetos (Marte), Conteúdo (Lúmina) e Eventos (Atlas) migradas; Serviços e 404 ainda usam Star Wars.
 - Arte-fonte aprovada (Grok) em `docs/art/galaxia-encantada/approved-source` (`GE-PL-0X` placas, `GE-GL-0X` Glaucia,
   `GE-DOG-0X` Prince, `GE-MASTER-*`, `props/<cena>`). `manifest.json` com sha256: `node scripts/build-galaxia-assets.mjs --manifest`.
   Assets web por cena: `node scripts/build-galaxia-assets.mjs <scene-id> [--debug]` gera `public/galaxia/**` e
@@ -70,7 +70,7 @@
   na porta. Confira com `netstat -ano` antes de reiniciar.
 - Motion: GSAP/Lenis via `src/lib/gsap.ts` e `src/lib/use-motion.ts`. Respeite `useMotionEnabled()`.
 - Sons: `src/lib/sfx.ts`, sempre opt-in, curtos (≤ 0,6 s) e sem loops; ruído filtrado (`wave: "noise"`), `play(kind, { detune, gain })` e `MIN_GAP`.
-  Hover/clique por mundo via `data-sound-world` no `<main>` (`observatory`, `niveora`, `mars`), lido pelo `FxLayer`.
+  Hover/clique por mundo via `data-sound-world` no `<main>` (`observatory`, `niveora`, `mars`, `lumina`, `atlas`), lido pelo `FxLayer`.
 - Middleware fica em `src/middleware.ts`: com `src/app`, o Next ignora um `middleware.ts` na raiz.
   Confira que o build lista `ƒ Middleware`.
 - Repositórios: `getTopRepos` (`src/lib/github.ts`) busca o ranking por estrelas no GitHub, revalidado a cada 24 h (sem custo extra; `GITHUB_TOKEN` opcional);
@@ -139,5 +139,41 @@
   em Conteúdo), pula Shorts (`HEAD /shorts/{id}`: 200 = Short; falhou → `#shorts`/`#YouTubeShorts`) e cai em `src/data/youtube.json`
   (`node scripts/snapshot-youtube.mjs`). O iframe `youtube-nocookie` só nasce depois de ligar (clique/toque/Enter, comando "tv"/"play"/"assistir").
   Testes: `tests/lumina.test.ts`, `tests/youtube.test.ts`, `tests/lumina.browser.mjs`.
+- Eventos (Atlas das Conexões, órbita da Terra): `src/app/[lang]/eventos/page.tsx` + `src/app/atlas.css` (`className="home-page events-page"`,
+  `data-sound-world="atlas"`; o antigo `events.css` saiu do `globals.css`). Textos em `src/i18n/atlas.ts` (`d.atlas`). **Regra factual**: formato
+  derivado de `cidade === "Online"` (remoto, nunca tem lat/lon) em `src/lib/atlas-records.ts`; presencial = luz de cidade (ouro), remoto =
+  anel de sinal (ciano), nunca ponto no mapa; sem arcos cidade→cidade. 134 eventos: 79 presenciais / 55 remotos, 20 cidades, 7 países com
+  presença, 9 "representados" (África do Sul e França só por remoto). CloudOuest Virtual e Reactor Brasil Webinar (2020) foram corrigidos
+  para remotos a pedido da Glaucia. Diário = formulário GET (`?ano=&formato=&tipo=&idioma=&q=`, `src/lib/atlas-filters.ts`), a página lê
+  `searchParams` (é `ƒ`) e filtra sem JS; com JS filtra na hora e faz `replaceState`. Cena: `src/components/events/AtlasScene.tsx` (composição A
+  aprovada: Glaucia (90; 87) de frente, Prince de perfil (64; 84), holograma `HOLO` sobre o pedestal da placa (75,5; 58), orbe de navegação
+  (60; 66); `HOTSPOTS` glaucia/holo/prince/orb), `AtlasMotion.tsx`, `holo-globe.ts` (cobe a ½ resolução, pixelado, marcadores só presenciais),
+  `orbit-engine.ts` (estrelas só em `inSky`, acima de `limb(u)`; satélites; aurora; brilhos de cidade; anéis; feixe; constelação no canvas de
+  trás, em projeção equirretangular recortada `VIEW`), salto `night-dive.ts` (disco ortográfico, cidades por ano, remotos numa coroa orbital
+  fora do disco). Capítulos: Atlas (`AtlasGlobe.tsx`: globo grande no prop `globe-pedestal`, odômetro de 32 marcas que só conta rotação
+  manual), Diário (`EventLog.tsx`), Sinais (`SignalDeck.tsx`, links `?ano=#diario` com `data-log-year`), convite. Segredos: `orbital-trail`
+  (uma volta manual = órbita de um ano, do mais recente; o holograma do hero gira e "lança" o globo via `emitEgg`), `constellation-route`
+  (Glaucia de perfil, holograma se desdobra, 20 estrelas pela 1ª presença, "A Tecelã", legenda "não rotas de viagem"), `dog-navigation`
+  (orbe idle→active, busto do Prince no visor `face-idle/tongue/joy`, holograma gira até a cidade ou radar para remoto; `visorQueue`).
+  Eventos conta no `epilogue-signal`. Pipeline: GE-GL-05 tem fundo magenta → `keyBackground`/`keyChroma` (chave global + despill por excesso
+  de magenta, preserva o coral); poses `bust-*`, `hip`, `idle`, `profile`, `back`; Prince `front-bare` (sem capacete, fora do palco), `side`,
+  `side-b`, `face-*`. Sem piscar nem pose de ação até chegarem as 05B (não imitar com CSS). Boot `atlas-boot`, `ReadingProgress variant="atlas"`
+  (satélite). Testes: `tests/atlas.test.ts`, `tests/atlas.browser.mjs` (capturas em `%TEMP%\atlas`), `tests/events-page.browser.mjs`.
+  Rodada 2 (26/10/2026): composição I aprovada (Glaucia (92; 88) e Prince `front-bare` (84; 86,5) de frente para quem visita, à
+  direita do holograma; o Prince vira `side`, que olha para o holograma, ao atuar; orbe em (79,5; 64,5)). Terra viva: o pipeline gera
+  `earth-mask.webp` (`EARTH_MASK` no script) e o `orbit-engine` desenha nuvens, terminador e luzes só na máscara. O salto saiu do hero:
+  `AtlasVoyage.tsx` + `voyage-engine.ts` formam uma seção sticky para todos os aparelhos (`main.events-page { overflow: clip }`; 320svh no
+  desktop, 220svh no toque), em 5 atos (`ACTS`): aproximação com paralaxe → vidro (DrawSVG + estilhaços) → globo cobe girando por `WAYPOINTS`
+  com cidades por ano e nomes reais → warp → pouso. Sem JS ou com movimento reduzido, entra uma lista estática de anos. Tablet da Glaucia
+  (hotspot da Glaucia): joystick com Draggable, regiões, ano no holograma (`holo.show`), Constelação e Órbita. Doca de ações (`.atlas-dock`)
+  numa faixa abaixo da cena no toque/telas pequenas. Segredos do Prince: `prince-antenna` (`PrinceAntenna.tsx` em Sinais, decodifica o
+  primeiro sinal remoto), `paw-stamp` (Prince ao lado do globo, gira até a cidade com mais encontros e carimba), `runaway-satellite`
+  (satélite DOM com MotionPath no céu do hero; a orbe busca um cartão-postal presencial real). Atlas = 6 segredos, catálogo = 37.
+  `zero-gravity` só entra com a pose `float` da 05B. Final: `OrbitalSunrise.tsx` (céu de 100svh guiado pela rolagem, Glaucia `back` em
+  silhueta, convite abaixo do horizonte, "Próximas conexões" do Luma). Luma: `src/lib/luma.ts` (endpoint público `events-hosting`,
+  revalida em 24 h, cai em `src/data/luma.json`); `node scripts/snapshot-luma.mjs` atualiza o snapshot e só **relata** eventos que faltam
+  no `eventos.json` (`LUMA_SAME_EVENT` trata a transmissão de SP como o mesmo evento). O Lenis ignora `dialog`/`[data-lenis-prevent]`
+  (opção `prevent`), o que destrava a rolagem do rádio no site todo. Plugins GSAP registrados em `src/lib/gsap.ts`: MotionPath,
+  Physics2D, Draggable, Inertia, CustomEase/Wiggle/Bounce, Text. Testes: `tests/luma.test.ts`.
 - Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
   `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).

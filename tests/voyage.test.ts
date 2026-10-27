@@ -10,7 +10,7 @@ describe("a viagem", () => {
     expect(VOYAGE_WORLDS.map((world) => world.page)).toEqual([...DESTINATIONS]);
     for (const world of VOYAGE_WORLDS) {
       const report = worldReport(world.page, []);
-      if (["home", "about", "projects", "content"].includes(world.page)) expect(world.plate).toMatch(/^\/galaxia\/scenes\/.+\/background\.webp$/);
+      if (["home", "about", "projects", "content", "events"].includes(world.page)) expect(world.plate).toMatch(/^\/galaxia\/scenes\/.+\/background\.webp$/);
       expect(report.charted).toBe(report.total > 0);
     }
   });
@@ -20,8 +20,9 @@ describe("a viagem", () => {
     expect(home.total).toBe(EGGS.filter((egg) => egg.page === "home").length);
     expect(home.found.length + home.missing.length).toBe(home.total);
     expect(worldReport("services", ["epilogue-signal"])).toMatchObject({ total: 0, charted: false });
-    const later = [...EGGS, { id: "orbital-trail" as EggId, page: "events" as EggPage }];
-    expect(worldReport("events", [], later)).toMatchObject({ total: 1, charted: true });
+    const later = [...EGGS, { id: "collaboration-beacon" as EggId, page: "services" as EggPage }];
+    expect(worldReport("services", [], later)).toMatchObject({ total: 1, charted: true });
+    expect(worldReport("events", [])).toMatchObject({ total: 6, charted: true });
   });
   it("blends palettes continuously between worlds", () => {
     expect(mix("#000000", "#ffffff", .5)).toBe("#808080");

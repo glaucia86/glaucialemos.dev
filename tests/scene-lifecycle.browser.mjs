@@ -73,7 +73,7 @@ try {
     assert.ok(await clock() > resumed, "visible animation must advance");
     await page.locator(".page-hero .actions a").last().click();
     await expect(page).toHaveURL(`${baseURL}/pt/eventos`);
-    await expect(page.locator(".hero-scene-layer--nevarro")).toHaveAttribute("data-motion", "running");
+    await expect(page.locator(".hero-scene-layer--atlas")).toHaveAttribute("data-paused", "false");
   });
   await check("Home has a coordinated lift and a quiet interval", async (page) => {
     await page.goto(`${baseURL}/pt`);
@@ -102,7 +102,7 @@ try {
     });
     await page.goto(`${baseURL}/pt`);
     await expect(page.locator(".hero-scene-layer")).toHaveAttribute("data-motion", "running");
-    for (const slug of ["eventos"]) {
+    for (const slug of ["servicos"]) {
       await page.locator(`nav a[href="/pt/${slug}"]`).click();
       await expect(page).toHaveURL(`${baseURL}/pt/${slug}`);
       await expect(page.locator(".hero-scene-layer")).toHaveAttribute("data-motion", "running");
@@ -128,7 +128,7 @@ try {
   await check("secondary scenes share cover geometry", async (page) => {
     for (const width of [390, 900, 901, 1280, 1920]) {
       await page.setViewportSize({ width, height: 900 });
-      for (const route of ["eventos"]) {
+      for (const route of ["servicos"]) {
         await page.goto(`${baseURL}/pt/${route}`);
         const alignment = await page.locator(".scene-image-plane").evaluate((plane) => {
           const image = plane.closest(".page-hero").querySelector(".page-hero__image");

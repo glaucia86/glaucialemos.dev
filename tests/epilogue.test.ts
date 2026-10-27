@@ -29,7 +29,7 @@ describe("epilogue eligibility", () => {
   });
   it.each(["pt", "en", "es"])("maps the route in %s", lang => {
     expect(pageOf(`/${lang}/alem-da-ultima-orbita`)).toBe("epilogue");
-    expect(EGGS).toHaveLength(31);
+    expect(EGGS).toHaveLength(37);
   });
 });
 

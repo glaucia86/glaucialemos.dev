@@ -29,9 +29,14 @@ const BOOK_CREST = pixels([
   ".......#.......", "......###......", ".....#####.....", "......###......", ".......#.......", "...............", "..###.....###..", ".#...##.##...#.",
   "#.##...#...##.#", "#....#.#.#....#", "#.##...#...##.#", "#....#.#.#....#", "#.##...#...##.#", ".####..#..####.", "......###......",
 ]);
-const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, mars: ROVER_CREST, observatory: OBSERVATORY_CREST, lumina: BOOK_CREST };
+// The Atlas: a globe with meridians inside a tilted orbit and its satellite, 15 × 15 pixels.
+const GLOBE_CREST = pixels([
+  ".............#.", "......###...###", "....#######..#.", "...##.#.#.##...", "..#.#.#.#.#.#..", ".#############.", "#.#.#.#.#.#.#.#",
+  ".#############.", "#.#.#.#.#.#.#.#", ".#############.", "..#.#.#.#.#.#..", "...##.#.#.##...", ".#..#######....", "###...###......", ".#.............",
+]);
+const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, mars: ROVER_CREST, observatory: OBSERVATORY_CREST, lumina: BOOK_CREST, atlas: GLOBE_CREST };
 
-type BootVariant = "niveora" | "mars" | "observatory" | "lumina";
+type BootVariant = "niveora" | "mars" | "observatory" | "lumina" | "atlas";
 type BootProps = { lines: string[]; granted: string; skip: string; label: string; storageKey?: string; brand?: string; variant?: BootVariant; armOnNavigation?: boolean };
 
 // Visible only when the inline boot script marked <html data-boot="pending">.

@@ -19,17 +19,18 @@ describe("journey constellation", () => {
     expect(constellation()).toEqual(stars);
   });
   it("grows with the catalogue: a secret added later gets a star and keeps the others in place", () => {
-    const extended = [...EGGS, { id: "orbital-trail" as EggId, page: "events" as EggPage }];
+    const extended = [...EGGS, { id: "collaboration-beacon" as EggId, page: "services" as EggPage }];
     const grown = constellation(extended);
     expect(grown).toHaveLength(EGGS.length + 1);
     expect(grown.slice(0, EGGS.length)).toEqual(stars);
-    expect(unchartedWorlds(extended)).not.toContain("events");
+    expect(unchartedWorlds(extended)).not.toContain("services");
   });
   it("lists destinations without secrets of their own as the next coordinates", () => {
     const next = unchartedWorlds();
     expect(next).toEqual(DESTINATIONS.filter((world) => !EGGS.some((egg) => egg.page === world && egg.id !== "epilogue-signal")));
     expect(next).toContain("services");
     expect(next).not.toContain("home");
+    expect(next).not.toContain("events");
   });
   it("draws the visitor's path in discovery order, ignoring duplicates and unknown ids", () => {
     const trip = journey(["rover-scan", "focus-lens", "rover-scan", "nope", "paw-tracks"], stars);

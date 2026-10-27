@@ -120,6 +120,32 @@
       "notes": ""
     },
     {
+      "id": "GE-DOG-05B",
+      "file": "approved-source/GE-DOG-05B-earth-orbit.png",
+      "sceneId": "earth-orbit",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "b8368e371b800654c0fae363c895b0bac03367c073e90faf33a2967fda9619fa",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
+      "id": "GE-DOG-05C",
+      "file": "approved-source/GE-DOG-05C-earth-orbit.png",
+      "sceneId": "earth-orbit",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "c1f227567815f4d27f1211053d5f3cd1aa1249a15e8acebaa8e3188b10dc2efe",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
       "id": "GE-DOG-06",
       "file": "approved-source/GE-DOG-06-aurelia.png",
       "sceneId": "aurelia",
@@ -246,6 +272,19 @@
       "nativeHeight": 941,
       "alpha": false,
       "sha256": "0179ee674c51c48d73b065e3bcd9756eb32a30fd83497296deaa46da0411740c",
+      "reviewer": "Glaucia Lemos",
+      "notes": ""
+    },
+    {
+      "id": "GE-GL-05B",
+      "file": "approved-source/GE-GL-05B-earth-orbit.png",
+      "sceneId": "earth-orbit",
+      "status": "approved",
+      "tool": "Grok Image",
+      "nativeWidth": 1792,
+      "nativeHeight": 1008,
+      "alpha": true,
+      "sha256": "3354eb81b7e73f7eaf51ab482ea157d4109e0c5f45feefabaa9bb39c2afc27c1",
       "reviewer": "Glaucia Lemos",
       "notes": ""
     },

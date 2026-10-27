@@ -113,7 +113,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
       <span className="comlink-toggle__count" aria-hidden="true">{count}/{total}</span>
     </button>, slot)}
     <p className="comlink-fresh" role="status" aria-live="polite" data-show={fresh || undefined}>{fresh ? copy.fresh : ""}</p>
-    <dialog ref={dialog} className="comlink" aria-labelledby="comlink-title" onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
+    <dialog ref={dialog} className="comlink" data-lenis-prevent="" aria-labelledby="comlink-title" onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="comlink__panel">
         <header className="comlink__head">
           <p className="comlink__channel" aria-hidden="true"><span className="comlink__rec" />{copy.channel}</p>
@@ -146,7 +146,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
         })}</ul>
       </div>
     </dialog>
-    <dialog ref={letter} className="curious-letter" aria-labelledby="curious-letter-title" onClose={() => { if (letterOpener.current?.isConnected) letterOpener.current.focus({ preventScroll: true }); }}>
+    <dialog ref={letter} className="curious-letter" data-lenis-prevent="" aria-labelledby="curious-letter-title" onClose={() => { if (letterOpener.current?.isConnected) letterOpener.current.focus({ preventScroll: true }); }}>
       <div className="curious-letter__paper">
         <span className="curious-letter__seal" aria-hidden="true">✦</span>
         <h2 id="curious-letter-title">{copy.letter.title}</h2>

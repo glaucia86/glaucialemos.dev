@@ -49,7 +49,20 @@ const POSES = {
     "glaucia:B": ["touch", "listen", "cheer", "read"],
     "prince:B": ["sniff-a", "sniff-b", "scan", "wag-a", "wag-b", "sit-up"],
   },
+  // GE-GL-05 is a character sheet: four busts on top (kept for portraits), four bodies below. GE-DOG-05: the front view has
+  // no helmet (kept as an asset, not on stage, like Marte); the helmeted side views act; the busts feed the visor.
+  "earth-orbit": {
+    glaucia: ["bust-smile", "bust-neutral", "bust-think", "bust-wonder", "hip", "idle", "profile", "back"],
+    prince: ["front-bare", "side", "side-b", "face-idle", "face-tongue", "face-joy", "face-idle-b"],
+    // 05B: the blink was drawn on the hand-on-hip pose (see BLINK_BASE); "operate" holds its own hologram.
+    "glaucia:B": ["blink", "operate", "trace", "cheer", "tablet"],
+    // 05B/05C, helmet on (the paw pose keeps its small floating orb).
+    "prince:B": ["front", "stand", "paw", "wag"],
+    "prince:C": ["listen", "leap", "float", "back-sit"],
+  },
 };
+// The pose a blink overlay is registered on (default: idle).
+const BLINK_BASE = { "earth-orbit": "hip" };
 
 // One body-height ratio per extra sheet, before final cutting. Measurements exclude the two-pixel cut padding.
 // C has a touching tail between wag-b and sit-up; this source-space seam separates those two bodies only.
@@ -65,6 +78,12 @@ const SHEET_NORMALIZATION = {
   lumina: {
     "glaucia:B": { pose: "read", reference: "idle" },
     "prince:B": { pose: "sniff-a", reference: "side" },
+  },
+  // 05B: the blinking pose is the hand-on-hip pose; Prince's standing helmeted views match his side view.
+  "earth-orbit": {
+    "glaucia:B": { pose: "blink", reference: "hip" },
+    "prince:B": { pose: "stand", reference: "side" },
+    "prince:C": { pose: "listen", reference: "side" },
   },
 };
 
@@ -188,6 +207,44 @@ function keyWhite(img) {
   }
   for (let i = 0; i < w * h; i++) if (seen[i]) data[i * 4 + 3] = Math.round(255 * Math.min(1, Math.max(0, (255 - white(i)) / 40)));
   return img;
+}
+
+// Flat chroma background (GE-GL-05: solid magenta) → transparent everywhere, including pockets enclosed by an arm (pure
+// key colour never appears in the costume). Within `ring` pixels of the background, colours mixed with the key are
+// un-mixed by their "excess magenta" (red and blue both above green): the coral trims and the skin have none, so they
+// keep their colour while the pink fringe on the hair goes.
+function keyChroma(img, [r0, g0, b0], { hard = 70, ring = 3 } = {}) {
+  const { data, w, h } = img;
+  const distance = (i) => Math.abs(data[i * 4] - r0) + Math.abs(data[i * 4 + 1] - g0) + Math.abs(data[i * 4 + 2] - b0);
+  const full = Math.min(r0 - g0, b0 - g0);
+  const spill = (i) => Math.min(data[i * 4] - data[i * 4 + 1], data[i * 4 + 2] - data[i * 4 + 1]) / full;
+  let front = [];
+  const near = new Uint8Array(w * h);
+  for (let i = 0; i < w * h; i++) if (distance(i) < hard) { data[i * 4 + 3] = 0; near[i] = 1; front.push(i); }
+  for (let step = 0; step < ring; step++) {
+    const next = [];
+    for (const i of front) {
+      const x = i % w; const y = (i / w) | 0;
+      for (const j of [x > 0 ? i - 1 : -1, x < w - 1 ? i + 1 : -1, y > 0 ? i - w : -1, y < h - 1 ? i + w : -1]) {
+        if (j < 0 || near[j]) continue;
+        near[j] = 1; next.push(j);
+        const s = spill(j);
+        if (s <= .08) continue;
+        const a = Math.max(0, 1 - s);
+        if (a < .1) { data[j * 4 + 3] = 0; continue; }
+        [r0, g0, b0].forEach((k, c) => { data[j * 4 + c] = Math.round(Math.min(255, Math.max(0, (data[j * 4 + c] - (1 - a) * k) / a))); });
+        data[j * 4 + 3] = Math.round(255 * a);
+      }
+    }
+    front = next;
+  }
+  return img;
+}
+
+// Sheets without alpha: white backgrounds keep the original key; any other flat colour (magenta) uses the chroma key.
+function keyBackground(img) {
+  const corner = [0, 1, 2].map((c) => img.data[c]);
+  return Math.min(...corner) >= 200 ? keyWhite(img) : keyChroma(img, corner);
 }
 
 // Props were cut from sheets on a black background and keep a dark margin. Flood from the transparent outside
@@ -394,7 +451,7 @@ async function cutActor(scene, name, prefix) {
   const sprites = {};
   for (const { file, tag } of sheets(scene, prefix)) {
     let img = await loadRgba(file);
-    if (!img.alpha) keyWhite(img);
+    if (!img.alpha) keyBackground(img);
     const key = tag ? `${name}:${tag}` : name;
     if (LIGHT_FRINGE[scene]?.includes(key)) peelLightFringe(img);
     const names = POSES[scene]?.[key] ?? [];
@@ -421,8 +478,9 @@ async function cutActor(scene, name, prefix) {
     groups.forEach((group, index) => { sprites[names[index] ?? `pose-${tag}${index + 1}`] = cut(img, label, group); });
   }
   for (const [pose, factor] of Object.entries(POSE_SCALE[scene]?.[name] ?? {})) if (sprites[pose]) sprites[pose] = await rescale(sprites[pose], factor);
-  if (sprites.idle && sprites.blink) {
-    sprites.blink = blinkOverlay(sprites.idle, sprites.blink);
+  const blinkBase = BLINK_BASE[scene] ?? "idle";
+  if (sprites[blinkBase] && sprites.blink) {
+    sprites.blink = blinkOverlay(sprites[blinkBase], sprites.blink);
     if (DEBUG) console.log(`${name}/blink: shift ${JSON.stringify(sprites.blink.shift)}, eyes ${JSON.stringify(sprites.blink.eyes)}`);
   }
   return Object.keys(sprites).length ? sprites : null;
@@ -437,14 +495,14 @@ function actorScale(scene, name, sprites, plateH) {
 
 // Pixelates every pose with the same factor. The blink overlay is rebuilt on the pixel grid: idle with closed eyes is
 // pixelated as a whole and only the changed pixels around the eyes are kept, so it always lines up with idle.
-async function pixelActor(sprites, factor, colors = COLORS.actor) {
+async function pixelActor(sprites, factor, colors = COLORS.actor, base = "idle") {
   const out = {};
   for (const [pose, sprite] of Object.entries(sprites)) if (pose !== "blink") out[pose] = await pixelate(sprite, factor, colors);
-  if (sprites.blink && sprites.idle) {
-    const shut = Buffer.from(sprites.idle.data);
+  if (sprites.blink && sprites[base]) {
+    const shut = Buffer.from(sprites[base].data);
     for (let i = 0; i < shut.length; i += 4) if (sprites.blink.data[i + 3]) sprites.blink.data.copy(shut, i, i, i + 4);
-    const closed = await pixelate({ ...sprites.idle, data: shut }, factor, colors);
-    const open = out.idle; const eyes = sprites.blink.eyes;
+    const closed = await pixelate({ ...sprites[base], data: shut }, factor, colors);
+    const open = out[base]; const eyes = sprites.blink.eyes;
     const box = { x0: Math.floor((eyes.x0 - 4) * factor), x1: Math.ceil((eyes.x1 + 4) * factor), y0: Math.floor((eyes.y0 - 4) * factor), y1: Math.ceil((eyes.y1 + 4) * factor) };
     const data = Buffer.alloc(open.data.length);
     for (let y = Math.max(0, box.y0); y <= Math.min(open.h - 1, box.y1); y++) for (let x = Math.max(0, box.x0); x <= Math.min(open.w - 1, box.x1); x++) {
@@ -481,6 +539,38 @@ async function bench(id, plateFile, sprites, scale, colors) {
   return out;
 }
 
+// The Earth seen through the Atlas's window: a 1-bit mask (¼ of the plate) of the pixels that belong to the planet, so
+// the motion layers (clouds, terminator, city lights) only touch the Earth. The plate itself is never changed.
+// Earth = below the limb curve, above the console, bluish / white / green (the window's struts are neutral greys),
+// connected to a seed in the open ocean.
+// The lit bench under the left of the window is bluish too: the floor of the mask rises there.
+const EARTH_MASK = { "earth-orbit": { scale: 4, limb: (u) => .9507 * u * u - 1.883 * u + 1.1023, bottom: (u) => u < .46 ? .5 : u < .545 ? Math.max(.5, .477 + (u - .46) / .085 * .123) : .6, left: .4, seed: [.72, .36] } };
+async function earthMask(id, plate) {
+  const spec = EARTH_MASK[id];
+  const w = Math.round(plate.w / spec.scale); const h = Math.round(plate.h / spec.scale);
+  const { data } = await sharp(plate.data, { raw: { width: plate.w, height: plate.h, channels: 4 } }).resize(w, h, { kernel: "cubic" }).raw().toBuffer({ resolveWithObject: true });
+  const earthy = (x, y) => {
+    const u = x / w; const v = y / h;
+    if (u < spec.left || v > spec.bottom(u) || v < spec.limb(u) + .004) return false;
+    const i = (y * w + x) * 4; const r = data[i]; const g = data[i + 1]; const b = data[i + 2];
+    const luma = .3 * r + .59 * g + .11 * b;
+    return b - r > 12 || luma > 140 || (g - r > 8 && g > 40);
+  };
+  const mask = new Uint8Array(w * h);
+  const stack = [Math.round(spec.seed[1] * h) * w + Math.round(spec.seed[0] * w)];
+  while (stack.length) {
+    const i = stack.pop(); const x = i % w; const y = (i / w) | 0;
+    if (mask[i] || !earthy(x, y)) continue;
+    mask[i] = 1;
+    if (x > 0) stack.push(i - 1); if (x < w - 1) stack.push(i + 1); if (y > 0) stack.push(i - w); if (y < h - 1) stack.push(i + w);
+  }
+  const out = Buffer.alloc(w * h * 4);
+  for (let i = 0; i < w * h; i++) if (mask[i]) { out[i * 4] = out[i * 4 + 1] = out[i * 4 + 2] = 255; out[i * 4 + 3] = 255; }
+  await lossless({ data: out, w, h }).toFile(`${OUT}/scenes/${id}/earth-mask.webp`);
+  if (DEBUG) console.log(`earth mask: ${mask.reduce((sum, value) => sum + value, 0)} of ${w * h} px`);
+  return { src: `/galaxia/scenes/${id}/earth-mask.webp`, w, h };
+}
+
 // A tiny copy of the plate, stretched smoothly behind the 16:9 frame so the scene's light spills over the page.
 const AMBIENT = new Set(["beyond-orbit"]);
 async function ambient(id, plate) {
@@ -506,6 +596,7 @@ async function scene(id) {
     if (art) await lossless(art).toFile(file); else await sharp(src.plate).webp({ quality: 90, smartSubsample: true, effort: 6 }).toFile(file);
     result.background = { src: `/galaxia/scenes/${id}/background.webp`, w: plate.w, h: plate.h, ...(art && { px: [art.w, art.h] }) };
     if (AMBIENT.has(id)) result.ambient = await ambient(id, src.plate);
+    if (EARTH_MASK[id]) result.earthMask = await earthMask(id, plate);
   }
   result.actors = {};
   for (const [name, prefix] of [["glaucia", "GE-GL"], ["prince", "GE-DOG"]]) {
@@ -514,7 +605,7 @@ async function scene(id) {
     const dir = `${OUT}/actors/${name}/${id}`;
     fs.mkdirSync(dir, { recursive: true });
     const factor = actorScale(id, name, sprites, plateH) / (grid || 1);
-    const art = grid ? await pixelActor(sprites, factor, colors.actor) : null;
+    const art = grid ? await pixelActor(sprites, factor, colors.actor, BLINK_BASE[id] ?? "idle") : null;
     result.actors[name] = {};
     for (const [pose, sprite] of Object.entries(sprites)) {
       const file = `${dir}/${pose}.webp`;

@@ -1,6 +1,6 @@
 import { EGGS, type EggPage } from "./egg-catalog";
 
-const WORLDS = new Set<EggPage>(["home", "about", "projects", "content"]);
+const WORLDS = new Set<EggPage>(["home", "about", "projects", "content", "events"]);
 
 export function discoveredWorldCount(found: readonly string[]): number {
   const ids = new Set(found);

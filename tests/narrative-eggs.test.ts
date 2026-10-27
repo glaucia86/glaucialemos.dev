@@ -33,7 +33,7 @@ describe("segredos narrativos", () => {
     expect(remainingDiscoveries("between-lines", [])).toBe(0);
     expect(EGGS.filter(egg => egg.page === "about")).toHaveLength(7);
     expect(EGGS.filter(egg => egg.page === "content")).toHaveLength(7);
-    expect(EGGS).toHaveLength(31);
+    expect(EGGS).toHaveLength(37);
     expect(matchPhrase("entre linhas")).toBe("between-lines");
     expect(matchPhrase("borrowed star")).toBe("borrowed-star");
     expect(matchPhrase("carta curiosa")).toBe("curious-letter");
