@@ -27,7 +27,9 @@ describe("journey constellation", () => {
   });
   it("lists destinations without secrets of their own as the next coordinates", () => {
     const next = unchartedWorlds();
-    expect(next).toEqual(["notfound"]);
+    expect(next).toEqual([]);
+    const withoutRedTide = EGGS.filter((egg) => egg.page !== "notfound");
+    expect(unchartedWorlds(withoutRedTide)).toEqual(["notfound"]);
     expect(next).toEqual(DESTINATIONS.filter((world) => !EGGS.some((egg) => egg.page === world && egg.id !== "epilogue-signal")));
     expect(next).not.toContain("services");
     expect(next).not.toContain("home");
@@ -40,7 +42,7 @@ describe("journey constellation", () => {
     const trip = journey(["first-page", ...ids, "garden-bloom", "epilogue-signal", "last-light"]);
     expect(trip.worlds).toEqual(["content", "services"]);
     expect(trip.found).toBe(9);
-    expect(trip.total).toBe(43);
+    expect(trip.total).toBe(EGGS.length);
     expect(trip.path.map((star) => star.id)).toEqual(["first-page", ...ids, "epilogue-signal", "last-light"]);
     const bridgeOnly = EGGS.filter((egg) => egg.page !== "services" || egg.id === "epilogue-signal");
     expect(unchartedWorlds(bridgeOnly)).toContain("services");

@@ -7,8 +7,10 @@ Prince (`PrinceSwarm` + `swarm-engine.ts`) no lugar dos botões de polinização
 noite (`FinaleTerrace`), sem créditos, com letterbox/flare/rastros/tremor. Testes novos em `tests/aurelia-fx.test.ts`. Divisão com a outra
 sessão: ela cuida de sons e dos testes existentes (inclusive `tests/aurelia.browser.mjs`, que ainda cita estufa/anéis/polinização antigos).
 404 Maré Rubra montada com o vídeo da Glaucia (detalhes no `AGENTS.md`). O catálogo passou de 43 para 45 e a 404 deixou de ser
-"sinal fraco" no epílogo: os testes existentes que fixam essas contagens (`epilogue`, `beyond-orbit`, `eggs`, `voyage`,
-`journey-constellation`, `narrative-eggs`) ficam vermelhos de propósito e são da outra sessão. `404-demo.html` (Manus) aponta para
+"sinal fraco" no epílogo. **Correção do CI quality (27/10/2026, run `40463148739`):** as 14 falhas eram expectativas antigas nos testes
+`epilogue`, `beyond-orbit`, `eggs`, `voyage`, `journey-constellation` e `narrative-eggs`. Atualizados para os 45 segredos, os dois segredos
+da Maré Rubra e todos os mundos mapeados; mantida a cobertura de mundos sem segredos com um catálogo de teste. Validação local:
+lint, typecheck e 486 testes passando (44 arquivos). Correção sem commit/push, build ou navegador. `404-demo.html` (Manus) aponta para
 arquivos que não vieram; `public/pixel/404-stormtrooper.jpg` só sai com confirmação.
 **Rodada 2 (27/10/2026):** a Glaucia achou a página simples e pediu um efeito muito forte, que leve a fechar serviços, e uma pista clara do
 epílogo no fim. Entraram: órbitas em 3D na rolagem, constelação de provas (só números do site), jardim que floresce (uma flor por serviço),

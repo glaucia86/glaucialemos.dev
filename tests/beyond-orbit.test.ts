@@ -68,7 +68,7 @@ describe("A Última Luz", () => {
     }
     expect(new Set(Array.from({ length: 15 }, (_, index) => starNote(index))).size).toBe(15);
   });
-  it.each(["pt", "en", "es"] as const)("includes Aurélia in the %s credits and leaves only future worlds after them", lang => {
+  it.each(["pt", "en", "es"] as const)("includes Aurélia and Red Tide in the %s credits and announces that every world is charted", lang => {
     const copy = beyondOrbit[lang];
     const html = renderToStaticMarkup(createElement(EpilogueCredits, { copy }));
     const credits = html.slice(0, html.indexOf('class="beyond-orbit__post"'));
@@ -77,10 +77,12 @@ describe("A Última Luz", () => {
     expect(badges.match(/<img /g)).toHaveLength(6);
     expect(badges).toContain(SCENES.aurelia.assets.background.src);
     expect(credits).toContain(copy.worlds.services);
-    expect(credits).toContain(copy.mapped.replace("{total}", "43"));
+    expect(credits).toContain(copy.worlds.notfound);
+    expect(credits).toContain(copy.mapped.replace("{total}", String(EGGS.length)));
     for (const actor of ["glaucia", "prince"] as const) expect(credits).toContain(SCENES["beyond-orbit"].assets.actors[actor]["float-idle"].src);
     expect(post).not.toContain(copy.worlds.services);
-    expect(post).toContain(`<li>${copy.worlds.notfound}</li>`);
+    expect(post).toContain(copy.postNone);
+    expect(post).not.toContain("<li>");
     expect(post).not.toContain(`<li>${copy.worlds.events}</li>`);
   });
   it("keeps the last star on the Veil and clear of both actors", () => {

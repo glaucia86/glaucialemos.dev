@@ -36,7 +36,7 @@ describe("epilogue eligibility", () => {
   });
   it.each(["pt", "en", "es"])("maps the route in %s", lang => {
     expect(pageOf(`/${lang}/alem-da-ultima-orbita`)).toBe("epilogue");
-    expect(EGGS).toHaveLength(43);
+    expect(EGGS).toHaveLength(45);
   });
 });
 
@@ -55,7 +55,7 @@ it.each(["pt", "en", "es"] as const)("renders an accessible static finale and lo
   expect(html).toContain(copy.skip);
   expect(html).toContain(copy.starHint);
   const voyage = renderToStaticMarkup(createElement(EpilogueVoyage, { copy, lang }));
-  for (const text of [copy.creditsTitle, copy.postTitle, copy.letterTitle, copy.atlasTitle, copy.nextStar, copy.worlds.services, copy.faint, ...copy.letter]) expect(voyage).toContain(text.replace("'", "&#x27;"));
+  for (const text of [copy.creditsTitle, copy.postTitle, copy.postNone, copy.letterTitle, copy.atlasTitle, copy.nextStar, copy.worlds.services, copy.worlds.notfound, ...copy.letter]) expect(voyage).toContain(text.replace("'", "&#x27;"));
   expect(voyage).toContain(`aria-label="${copy.replay}"`);
   expect(voyage).not.toContain("beyond-orbit__star\"");
   expect(voyage).not.toContain("data-waiting");
@@ -74,8 +74,14 @@ it.each(["pt", "en", "es"] as const)("renders an accessible static finale and lo
   for (const egg of EGGS.filter((egg) => egg.page === "services" && egg.id !== "epilogue-signal")) {
     expect(gardens).toContain(comlink[lang].eggs[egg.id].hint);
   }
-  expect(voyage.split(copy.faint)).toHaveLength(2);
-  expect(html.match(/data-uncharted="true"/g)).toHaveLength(1);
+  const redTide = voyage.slice(voyage.indexOf('data-world="notfound"'), voyage.indexOf("</ol>"));
+  expect(redTide).toContain('data-charted="true"');
+  expect(redTide).toContain(copy.found.replace("{found}", "0").replace("{total}", "2"));
+  expect(redTide.match(/<i style=/g)).toHaveLength(2);
+  for (const id of ["signal-recovered", "paw-rescue"] as const) expect(redTide).toContain(comlink[lang].eggs[id].hint);
+  expect(redTide).not.toContain("<a ");
+  expect(voyage).not.toContain(copy.faint);
+  expect(html).not.toContain('data-uncharted="true"');
   expect(html).toContain("/galaxia/scenes/beyond-orbit/ambient.webp");
   expect(html.match(/class="beyond-orbit__node"/g)).toHaveLength(EGGS.length);
   expect(comlink[lang].epilogue.signalLocked).toBe(copy.signalLocked);

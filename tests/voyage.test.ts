@@ -23,10 +23,13 @@ describe("a viagem", () => {
     expect(home.found.length + home.missing.length).toBe(home.total);
     expect(worldReport("events", [])).toMatchObject({ total: 6, charted: true });
     expect(worldReport("services", ["epilogue-signal"])).toMatchObject({ total: 6, charted: true, found: [] });
+    expect(worldReport("notfound", ["paw-rescue", "paw-rescue", "epilogue-signal", "unknown"])).toEqual({
+      total: 2, charted: true, found: ["paw-rescue"], missing: ["signal-recovered"],
+    });
     const later = [...EGGS, { id: "orbital-trail" as EggId, page: "events" as EggPage }];
     expect(worldReport("events", [], later)).toMatchObject({ total: 7, charted: true });
   });
-  it("gives Aurélia its own plate, palette and six moons, with only 404 still faint", () => {
+  it("gives Aurélia its own plate, palette and six moons, with every destination charted", () => {
     const ids = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination"];
     const world = VOYAGE_WORLDS.find((world) => world.page === "services")!;
     expect(world).toMatchObject({ path: "/servicos", plate: SCENES.aurelia.assets.background.src, palette: SCENES.aurelia.palette });
@@ -38,8 +41,8 @@ describe("a viagem", () => {
         total: 6, charted: true, found, missing: ids.slice(count),
       });
     }
-    expect(VOYAGE_WORLDS.filter((world) => worldReport(world.page, []).charted)).toHaveLength(6);
-    expect(VOYAGE_WORLDS.filter((world) => !worldReport(world.page, []).charted).map((world) => world.page)).toEqual(["notfound"]);
+    expect(VOYAGE_WORLDS.filter((world) => worldReport(world.page, []).charted)).toHaveLength(7);
+    expect(VOYAGE_WORLDS.filter((world) => !worldReport(world.page, []).charted).map((world) => world.page)).toEqual([]);
   });
   it("blends palettes continuously between worlds", () => {
     expect(mix("#000000", "#ffffff", .5)).toBe("#808080");
