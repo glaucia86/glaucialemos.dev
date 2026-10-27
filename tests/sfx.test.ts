@@ -20,6 +20,17 @@ describe("sons dos mundos", () => {
     }
   });
 
+  it("os novos kinds de ambiência têm fallback synth curto e suave", () => {
+    for (const kind of ["observatory", "red-dunes", "crystal-hum", "orbit-hum", "veil", "snow-bed"] as const) {
+      expect(soundBank[kind].length).toBeGreaterThan(0);
+      expect(soundBank[kind].length).toBeLessThanOrEqual(2);
+      for (const tone of soundBank[kind]) {
+        expect(tone.gain).toBeLessThanOrEqual(.08);
+        expect((tone.delay ?? 0) + tone.duration).toBeLessThanOrEqual(.6);
+      }
+    }
+  });
+
   it("não empilha teclas: respeita o intervalo mínimo de cada som", () => {
     const played = new Map();
     expect(allowed("type", 1000, played)).toBe(true);
@@ -104,6 +115,85 @@ describe('hybrid audio lifecycle', () => {
   });
   afterEach(() => { sfx.setSoundEnabled(false); vi.restoreAllMocks(); vi.clearAllTimers(); vi.useRealTimers(); vi.unstubAllGlobals(); });
 
+  it.each([
+    ['aurelia', 'garden-ambience', .08], ['observatory', 'observatory-ambience', .07],
+    ['niveora', 'wind', .08], ['mars', 'mars-ambience', .07], ['lumina', 'lumina-ambience', .07],
+    ['atlas', 'atlas-ambience', .07], ['epilogue', 'epilogue-ambience', .07],
+  ] as const)('starts %s ambience only after opt-in, including with reduced motion', async (world, file, gain) => {
+    vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: true })));
+    sfx.setSoundWorld(world); await flush();
+    expect(request).not.toHaveBeenCalled();
+    sfx.setSoundEnabled(true); await flush();
+    expect(request.mock.calls.map(call => call[0])).toEqual([`/sfx/${file}.ogg`]);
+    expect(samples()).toHaveLength(1);
+    expect(samples()[0].loop).toBe(true);
+    expect(AudioMock.instance.gains.at(-1)!.gain.linearRampToValueAtTime).toHaveBeenCalledWith(gain, .6);
+    sfx.setSoundWorld(world); await flush();
+    expect(samples()).toHaveLength(1);
+    expect(request).toHaveBeenCalledTimes(1);
+  });
+
+  it('crossfades world voices over .5 seconds and the new loop over .6, clearing old offsets', async () => {
+    sfx.setSoundWorld('observatory'); sfx.setSoundEnabled(true); await flush();
+    const oldLoop = samples()[0], oldEnvelope = AudioMock.instance.gains.at(-1)!.gain;
+    sfx.play('key'); const key = AudioMock.instance.oscillators.at(-1)!;
+    AudioMock.instance.currentTime = 3;
+    sfx.setSoundWorld('atlas'); await flush();
+    expect(oldLoop.stop).toHaveBeenLastCalledWith(3.5);
+    expect(key.stop).toHaveBeenLastCalledWith(3.5);
+    expect(oldEnvelope.linearRampToValueAtTime).toHaveBeenLastCalledWith(0, 3.5);
+    expect(request.mock.calls.map(call => call[0])).toEqual(['/sfx/observatory-ambience.ogg', '/sfx/atlas-ambience.ogg']);
+    expect(samples()[1].start).toHaveBeenCalledWith(3, 0);
+    expect(AudioMock.instance.gains.at(-1)!.gain.linearRampToValueAtTime).toHaveBeenCalledWith(.07, 3.6);
+    sfx.setSoundWorld('observatory'); await flush();
+    expect(samples().at(-1)!.start).toHaveBeenCalledWith(3, 0);
+    expect(request).toHaveBeenCalledTimes(2);
+  });
+
+  it('snow-bed is an optional Nivéora loop alongside the default wind', async () => {
+    sfx.setSoundWorld('niveora'); sfx.setSoundEnabled(true); await flush();
+    expect(request.mock.calls.map(call => call[0])).toEqual(['/sfx/wind.ogg']);
+    sfx.play('snow-bed'); await flush();
+    expect(request.mock.calls.map(call => call[0])).toEqual(['/sfx/wind.ogg', '/sfx/snow-ambience.ogg']);
+    expect(samples()).toHaveLength(2);
+    expect(samples()[1].loop).toBe(true);
+    sfx.stop('snow-bed');
+    expect(samples()[1].stop).toHaveBeenCalled();
+    expect(samples()[0].stop).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['comet', 'observatory', 'comet-whoosh', 2], ['thunder', 'niveora', 'thunder', 4],
+    ['gust-dust', 'mars', 'dust-storm', 1.8], ['dig', 'mars', 'rover', 1],
+    ['holo', 'atlas', 'hologram', 1], ['descent', 'atlas', 'travel', 1.6],
+    ['dive', 'epilogue', 'space-pulse', 2.5], ['chime', 'lumina', 'crystal-chime', 1.8],
+    ['bloom', 'aurelia', 'bloom-chime', 2], ['garden-bloom', 'aurelia', 'bloom-chime', 2],
+    ['relay', 'aurelia', 'beacon', 2], ['beacon-sample', 'aurelia', 'beacon', 2],
+  ] as const)('%s loads only in %s from %s and caps playback at %s seconds', async (kind, world, file, duration) => {
+    vi.spyOn(performance, 'now').mockReturnValue(0);
+    sfx.setSoundEnabled(true); sfx.play(kind); await flush();
+    expect(request).not.toHaveBeenCalled();
+    sfx.setSoundWorld(world); await flush();
+    vi.spyOn(performance, 'now').mockReturnValue(5000);
+    sfx.play(kind); await flush();
+    expect(request).toHaveBeenLastCalledWith(`/sfx/${file}.ogg`);
+    expect(samples()).toHaveLength(1); // Cold one-shots use synth immediately, never a delayed sample.
+    vi.spyOn(performance, 'now').mockReturnValue(10000);
+    sfx.play(kind);
+    expect(samples()).toHaveLength(2);
+    expect(samples()[1].loop).toBe(false);
+    expect(samples()[1].stop).toHaveBeenCalledWith(duration);
+  });
+
+  it('bloom in the epilogue stays synthesized, without fetching bloom-chime', async () => {
+    sfx.setSoundWorld('epilogue'); sfx.setSoundEnabled(true); await flush();
+    const before = AudioMock.instance.oscillators.length;
+    sfx.play('bloom'); await flush();
+    expect(AudioMock.instance.oscillators.length).toBeGreaterThan(before);
+    expect(request.mock.calls.map(call => call[0])).toEqual(['/sfx/epilogue-ambience.ogg']);
+    expect(samples()).toHaveLength(1);
+  });
+
   it('defaults OFF: neither fetch/decode nor loops start before opt-in, even with loop requests', async () => {
     sfx.setSoundWorld('aurelia'); sfx.play('garden'); sfx.play('bloom');
     expect(sfx.isSoundEnabled()).toBe(false);
@@ -125,20 +215,20 @@ describe('hybrid audio lifecycle', () => {
     sfx.play('relay'); expect(beacon.stop).toHaveBeenLastCalledWith(.08);
     sfx.play('thunder'); await flush(); expect(request).toHaveBeenCalledTimes(2);
     sfx.setSoundWorld('epilogue'); sfx.play('bloom'); await flush();
-    expect(request).toHaveBeenCalledTimes(2); // Preserve the finale's original synth bloom.
-    sfx.setSoundWorld('aurelia'); await flush(); expect(request).toHaveBeenCalledTimes(2);
+    expect(request.mock.calls.map(call => call[0])).toEqual(['/sfx/garden-ambience.ogg', '/sfx/beacon.ogg', '/sfx/epilogue-ambience.ogg']);
+    sfx.setSoundWorld('aurelia'); await flush(); expect(request).toHaveBeenCalledTimes(3);
   });
 
   it.each(['decode', 'network', 'http'])('falls back from Opus to MP3 on %s failure', async failure => {
-    sfx.setSoundWorld('observatory'); sfx.setSoundEnabled(true);
+    sfx.setSoundWorld('observatory'); sfx.setSoundEnabled(true); await flush();
     if (failure === 'decode') AudioMock.instance.decodeAudioData.mockRejectedValueOnce(new Error('Opus unavailable'));
     if (failure === 'network') request.mockRejectedValueOnce(new Error('network'));
     if (failure === 'http') request.mockResolvedValueOnce({ ok: false });
     sfx.play('comet'); await flush();
-    expect(request.mock.calls.map(call => call[0])).toEqual(['/sfx/comet-whoosh.ogg', '/sfx/comet-whoosh.mp3']);
+    expect(request.mock.calls.map(call => call[0])).toEqual(['/sfx/observatory-ambience.ogg', '/sfx/comet-whoosh.ogg', '/sfx/comet-whoosh.mp3']);
     vi.spyOn(performance, 'now').mockReturnValue(5000);
-    sfx.play('comet'); expect(samples()).toHaveLength(1);
-    expect(samples()[0].stop).toHaveBeenCalledWith(2);
+    sfx.play('comet'); expect(samples()).toHaveLength(2);
+    expect(samples()[1].stop).toHaveBeenCalledWith(2);
   });
 
   it('keeps synth feedback if both formats fail, without refetching or delayed one-shots', async () => {
@@ -197,8 +287,8 @@ describe('hybrid audio lifecycle', () => {
     expect(samples().at(-1)!.buffer).toBe(samples()[0].buffer);
   });
 
-  it.each(['mute', 'hidden', 'route', 'stop'])('does not start a pending decode after %s', async action => {
-    sfx.setSoundWorld('observatory'); sfx.setSoundEnabled(true);
+  it.each(['mute', 'hidden', 'route', 'stop', 'view exit'])('does not start a pending decode after %s', async action => {
+    sfx.setSoundEnabled(true);
     let resolve!: (value: { duration: number; sample: boolean }) => void;
     AudioMock.instance.decodeAudioData.mockImplementationOnce(() => new Promise(done => { resolve = done; }));
     sfx.setSoundWorld('niveora'); await flush();
@@ -206,8 +296,11 @@ describe('hybrid audio lifecycle', () => {
     if (action === 'hidden') visibility(true);
     if (action === 'route') sfx.setSoundWorld('mars');
     if (action === 'stop') sfx.stop('wind');
-    resolve({ duration: 20, sample: true }); await flush();
-    expect(samples()).toHaveLength(0);
+    if (action === 'view exit') sfx.setSoundWorld('niveora', false);
+    const pendingBuffer = { duration: 20, sample: true };
+    resolve(pendingBuffer); await flush();
+    expect(samples().some(source => source.buffer === pendingBuffer)).toBe(false);
+    expect(samples()).toHaveLength(action === 'route' ? 1 : 0);
   });
 
   it('limits sample gain even with a caller multiplier and caps thunder at four seconds', async () => {

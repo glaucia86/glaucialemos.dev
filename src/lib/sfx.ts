@@ -6,6 +6,7 @@ export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" |
   | "garden-bloom" | "relay" | "seed" | "greenhouse" | "align-aurelia" | "hover-aurelia" | "click-aurelia"
   | "hover-observatory" | "click-observatory" | "hover-niveora" | "click-niveora" | "hover-mars" | "click-mars" | "hover-lumina" | "click-lumina"
   | "hover-epilogue" | "click-epilogue" | "blizzard" | "thunder" | "comet" | "garden" | "beacon-sample"
+  | "observatory" | "red-dunes" | "crystal-hum" | "orbit-hum" | "veil" | "snow-bed"
   | "orbit" | "star" | "visor" | "radar" | "descent" | "citylights" | "hover-atlas" | "click-atlas";
 // "noise" is filtered white noise: `from`/`to` sweep the band-pass centre instead of a pitch.
 type Tone = { wave: OscillatorType | "noise"; from: number; to: number; duration: number; gain: number; delay?: number };
@@ -20,6 +21,12 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   thunder: [{ wave: "sawtooth", from: 48, to: 36, duration: .6, gain: .07 }],
   comet: [{ wave: "noise", from: 200, to: 1800, duration: .35, gain: .035 }],
   garden: [{ wave: "noise", from: 1200, to: 700, duration: .6, gain: .012 }],
+  observatory: [{ wave: "sine", from: 660, to: 330, duration: .6, gain: .03 }],
+  "red-dunes": [{ wave: "noise", from: 700, to: 1700, duration: .55, gain: .022 }],
+  "crystal-hum": [{ wave: "sine", from: 1568, to: 1568, duration: .3, gain: .024 }],
+  "orbit-hum": [{ wave: "sine", from: 220, to: 880, duration: .5, gain: .025 }],
+  veil: [{ wave: "sine", from: 2093, to: 2093, duration: .5, gain: .02 }],
+  "snow-bed": [{ wave: "noise", from: 5200, to: 3000, duration: .25, gain: .012 }],
   "beacon-sample": [{ wave: "sine", from: 880, to: 880, duration: .09, gain: .035 }, { wave: "triangle", from: 1320, to: 1760, duration: .16, gain: .025, delay: .12 }],
   blip: [{ wave: "square", from: 880, to: 1320, duration: .04, gain: .025 }],
   key: [{ wave: "square", from: 220, to: 180, duration: .025, gain: .03 }],
@@ -171,15 +178,31 @@ let suspendTimer: ReturnType<typeof setTimeout> | undefined;
 type PlayOptions = { detune?: number; gain?: number };
 type Sample = { file: string; world: SoundWorld; gain: number; loop?: boolean; duration?: number; fallback: SoundKind };
 export const sampleBank: Partial<Record<SoundKind, Sample>> = {
+  observatory: { file: "observatory-ambience", world: "observatory", gain: .07, loop: true, fallback: "hush" },
+  "red-dunes": { file: "mars-ambience", world: "mars", gain: .07, loop: true, fallback: "gust-dust" },
+  "crystal-hum": { file: "lumina-ambience", world: "lumina", gain: .07, loop: true, fallback: "chime" },
+  "orbit-hum": { file: "atlas-ambience", world: "atlas", gain: .07, loop: true, fallback: "orbit" },
+  veil: { file: "epilogue-ambience", world: "epilogue", gain: .07, loop: true, fallback: "shimmer" },
+  "snow-bed": { file: "snow-ambience", world: "niveora", gain: .06, loop: true, fallback: "snow" },
   wind: { file: "wind", world: "niveora", gain: .08, loop: true, fallback: "wind" },
   blizzard: { file: "blizzard", world: "niveora", gain: .1, loop: true, fallback: "gust" },
   thunder: { file: "thunder", world: "niveora", gain: .12, duration: 4, fallback: "rumble" },
   comet: { file: "comet-whoosh", world: "observatory", gain: .08, duration: 2, fallback: "warp" },
+  "gust-dust": { file: "dust-storm", world: "mars", gain: .1, duration: 1.8, fallback: "gust-dust" },
+  dig: { file: "rover", world: "mars", gain: .08, duration: 1, fallback: "dig" },
+  holo: { file: "hologram", world: "atlas", gain: .08, duration: 1, fallback: "holo" },
+  descent: { file: "travel", world: "atlas", gain: .09, duration: 1.6, fallback: "descent" },
+  dive: { file: "space-pulse", world: "epilogue", gain: .1, duration: 2.5, fallback: "dive" },
+  chime: { file: "crystal-chime", world: "lumina", gain: .09, duration: 1.8, fallback: "chime" },
   garden: { file: "garden-ambience", world: "aurelia", gain: .08, loop: true, fallback: "garden" },
   bloom: { file: "bloom-chime", world: "aurelia", gain: .1, duration: 2, fallback: "bloom" },
   "garden-bloom": { file: "bloom-chime", world: "aurelia", gain: .1, duration: 2, fallback: "garden-bloom" },
   relay: { file: "beacon", world: "aurelia", gain: .08, duration: 2, fallback: "relay" },
   "beacon-sample": { file: "beacon", world: "aurelia", gain: .08, duration: 2, fallback: "relay" },
+};
+const worldAmbience: Record<SoundWorld, SoundKind> = {
+  aurelia: "garden", observatory: "observatory", niveora: "wind", mars: "red-dunes",
+  lumina: "crystal-hum", atlas: "orbit-hum", epilogue: "veil",
 };
 const buffers = new Map<string, AudioBuffer>();
 const loads = new Map<string, Promise<AudioBuffer | null>>();
@@ -326,11 +349,10 @@ export function setSoundWorld(value: string | undefined, visible = true) {
   listen();
   const next = WORLDS.includes(value ?? "") ? value as SoundWorld : undefined;
   if (next !== world) {
-    for (const voice of voices) stopVoice(voice);
+    for (const voice of voices) stopVoice(voice, .5);
     desiredLoops.clear(); offsets.clear(); loopFallbacks.clear();
     world = next;
-    if (world === "aurelia") desiredLoops.set("garden", {});
-    if (world === "niveora") desiredLoops.set("wind", {});
+    if (world) desiredLoops.set(worldAmbience[world], {});
   }
   inView = visible;
   syncAudio();
