@@ -3,6 +3,7 @@
 import earthObservatory from "@/data/galaxia/earth-observatory.json";
 import niveora from "@/data/galaxia/niveora.json";
 import marsLab from "@/data/galaxia/mars-lab.json";
+import aurelia from "@/data/galaxia/aurelia.json";
 import lumina from "@/data/galaxia/lumina.json";
 import earthOrbit from "@/data/galaxia/earth-orbit.json";
 import beyondOrbit from "@/data/galaxia/beyond-orbit.json";
@@ -27,6 +28,11 @@ export type SceneDefinition = {
 };
 
 export const SCENES = {
+  aurelia: {
+    id: "aurelia", assets: aurelia,
+    palette: { base: "#082a30", accent: "#87e4c1", glow: "#ffa69e" },
+    focalPoint: { x: 82, y: 76 }, stages: layout.aurelia.stages, propScale: layout.aurelia.props,
+  },
   "beyond-orbit": {
     id: "beyond-orbit",
     assets: beyondOrbit,

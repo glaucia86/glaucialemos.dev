@@ -23,6 +23,13 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     reset: "Apagar memória", resetConfirm: "Confirmar: apagar {n} segredos?", resetDone: "Memória apagada. O céu voltou a ser um mistério, e a caçada recomeça.",
     pages: { epilogue: beyondOrbit.pt.title, home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", notfound: "Coordenadas perdidas" },
     eggs: {
+      "garden-bloom": {"name": "Jardim em flor", "hint": "A Glaucia cuida de possibilidades na estufa do terraço. Uma delas pode florescer com a sua curiosidade. Transmissão: florescer."},
+      "beacon-relay": {"name": "Sinalizador do Prince", "hint": "O Prince está de olho numa luz do terraço. Talvez ela tenha um recado para quem se aproxima. Transmissão: sinalizador."},
+      "ring-alignment": {"name": "Órbitas em sintonia", "hint": "Os três anéis dos jardins parecem procurar a mesma direção. Transmissão: anéis."},
+      "seed-vault": {"name": "Cofre de sementes", "hint": "Sob os canteiros, um pequeno cofre guarda o começo de outras possibilidades. Transmissão: sementes."},
+      "greenhouse-dusk": {"name": "Estufa ao entardecer", "hint": "Algumas cores dos jardins só aparecem quando o dia quase se despede. Esc traz a luz de volta. Transmissão: estufa."},
+      "pollination": {"name": "Polinização", "hint": "O pólen procura um caminho entre os canteiros. Repare nas marcas que cada um carrega. Transmissão: polinizar."},
+
       "epilogue-signal": { name: beyondOrbit.pt.signalTitle, hint: "Descubra algo em três mundos e siga o sinal em Serviços. Transmissão: além da última órbita." },
       "last-light": { name: "Última luz", hint: "Toque a estrela do epílogo. Transmissão: última luz." },
       "curious-letter": { name: "Carta aos curiosos", hint: "Três descobertas diferentes deixam uma carta no rádio. Transmissão: carta curiosa." },
@@ -71,6 +78,13 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     reset: "Wipe memory", resetConfirm: "Confirm: wipe {n} secrets?", resetDone: "Memory wiped. The sky is a mystery again, and the hunt starts over.",
     pages: { epilogue: beyondOrbit.en.title, home: "Home", about: "About", projects: "Projects", content: "Content", events: "Events", services: "Services", notfound: "Lost coordinates" },
     eggs: {
+      "garden-bloom": {"name": "Garden in bloom", "hint": "Glaucia tends possibilities in the terrace greenhouse. Your curiosity might help one bloom. Transmission: garden bloom."},
+      "beacon-relay": {"name": "Prince’s beacon", "hint": "Prince is watching a light on the terrace. Perhaps it has a message for whoever comes closer. Transmission: beacon."},
+      "ring-alignment": {"name": "Orbits in harmony", "hint": "The three garden rings seem to be looking for the same direction. Transmission: rings."},
+      "seed-vault": {"name": "Seed vault", "hint": "Beneath the garden beds, a small vault holds the beginnings of other possibilities. Transmission: seeds."},
+      "greenhouse-dusk": {"name": "Greenhouse at dusk", "hint": "Some garden colours only appear when the day is almost gone. Esc brings daylight back. Transmission: greenhouse."},
+      "pollination": {"name": "Pollination", "hint": "Pollen is looking for a path between the garden beds. Notice the marks each one carries. Transmission: pollinate."},
+
       "epilogue-signal": { name: "Unknown transmission", hint: "Make a discovery in three worlds and follow the signal in Services. Transmission: beyond the last orbit." },
       "last-light": { name: "Last light", hint: "Touch the epilogue star. Transmission: last light." },
       "curious-letter": { name: "Letter to the curious", hint: "Three different discoveries leave a letter in the radio. Transmission: curious letter." },
@@ -119,6 +133,13 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
     reset: "Borrar memoria", resetConfirm: "¿Confirmas? Borrar {n} secretos", resetDone: "Memoria borrada. El cielo vuelve a ser un misterio y la búsqueda empieza de nuevo.",
     pages: { epilogue: beyondOrbit.es.title, home: "Inicio", about: "Sobre mí", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Servicios", notfound: "Coordenadas perdidas" },
     eggs: {
+      "garden-bloom": {"name": "Jardín en flor", "hint": "Glaucia cuida posibilidades en el invernadero de la terraza. Tu curiosidad puede hacer florecer una de ellas. Transmisión: florecer."},
+      "beacon-relay": {"name": "Baliza de Prince", "hint": "Prince observa una luz en la terraza. Quizá tenga un mensaje para quien se acerque. Transmisión: baliza."},
+      "ring-alignment": {"name": "Órbitas en sintonía", "hint": "Los tres anillos de los jardines parecen buscar la misma dirección. Transmisión: anillos."},
+      "seed-vault": {"name": "Bóveda de semillas", "hint": "Bajo los jardines, una pequeña bóveda guarda el comienzo de otras posibilidades. Transmisión: semillas."},
+      "greenhouse-dusk": {"name": "Invernadero al atardecer", "hint": "Algunos colores del jardín solo aparecen cuando el día casi se despide. Esc devuelve la luz. Transmisión: invernadero."},
+      "pollination": {"name": "Polinización", "hint": "El polen busca un camino entre los jardines. Fíjate en las marcas que lleva cada uno. Transmisión: polinizar jardín."},
+
       "epilogue-signal": { name: beyondOrbit.es.signalTitle, hint: "Haz un descubrimiento en tres mundos y sigue la señal en Servicios. Transmisión: más allá de la última órbita." },
       "last-light": { name: "Última luz", hint: "Toca la estrella del epílogo. Transmisión: última luz." },
       "curious-letter": { name: "Carta para los curiosos", hint: "Tres descubrimientos diferentes dejan una carta en la radio. Transmisión: carta curiosa." },

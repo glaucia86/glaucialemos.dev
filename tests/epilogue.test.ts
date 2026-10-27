@@ -19,10 +19,17 @@ describe("epilogue eligibility", () => {
     expect(epilogueUnlocked(found)).toBe(count >= 3);
   });
   it("ignores duplicates, unknown ids and discoveries outside the four worlds", () => {
-    const found = ["focus-lens", "focus-lens", "wish", "dog-signal", "star-map", "curious-letter", "last-light", "epilogue-signal", "invalid"];
+    const found = ["focus-lens", "focus-lens", "wish", "dog-signal", "star-map", "curious-letter", "last-light", "epilogue-signal", "garden-bloom", "beacon-relay", "invalid"];
     expect(discoveredWorldCount(found)).toBe(1);
     expect(remainingDiscoveries("epilogue-signal", found)).toBe(2);
     expect(remainingDiscoveries("curious-letter", ["focus-lens", "wish", "dog-signal"])).toBe(0);
+  });
+  it.each([0, 1, 2, 3, 4])("keeps the gate at three original worlds even with every Aurélia secret (%i worlds)", count => {
+    const gardens = EGGS.filter((egg) => egg.page === "services" && egg.id !== "epilogue-signal").map((egg) => egg.id);
+    const found = [...worlds.slice(0, count), ...gardens];
+    expect(discoveredWorldCount(found)).toBe(count);
+    expect(epilogueRemaining(found)).toBe(Math.max(0, 3 - count));
+    expect(epilogueUnlocked(found)).toBe(count >= 3);
   });
   it.each(["Além da última órbita!", "Beyond the Last Orbit", "Más allá de la última órbita"])("recognizes %s", phrase => {
     expect(matchPhrase(phrase)).toBe("epilogue-signal");
@@ -55,6 +62,20 @@ it.each(["pt", "en", "es"] as const)("renders an accessible static finale and lo
   expect(voyage).toContain(`href="/${lang}/sobre"`);
   expect(voyage).not.toContain(`>${copy.back}<`);
   expect(voyage.match(/class="beyond-orbit__world-stop"/g)).toHaveLength(7);
+  const gardens = voyage.slice(voyage.indexOf('data-world="services"'), voyage.indexOf('data-world="notfound"'));
+  expect(gardens).toContain('data-charted="true"');
+  expect(gardens).toContain(copy.worlds.services);
+  expect(gardens).toContain('/galaxia/scenes/aurelia/background.webp');
+  expect(gardens).toContain(`href="/${lang}/servicos"`);
+  expect(gardens).toContain(copy.found.replace("{found}", "0").replace("{total}", "6"));
+  expect(gardens.match(/<i style=/g)).toHaveLength(6);
+  expect(gardens).not.toContain(copy.faint);
+  expect(gardens).not.toContain(copy.signalTitle);
+  for (const egg of EGGS.filter((egg) => egg.page === "services" && egg.id !== "epilogue-signal")) {
+    expect(gardens).toContain(comlink[lang].eggs[egg.id].hint);
+  }
+  expect(voyage.split(copy.faint)).toHaveLength(3);
+  expect(html.match(/data-uncharted="true"/g)).toHaveLength(2);
   expect(html).toContain("/galaxia/scenes/beyond-orbit/ambient.webp");
   expect(html.match(/class="beyond-orbit__node"/g)).toHaveLength(EGGS.length);
   expect(comlink[lang].epilogue.signalLocked).toBe(copy.signalLocked);

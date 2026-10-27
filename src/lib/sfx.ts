@@ -1,20 +1,26 @@
-// 8-bit effects synthesized with Web Audio: no files, off by default, opt-in only.
+// Hybrid Web Audio: real world samples and synthesized UI, off by default, opt-in only.
 export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" | "error" | "success" | "levitate" | "deflect" | "rumble" | "splash" | "wind" | "ice" | "holo" | "r2" | "jawa" | "pod" | "cantina" | "sunset" | "zap" | "twinkle" | "lens" | "woof" | "beacon" | "ignite" | "launch" | "hangar" | "switch" | "hush" | "catch" | "wish" | "warp" | "pawstep" | "capsule" | "aurora" | "gust" | "scan" | "dust" | "sprout" | "bug"
   | "type" | "return" | "disk-in" | "disk-out" | "crt-on" | "dig" | "thread" | "letter" | "snow" | "gust-dust" | "scan-sweep" | "static" | "build" | "brush"
   | "chime" | "page" | "prism" | "scanner" | "echo" | "link" | "dusk" | "refract" | "facet"
   | "implode" | "nova" | "shimmer" | "bloom" | "star-ping" | "slam" | "credits-chord" | "transmission" | "dive"
+  | "garden-bloom" | "relay" | "seed" | "greenhouse" | "align-aurelia" | "hover-aurelia" | "click-aurelia"
   | "hover-observatory" | "click-observatory" | "hover-niveora" | "click-niveora" | "hover-mars" | "click-mars" | "hover-lumina" | "click-lumina"
-  | "hover-epilogue" | "click-epilogue"
+  | "hover-epilogue" | "click-epilogue" | "blizzard" | "thunder" | "comet" | "garden" | "beacon-sample"
   | "orbit" | "star" | "visor" | "radar" | "descent" | "citylights" | "hover-atlas" | "click-atlas";
 // "noise" is filtered white noise: `from`/`to` sweep the band-pass centre instead of a pitch.
 type Tone = { wave: OscillatorType | "noise"; from: number; to: number; duration: number; gain: number; delay?: number };
-export type SoundWorld = "observatory" | "niveora" | "mars" | "lumina" | "epilogue" | "atlas";
-const WORLDS: readonly string[] = ["observatory", "niveora", "mars", "lumina", "epilogue", "atlas"] satisfies SoundWorld[];
+export type SoundWorld = "aurelia" | "observatory" | "niveora" | "mars" | "lumina" | "epilogue" | "atlas";
+const WORLDS: readonly string[] = ["aurelia", "observatory", "niveora", "mars", "lumina", "epilogue", "atlas"] satisfies SoundWorld[];
 
 export const SOUND_KEY = "sfx-enabled";
 export const SOUND_EVENT = "sfx-change";
 
 export const soundBank: Record<SoundKind, Tone[]> = {
+  blizzard: [{ wave: "noise", from: 180, to: 420, duration: .55, gain: .02 }],
+  thunder: [{ wave: "sawtooth", from: 48, to: 36, duration: .6, gain: .07 }],
+  comet: [{ wave: "noise", from: 200, to: 1800, duration: .35, gain: .035 }],
+  garden: [{ wave: "noise", from: 1200, to: 700, duration: .6, gain: .012 }],
+  "beacon-sample": [{ wave: "sine", from: 880, to: 880, duration: .09, gain: .035 }, { wave: "triangle", from: 1320, to: 1760, duration: .16, gain: .025, delay: .12 }],
   blip: [{ wave: "square", from: 880, to: 1320, duration: .04, gain: .025 }],
   key: [{ wave: "square", from: 220, to: 180, duration: .025, gain: .03 }],
   boot: [{ wave: "square", from: 110, to: 440, duration: .35, gain: .04 }],
@@ -111,6 +117,13 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   "click-niveora": [{ wave: "noise", from: 4000, to: 2500, duration: .04, gain: .03 }, { wave: "square", from: 1800, to: 1200, duration: .03, gain: .012 }],
   "hover-mars": [{ wave: "square", from: 1200, to: 1000, duration: .025, gain: .014 }, { wave: "noise", from: 3000, to: 3000, duration: .02, gain: .01 }],
   "click-mars": [{ wave: "noise", from: 1500, to: 900, duration: .04, gain: .035 }, { wave: "square", from: 300, to: 200, duration: .05, gain: .02 }],
+  "garden-bloom": [{ wave: "sine", from: 523, to: 784, duration: .28, gain: .045 }, { wave: "triangle", from: 1047, to: 1319, duration: .2, gain: .025, delay: .08 }],
+  relay: [{ wave: "sine", from: 880, to: 880, duration: .09, gain: .035 }, { wave: "triangle", from: 1320, to: 1760, duration: .16, gain: .025, delay: .12 }],
+  seed: [{ wave: "triangle", from: 392, to: 587, duration: .18, gain: .04 }],
+  greenhouse: [{ wave: "sine", from: 440, to: 220, duration: .38, gain: .035 }],
+  "align-aurelia": [{ wave: "sine", from: 659, to: 988, duration: .24, gain: .04 }, { wave: "sine", from: 1319, to: 1319, duration: .2, gain: .022, delay: .1 }],
+  "hover-aurelia": [{ wave: "sine", from: 1760, to: 2093, duration: .045, gain: .015 }],
+  "click-aurelia": [{ wave: "triangle", from: 1047, to: 1568, duration: .08, gain: .025 }],
   "hover-lumina": [{ wave: "sine", from: 3136, to: 3322, duration: .05, gain: .016 }, { wave: "triangle", from: 4699, to: 4699, duration: .03, gain: .007, delay: .02 }],
   "click-lumina": [{ wave: "triangle", from: 2637, to: 2637, duration: .05, gain: .022 }, { wave: "noise", from: 6000, to: 4000, duration: .03, gain: .015 }],
   "hover-epilogue": [{ wave: "sine", from: 1760, to: 1976, duration: .06, gain: .016 }, { wave: "triangle", from: 3520, to: 3520, duration: .03, gain: .006, delay: .02 }],
@@ -122,8 +135,8 @@ export const soundBank: Record<SoundKind, Tone[]> = {
 // Minimum gap between two plays of the same sound, so fast typing or wiping never piles up (milliseconds).
 export const MIN_GAP: Partial<Record<SoundKind, number>> = {
   type: 28, build: 40, brush: 70, snow: 400, "gust-dust": 1500, bug: 300, pawstep: 120,
-  "hover-observatory": 40, "hover-niveora": 40, "hover-mars": 40, "hover-lumina": 40, "hover-epilogue": 40, "hover-atlas": 40, star: 60, radar: 200, page: 90, link: 60, blip: 40,
-  "star-ping": 45,
+  "hover-aurelia": 40, "hover-observatory": 40, "hover-niveora": 40, "hover-mars": 40, "hover-lumina": 40, "hover-epilogue": 40, "hover-atlas": 40, star: 60, radar: 200, page: 90, link: 60, blip: 40,
+  "star-ping": 45, comet: 1500, thunder: 4000,
 };
 const lastPlayed = new Map<SoundKind, number>();
 export function allowed(kind: SoundKind, now: number, played = lastPlayed) {
@@ -150,6 +163,189 @@ export function writeSoundPreference(storage: Pick<Storage, "setItem"> | undefin
 
 let context: AudioContext | null = null;
 let enabled: boolean | null = null;
+let master: GainNode | null = null;
+let world: SoundWorld | undefined;
+let inView = true;
+let listening = false;
+let suspendTimer: ReturnType<typeof setTimeout> | undefined;
+type PlayOptions = { detune?: number; gain?: number };
+type Sample = { file: string; world: SoundWorld; gain: number; loop?: boolean; duration?: number; fallback: SoundKind };
+export const sampleBank: Partial<Record<SoundKind, Sample>> = {
+  wind: { file: "wind", world: "niveora", gain: .08, loop: true, fallback: "wind" },
+  blizzard: { file: "blizzard", world: "niveora", gain: .1, loop: true, fallback: "gust" },
+  thunder: { file: "thunder", world: "niveora", gain: .12, duration: 4, fallback: "rumble" },
+  comet: { file: "comet-whoosh", world: "observatory", gain: .08, duration: 2, fallback: "warp" },
+  garden: { file: "garden-ambience", world: "aurelia", gain: .08, loop: true, fallback: "garden" },
+  bloom: { file: "bloom-chime", world: "aurelia", gain: .1, duration: 2, fallback: "bloom" },
+  "garden-bloom": { file: "bloom-chime", world: "aurelia", gain: .1, duration: 2, fallback: "garden-bloom" },
+  relay: { file: "beacon", world: "aurelia", gain: .08, duration: 2, fallback: "relay" },
+  "beacon-sample": { file: "beacon", world: "aurelia", gain: .08, duration: 2, fallback: "relay" },
+};
+const buffers = new Map<string, AudioBuffer>();
+const loads = new Map<string, Promise<AudioBuffer | null>>();
+const desiredLoops = new Map<SoundKind, PlayOptions>();
+const offsets = new Map<SoundKind, number>();
+const loopFallbacks = new Set<SoundKind>();
+type Voice = { source: AudioScheduledSourceNode; gain: GainNode; kind: SoundKind; started: number; offset: number; duration?: number };
+const voices = new Set<Voice>();
+const loops = new Map<SoundKind, Voice>();
+const audible = () => typeof window !== "undefined" && isSoundEnabled() && !document.hidden;
+
+function audioContext() {
+  if (!context) {
+    context = new AudioContext();
+    master = context.createGain();
+    master.gain.value = 0;
+    master.connect(context.destination);
+  }
+  return context;
+}
+
+function listen() {
+  if (listening || typeof document === "undefined") return;
+  listening = true;
+  document.addEventListener("visibilitychange", syncAudio);
+}
+
+// Failed requests are cached too: a missing asset must not cause a fetch on every hover/replay.
+function loadSample(sample: Sample): Promise<AudioBuffer | null> {
+  const cached = loads.get(sample.file);
+  if (cached) return cached;
+  const audio = audioContext();
+  const request = (async () => {
+    for (const extension of ["ogg", "mp3"]) {
+      try {
+        const response = await fetch(`/sfx/${sample.file}.${extension}`);
+        if (!response.ok) continue;
+        const buffer = await audio.decodeAudioData(await response.arrayBuffer());
+        buffers.set(sample.file, buffer);
+        return buffer;
+      } catch { /* Opus/network/decode failure: try MP3, then retain the synth. */ }
+    }
+    return null;
+  })();
+  loads.set(sample.file, request);
+  return request;
+}
+
+function track(source: AudioScheduledSourceNode, gain: GainNode, kind: SoundKind, extra: Partial<Voice> = {}) {
+  const voice: Voice = { source, gain, kind, started: context!.currentTime, offset: 0, ...extra };
+  voices.add(voice);
+  source.onended = () => { voices.delete(voice); source.disconnect(); gain.disconnect(); };
+  return voice;
+}
+
+// cancelAndHoldAtTime is not available in every Web Audio implementation.
+function hold(param: AudioParam, now: number) {
+  if (typeof param.cancelAndHoldAtTime === "function") param.cancelAndHoldAtTime(now);
+  else {
+    const current = param.value;
+    param.cancelScheduledValues(now);
+    param.setValueAtTime(current, now);
+  }
+}
+
+function stopVoice(voice: Voice, fade = .08) {
+  const now = context!.currentTime;
+  hold(voice.gain.gain, now);
+  voice.gain.gain.linearRampToValueAtTime(0, now + fade);
+  voice.source.stop(now + fade);
+  voices.delete(voice);
+  if (loops.get(voice.kind) === voice) {
+    offsets.set(voice.kind, (voice.offset + now - voice.started) % voice.duration!);
+    loops.delete(voice.kind);
+  }
+}
+
+function startSample(kind: SoundKind, sample: Sample, buffer: AudioBuffer, options: PlayOptions) {
+  if (!audible() || !inView || sample.world !== world || (sample.loop && loops.has(kind))) return;
+  // One instance per file prevents overlapping aliases (bloom/garden-bloom, relay/beacon-sample).
+  for (const voice of voices) if (sampleBank[voice.kind]?.file === sample.file) stopVoice(voice);
+  const audio = audioContext(), now = audio.currentTime;
+  const source = audio.createBufferSource(), gain = audio.createGain();
+  source.buffer = buffer;
+  source.loop = !!sample.loop;
+  // Keep loop playback at its native speed so offsets stay exact across pause/resume.
+  if (!sample.loop) source.detune.value = options.detune ?? 0;
+  const level = sample.gain * Math.max(0, Math.min(1, options.gain ?? 1));
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(level, now + (sample.loop ? .6 : .025));
+  source.connect(gain).connect(master!);
+  const offset = sample.loop ? offsets.get(kind) ?? 0 : 0;
+  const voice = track(source, gain, kind, { offset, duration: buffer.duration });
+  source.start(now, offset);
+  if (sample.loop) loops.set(kind, voice);
+  else {
+    const duration = Math.min(sample.duration!, buffer.duration / (2 ** ((options.detune ?? 0) / 1200)));
+    gain.gain.setValueAtTime(level, now + Math.max(.025, duration - .15));
+    gain.gain.linearRampToValueAtTime(0, now + duration);
+    source.stop(now + duration);
+  }
+}
+
+function syncLoops() {
+  for (const [kind, voice] of loops) if (!audible() || !inView || !desiredLoops.has(kind)) stopVoice(voice, audible() ? .12 : 0);
+  if (!audible() || !inView) return;
+  for (const [kind, options] of desiredLoops) {
+    const sample = sampleBank[kind]!;
+    if (sample.world !== world || loops.has(kind)) continue;
+    const buffer = buffers.get(sample.file);
+    if (buffer) startSample(kind, sample, buffer, options);
+    else {
+      if (!loopFallbacks.has(kind)) { loopFallbacks.add(kind); synth(sample.fallback, options); }
+      void loadSample(sample).then(loaded => {
+        if (loaded && desiredLoops.has(kind)) startSample(kind, sample, loaded, desiredLoops.get(kind)!);
+      });
+    }
+  }
+}
+
+function syncAudio() {
+  clearTimeout(suspendTimer);
+  if (!audible()) {
+    if (context && master) {
+      const now = context.currentTime;
+      hold(master.gain, now);
+      master.gain.linearRampToValueAtTime(0, now + (document.hidden ? 0 : .04));
+      for (const voice of voices) stopVoice(voice, document.hidden ? 0 : .04);
+      // Hidden tabs suspend immediately; mute gets a short click-free fade.
+      if (document.hidden) void context.suspend().catch(() => {});
+      else suspendTimer = setTimeout(() => { if (!audible()) void context?.suspend().catch(() => {}); }, 50);
+    }
+    return;
+  }
+  const audio = audioContext();
+  if (audio.state === "suspended") void audio.resume().catch(() => {});
+  hold(master!.gain, audio.currentTime);
+  master!.gain.linearRampToValueAtTime(1, audio.currentTime + .08);
+  syncLoops();
+}
+
+/** FxLayer owns the current page and its intersection, independently of motion preferences. */
+export function setSoundWorld(value: string | undefined, visible = true) {
+  listen();
+  const next = WORLDS.includes(value ?? "") ? value as SoundWorld : undefined;
+  if (next !== world) {
+    for (const voice of voices) stopVoice(voice);
+    desiredLoops.clear(); offsets.clear(); loopFallbacks.clear();
+    world = next;
+    if (world === "aurelia") desiredLoops.set("garden", {});
+    if (world === "niveora") desiredLoops.set("wind", {});
+  }
+  inView = visible;
+  syncAudio();
+}
+
+/** Stop a requested loop (for example when a whiteout ends); mute/visibility retain its intent. */
+export function stop(kind: SoundKind) {
+  desiredLoops.delete(kind);
+  const voice = loops.get(kind);
+  if (voice) stopVoice(voice);
+  offsets.delete(kind);
+  loopFallbacks.delete(kind);
+  if (kind === "blizzard" && world === "niveora") desiredLoops.set("wind", {});
+  syncLoops();
+}
 
 export function isSoundEnabled() {
   if (enabled === null) {
@@ -162,7 +358,9 @@ export function isSoundEnabled() {
 export function setSoundEnabled(value: boolean) {
   enabled = value;
   try { writeSoundPreference(window.localStorage, value); } catch { /* Keep the in-memory preference when storage access is blocked. */ }
-  window.dispatchEvent(new CustomEvent(SOUND_EVENT, { detail: value }));
+  listen();
+  syncAudio();
+  if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent(SOUND_EVENT, { detail: value }));
   if (value) play("granted");
 }
 
@@ -176,18 +374,36 @@ const noiseBuffer = (audio: AudioContext) => {
 };
 
 // `detune` (cents) and `gain` (multiplier) vary a sound per play, so repeated keys never sound robotic.
-export function play(kind: SoundKind, { detune = 0, gain: level = 1 }: { detune?: number; gain?: number } = {}) {
-  if (!isSoundEnabled() || typeof window === "undefined" || document.hidden) return;
-  if (!allowed(kind, performance.now())) return;
-  context ??= new AudioContext();
-  if (context.state === "suspended") void context.resume();
+export function play(kind: SoundKind, options: PlayOptions = {}) {
+  listen();
+  const sample = sampleBank[kind];
+  if (sample?.loop && sample.world === world) {
+    desiredLoops.set(kind, options);
+    if (kind === "blizzard") desiredLoops.delete("wind");
+    syncAudio();
+    return;
+  }
+  if (!audible() || !allowed(kind, performance.now())) return;
+  syncAudio();
+  if (sample && sample.world === world) {
+    if (!inView) return;
+    const buffer = buffers.get(sample.file);
+    if (buffer) { startSample(kind, sample, buffer, options); return; }
+    // Immediate synth feedback on a cold cache; never replay a stale impact after an async load.
+    void loadSample(sample);
+    synth(sample.fallback, options);
+  } else synth(kind, options);
+}
+
+function synth(kind: SoundKind, { detune = 0, gain: level = 1 }: PlayOptions) {
+  if (!context || !master) return;
   const now = context.currentTime;
   for (const tone of soundBank[kind]) {
     const start = now + (tone.delay ?? 0);
     const gain = context.createGain();
     gain.gain.setValueAtTime(tone.gain * level, start);
     gain.gain.exponentialRampToValueAtTime(.0001, start + tone.duration);
-    gain.connect(context.destination);
+    gain.connect(master);
     if (tone.wave === "noise") {
       const source = context.createBufferSource();
       const filter = context.createBiquadFilter();
@@ -197,6 +413,8 @@ export function play(kind: SoundKind, { detune = 0, gain: level = 1 }: { detune?
       filter.frequency.setValueAtTime(tone.from, start);
       filter.frequency.exponentialRampToValueAtTime(tone.to, start + tone.duration);
       source.connect(filter).connect(gain);
+      track(source, gain, kind);
+      source.onended = () => { source.disconnect(); filter.disconnect(); gain.disconnect(); for (const voice of voices) if (voice.source === source) voices.delete(voice); };
       source.start(start, Math.random() * .5);
       source.stop(start + tone.duration + .02);
       continue;
@@ -207,6 +425,7 @@ export function play(kind: SoundKind, { detune = 0, gain: level = 1 }: { detune?
     oscillator.frequency.setValueAtTime(tone.from, start);
     oscillator.frequency.exponentialRampToValueAtTime(tone.to, start + tone.duration);
     oscillator.connect(gain);
+    track(oscillator, gain, kind);
     oscillator.start(start);
     oscillator.stop(start + tone.duration + .02);
   }

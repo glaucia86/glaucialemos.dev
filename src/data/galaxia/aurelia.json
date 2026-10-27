@@ -1,0 +1,230 @@
+{
+  "scene": "aurelia",
+  "background": {
+    "src": "/galaxia/scenes/aurelia/background.webp",
+    "w": 1672,
+    "h": 941
+  },
+  "actors": {
+    "glaucia": {
+      "face-smile": {
+        "src": "/galaxia/actors/glaucia/aurelia/face-smile.webp",
+        "w": 304,
+        "h": 289,
+        "feetX": 151,
+        "px": [
+          222,
+          211
+        ]
+      },
+      "face-neutral": {
+        "src": "/galaxia/actors/glaucia/aurelia/face-neutral.webp",
+        "w": 301,
+        "h": 292,
+        "feetX": 149,
+        "px": [
+          220,
+          213
+        ]
+      },
+      "face-thoughtful": {
+        "src": "/galaxia/actors/glaucia/aurelia/face-thoughtful.webp",
+        "w": 309,
+        "h": 289,
+        "feetX": 155,
+        "px": [
+          226,
+          211
+        ]
+      },
+      "face-look": {
+        "src": "/galaxia/actors/glaucia/aurelia/face-look.webp",
+        "w": 300,
+        "h": 290,
+        "feetX": 148,
+        "px": [
+          219,
+          212
+        ]
+      },
+      "idle": {
+        "src": "/galaxia/actors/glaucia/aurelia/idle.webp",
+        "w": 272,
+        "h": 606,
+        "feetX": 157,
+        "px": [
+          199,
+          442
+        ]
+      },
+      "relaxed": {
+        "src": "/galaxia/actors/glaucia/aurelia/relaxed.webp",
+        "w": 234,
+        "h": 603,
+        "feetX": 117,
+        "px": [
+          171,
+          440
+        ]
+      },
+      "side": {
+        "src": "/galaxia/actors/glaucia/aurelia/side.webp",
+        "w": 159,
+        "h": 604,
+        "feetX": 59,
+        "px": [
+          116,
+          441
+        ]
+      },
+      "back": {
+        "src": "/galaxia/actors/glaucia/aurelia/back.webp",
+        "w": 232,
+        "h": 604,
+        "feetX": 109,
+        "px": [
+          169,
+          441
+        ]
+      },
+      "blink": {
+        "src": "/galaxia/actors/glaucia/aurelia/blink.webp",
+        "w": 272,
+        "h": 606,
+        "feetX": 157,
+        "px": [
+          199,
+          442
+        ]
+      }
+    },
+    "prince": {
+      "front": {
+        "src": "/galaxia/actors/prince/aurelia/front.webp",
+        "w": 343,
+        "h": 467,
+        "feetX": 168,
+        "px": [
+          98,
+          133
+        ]
+      },
+      "stand": {
+        "src": "/galaxia/actors/prince/aurelia/stand.webp",
+        "w": 535,
+        "h": 461,
+        "feetX": 293,
+        "px": [
+          153,
+          132
+        ]
+      },
+      "paw": {
+        "src": "/galaxia/actors/prince/aurelia/paw.webp",
+        "w": 509,
+        "h": 454,
+        "feetX": 275,
+        "px": [
+          145,
+          130
+        ]
+      },
+      "face-idle": {
+        "src": "/galaxia/actors/prince/aurelia/face-idle.webp",
+        "w": 380,
+        "h": 369,
+        "feetX": 206,
+        "px": [
+          109,
+          105
+        ]
+      },
+      "face-happy": {
+        "src": "/galaxia/actors/prince/aurelia/face-happy.webp",
+        "w": 373,
+        "h": 370,
+        "feetX": 188,
+        "px": [
+          107,
+          106
+        ]
+      },
+      "face-joy": {
+        "src": "/galaxia/actors/prince/aurelia/face-joy.webp",
+        "w": 374,
+        "h": 372,
+        "feetX": 180,
+        "px": [
+          107,
+          106
+        ]
+      },
+      "face-curious": {
+        "src": "/galaxia/actors/prince/aurelia/face-curious.webp",
+        "w": 385,
+        "h": 370,
+        "feetX": 186,
+        "px": [
+          110,
+          106
+        ]
+      }
+    }
+  },
+  "props": {
+    "communication-beacon-active": {
+      "src": "/galaxia/props/aurelia/communication-beacon-active.webp",
+      "w": 80,
+      "h": 155,
+      "px": [
+        24,
+        47
+      ]
+    },
+    "communication-beacon-idle": {
+      "src": "/galaxia/props/aurelia/communication-beacon-idle.webp",
+      "w": 91,
+      "h": 161,
+      "px": [
+        27,
+        48
+      ]
+    },
+    "garden-dome-blooming": {
+      "src": "/galaxia/props/aurelia/garden-dome-blooming.webp",
+      "w": 181,
+      "h": 193,
+      "px": [
+        81,
+        87
+      ]
+    },
+    "garden-dome-idle": {
+      "src": "/galaxia/props/aurelia/garden-dome-idle.webp",
+      "w": 175,
+      "h": 147,
+      "px": [
+        79,
+        66
+      ]
+    },
+    "hanging-botanical-waterfall": {
+      "src": "/galaxia/props/aurelia/hanging-botanical-waterfall.webp",
+      "w": 108,
+      "h": 282,
+      "px": [
+        43,
+        113
+      ]
+    },
+    "suspended-garden-waterfall": {
+      "src": "/galaxia/props/aurelia/suspended-garden-waterfall.webp",
+      "w": 166,
+      "h": 184,
+      "px": [
+        66,
+        74
+      ]
+    }
+  }
+}

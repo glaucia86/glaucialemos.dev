@@ -1,6 +1,7 @@
 export const BOOT_KEY = "galaxia-boot";
 export const NIVEORA_BOOT_KEY = "niveora-boot";
 export const MARTE_BOOT_KEY = "marte-boot";
+export const AURELIA_BOOT_KEY = "aurelia-boot";
 export const LUMINA_BOOT_KEY = "lumina-boot";
 export const ATLAS_BOOT_KEY = "atlas-boot";
 export const BOOT_DONE_EVENT = "holonet:boot-done";

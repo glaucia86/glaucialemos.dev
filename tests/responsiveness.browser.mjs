@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { mkdir, writeFile } from "node:fs/promises";
 import { chromium, webkit, devices } from "playwright";
+import { mockContact } from "./contact-browser-mocks.mjs";
 
 const base = process.env.BASE_URL ?? "http://127.0.0.1:3100";
 const output = "test-results/responsiveness";
@@ -155,11 +156,14 @@ for (const engine of (process.env.BROWSER_ENGINE === "webkit" ? [webkit] : [chro
           if (await select.count() && await select.locator("option").count() > 1) await select.selectOption({ index: 1 });
         }
         if (route === "servicos") {
-          await page.route("https://formspree.io/**", intercepted => intercepted.fulfill({ status: 200, contentType: "application/json", body: "{}" }));
+          await mockContact(page, base);
           const name = page.locator('[name="name"]');
           if (await name.isEnabled()) {
             await name.fill("Responsive layout test");
-            await page.locator('[name="email"]').fill("responsive@example.com");
+            await page.locator('[name="company"]').fill("Responsive test");
+            await page.locator('[name="service"]').selectOption("consultoria");
+            await page.locator('[name="linkedin"]').fill("https://linkedin.com/in/responsive-test");
+            await page.locator('[name="consent"]').check();
             await page.locator('[name="message"]').fill("Long message ".repeat(80));
             await page.locator('.contact-panel button[type="submit"]').click();
           } else assert.ok(await page.locator(".form-notice").isVisible());

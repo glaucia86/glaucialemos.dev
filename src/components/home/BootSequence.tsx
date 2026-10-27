@@ -34,9 +34,14 @@ const GLOBE_CREST = pixels([
   ".............#.", "......###...###", "....#######..#.", "...##.#.#.##...", "..#.#.#.#.#.#..", ".#############.", "#.#.#.#.#.#.#.#",
   ".#############.", "#.#.#.#.#.#.#.#", ".#############.", "..#.#.#.#.#.#..", "...##.#.#.##...", ".#..#######....", "###...###......", ".#.............",
 ]);
-const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, mars: ROVER_CREST, observatory: OBSERVATORY_CREST, lumina: BOOK_CREST, atlas: GLOBE_CREST };
+// A stem with two leaves encircled by an orbital ring.
+const GARDEN_CREST = pixels([
+  ".......#.......", "...#...#...#...", "..#....#....#..", ".#.....#.....#.", "#..##..#..##..#", "#..###.#.###..#", "#...#######...#", "#....#####....#",
+  "#......#......#", ".#.....#.....#.", "..#....#....#..", "...#...#...#...", "....#######....", ".......#.......", ".....#####.....",
+]);
+const CRESTS: Partial<Record<BootVariant, number[][]>> = { niveora: ICE_CREST, mars: ROVER_CREST, observatory: OBSERVATORY_CREST, lumina: BOOK_CREST, aurelia: GARDEN_CREST, atlas: GLOBE_CREST };
 
-type BootVariant = "niveora" | "mars" | "observatory" | "lumina" | "atlas";
+type BootVariant = "niveora" | "mars" | "observatory" | "lumina" | "aurelia" | "atlas";
 type BootProps = { lines: string[]; granted: string; skip: string; label: string; storageKey?: string; brand?: string; variant?: BootVariant; armOnNavigation?: boolean };
 
 // Visible only when the inline boot script marked <html data-boot="pending">.

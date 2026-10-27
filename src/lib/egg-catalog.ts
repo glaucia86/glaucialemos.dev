@@ -35,6 +35,12 @@ export const EGGS = [
   { id: "prince-antenna", page: "events", phrases: ["antena", "antenna", "parabolica", "radar"] },
   { id: "paw-stamp", page: "events", phrases: ["patinha", "carimbo", "pawprint", "stamp", "huellita", "sello"] },
   { id: "runaway-satellite", page: "events", phrases: ["satelite", "satellite", "fujao", "runaway", "fugitivo"] },
+  { id: "garden-bloom", page: "services", phrases: ["florescer", "gardenbloom", "florecer"] },
+  { id: "beacon-relay", page: "services", phrases: ["sinalizador", "beacon", "baliza"] },
+  { id: "ring-alignment", page: "services", phrases: ["aneis", "rings", "anillos"] },
+  { id: "seed-vault", page: "services", phrases: ["sementes", "seeds", "semillas"] },
+  { id: "greenhouse-dusk", page: "services", phrases: ["estufa", "greenhouse", "invernadero"] },
+  { id: "pollination", page: "services", phrases: ["polinizar", "pollinate", "polinizarjardin"] },
   { id: "epilogue-signal", page: "services", phrases: ["alemdaultimaorbita", "beyondthelastorbit", "masalladelaultimaorbita"] },
   { id: "last-light", page: "epilogue", phrases: ["ultimaluz", "lastlight", "ultimaluzestelar"] },
 ] as const satisfies readonly { id: string; page: EggPage; phrases: readonly string[] }[];
