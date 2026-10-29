@@ -67,7 +67,6 @@ export const servicoSchema = z.object({
   id: z.string(),
   titulo: textoLocalizadoSchema,
   descricao: textoLocalizadoSchema,
-  preco: z.enum(["sob consulta"]),
 });
 
 export const contribuicaoSchema = z.object({
@@ -87,3 +86,13 @@ export type Projeto = z.infer<typeof projetoSchema>;
 export type GithubStats = z.infer<typeof githubStatsSchema>;
 export type Artigo = z.infer<typeof artigoSchema>;
 export type Servico = z.infer<typeof servicoSchema>;
+
+export const depoimentoSchema = z.object({
+  id: z.string().trim().min(1),
+  nome: z.string().trim().min(1),
+  cargo: z.string().trim().min(1),
+  empresa: z.string().trim().min(1).optional(),
+  texto: textoLocalizadoSchema,
+  url: z.url({ protocol: /^https$/ }).optional(),
+});
+export type Depoimento = z.infer<typeof depoimentoSchema>;

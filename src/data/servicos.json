@@ -10,8 +10,7 @@
       "pt": "Workshop prático ao vivo para integrar agentes de IA ao ciclo de desenvolvimento de software de times TypeScript.",
       "en": "Live hands-on workshop for integrating AI agents into the software development lifecycle of TypeScript teams.",
       "es": "Taller práctico en vivo para integrar agentes de IA en el ciclo de desarrollo de software de equipos TypeScript."
-    },
-    "preco": "sob consulta"
+    }
   },
   {
     "id": "mentoria-consultoria-lideranca-tecnica",
@@ -24,8 +23,7 @@
       "pt": "Acompanhamento personalizado em estratégia técnica, carreira, liderança e adoção responsável de IA.",
       "en": "Personalized guidance on technical strategy, career development, leadership, and responsible AI adoption.",
       "es": "Acompañamiento personalizado en estrategia técnica, carrera, liderazgo y adopción responsable de IA."
-    },
-    "preco": "sob consulta"
+    }
   },
   {
     "id": "palestras",
@@ -38,7 +36,6 @@
       "pt": "Palestras para eventos e empresas sobre TypeScript, JavaScript, desenvolvimento de software e IA.",
       "en": "Talks for events and companies about TypeScript, JavaScript, software development, and AI.",
       "es": "Conferencias para eventos y empresas sobre TypeScript, JavaScript, desarrollo de software e IA."
-    },
-    "preco": "sob consulta"
+    }
   }
 ]
