@@ -1,6 +1,5 @@
 import { getArtigos, getCargos, getGithubStats, getServicos } from './data';
 import { presenceStats } from './atlas-records';
-import { getDictionary } from '@/i18n/dictionaries';
 import type { Locale } from '@/i18n/config';
 import type { Servico } from './types';
 
@@ -21,7 +20,6 @@ export function gardenRecords(services = getServicos()): GardenRecord[] {
   });
 }
 export { serviceHref, RING_START, turnRing, ringsAligned } from './aurelia-controls';
-export const servicePrice = (service: Servico, lang: Locale) => service.preco === 'sob consulta' ? getDictionary(lang).services.price : service.preco;
 
 export type ProofKey = 'events' | 'cities' | 'countries' | 'articles' | 'years' | 'stars';
 export type ProofStar = { key: ProofKey; value: number; href: string; link: 'events' | 'articles' | 'years' | 'stars' };

@@ -1,10 +1,9 @@
 'use client';
 
 import Script from 'next/script';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { Locale } from '@/i18n/config';
 import { contactCopy } from '@/i18n/contact';
-import type { ContactState } from '@/lib/contact-schema';
 
 type Turnstile = {
   render: (container: HTMLElement, options: {
@@ -17,8 +16,9 @@ type Turnstile = {
 };
 declare global { interface Window { turnstile?: Turnstile } }
 
-export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; lang: Locale; result: ContactState | null }) {
+export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; lang: Locale; result: { status: string } | null }) {
   const copy = contactCopy[lang];
+  const instance = useId();
   const container = useRef<HTMLDivElement>(null);
   const widget = useRef<string | null>(null);
   const [visible, setVisible] = useState(false);
@@ -69,7 +69,7 @@ export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; l
   }
 
   return <div className="contact-captcha">
-    {visible && <Script key={attempt} id={`contact-turnstile-${attempt}`}
+    {visible && <Script key={attempt} id={`contact-turnstile-${instance}-${attempt}`}
       src={`https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit${attempt ? `&retry=${attempt}` : ''}`}
       onReady={() => { setLoaded(true); setFailed(false); }} onError={() => setFailed(true)} />}
     <div ref={container} />

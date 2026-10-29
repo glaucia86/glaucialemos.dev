@@ -1,6 +1,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
+import { waitlistCopy } from '@/i18n/waitlist';
 import { aureliaStory } from '@/i18n/aurelia-story';
 import { aurelia } from '@/i18n/aurelia';
 import { beyondOrbit } from '@/i18n/beyond-orbit';
@@ -70,7 +71,7 @@ describe.each(langs)('Aurélia: SSR sem JS (%s)', lang => {
     const html = [
       renderToStaticMarkup(createElement(OrbitGyroscope, { copy: aurelia[lang].rings, story: story.orbit, lang })),
       renderToStaticMarkup(createElement(ProofConstellation, { stars: proofStars(lang, 2026), copy: story.proof, locale: lang })),
-      renderToStaticMarkup(createElement(GardenBloom, { records, copy: story.bloom, lang, price: 'x' })),
+      renderToStaticMarkup(createElement(GardenBloom, { records, copy: story.bloom, lang, waitlist: waitlistCopy[lang].submit })),
       renderToStaticMarkup(createElement(WorkSteps, { copy: story.steps })),
       renderToStaticMarkup(createElement(BeaconFinale, { copy: story.finale, terrace: createElement('div', { className: 'finale-terrace' }) })),
     ].join('');

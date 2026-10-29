@@ -4,7 +4,8 @@ import { ServiceGarden } from '@/components/services/ServiceGarden';
 import { AureliaScene, HOTSPOTS } from '@/components/services/AureliaScene';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { getServicos } from '@/lib/data';
-import { gardenRecords, serviceHref, servicePrice, turnRing, ringsAligned } from '@/lib/aurelia-records';
+import { gardenRecords, serviceHref, turnRing, ringsAligned } from '@/lib/aurelia-records';
+import { getDictionary } from '@/i18n/dictionaries';
 import { aurelia } from '@/i18n/aurelia';
 import { comlink } from '@/i18n/comlink';
 import { EGGS, matchPhrase, matchTail, normalizePhrase, type EggId } from '@/lib/eggs';
@@ -20,16 +21,16 @@ describe('Aurélia — registros e interações', () => {
     expect(() => gardenRecords([])).toThrow();
     for (const lang of ['pt', 'en', 'es'] as const) for (const record of gardenRecords()) {
       expect(serviceHref(lang, record.subject)).toBe(`/${lang}/servicos?assunto=${record.subject}#contato`);
-      expect(servicePrice(record.service, lang)).toBeTruthy();
     }
   });
   it('renderiza todos os dados e links localizados sem depender de animação', () => {
     for (const lang of ['pt','en','es'] as const) {
-      const html=renderToStaticMarkup(createElement(ServiceGarden,{records:gardenRecords(),copy:aurelia[lang].garden,lang,price:servicePrice(getServicos()[0],lang),princeFace:SCENES.aurelia.assets.actors.prince['face-happy'].src}));
+      const html=renderToStaticMarkup(createElement(ServiceGarden,{records:gardenRecords(),copy:aurelia[lang].garden,lang,waitlist:getDictionary(lang).services.waitlist,princeFace:SCENES.aurelia.assets.actors.prince['face-happy'].src}));
       for(const {service,subject} of gardenRecords()) {
         expect(html).toContain(service.titulo[lang]);
         expect(html).toContain(serviceHref(lang,subject));
-        expect(html).toContain(servicePrice(service,lang));
+        expect(html).toContain(getDictionary(lang).services.waitlist);
+        expect(html).toContain('href="#lista-de-espera"');
       }
       expect(html).toContain('<details');
       expect(html).not.toContain('type="submit"');
