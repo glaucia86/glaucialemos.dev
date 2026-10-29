@@ -1,6 +1,6 @@
 // The hologram over the hero's pedestal: the real globe (cobe) rendered at a fraction of its size and scaled up with
 // `image-rendering: pixelated`, so it reads as pixel art in cyan. Only in-person cities are markers. It never steals the
-// big globe's controls: it spins on its own, whirls a full turn on request and turns to face a coordinate.
+// big globe's controls: it spins on its own, whirls a full turn when triggered and turns to face a coordinate.
 import createGlobe from "cobe";
 import { anglesOf } from "@/lib/atlas-records";
 

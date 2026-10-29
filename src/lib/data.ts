@@ -1,3 +1,4 @@
+import depoimentosJson from "@/data/depoimentos.json";
 import artigosJson from "@/data/artigos.json";
 import eventosJson from "@/data/eventos.json";
 import cargosJson from "@/data/experiencia.json";
@@ -6,6 +7,7 @@ import githubStatsJson from "@/data/github-stats.json";
 import projetosJson from "@/data/projetos.json";
 import servicosJson from "@/data/servicos.json";
 import {
+  depoimentoSchema,
   artigoSchema,
   cargoSchema,
   contribuicaoSchema,
@@ -20,6 +22,7 @@ const eventos = z.array(eventoSchema).parse(eventosJson);
 const cargos = z.array(cargoSchema).parse(cargosJson);
 const projetos = z.array(projetoSchema).parse(projetosJson);
 const artigos = z.array(artigoSchema).parse(artigosJson);
+const depoimentos = z.array(depoimentoSchema).parse(depoimentosJson);
 const servicos = z.array(servicoSchema).parse(servicosJson);
 const contribuicoes = z.array(contribuicaoSchema).parse(contribuicoesJson);
 const githubStats = githubStatsSchema.parse(githubStatsJson);
@@ -28,6 +31,7 @@ export const getEventos = () => eventos;
 export const getCargos = () => cargos;
 export const getProjetos = () => projetos;
 export const getArtigos = () => artigos;
+export const getDepoimentos = () => depoimentos;
 export const getServicos = () => servicos;
 export const getContribuicoes = () => contribuicoes;
 export const getGithubStats = () => githubStats;

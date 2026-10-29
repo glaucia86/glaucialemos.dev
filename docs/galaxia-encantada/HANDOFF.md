@@ -1,5 +1,13 @@
 # Handoff — Migração Galáxia Encantada
 
+## Retomada — Serviços independentes, lista de espera e depoimentos (29/10/2026)
+
+- `services.independent` nos dicionários PT/EN/ES aparece no hero e acima da lista de espera. Serviços, contato e epílogo têm um teste de guarda contra referências ao empregador/setor bancário; experiência/CV, Home, Sobre e Projetos não foram alterados. Um comentário em `holo-globe.ts` foi reescrito apenas para zerar a expressão inglesa antiga em todo `src`.
+- O conceito de preço saiu do catálogo/schema/componentes. Cards e flores apontam para `#lista-de-espera`, antes do contato, mantendo os links de conversa. A seção tem marcador `◇` próprio para preservar os sete códigos de capítulos existentes quando não há depoimentos.
+- `src/components/WaitlistForm.tsx`, `src/lib/waitlist-schema.ts`, `src/i18n/waitlist.ts` e `src/app/actions/waitlist.ts`: nome, e-mail, três interesses, consentimento LGPD, honeypot e Turnstile. `?interesse=workshop-corporativo|mentoria-grupo-noite|curso-gravado` seleciona a opção. Mesmas três variáveis de `contactConfig()`; helpers server-only em `src/lib/turnstile.ts` e `src/lib/web3forms.ts` compartilhados com contato, sem mudar seu comportamento. Sem JS/configuração: alternativa LinkedIn. Confirmação reutiliza as flores CSS, respeitando movimento reduzido.
+- `src/data/depoimentos.json` começa em `[]`. Para adicionar um depoimento real autorizado, inclua `id`, `nome`, `cargo`, `texto: {pt,en,es}` e, opcionalmente, `empresa` e `url` HTTPS. `depoimentoSchema`/`getDepoimentos()` validam; `Testimonials.tsx` só renderiza com dados, depois de Provas, inserindo então seu capítulo. Vazio = nenhum DOM/label e numeração original intacta. Não adicionar exemplos fictícios ao JSON.
+- Validação: `npx vitest run` — 50 arquivos, 574 testes passando; `npx tsc --noEmit` e `npx eslint src tests` passaram. O typecheck apontou uma prop antiga no teste `aurelia-fx`, corrigida e validada novamente (9 testes). Sem rede, commit, build, servidor ou navegador; aparência/interação no navegador ainda não validada nesta rodada.
+
 ## Próximo — Serviços (Aurélia) com efeito WOW e sons reais (itens 1–3 e 5 implementados, sem commit; item 4 em outra sessão)
 **Rodada 3 (27/10/2026):** giroscópio sci-fi (`OrbitGyroscope` + `gyro-engine.ts`) no lugar de `OrbitRings`/`RingAlignment`; eclipse
 (`PlanetEclipse` + `eclipse-engine.ts`, frase nova "eclipse", contrato `main[data-greenhouse="dusk"]` mantido) no lugar da estufa; enxame do
