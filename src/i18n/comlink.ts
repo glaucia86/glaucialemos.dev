@@ -11,17 +11,20 @@ export type ComlinkCopy = {
   eggs: Record<EggId, Entry>;
   letter: typeof curiousLetter.pt;
   epilogue: Pick<BeyondOrbitCopy, "signalLocked" | "revisit">;
+  // What the radio is for, and the two secret pages it leads to (shown at the top of the panel).
+  guide: { intro: string; pages: string; epilogue: string; epilogueLocked: string; epilogueReady: string; epilogueOpen: string; lost: string; lostLocked: string; lostHidden: string; lostFound: string; hint: string; hintClose: string };
 };
 
 export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   pt: {
     letter: curiousLetter.pt,
+    guide: { intro: "Este site tem segredos escondidos em cada página. Clique nos personagens e nas cenas, ou digite aqui as transmissões das dicas abaixo. Cada segredo encontrado acende nesta lista, e só quem encontra segredos libera as 2 páginas secretas.", pages: "Páginas secretas (2)", epilogue: beyondOrbit.pt.title, epilogueLocked: "Bloqueada. Descubra segredos em mais {n} mundos (Início, Tripulante, Projetos, Eventos ou Conteúdo) para liberar.", epilogueReady: "Liberada! Siga a transmissão no fim de Workshops e mentorias.", epilogueOpen: "Liberada. Você pode voltar quando quiser.", lost: "Coordenadas perdidas", lostLocked: "Bloqueada. Encontre mais {n} segredos para receber a coordenada.", lostHidden: "Escondida. Existe um endereço que não leva a lugar nenhum… ou leva?", lostFound: "Encontrada. Qualquer endereço inexistente leva até ela.", hint: "Este site tem segredos. Abra o rádio estelar.", hintClose: "Entendi" },
     epilogue: beyondOrbit.pt,
     open: "Abrir o rádio estelar", title: "Rádio estelar", channel: "RÁDIO // GALÁXIA ENCANTADA", counter: "Segredos descobertos", master: "Guardiã das Estrelas",
     placeholder: "digite uma transmissão…", send: "Transmitir", sent: "Sinal enviado.", unknown: "Transmissão desconhecida. Tente uma das dicas abaixo.",
     elsewhere: "Sinal fora de alcance. Tente na página {page}.", play: "Reproduzir", close: "Fechar rádio", hidden: "Sinal criptografado", fresh: "Novo segredo descoberto!",
     reset: "Apagar memória", resetConfirm: "Confirmar: apagar {n} segredos?", resetDone: "Memória apagada. O céu voltou a ser um mistério, e a caçada recomeça.",
-    pages: { epilogue: beyondOrbit.pt.title, home: "Início", about: "Sobre", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Serviços", notfound: "Coordenadas perdidas" },
+    pages: { epilogue: beyondOrbit.pt.title, home: "Início", about: "Tripulante", projects: "Projetos", content: "Conteúdo", events: "Eventos", services: "Workshops e mentorias", notfound: "Coordenadas perdidas" },
     eggs: {
       "garden-bloom": {"name": "Jardim em flor", "hint": "A Glaucia cuida de possibilidades na estufa do terraço. Uma delas pode florescer com a sua curiosidade. Transmissão: florescer."},
       "beacon-relay": {"name": "Sinalizador do Prince", "hint": "O Prince está de olho numa luz do terraço. Talvez ela tenha um recado para quem se aproxima. Transmissão: sinalizador."},
@@ -34,6 +37,11 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
 
       "epilogue-signal": { name: beyondOrbit.pt.signalTitle, hint: "Descubra algo em três mundos e siga o sinal em Serviços. Transmissão: além da última órbita." },
       "last-light": { name: "Última luz", hint: "Toque a estrela do epílogo. Transmissão: última luz." },
+      "meteor-shower": { name: "Chuva de encontros", hint: "No capítulo de Eventos do Início, clique 3 vezes no título do capítulo. Transmissão: chuva." },
+      "lost-commit": { name: "Commit perdido", hint: "Um disquete caiu no canto do laboratório de Marte. Leve-o de volta. Transmissão: commit." },
+      "orbital-selfie": { name: "Selfie orbital", hint: "Em Eventos, segure a imagem da órbita por 2 segundos para tirar uma foto. Transmissão: selfie." },
+      "proposal-harvest": { name: "Colheita de propostas", hint: "Em Workshops e mentorias, passe pelos três formatos na ordem 01, 02 e 03. Transmissão: colheita." },
+      "deep-night": { name: "Noite profunda", hint: "Em qualquer página, digite a palavra da noite e explore só com uma lanterna. Transmissão: lua." },
       "curious-letter": { name: "Carta aos curiosos", hint: "Três descobertas diferentes deixam uma carta no rádio. Transmissão: carta curiosa." },
       "between-lines": { name: "Entre as linhas", hint: "Há um fio além das barras do mapa. Transmissão: entre linhas." },
       "borrowed-star": { name: "A estrela emprestada", hint: "Uma pegada no diário aponta para o convite final. Transmissão: estrela emprestada." },
@@ -73,12 +81,13 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   },
   en: {
     letter: curiousLetter.en,
+    guide: { intro: "This site hides secrets on every page. Click the characters and the scenes, or type here the transmissions from the hints below. Every secret you find lights up in this list, and only those who find secrets unlock the 2 secret pages.", pages: "Secret pages (2)", epilogue: beyondOrbit.en.title, epilogueLocked: "Locked. Find secrets in {n} more worlds (Home, Crew, Projects, Events or Content) to unlock it.", epilogueReady: "Unlocked! Follow the transmission at the end of Workshops & mentoring.", epilogueOpen: "Unlocked. Come back whenever you like.", lost: "Lost coordinates", lostLocked: "Locked. Find {n} more secrets to receive the coordinates.", lostHidden: "Hidden. There is an address that leads nowhere… or does it?", lostFound: "Found. Any address that does not exist leads there.", hint: "This site has secrets. Open the star radio.", hintClose: "Got it" },
     epilogue: beyondOrbit.en,
     open: "Open the star radio", title: "Star radio", channel: "RADIO // ENCHANTED GALAXY", counter: "Secrets discovered", master: "Keeper of the Stars",
     placeholder: "type a transmission…", send: "Transmit", sent: "Signal sent.", unknown: "Unknown transmission. Try one of the hints below.",
     elsewhere: "Signal out of range. Try it on the {page} page.", play: "Replay", close: "Close radio", hidden: "Encrypted signal", fresh: "New secret discovered!",
     reset: "Wipe memory", resetConfirm: "Confirm: wipe {n} secrets?", resetDone: "Memory wiped. The sky is a mystery again, and the hunt starts over.",
-    pages: { epilogue: beyondOrbit.en.title, home: "Home", about: "About", projects: "Projects", content: "Content", events: "Events", services: "Services", notfound: "Lost coordinates" },
+    pages: { epilogue: beyondOrbit.en.title, home: "Home", about: "Crew", projects: "Projects", content: "Content", events: "Events", services: "Workshops & mentoring", notfound: "Lost coordinates" },
     eggs: {
       "garden-bloom": {"name": "Garden in bloom", "hint": "Glaucia tends possibilities in the terrace greenhouse. Your curiosity might help one bloom. Transmission: garden bloom."},
       "beacon-relay": {"name": "Prince’s beacon", "hint": "Prince is watching a light on the terrace. Perhaps it has a message for whoever comes closer. Transmission: beacon."},
@@ -91,6 +100,11 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
 
       "epilogue-signal": { name: "Unknown transmission", hint: "Make a discovery in three worlds and follow the signal in Services. Transmission: beyond the last orbit." },
       "last-light": { name: "Last light", hint: "Touch the epilogue star. Transmission: last light." },
+      "meteor-shower": { name: "Shower of encounters", hint: "In the Home Events chapter, click the chapter title 3 times. Transmission: meteor shower." },
+      "lost-commit": { name: "Lost commit", hint: "A floppy disk fell in a corner of the Mars lab. Bring it back. Transmission: commit." },
+      "orbital-selfie": { name: "Orbital selfie", hint: "On Events, hold the orbit image for 2 seconds to take a photo. Transmission: selfie." },
+      "proposal-harvest": { name: "Proposal harvest", hint: "On Workshops and mentoring, go through the three formats in order 01, 02, 03. Transmission: harvest." },
+      "deep-night": { name: "Deep night", hint: "On any page, type the word of the night and explore with only a flashlight. Transmission: moon." },
       "curious-letter": { name: "Letter to the curious", hint: "Three different discoveries leave a letter in the radio. Transmission: curious letter." },
       "between-lines": { name: "Between the lines", hint: "A thread runs beyond the map's bars. Transmission: between the lines." },
       "borrowed-star": { name: "The borrowed star", hint: "A paw print in the log points to the final invitation. Transmission: borrowed star." },
@@ -130,12 +144,13 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
   },
   es: {
     letter: curiousLetter.es,
+    guide: { intro: "Este sitio esconde secretos en cada página. Haz clic en los personajes y en las escenas, o escribe aquí las transmisiones de las pistas de abajo. Cada secreto que encuentres se enciende en esta lista, y solo quien encuentra secretos libera las 2 páginas secretas.", pages: "Páginas secretas (2)", epilogue: beyondOrbit.es.title, epilogueLocked: "Bloqueada. Descubre secretos en {n} mundos más (Inicio, Tripulante, Proyectos, Eventos o Contenido) para liberarla.", epilogueReady: "¡Liberada! Sigue la transmisión al final de Talleres y mentorías.", epilogueOpen: "Liberada. Puedes volver cuando quieras.", lost: "Coordenadas perdidas", lostLocked: "Bloqueada. Encuentra {n} secretos más para recibir la coordenada.", lostHidden: "Escondida. Hay una dirección que no lleva a ninguna parte… ¿o sí?", lostFound: "Encontrada. Cualquier dirección inexistente lleva hasta ella.", hint: "Este sitio tiene secretos. Abre la radio estelar.", hintClose: "Entendido" },
     epilogue: beyondOrbit.es,
     open: "Abrir la radio estelar", title: "Radio estelar", channel: "RADIO // GALAXIA ENCANTADA", counter: "Secretos descubiertos", master: "Guardiana de las Estrellas",
     placeholder: "escribe una transmisión…", send: "Transmitir", sent: "Señal enviada.", unknown: "Transmisión desconocida. Prueba una de las pistas.",
     elsewhere: "Señal fuera de alcance. Prueba en la página {page}.", play: "Reproducir", close: "Cerrar radio", hidden: "Señal cifrada", fresh: "¡Nuevo secreto descubierto!",
     reset: "Borrar memoria", resetConfirm: "¿Confirmas? Borrar {n} secretos", resetDone: "Memoria borrada. El cielo vuelve a ser un misterio y la búsqueda empieza de nuevo.",
-    pages: { epilogue: beyondOrbit.es.title, home: "Inicio", about: "Sobre mí", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Servicios", notfound: "Coordenadas perdidas" },
+    pages: { epilogue: beyondOrbit.es.title, home: "Inicio", about: "Tripulante", projects: "Proyectos", content: "Contenido", events: "Eventos", services: "Talleres y mentorías", notfound: "Coordenadas perdidas" },
     eggs: {
       "garden-bloom": {"name": "Jardín en flor", "hint": "Glaucia cuida posibilidades en el invernadero de la terraza. Tu curiosidad puede hacer florecer una de ellas. Transmisión: florecer."},
       "beacon-relay": {"name": "Baliza de Prince", "hint": "Prince observa una luz en la terraza. Quizá tenga un mensaje para quien se acerque. Transmisión: baliza."},
@@ -148,6 +163,11 @@ export const comlink: Record<"pt" | "en" | "es", ComlinkCopy> = {
 
       "epilogue-signal": { name: beyondOrbit.es.signalTitle, hint: "Haz un descubrimiento en tres mundos y sigue la señal en Servicios. Transmisión: más allá de la última órbita." },
       "last-light": { name: "Última luz", hint: "Toca la estrella del epílogo. Transmisión: última luz." },
+      "meteor-shower": { name: "Lluvia de encuentros", hint: "En el capítulo de Eventos del Inicio, haz clic 3 veces en el título del capítulo. Transmisión: lluvia." },
+      "lost-commit": { name: "Commit perdido", hint: "Un disquete cayó en un rincón del laboratorio de Marte. Devuélvelo. Transmisión: commit." },
+      "orbital-selfie": { name: "Selfie orbital", hint: "En Eventos, mantén pulsada la imagen de la órbita 2 segundos para sacar una foto. Transmisión: selfie." },
+      "proposal-harvest": { name: "Cosecha de propuestas", hint: "En Talleres y mentorías, recorre los tres formatos en orden 01, 02 y 03. Transmisión: cosecha." },
+      "deep-night": { name: "Noche profunda", hint: "En cualquier página, escribe la palabra de la noche y explora solo con una linterna. Transmisión: luna." },
       "curious-letter": { name: "Carta para los curiosos", hint: "Tres descubrimientos diferentes dejan una carta en la radio. Transmisión: carta curiosa." },
       "between-lines": { name: "Entre líneas", hint: "Un hilo continúa más allá de las barras del mapa. Transmisión: entre líneas." },
       "borrowed-star": { name: "La estrella prestada", hint: "Una huella en el diario apunta a la invitación final. Transmisión: estrella prestada." },

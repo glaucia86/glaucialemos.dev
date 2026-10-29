@@ -4,7 +4,7 @@ export type JourneyCopy = {
   demo: {
     title: string; note: string; grounded: string; ungrounded: string; diagnostic: string; result: string;
     groundedDiagnostic: string; ungroundedDiagnostic: string; groundedResult: string; ungroundedResult: string;
-    explanation: string; cta: string;
+    explanation: string; cta: string; context: string;
   };
   projects: Record<string, string>;
   map: { title: string; intro: string; history: string; label: string; countries: string; unlocated: string; all: string; count: string; countryNames: Record<string, string> };
@@ -25,6 +25,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       ungroundedResult: 'O modelo diz que não sabe, em vez de inventar. Sem fonte, não há resposta.',
       explanation: 'RAG não é mágica: o modelo só responde bem com as fontes certas e regras claras. Ajudei a construir este chat serverless oficial da Microsoft, do upload de documentos ao streaming da resposta.',
       cta: 'Veja o projeto no GitHub',
+      context: 'Um exemplo real do meu trabalho na Microsoft: a mesma pergunta respondida pela IA sem fonte e com fonte. Clique em “Pergunta com fonte” e veja a resposta mudar. É o que ensino nos workshops: IA que responde com base nos documentos da empresa, sem inventar.',
     },
     projects: {
       'curso-typescript-zero-to-hero': 'Curso de TypeScript do zero ao avançado: a base para construir com IA.',
@@ -54,6 +55,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       ungroundedResult: 'The model says it does not know instead of making something up. No source, no answer.',
       explanation: 'RAG is not magic: a model only answers well with the right sources and clear rules. I helped build this official Microsoft serverless chat, from document upload to streamed answers.',
       cta: 'See the project on GitHub',
+      context: 'A real example from my work at Microsoft: the same question answered by AI without a source and with one. Click “Question with sources” and watch the answer change. This is what I teach in workshops: AI that answers from the company’s own documents instead of making things up.',
     },
     projects: {
       'curso-typescript-zero-to-hero': 'A TypeScript course from zero to advanced: the foundation for building with AI.',
@@ -83,6 +85,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
       ungroundedResult: 'El modelo dice que no lo sabe en lugar de inventar. Sin fuente, no hay respuesta.',
       explanation: 'RAG no es magia: el modelo solo responde bien con las fuentes correctas y reglas claras. Ayudé a construir este chat serverless oficial de Microsoft, desde la carga de documentos hasta la respuesta en streaming.',
       cta: 'Mira el proyecto en GitHub',
+      context: 'Un ejemplo real de mi trabajo en Microsoft: la misma pregunta respondida por la IA sin fuente y con fuente. Haz clic en “Pregunta con fuentes” y mira cómo cambia la respuesta. Es lo que enseño en los talleres: IA que responde a partir de los documentos de la empresa, sin inventar.',
     },
     projects: {
       'curso-typescript-zero-to-hero': 'Curso de TypeScript desde cero hasta avanzado: la base para construir con IA.',

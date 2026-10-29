@@ -11,7 +11,8 @@ import { play } from "@/lib/sfx";
 const vars = (values: Record<string, string | number>) => values as CSSProperties;
 
 // One markup, two layouts: parallel trails on desktop, an era-grouped list on mobile and without CSS.
-export function CareerMap({ roles, copy, locale, source, ship }: { roles: CareerRole[]; copy: NiveoraCopy["map"]; ship: string; locale: string; source: string }) {
+// `embedded` (the Home trajectory dialog): no ?era= in the URL and no scroll-driven ship; the trail is simply complete.
+export function CareerMap({ roles, copy, locale, source, ship, embedded = false }: { roles: CareerRole[]; copy: NiveoraCopy["map"]; ship: string; locale: string; source: string; embedded?: boolean }) {
   const root = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [era, setEra] = useState<Era | "all">("all");
@@ -20,13 +21,16 @@ export function CareerMap({ roles, copy, locale, source, ship }: { roles: Career
   const motion = useMotionEnabled();
   const map = ready && desktop;
   useEffect(() => {
+    setReady(true);
+    if (embedded) return;
     const sync = () => setEra(normalizeEra(new URLSearchParams(location.search).get("era")));
-    sync(); setReady(true); addEventListener("popstate", sync);
+    sync(); addEventListener("popstate", sync);
     return () => removeEventListener("popstate", sync);
-  }, []);
+  }, [embedded]);
   const filter = (next: Era | "all") => {
     if (next !== era) play("click-niveora", { detune: next === "all" ? 0 : 300 });
     setEra(next); setExpanded(null);
+    if (embedded) return;
     const url = new URL(location.href);
     if (next === "all") url.searchParams.delete("era"); else url.searchParams.set("era", next);
     history.replaceState(history.state, "", url);
@@ -45,7 +49,7 @@ export function CareerMap({ roles, copy, locale, source, ship }: { roles: Career
   const zs = selected ? Math.min(1, width * 1.12) : 1;
   useGSAP(() => {
     const element = root.current;
-    if (!element || !map || !motion) return;
+    if (!element || !map || !motion || embedded) return;
     const beam = { progress: 0 };
     const year = element.querySelector(".ops-ship__year");
     gsap.set(".ops-ship", { autoAlpha: 1 });
@@ -54,7 +58,7 @@ export function CareerMap({ roles, copy, locale, source, ship }: { roles: Career
       if (year) year.textContent = String(yearOf(min + (zf + beam.progress * zs) * (span - 1)));
     }, scrollTrigger: { trigger: element.querySelector(".ops-chart"), start: "top 72%", end: "bottom 62%", scrub: .5 } });
     return () => { element.style.removeProperty("--progress"); };
-  }, { scope: root, dependencies: [map, motion, era], revertOnUpdate: true });
+  }, { scope: root, dependencies: [map, motion, era, embedded], revertOnUpdate: true });
   useEffect(() => {
     const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => cancelAnimationFrame(frame);

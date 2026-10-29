@@ -42,7 +42,7 @@ describe('Aurélia — registros e interações', () => {
   });
 });
 describe('Aurélia — catálogo e idiomas', () => {
-  const ids = ['garden-bloom', 'beacon-relay', 'ring-alignment', 'seed-vault', 'greenhouse-dusk', 'pollination'];
+  const ids = ['garden-bloom', 'beacon-relay', 'ring-alignment', 'seed-vault', 'greenhouse-dusk', 'pollination', 'proposal-harvest'];
   const leaves = (obj: unknown): string[] => typeof obj === 'object' && obj !== null ? Object.entries(obj).flatMap(([k,v]) => leaves(v).map(p => `${k}.${p}`)) : [''];
   it.each([
     ['garden-bloom', ['florescer', 'garden bloom', 'florecer']],
@@ -66,7 +66,7 @@ describe('Aurélia — catálogo e idiomas', () => {
     }
   });
   it('registra seis segredos novos com nomes, dicas e comandos nos três idiomas', () => {
-    expect(EGGS.filter(e => e.page === 'services').map(e => e.id)).toEqual([...ids, 'epilogue-signal']);
+    expect(EGGS.filter(e => e.page === 'services').map(e => e.id)).toEqual([...ids.slice(0, 6), 'epilogue-signal', 'proposal-harvest']);
     for (const egg of EGGS.filter(e => ids.includes(e.id))) {
       for (const phrase of egg.phrases) expect(matchPhrase(phrase)).toBe(egg.id);
       for (const lang of ['pt','en','es'] as const) {

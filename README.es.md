@@ -34,6 +34,15 @@ Detrás de los escenarios hay repositorios, registros de trayectoria, publicacio
 
 > Este README presenta los paisajes y la ingeniería. Los descubrimientos te esperan en el sitio.
 
+## Novedades · versión de noviembre de 2026 (`v2026.11.0`)
+
+- **Oferta más clara, contacto más fácil.** Menú literal (Inicio · Tripulante · Proyectos · Eventos · Talleres y mentorías · Contenido), un único botón "Pedir una propuesta para mi equipo" con plazo de respuesta, llamada fija en las páginas de lectura y formulario que entrega por **Resend** (Turnstile y validación Zod se mantienen).
+- **Prueba social real.** Retrato aprobado, foto dando una charla, empresas donde Glaucia trabajó, eventos donde habló (con fuentes), una charla completa de BrazilJS para ver ahí mismo y formulario propio de testimonios con aprobación manual.
+- **Formatos y temas de charla con vida.** Íconos en pixel art, un color por formato y luz que sigue el cursor; talleres de PDLC/SDLC para cualquier stack, Spec-Driven Development, Context y Harness Engineering.
+- **Salto por los siete mundos.** Cerca del final del Inicio, el scroll se vuelve un viaje en hiperespacio por las placas reales de cada mundo y termina en el botón de propuesta.
+- **50 secretos.** La galaxia ahora esconde 50 descubrimientos. El Inicio explica qué liberan y la radio estelar guía hasta las 2 páginas secretas.
+- **Episodio narrado del epílogo**, con subtítulos en tres idiomas, liberado por la última luz.
+
 <a id="worlds"></a>
 
 ## Seis mundos. Un viaje conectado.
@@ -124,7 +133,7 @@ flowchart TD
     C --> F["Formulario de contacto"]
     F --> S["Server Action<br/>Honeypot + validación Zod"]
     S --> T["Verificación Turnstile"]
-    T --> E["Entrega mediante Web3Forms"]
+    T --> E["Entrega mediante Resend"]
 ```
 
 | Límite | Responsabilidad |
@@ -148,7 +157,7 @@ No hay una base de datos de la aplicación que aprovisionar. Los datos editorial
 | Movimiento | GSAP 3 · `@gsap/react` · ScrollTrigger · SplitText · DrawSVG · Draggable · Lenis |
 | Gráficos | Motores Canvas 2D · SVG · CSS 3D · globo WebGL con cobe |
 | Audio y vídeo | Web Audio API · audio/vídeo HTML · efectos Ogg/MP3 · vídeo WebM/MP4 |
-| Contenido y formularios | Zod 4 · React Server Actions · Cloudflare Turnstile · Web3Forms |
+| Contenido y formularios | Zod 4 · React Server Actions · Cloudflare Turnstile · Resend |
 | Verificación | ESLint · TypeScript · Vitest · Playwright |
 | Fuentes | Geist · Geist Mono · Departure Mono, servidas localmente con `next/font/local` |
 
@@ -210,14 +219,16 @@ Copy-Item .env.example .env.local
 
 | Variable | Finalidad |
 | --- | --- |
-| `WEB3FORMS_ACCESS_KEY` | Credencial del servidor para entregar el contacto |
+| `RESEND_API_KEY` | Clave de Resend solo de envío, restringida al dominio verificado |
+| `CONTACT_FROM` | Remitente en el dominio verificado (p. ej. `Site <contato@mail.glaucialemos.dev>`) |
+| `CONTACT_TO` | Bandeja que recibe contactos y testimonios |
 | `TURNSTILE_SECRET_KEY` | Credencial del servidor para verificar el desafío |
 | `TURNSTILE_SITE_KEY` | Clave pública del widget, leída por el servidor y enviada al componente |
 | `GITHUB_TOKEN` | Token opcional del servidor para ampliar el límite de la API de GitHub; añádelo a `.env.local` si lo necesitas |
 
 Mantén las credenciales del servidor fuera de las variables `NEXT_PUBLIC_*`. Reinicia el servidor local tras cambiar el entorno. Sin las claves de contacto, los campos y el envío quedan deshabilitados y LinkedIn permanece disponible.
 
-Autoriza tu hostname en Turnstile y configura el destinatario en Web3Forms. La integración actual envía desde el servidor; [Web3Forms exige un plan de pago y autorización de las IP del servidor para este uso](https://docs.web3forms.com/getting-started/api-reference).
+Autoriza tu hostname en Turnstile y verifica el dominio de envío en Resend (DNS en Vercel: "Auto configure"). Hasta verificarlo, usa `onboarding@resend.dev` como remitente: solo entrega en el correo de tu cuenta de Resend.
 
 <a id="verification"></a>
 

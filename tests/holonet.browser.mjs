@@ -49,8 +49,14 @@ for (const locale of ["pt", "en", "es"]) await check(`conteúdo e capítulos vis
   await page.keyboard.press("Escape");
   await page.waitForTimeout(2600);
   assert.equal(await page.locator("h1").getAttribute("aria-label"), "Glaucia Lemos");
-  for (const id of ["#tripulante", "#projetos", "#mapa", "#missoes"]) assert.equal(await page.locator(id).count(), 1, id);
-  assert.equal(await page.locator(".mission").count(), 3);
+  for (const id of ["#tripulante", "#projetos", "#mapa", "#formatos"]) assert.equal(await page.locator(id).count(), 1, id);
+  assert.equal(await page.locator(".credibility-offer").count(), 3);
+  // CX: the crew chapter never leaves the page (LinkedIn opens in a new tab, the full map in a dialog).
+  assert.equal(await page.locator('#tripulante a[href$="/sobre"]').count(), 0);
+  await page.locator(".career-dialog__open").click();
+  assert.equal(await page.locator(".career-dialog[open]").count(), 1);
+  await page.keyboard.press("Escape");
+  assert.equal(await page.locator(".career-dialog[open]").count(), 0);
   assert.equal(await page.locator(".hero-copy").evaluate((element) => getComputedStyle(element).visibility), "visible");
   assert.deepEqual(errors, []);
   await context.close();

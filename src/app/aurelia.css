@@ -187,7 +187,7 @@ html.has-fx-cursor[data-contact-portal] .contact-portal :is(input:not([type=radi
 html[data-contact-portal] :is(.fx-cursor,.fx-trail) { visibility: hidden; }
 
 /* Glaucia and Prince watch the form from the panel's edge; one approved portrait each is lit. */
-.contact-crew { position: relative; z-index: 3; justify-self: end; display: flex; gap: .5rem; margin: 0 clamp(.75rem,3vw,2rem) -1.75rem 0; pointer-events: none; }
+.contact-crew { position: relative; z-index: 3; justify-self: start; display: flex; gap: .5rem; margin: 0 0 -1.75rem clamp(.75rem,3vw,2rem); pointer-events: none; }
 .contact-crew__face { position: relative; width: clamp(56px,8vw,88px); aspect-ratio: 1; background: var(--scene-bg); box-shadow: 0 0 0 2px var(--scene-accent),0 0 18px #87e4c133; }
 .contact-crew__face--prince { box-shadow: 0 0 0 2px var(--scene-glow),0 0 18px #ffa69e33; }
 .contact-crew__face > i { position: absolute; inset: 6%; background: no-repeat 50% 50% / contain; image-rendering: pixelated; opacity: 0; }

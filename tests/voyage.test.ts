@@ -22,16 +22,16 @@ describe("a viagem", () => {
     expect(home.found).toEqual(["focus-lens", "wish"]);
     expect(home.total).toBe(EGGS.filter((egg) => egg.page === "home").length);
     expect(home.found.length + home.missing.length).toBe(home.total);
-    expect(worldReport("events", [])).toMatchObject({ total: 6, charted: true });
-    expect(worldReport("services", ["epilogue-signal"])).toMatchObject({ total: 6, charted: true, found: [] });
+    expect(worldReport("events", [])).toMatchObject({ total: 7, charted: true });
+    expect(worldReport("services", ["epilogue-signal"])).toMatchObject({ total: 7, charted: true, found: [] });
     expect(worldReport("notfound", ["paw-rescue", "paw-rescue", "epilogue-signal", "unknown"])).toEqual({
       total: 2, charted: true, found: ["paw-rescue"], missing: ["signal-recovered"],
     });
     const later = [...EGGS, { id: "orbital-trail" as EggId, page: "events" as EggPage }];
-    expect(worldReport("events", [], later)).toMatchObject({ total: 7, charted: true });
+    expect(worldReport("events", [], later)).toMatchObject({ total: 8, charted: true });
   });
   it("gives Aurélia its own plate, palette and six moons, with every destination charted", () => {
-    const ids = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination"];
+    const ids = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination", "proposal-harvest"];
     const world = VOYAGE_WORLDS.find((world) => world.page === "services")!;
     expect(world).toMatchObject({ path: "/servicos", plate: SCENES.aurelia.assets.background.src, palette: SCENES.aurelia.palette });
     expect(paletteAt(VOYAGE_WORLDS.indexOf(world) / (VOYAGE_WORLDS.length - 1))).toEqual(SCENES.aurelia.palette);
@@ -39,7 +39,7 @@ describe("a viagem", () => {
     for (const count of [0, 1, 6]) {
       const found = ids.slice(0, count);
       expect(worldReport("services", [...found, ...found, "epilogue-signal", "first-page", "unknown"])).toEqual({
-        total: 6, charted: true, found, missing: ids.slice(count),
+        total: 7, charted: true, found, missing: ids.slice(count),
       });
     }
     expect(VOYAGE_WORLDS.filter((world) => worldReport(world.page, []).charted)).toHaveLength(7);

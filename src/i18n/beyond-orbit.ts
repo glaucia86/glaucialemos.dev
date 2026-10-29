@@ -50,6 +50,7 @@ export type BeyondOrbitCopy = {
   nextStar: string;
   nextBody: string;
   replay: string;
+  episode: { kicker: string; watch: string; title: string; close: string; note: string; tracks: Record<Locale, string> };
 };
 
 export const beyondOrbit: Record<Locale, BeyondOrbitCopy> = {
@@ -119,7 +120,8 @@ export const beyondOrbit: Record<Locale, BeyondOrbitCopy> = {
     "allFound": "Todas as luas encontradas!",
     "nextStar": "A próxima estrela",
     "nextBody": "Toda viagem termina num céu novo.",
-    "replay": "Tocar a última luz de novo"
+    "replay": "Tocar a última luz de novo",
+    "episode": { "kicker": "Episódio 08", "watch": "Assistir: Além da Última Órbita", "title": "Episódio — Além da Última Órbita", "close": "Fechar episódio", "note": "Com som e legendas. Narração em português.", "tracks": { "pt": "Português", "en": "English", "es": "Español" } }
   },
   "en": {
     "chapter": "EPILOGUE // 08",
@@ -187,7 +189,8 @@ export const beyondOrbit: Record<Locale, BeyondOrbitCopy> = {
     "allFound": "Every moon found!",
     "nextStar": "The next star",
     "nextBody": "Every voyage ends under a new sky.",
-    "replay": "Play the last light again"
+    "replay": "Play the last light again",
+    "episode": { "kicker": "Episode 08", "watch": "Watch: Beyond the Last Orbit", "title": "Episode — Beyond the Last Orbit", "close": "Close episode", "note": "With sound and captions. Narration in Portuguese.", "tracks": { "pt": "Português", "en": "English", "es": "Español" } }
   },
   "es": {
     "chapter": "EPÍLOGO // 08",
@@ -255,6 +258,7 @@ export const beyondOrbit: Record<Locale, BeyondOrbitCopy> = {
     "allFound": "¡Todas las lunas encontradas!",
     "nextStar": "La próxima estrella",
     "nextBody": "Todo viaje termina bajo un cielo nuevo.",
-    "replay": "Tocar la última luz otra vez"
+    "replay": "Tocar la última luz otra vez",
+    "episode": { "kicker": "Episodio 08", "watch": "Ver: Más allá de la última órbita", "title": "Episodio — Más allá de la última órbita", "close": "Cerrar episodio", "note": "Con sonido y subtítulos. Narración en portugués.", "tracks": { "pt": "Português", "en": "English", "es": "Español" } }
   }
 };

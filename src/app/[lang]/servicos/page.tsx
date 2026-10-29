@@ -2,9 +2,9 @@ import '../../home.css';
 import '../../aurelia.css';
 import '../../aurelia-story.css';
 import '../../beyond-orbit.css';
+import '../../credibility.css';
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ContactForm } from '@/components/ContactForm';
 import { ContactCinema } from '@/components/services/ContactCinema';
@@ -18,6 +18,7 @@ import { DiscoveryCount } from '@/components/about/DiscoveryCount';
 import { AureliaScene, AureliaHotspots, ContactCrew, FinaleTerrace, aureliaScene } from '@/components/services/AureliaScene';
 import { AureliaMotion } from '@/components/services/AureliaMotion';
 import { AureliaEggs } from '@/components/services/AureliaEggs';
+import { ProposalHarvest } from '@/components/eggs/ExtraEggs';
 import { ServiceGarden } from '@/components/services/ServiceGarden';
 import { PlanetEclipse } from '@/components/services/PlanetEclipse';
 import { CollaborationBeacon } from '@/components/services/CollaborationBeacon';
@@ -34,6 +35,12 @@ import { AURELIA_BOOT_KEY, bootScriptFor } from '@/lib/boot';
 import { beyondOrbit } from '@/i18n/beyond-orbit';
 import { isLocale } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
+import { Portrait } from '@/components/credibility/Portrait';
+import { ProfessionalExperience } from '@/components/credibility/ProfessionalExperience';
+import { OfferFormats } from '@/components/credibility/OfferFormats';
+import { ActivityGallery } from '@/components/credibility/ActivityGallery';
+import { Testimonials } from '@/components/credibility/Testimonials';
+import { commercial } from '@/i18n/commercial';
 
 type Props={params:Promise<{lang:string}>;searchParams:Promise<{assunto?:string|string[]}>};
 export async function generateMetadata({params}:Props):Promise<Metadata>{const {lang}=await params;return isLocale(lang)?getDictionary(lang).services.metadata:{};}
@@ -47,7 +54,7 @@ export default async function Services({params,searchParams}:Props){
   const {assunto}=await searchParams;
   const subject=typeof assunto==='string'?assunto:null;
   const ticker=records.map(({service})=>service.titulo[lang]);
-  return <main id="main" className="home-page services-page" data-sound-world="aurelia" tabIndex={-1}>
+  return <main id="main" className="home-page services-page commercial-page" data-sound-world="aurelia" tabIndex={-1}>
     <script dangerouslySetInnerHTML={{__html:bootScriptFor(AURELIA_BOOT_KEY)}}/>
     <BootSequence {...a.boot} storageKey={AURELIA_BOOT_KEY} variant="aurelia" armOnNavigation/>
     <ReadingProgress variant="aurelia"/>
@@ -64,15 +71,17 @@ export default async function Services({params,searchParams}:Props){
         <div className="page-hero__content aurelia-copy">
           <ChapterTag code={code(0)} label={a.chapters[0]}/>
           <p className="aurelia-world">{a.hero.world}</p>
-          <h1 id="services-title">{d.services.title}</h1>
+          <div className="commercial-intro"><Portrait lang={lang}/><h1 id="services-title">{d.services.title}</h1></div>
           <p className="page-hero__subtitle">{a.hero.intro}</p><p className="page-hero__extra">{a.hero.extra}</p>
-          <div className="actions"><a className="button primary" data-magnetic href="#contato">{d.home.primaryCta}</a><Link className="hero-link" href={`/${lang}/eventos`}>{d.events.secondaryCta} <span aria-hidden="true">↗</span></Link></div>
+          <div className="actions"><a className="button primary" data-magnetic href="#contato">{d.home.primaryCta}</a><a className="hero-link" href="#formatos">{commercial[lang].formatsLink} <span aria-hidden="true">↓</span></a></div>
+          <ProfessionalExperience lang={lang}/>
         </div>
         <AureliaHotspots labels={a.hud}/>
       </AureliaMotion>
       <DiscoveryCount page="services" label={a.discoveries} className="aurelia-discoveries"/>
       <div className="hero-bar" aria-hidden="true"><span className="hero-bar__caption"><span className="pixel-mark"/>{a.hero.caption}</span><span className="hero-bar__ticker"><span className="hero-bar__track">{[...ticker,...ticker].map((item,i)=><span key={i}>{item}<b>◆</b></span>)}</span></span><span className="hero-bar__scroll">{a.hero.scroll}<i/></span></div>
     </div>
+    <OfferFormats lang={lang}/>
     <section className="chapter chapter--orbits" id="orbitas" aria-labelledby="orbits-title"><div className="chapter__inner">
       <div className="chapter-head"><div><ChapterTag code={code(1)} label={labels[1]}/><h2 id="orbits-title" data-reveal="lines">{a.rings.title}</h2></div></div>
       <OrbitGyroscope copy={a.rings} story={s.orbit} lang={lang}/>
@@ -90,6 +99,8 @@ export default async function Services({params,searchParams}:Props){
       <ServiceGarden records={records} copy={a.garden} lang={lang} price={d.services.price} princeFace={aureliaScene.assets.actors.prince['face-happy'].src}/>
     </div></section>
     <ChapterJump code={code(4)} label={labels[4]}/>
+    <ActivityGallery lang={lang}/>
+    <Testimonials lang={lang} enabled={contact.enabled} siteKey={contact.enabled ? contact.siteKey ?? '' : ''}/>
     <section className="chapter chapter--steps" id="como" aria-labelledby="steps-title"><div className="chapter__inner">
       <div className="chapter-head"><div><ChapterTag code={code(4)} label={labels[4]}/><h2 id="steps-title" data-reveal="lines">{s.steps.title}</h2><p data-reveal="up">{s.steps.intro}</p></div></div>
       <WorkSteps copy={s.steps}/>
@@ -106,6 +117,6 @@ export default async function Services({params,searchParams}:Props){
     </div></section>
     <BeaconFinale copy={s.finale} terrace={<FinaleTerrace/>} tag={<ChapterTag code={code(6)} label={labels[6]}/>}/>
     <div className="transmission-wrap"><EpilogueTransmission lang={lang} copy={s.transmission} epilogue={beyondOrbit[lang]}/></div>
-    <AureliaEggs/><HomeChoreography/>
+    <AureliaEggs/><ProposalHarvest lang={lang}/><HomeChoreography/>
   </main>;
 }

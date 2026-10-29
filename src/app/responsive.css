@@ -77,7 +77,8 @@ html body .telescope { padding: 1rem; }
 
 @media (min-width: 1200px) and (min-height: 680px) and (hover: hover) and (pointer: fine) {
   html body .home-page .home-hero-v2 { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
-  html body .home-hero-v2 .page-hero__content { padding-block: clamp(2rem, 5vh, 4rem); }
+  /* Top padding clears the HUD line (clock and location) on short screens. */
+  html body .home-hero-v2 .page-hero__content { padding-block: max(4rem, 7vh) clamp(2rem, 5vh, 4rem); }
   html body .home-page .home-hero-v2 .hero-name { font-size: clamp(3.4rem, 6vw, 6.2rem); }
 }
 

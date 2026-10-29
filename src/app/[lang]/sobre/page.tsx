@@ -1,5 +1,6 @@
 import "../../home.css";
 import "../../niveora.css";
+import "../../career-map.css";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,6 +34,7 @@ import { bootScriptFor, NIVEORA_BOOT_KEY } from "@/lib/boot";
 import { buildCareer, careerStats, type CareerRole } from "@/lib/career";
 import { getCargos, getEventStats, getEventos } from "@/lib/data";
 import { formatExperiencePeriod } from "@/lib/home-curation";
+import { commercial } from "@/i18n/commercial";
 
 type Props = { params: Promise<{ lang: string }> };
 
@@ -98,9 +100,10 @@ export default async function About({ params }: Props) {
           <p className="page-hero__subtitle">{d.about.intro}</p>
           <p className="page-hero__extra">{d.about.mvp}</p>
           <div className="actions">
-            <a className="button primary" data-magnetic href="#trajetoria">{d.about.primaryCta}</a>
+            <Link className="button primary" data-magnetic href={`/${lang}/servicos#contato`} aria-describedby="about-cta-note">{commercial[lang].cta}</Link>
             <a className="hero-link" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{d.about.secondaryCta} <span aria-hidden="true">↗</span></a>
           </div>
+          <p className="cta-note" id="about-cta-note">{commercial[lang].ctaNote}</p>
         </div>
         <NiveoraHotspots labels={{ glaucia: n.hud.glaucia, prince: n.hud.prince, crystal: n.hud.crystal, station: n.hud.station, capsule: n.hud.capsule }} />
       </NiveoraMotion>

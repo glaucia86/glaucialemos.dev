@@ -250,70 +250,6 @@ html.reduce-motion .niveora-portrait * { animation: none !important; }
 
 /* ——— 5. Crossing map ——— */
 .chapter--ops { padding-top: calc(var(--section-space) * .6); }
-.ops { --lane-h: 50px; --era-h: 4.2rem; --axis-h: 2.6rem; --brief-h: 5rem; --zf: 0; --zs: 1; }
-.ops-filter { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.75rem; }
-.ops-filter[hidden] { display: none; }
-.ops-filter button { min-height: 44px; margin: 0; padding: .6rem .95rem; border: 1px solid var(--color-primary-400); border-radius: 0; background: transparent; color: var(--text-inverse); font: 400 .66rem var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background var(--duration-fast), color var(--duration-fast), border-color var(--duration-fast); }
-.ops-filter button:hover { border-color: var(--niv-glacier); }
-.ops-filter button[aria-pressed="true"] { background: var(--niv-glacier); border-color: var(--niv-glacier); color: var(--color-primary-950); }
-
-.ops-era[data-era="foundation"] { --era: var(--era-foundation); }
-.ops-era[data-era="advocacy"] { --era: var(--era-advocacy); }
-.ops-era[data-era="leadership"] { --era: var(--era-leadership); }
-.ops-roles { margin: 0; padding: 0; list-style: none; }
-.ops-role__brief h4 { margin: .35rem 0 .3rem; color: var(--text-heading); font-size: 1rem; line-height: 1.4; }
-.ops-role__brief p { margin: 0; font-size: .85rem; line-height: 1.5; }
-.ops-role__period { color: var(--color-neutral-400) !important; font: 400 .6rem/1.6 var(--font-pixel) !important; letter-spacing: .08em; text-transform: uppercase; }
-.ops-role__period b { color: var(--era); font-weight: 400; }
-.ops-role__company { color: var(--text-muted); }
-.ops-role__brief a { display: inline-flex; align-items: center; min-height: 32px; color: var(--color-primary-200); font-size: .8rem; text-decoration: underline; text-underline-offset: 3px; }
-.ops-era__title { margin: 0; color: var(--era); font: 400 .72rem/1.5 var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
-.ops-era__title small { display: block; color: var(--text-inverse-muted); font-size: .58rem; letter-spacing: .08em; }
-.ops-chart { position: relative; }
-
-@media (min-width: 901px) {
-.ops[data-view="map"] {
-  .ops-chart {
-    height: calc(var(--era-h) + var(--axis-h) + var(--lanes) * var(--lane-h) + var(--brief-h)); overflow: hidden;
-    border-top: 1px solid var(--hud-line); border-bottom: 1px solid var(--hud-line);
-    background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--lane-h) - 1px), color-mix(in srgb, var(--hud-line) 55%, transparent) calc(var(--lane-h) - 1px) var(--lane-h)) 0 calc(var(--era-h) + var(--axis-h)) / 100% calc(var(--lanes) * var(--lane-h)) no-repeat;
-  }
-  .ops-chart :is(.ops-era__band, .ops-era__title, .ops-role) { transition: left .9s var(--ease-out), width .9s var(--ease-out), opacity .5s; }
-  .ops-chart .ops-tick { transition: left .9s var(--ease-out); }
-  .ops-era, .ops-roles { position: static; }
-  .ops-era__band { position: absolute; top: 0; bottom: var(--brief-h); left: calc((var(--x) - var(--zf)) / var(--zs) * 100%); width: calc(var(--w) / var(--zs) * 100%); border-left: 1px dashed color-mix(in srgb, var(--era) 60%, transparent); background: linear-gradient(to bottom, color-mix(in srgb, var(--era) 10%, transparent), color-mix(in srgb, var(--era) 3%, transparent)); }
-  .ops-era__title { position: absolute; top: .8rem; left: calc((var(--x) - var(--zf)) / var(--zs) * 100% + .75rem); width: calc(var(--w) / var(--zs) * 100% - 1.5rem); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-  .ops-era__summary { position: absolute; left: 0; right: 0; bottom: 1.4rem; margin: 0; max-width: 64ch; color: var(--text-muted); font-size: .95rem; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; pointer-events: none; }
-  :is(.ops[data-focus="foundation"] .ops-era[data-era="foundation"], .ops[data-focus="advocacy"] .ops-era[data-era="advocacy"], .ops[data-focus="leadership"] .ops-era[data-era="leadership"]) .ops-era__summary { visibility: visible; }
-  .ops-axis { position: absolute; left: 0; right: 0; top: var(--era-h); height: var(--axis-h); }
-  .ops-tick { position: absolute; top: .55rem; left: calc((var(--x) - var(--zf)) / var(--zs) * 100%); translate: -50% 0; color: var(--text-inverse-muted); font: 400 .58rem var(--font-pixel); letter-spacing: .06em; }
-  .ops-tick::after { content: ""; position: absolute; left: 50%; top: 1.4rem; width: 1px; height: calc(var(--lanes) * var(--lane-h) + 1rem); background: color-mix(in srgb, var(--hud-line) 70%, transparent); }
-  .ops-tick--now { translate: -100% 0; color: var(--niv-glacier); }
-  .ops-tick--now::after { left: auto; right: 0; background: var(--niv-glacier); opacity: .5; }
-  .ops-trail { position: absolute; left: 0; right: 0; top: calc(var(--era-h) + var(--axis-h) - 5px); height: 3px; background: repeating-linear-gradient(90deg, var(--hud-line) 0 6px, transparent 6px 12px); }
-  .ops-trail__beam { position: absolute; inset: 0; transform: scaleX(var(--progress, 1)); transform-origin: 0 50%; background: linear-gradient(90deg, var(--niv-glacier), var(--niv-cyan) 60%, var(--niv-lilac)); box-shadow: 0 0 8px var(--niv-cyan); }
-  .ops-ship { position: absolute; z-index: 3; top: calc(var(--era-h) + var(--axis-h) - 14px); left: calc(var(--progress, 0) * 100%); width: 44px; aspect-ratio: 137 / 70; translate: -50% 0; visibility: hidden; opacity: 0; pointer-events: none; }
-  .ops-ship__art { position: absolute; inset: 0; background: no-repeat 0 0 / 100% 100%; image-rendering: pixelated; scale: -1 1; filter: drop-shadow(4px 0 6px var(--niv-cyan)); }
-  .ops-ship__year { position: absolute; left: 50%; top: -1.35rem; translate: -50% 0; padding: .1rem .35rem; background: var(--niv-glacier); color: var(--color-primary-950); font: 400 .56rem var(--font-pixel); }
-  .ops-role { position: absolute; z-index: 1; left: calc((var(--x) - var(--zf)) / var(--zs) * 100%); width: max(12px, calc(var(--w) / var(--zs) * 100% - 3px)); top: calc(var(--era-h) + var(--axis-h) + var(--lane) * var(--lane-h) + 7px); height: calc(var(--lane-h) - 14px); }
-  .ops-role:is(:hover, :focus-within, :has([aria-expanded="true"])) { z-index: 4; }
-  .ops-role__bar { border: 0; width: 100%; padding: 0; position: relative; display: flex; align-items: center; height: 100%; overflow: hidden; cursor: pointer; transition: opacity .35s, filter .35s, box-shadow .35s;
-    background: linear-gradient(90deg, color-mix(in srgb, var(--era) 22%, var(--color-space-2)), color-mix(in srgb, var(--era) 50%, var(--color-space-2)));
-    box-shadow: inset 0 0 0 1px var(--era), 0 0 18px color-mix(in srgb, var(--era) 35%, transparent); }
-  .ops-role[data-lit="false"] .ops-role__bar { opacity: .32; filter: saturate(.3); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--era) 55%, transparent); }
-  .ops-role__bar::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-white) 45%, transparent), transparent); translate: -100% 0; }
-  .ops-role:is(:hover, :focus-within) .ops-role__bar::before { animation: ops-sweep .7s steps(8) 1; }
-  .ops-role[data-current] .ops-role__bar::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 4px; background: var(--color-white); box-shadow: 0 0 10px var(--era), 0 0 22px var(--era); animation: hud-blink .9s steps(1) infinite; }
-  .ops-role__label { overflow: hidden; padding: 0 .6rem; color: var(--color-white); font: 400 .6rem var(--font-pixel); letter-spacing: .04em; white-space: nowrap; text-overflow: ellipsis; text-shadow: 1px 1px 0 var(--color-space-0); }
-  .ops-role__brief { visibility: hidden; position: absolute; left: 0; top: calc(100% + 8px); width: 300px; padding: .9rem 1rem; opacity: 0; translate: 0 -4px; pointer-events: none; transition: opacity .2s, translate .2s;
-    background: var(--color-space-1); box-shadow: 0 -2px 0 0 var(--era), 0 2px 0 0 var(--era), -2px 0 0 0 var(--era), 2px 0 0 0 var(--era), 0 18px 40px color-mix(in srgb, var(--color-space-0) 80%, transparent); }
-  .ops-role:is(:hover, :focus-within, :has([aria-expanded="true"])) .ops-role__brief { visibility: visible; opacity: 1; translate: 0 0; pointer-events: auto; }
-  .ops-role[data-side="end"] .ops-role__brief { left: auto; right: 0; }
-  .ops-role[data-open="up"] .ops-role__brief { top: auto; bottom: calc(100% + 8px); translate: 0 4px; }
-  :is(.ops[data-focus="foundation"] .ops-era[data-era="foundation"], .ops[data-focus="advocacy"] .ops-era[data-era="advocacy"], .ops[data-focus="leadership"] .ops-era[data-era="leadership"]) :is(.ops-role, .ops-era__band, .ops-era__title, .ops-era__summary) { opacity: 1; }
-}
-}
-@keyframes ops-sweep { to { translate: 100% 0; } }
 
 /* ——— 6. Expedition call: the ship lifts off the snow when the chapter comes into view. ——— */
 .chapter--expedition::before { background: radial-gradient(ellipse at 50% 0%, color-mix(in srgb, var(--niv-cyan) 32%, transparent), color-mix(in srgb, var(--niv-lilac) 28%, transparent) 25%, transparent 60%); }
@@ -397,15 +333,6 @@ html.reduce-motion :is(.niveora-crystal__art, .niveora-station__lamp, .niveora-w
 html.reduce-motion .reading-progress--niveora .reading-progress__track { height: calc(100% - 18px); width: 10px; }
 html.reduce-motion .reading-progress--niveora .reading-progress__fill { background: #55e9e8; }
 
-.ops[data-view="list"] {
-.ops-era { margin-top: 2.25rem; padding: 1.25rem 0 0 1.25rem; border-left: 2px solid var(--era); }
-.ops-era__band, .ops-axis, .ops-trail, .ops-ship { display: none; }
-.ops-era__summary { margin: .6rem 0 1rem; color: var(--text-muted); font-size: .92rem; }
-.ops-role { position: relative; padding: 1rem 0; border-top: 1px solid var(--hud-line); }
-.ops-role__bar { display: none; width: 18px; height: 6px; margin-bottom: .6rem; background: var(--era); box-shadow: 0 0 10px var(--era); }
-.ops-role__label { display: none; }
-.ops-role[data-current] .ops-role__bar { animation: hud-blink 1s steps(1) infinite; }
-}
 
 /* Compact rhythm belongs only to Nivéora. Adjacent half-paddings form one gap. */
 .between-lines { margin-top: 1.5rem; border-left: 2px solid var(--niv-cyan); background: color-mix(in srgb, var(--niv-cyan) 4%, var(--color-space-1)); }
@@ -448,11 +375,6 @@ html.reduce-motion .reading-progress--niveora .reading-progress__fill { backgrou
 .about-page .badges { margin-top: var(--niveora-gap); }
 .about-page .chapter--expedition { min-height: 0; padding-bottom: var(--niveora-gap); }
 .about-page .chapter-head { margin-bottom: var(--niveora-gap); }
-.about-page .ops-era[hidden] { display: none; }
-.about-page .ops-role__bar:focus-visible { outline: 3px solid var(--niv-snow); outline-offset: 3px; }
-.about-page .ops-role__brief a { min-height: 44px; }
-.about-page .ops-era:not([hidden]) .ops-era__summary { opacity: 1; }
-.about-page .ops[data-view="list"] .ops-role__brief { overflow-wrap: anywhere; }
 
 .chapter--aurora { --signal: var(--niv-cyan); overflow: visible; }
 .chapter--aurora[data-signal="en"] { --signal: var(--niv-lilac); }
@@ -486,6 +408,6 @@ html.reduce-motion .reading-progress--niveora .reading-progress__fill { backgrou
   .aurora-records { padding-left: 1rem; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .about-page .ops * { animation: none !important; transition: none !important; }
+  :is(.about-page, .career-dialog) .ops * { animation: none !important; transition: none !important; }
 }
-html.reduce-motion .about-page .ops * { animation: none !important; transition: none !important; }
+html.reduce-motion :is(.about-page, .career-dialog) .ops * { animation: none !important; transition: none !important; }

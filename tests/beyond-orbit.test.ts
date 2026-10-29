@@ -7,6 +7,9 @@ import { SCENES, poseBox } from "@/lib/scenes";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { EpilogueCredits } from "@/components/epilogue/EpilogueCredits";
+import { EpilogueVoyage } from "@/components/epilogue/EpilogueVoyage";
+import { BeyondOrbitEpisode } from "@/components/epilogue/BeyondOrbitEpisode";
+import { BeyondOrbitScene } from "@/components/epilogue/BeyondOrbitScene";
 import { beyondOrbit } from "@/i18n/beyond-orbit";
 import { EGGS } from "@/lib/egg-catalog";
 
@@ -148,5 +151,47 @@ describe("approved orbit art", () => {
       expect(light / solid).toBeGreaterThan(.15);
       expect(data[3]).toBe(0);
     }
+  });
+});
+
+describe("narrated episode", () => {
+  const BASE = "public/galaxia/scenes/beyond-orbit";
+  it.each(["pt", "en", "es"] as const)("o episódio só abre por clique, com som, controles e legendas nos três idiomas (%s por padrão)", lang => {
+    const copy = beyondOrbit[lang];
+    const html = renderToStaticMarkup(createElement(BeyondOrbitEpisode, { copy: copy.episode, lang }));
+    const episode = html.slice(html.indexOf("<dialog"));
+    expect(html).toContain(copy.episode.watch);
+    expect(html).toMatch(/<button type="button" class="beyond-orbit__episode"/);
+    expect(episode).toMatch(/<dialog[^>]*data-lenis-prevent=""/);
+    expect(episode).toMatch(/<video[^>]*controls=""/);
+    expect(episode).toMatch(/<video[^>]*preload="none"/);
+    expect(episode).not.toMatch(/autoplay|muted/i);
+    expect(episode.match(/<track/g)).toHaveLength(3);
+    expect(episode.match(/<track[^>]*default=""/gi)).toHaveLength(1);
+    expect(episode.match(new RegExp(`<track[^>]*srcLang="${lang}"[^>]*>`, "i"))?.[0]).toContain('default=""');
+  });
+  it("fica à esquerda da imagem, no texto do topo (como na 404), e nunca na cena, nos créditos ou na viagem", async () => {
+    const { default: BeyondOrbit } = await import("@/app/[lang]/alem-da-ultima-orbita/page");
+    const page = renderToStaticMarkup(await BeyondOrbit({ params: Promise.resolve({ lang: "en" }) }));
+    const copyBlock = page.slice(page.indexOf('class="beyond-orbit__copy"'), page.indexOf('class="beyond-orbit__experience"'));
+    expect(copyBlock).toContain('class="beyond-orbit__episode-slot"');
+    expect(page.match(/<dialog[^>]*class="beyond-orbit-episode"/g)).toHaveLength(1);
+    expect(page).toContain(beyondOrbit.en.episode.watch);
+    for (const html of [renderToStaticMarkup(createElement(BeyondOrbitScene, { copy: beyondOrbit.en })), renderToStaticMarkup(createElement(EpilogueVoyage, { copy: beyondOrbit.en, lang: "en" })), renderToStaticMarkup(createElement(EpilogueCredits, { copy: beyondOrbit.en }))]) expect(html).not.toContain("beyond-orbit-episode");
+  });
+  it("publica vídeo leve com poster e legendas sincronizadas nos três idiomas", () => {
+    for (const file of ["episode.mp4", "episode.webm"]) expect(fs.statSync(`${BASE}/${file}`).size).toBeLessThanOrEqual(8_000_000);
+    expect(fs.statSync(`${BASE}/episode-poster.webp`).size).toBeLessThan(200_000);
+    const cues = (lang: string) => [...fs.readFileSync(`${BASE}/episode.${lang}.vtt`, "utf8").matchAll(/(\d\d):(\d\d):(\d\d\.\d{3}) --> (\d\d):(\d\d):(\d\d\.\d{3})/g)]
+      .map(match => [Number(match[2]) * 60 + Number(match[3]), Number(match[5]) * 60 + Number(match[6])]);
+    const pt = cues("pt");
+    expect(pt.length).toBeGreaterThan(5);
+    for (const lang of ["en", "es"]) expect(cues(lang)).toEqual(pt);
+    for (const lang of ["pt", "en", "es"]) expect(fs.readFileSync(`${BASE}/episode.${lang}.vtt`, "utf8").startsWith("WEBVTT")).toBe(true);
+    pt.forEach(([start, end], index) => {
+      expect(end).toBeGreaterThan(start);
+      expect(end).toBeLessThan(74.3);
+      if (index) expect(start).toBeGreaterThanOrEqual(pt[index - 1][1]);
+    });
   });
 });

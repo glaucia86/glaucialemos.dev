@@ -6,12 +6,21 @@ import { createPortal } from "react-dom";
 import type { ComlinkCopy } from "@/i18n/comlink";
 import { EGGS, FOUND_EVENT, discover, emitEgg, eggsFor, forget, getFoundSnapshot, matchPhrase, matchTail, normalizePhrase, onEgg, pageOf, remainingDiscoveries, subscribeReset, type EggId } from "@/lib/eggs";
 import { useDiscoveries } from "@/lib/use-discoveries";
+import { epilogueRemaining } from "@/lib/epilogue";
 import { play } from "@/lib/sfx";
 
 
 // The secret channel: every Easter egg is reachable from here on any device, by typing or by tapping replay.
 // The toggle lives in the site header (slot); the dialog and the toast stay at the page root.
-export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname: string; slot: HTMLElement | null }) {
+const HINT_KEY = "comlink-hint-seen";
+// Secrets needed before the radio reveals where the second secret page (the 404) hides.
+export const LOST_UNLOCK = 5;
+// Any page can open the radio (e.g. the Home's guide button).
+export const COMLINK_OPEN_EVENT = "comlink:open";
+const markHintSeen = () => { try { localStorage.setItem(HINT_KEY, "1"); } catch { /* Session only. */ } };
+
+// `hintReady`: the chrome says when nothing else is asking for attention (intro and sound invitation are over).
+export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: ComlinkCopy; pathname: string; slot: HTMLElement | null; hintReady?: boolean }) {
   const page = pageOf(pathname);
   const list = eggsFor(page);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -27,6 +36,18 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
   const [fresh, setFresh] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [confirming, setConfirming] = useState(false);
+  const [hint, setHint] = useState(false);
+  // First visit only: the radio blinks once with a one-line explanation, so nobody misses that the site has secrets.
+  useEffect(() => {
+    if (!hintReady) return;
+    let seen = true;
+    try { seen = localStorage.getItem(HINT_KEY) === "1"; } catch { /* Without storage the hint is skipped. */ }
+    if (seen) return;
+    const show = setTimeout(() => setHint(true), 900);
+    const hide = setTimeout(() => { setHint(false); markHintSeen(); }, 12_000);
+    return () => { clearTimeout(show); clearTimeout(hide); };
+  }, [hintReady]);
+  function dismissHint() { setHint(false); markHintSeen(); }
   useEffect(() => {
     const cleanups = [[scroll.current, scrollContent.current], [letterScroll.current, letterContent.current]].map(([viewport, content]) => {
       const frame = viewport?.parentElement;
@@ -108,14 +129,16 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
       event.preventDefault();
       if (dialog.current?.open) dialog.current.close(); else open();
     };
+    const onOpen = () => open();
     addEventListener(FOUND_EVENT, onFound);
     addEventListener("keydown", onKey);
-    return () => { clearTimeout(timer); removeEventListener(FOUND_EVENT, onFound); removeEventListener("keydown", onKey); };
+    addEventListener(COMLINK_OPEN_EVENT, onOpen);
+    return () => { clearTimeout(timer); removeEventListener(FOUND_EVENT, onFound); removeEventListener("keydown", onKey); removeEventListener(COMLINK_OPEN_EVENT, onOpen); };
   }, []);
 
   useEffect(() => { if (dialog.current?.open) dialog.current.close(); }, [pathname]);
 
-  function open() { setFeedback(""); setConfirming(false); dialog.current?.showModal(); input.current?.focus({ preventScroll: true }); play("blip"); }
+  function open() { setHint(false); markHintSeen(); setFeedback(""); setConfirming(false); dialog.current?.showModal(); input.current?.focus({ preventScroll: true }); play("blip"); }
   const wipe = () => {
     if (!confirming) { setConfirming(true); play("error"); return; }
     forget(); setConfirming(false); setFeedback(copy.resetDone); play("push");
@@ -139,6 +162,9 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
   };
   const total = EGGS.length;
   const count = found.length;
+  const lang = pathname.split("/")[1] || "pt";
+  const remaining = epilogueRemaining(found);
+  const lostFound = EGGS.some(egg => egg.page === "notfound" && found.includes(egg.id));
 
   return <>
     {slot && createPortal(<button type="button" className="comlink-toggle" aria-label={copy.open} aria-haspopup="dialog" title={`${copy.open} (\`)`} data-fresh={fresh || undefined} onClick={open}>
@@ -149,6 +175,7 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
       </svg>
       <span className="comlink-toggle__count" aria-hidden="true">{count}/{total}</span>
     </button>, slot)}
+    {slot && hint && createPortal(<p className="comlink-hint" role="status">{copy.guide.hint} <button type="button" onClick={dismissHint}>{copy.guide.hintClose}</button></p>, slot)}
     <p className="comlink-fresh" role="status" aria-live="polite" data-show={fresh || undefined}>{fresh ? copy.fresh : ""}</p>
     <dialog ref={dialog} className="comlink" data-lenis-prevent="" aria-labelledby="comlink-title" onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="comlink__panel">
@@ -161,6 +188,21 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <span>{copy.counter}: <b>{count}/{total}</b>{count === total && <em> · {copy.master}</em>}</span>
           <span className="comlink__bar" aria-hidden="true"><i style={{ transform: `scaleX(${count / total})` }} /></span>
         </p>
+        <p className="comlink__intro">{copy.guide.intro}</p>
+        <section className="comlink__pages" aria-labelledby="comlink-pages">
+          <h3 id="comlink-pages">{copy.guide.pages}</h3>
+          <ul>
+            <li data-found={found.includes("epilogue-signal") || undefined}>
+              <span className="comlink__icon" aria-hidden="true">{found.includes("epilogue-signal") ? "✦" : remaining ? "◌" : "✧"}</span>
+              <span className="comlink__text"><b>{copy.guide.epilogue}</b><small>{found.includes("epilogue-signal") ? copy.guide.epilogueOpen : remaining ? copy.guide.epilogueLocked.replace("{n}", String(remaining)) : copy.guide.epilogueReady}</small></span>
+              {found.includes("epilogue-signal") && <Link href={`/${lang}/alem-da-ultima-orbita`} onClick={() => dialog.current?.close()}>{copy.epilogue.revisit}</Link>}
+            </li>
+            <li data-found={lostFound || undefined}>
+              <span className="comlink__icon" aria-hidden="true">{lostFound ? "✦" : "?"}</span>
+              <span className="comlink__text"><b>{copy.guide.lost}</b><small>{lostFound ? copy.guide.lostFound : count < LOST_UNLOCK ? copy.guide.lostLocked.replace("{n}", String(LOST_UNLOCK - count)) : copy.guide.lostHidden}</small></span>
+            </li>
+          </ul>
+        </section>
         <form className="comlink__terminal" onSubmit={submit}>
           <label className="sr-only" htmlFor="comlink-input">{copy.placeholder}</label>
           <span aria-hidden="true">&gt;</span>
@@ -172,7 +214,6 @@ export function Comlink({ copy, pathname, slot }: { copy: ComlinkCopy; pathname:
           <div ref={scroll} className="comlink__scroll" data-lenis-prevent="" tabIndex={0} role="region" aria-labelledby="comlink-title">
             <div ref={scrollContent} className="comlink__scroll-content">
               {remainingDiscoveries("curious-letter", found) === 0 && <button type="button" className="comlink__envelope" onClick={() => run("curious-letter")}><span aria-hidden="true">✉</span> {copy.letter.open}</button>}
-              {found.includes("epilogue-signal") && <Link className="comlink__envelope" href={`/${pathname.split("/")[1]}/alem-da-ultima-orbita`} onClick={() => dialog.current?.close()}>{copy.epilogue.revisit}</Link>}
               {count > 0 && <button type="button" className="comlink__reset" data-confirming={confirming || undefined} onClick={wipe}>
                 <span aria-hidden="true">{confirming ? "!" : "⟲"}</span>{confirming ? copy.resetConfirm.replace("{n}", String(count)) : copy.reset}
               </button>}

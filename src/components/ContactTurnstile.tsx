@@ -4,7 +4,6 @@ import Script from 'next/script';
 import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '@/i18n/config';
 import { contactCopy } from '@/i18n/contact';
-import type { ContactState } from '@/lib/contact-schema';
 
 type Turnstile = {
   render: (container: HTMLElement, options: {
@@ -17,7 +16,8 @@ type Turnstile = {
 };
 declare global { interface Window { turnstile?: Turnstile } }
 
-export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; lang: Locale; result: ContactState | null }) {
+// Shared by the contact and testimonial forms (any Server Action state with a status resets the widget).
+export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; lang: Locale; result: { status: string } | null }) {
   const copy = contactCopy[lang];
   const container = useRef<HTMLDivElement>(null);
   const widget = useRef<string | null>(null);
@@ -36,6 +36,13 @@ export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; l
     observer.observe(form);
     return () => observer.disconnect();
   }, []);
+
+  // A second form on the same page shares the script (same id), which may already be loading or loaded.
+  useEffect(() => {
+    if (!visible || loaded) return;
+    const timer = setInterval(() => { if (window.turnstile) { setLoaded(true); clearInterval(timer); } }, 300);
+    return () => clearInterval(timer);
+  }, [visible, loaded]);
 
   useEffect(() => {
     if (!loaded || !container.current || !window.turnstile) return;

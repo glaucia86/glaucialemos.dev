@@ -1,4 +1,7 @@
 import "../home.css";
+import "../credibility.css";
+import "../career-map.css";
+import "../worlds-warp.css";
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,15 +16,23 @@ import { CareerTelescope } from "@/components/home/CareerTelescope";
 import { CrewPortrait } from "@/components/home/CrewPortrait";
 import { HudClock } from "@/components/home/HudClock";
 import { HomeChoreography } from "@/components/home/HomeChoreography";
-import { MissionIcon } from "@/components/home/MissionIcon";
+import { CareerDialog } from "@/components/home/CareerDialog";
+import { SecretsGuide } from "@/components/home/SecretsGuide";
+import { WorldsWarp } from "@/components/home/WorldsWarp";
+import { MeteorShower } from "@/components/eggs/ExtraEggs";
+import { EGGS } from "@/lib/egg-catalog";
 import { ChapterTag as Tag, ChapterJump as Jump } from "@/components/home/Chapter";
-import { curateMilestones, homeServiceSubjects, formatExperiencePeriod, featuredContribution, HOME_ARCHIVE_SIZE } from "@/lib/home-curation";
+import { curateMilestones, formatExperiencePeriod, featuredContribution, HOME_ARCHIVE_SIZE } from "@/lib/home-curation";
+import { buildCareer } from "@/lib/career";
 import { bootScript } from "@/lib/boot";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
-import { getEventStats, getServicos, getCargos, getEventos } from "@/lib/data";
+import { getEventStats, getCargos, getEventos } from "@/lib/data";
 import { getContribuicoesComEstrelas, getTopRepos } from "@/lib/github";
 import { socialLinks } from "@/data/social";
+import { Portrait } from "@/components/credibility/Portrait";
+import { OfferFormats } from "@/components/credibility/OfferFormats";
+import { commercial } from "@/i18n/commercial";
 
 export const revalidate = 86400;
 
@@ -50,7 +61,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
   const bootLines = h.boot.lines.map(line => line.replace("{events}", format.format(stats.eventos)).replace("{countries}", format.format(stats.paises)));
   const ticker = [...h.hud.ticker, ...h.hud.ticker];
 
-  return <main id="main" className="home-page" data-sound-world="observatory" tabIndex={-1}>
+  return <main id="main" className="home-page commercial-page" data-sound-world="observatory" tabIndex={-1}>
     <script dangerouslySetInnerHTML={{ __html: bootScript }} />
     <BootSequence lines={bootLines} granted={h.boot.granted} skip={h.boot.skip} label={h.boot.label} />
     <ReadingProgress />
@@ -70,13 +81,18 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         </div>
         <div className="page-hero__content hero-copy">
           <ChapterTag index={0} label={h.episodes[0]} />
-          <h1 id="hero-title" className="hero-name" aria-label="Glaucia Lemos"><span className="hero-name__line" aria-hidden="true">Glaucia</span><span className="hero-name__line hero-name__line--alt" aria-hidden="true">Lemos</span></h1>
+          <div className="commercial-intro">
+            <Portrait lang={lang} />
+            <h1 id="hero-title" className="hero-name" aria-label="Glaucia Lemos"><span className="hero-name__line" aria-hidden="true">Glaucia</span><span className="hero-name__line hero-name__line--alt" aria-hidden="true">Lemos</span></h1>
+          </div>
           <p className="hero-role">{d.home.eyebrow}</p>
           <p className="page-hero__subtitle">{d.home.value}</p>
           <div className="actions">
-            <Link className="button primary" data-magnetic href={`/${lang}/servicos`}>{d.home.primaryCta}</Link>
-            <Link className="hero-link" href="#projetos">{d.home.secondaryCta} <span aria-hidden="true">↓</span></Link>
+            <Link className="button primary" data-magnetic href={`/${lang}/servicos#contato`} aria-describedby="hero-cta-note">{commercial[lang].cta}</Link>
+            <a className="hero-link" href="#formatos">{d.home.secondaryCta} <span aria-hidden="true">↓</span></a>
           </div>
+          <p className="cta-note" id="hero-cta-note">{commercial[lang].ctaNote}</p>
+          <SecretsGuide text={h.guide.text.replace("{n}", String(EGGS.length))} cta={h.guide.cta} />
         </div>
         <ObservatoryHotspots labels={{ glaucia: h.hud.glaucia, prince: h.hud.prince, console: h.hud.console, hangar: h.hud.hangar, lantern: h.hud.lantern }} />
       </ObservatoryMotion>
@@ -88,7 +104,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
       </div>
     </div>
 
-    {/* Chapter 2 — The crew member */}
+    {/* Chapter 2 — Who I am: the short timeline here, the detailed map in a dialog (no detour to another page). */}
     <section className="chapter chapter--crew" id="tripulante" aria-labelledby="crew-title">
       <div className="chapter__inner crew-grid">
         <div className="holo-card" data-tilt>
@@ -107,7 +123,7 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <dl className="char-sheet" aria-label={h.crew.sheetLabel} data-reveal="stagger">
             {h.crew.sheet.map(([term, value]) => <div key={term}><dt>{term}</dt><dd data-scramble>{value}</dd></div>)}
           </dl>
-          <Link className="text-link trajectory-link" href={`/${lang}/sobre`}>{d.home.aboutLink}<span aria-hidden="true">↗</span></Link>
+          <a className="text-link trajectory-link" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{h.crew.linkedin}<span aria-hidden="true"> ↗</span></a>
         </div>
       </div>
       <div className="chapter__inner route" data-route>
@@ -122,16 +138,17 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
           <h4>{d.journey.milestones[index]}</h4>
           <p>{milestone.empresa} · <a href={milestone.fonte}>{d.common.source}<span aria-hidden="true"> ↗</span></a></p>
         </li>)}</ol>
+        <CareerDialog copy={{ more: h.crew.more, title: h.crew.mapTitle, intro: h.crew.mapIntro, close: h.crew.close }} roles={buildCareer(getCargos())} map={d.niveora.map} locale={lang} source={d.common.source} ship={observatory.assets.props["spacecraft-far"].src} />
       </div>
     </section>
 
     <ChapterJump index={2} label={h.episodes[2]} />
 
-    {/* Chapter 3 — The star archive */}
+    {/* Chapter 3 — Projects, with one plain-language line for readers who are not engineers. */}
     <section className="chapter chapter--stellar" id="projetos" aria-labelledby="stellar-title">
       <div className="chapter__inner">
         <div className="chapter-head">
-          <div><ChapterTag index={2} label={h.episodes[2]} /><h2 id="stellar-title" data-reveal="lines">{d.journey.demo.title}</h2></div>
+          <div><ChapterTag index={2} label={h.episodes[2]} /><h2 id="stellar-title" data-reveal="lines">{d.journey.demo.title}</h2><p className="chapter-context" data-reveal="up">{d.journey.demo.context}</p></div>
           <Link className="text-link" href={`/${lang}/projetos`}>{d.home.projectsLink}<span aria-hidden="true">↗</span></Link>
         </div>
         <div className="stellar-grid">
@@ -163,11 +180,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
     <ChapterJump index={3} label={h.episodes[3]} />
 
-    {/* Chapter 4 — The constellation map */}
+    {/* Chapter 4 — Events */}
     <section className="chapter chapter--galaxy" id="mapa" aria-labelledby="galaxy-title">
       <div className="chapter__inner">
         <div className="chapter-head">
-          <div><ChapterTag index={3} label={h.episodes[3]} /><h2 id="galaxy-title" data-reveal="lines">{h.galaxy.title}</h2><p data-reveal="up">{d.journey.map.intro}</p></div>
+          <div><ChapterTag index={3} label={h.episodes[3]} /><h2 id="galaxy-title" data-reveal="lines">{h.galaxy.title}</h2><p data-reveal="up">{h.galaxy.intro}</p></div>
           <dl className="galaxy-stats">{[stats.eventos, stats.paises, languages].map((value, index) => <div key={index}><dt>{d.events.labels[index]}</dt><dd data-count={value}>{format.format(value)}</dd></div>)}</dl>
         </div>
         <p className="history-label">{d.journey.map.history}</p>
@@ -178,22 +195,10 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
 
     <ChapterJump index={4} label={h.episodes[4]} />
 
-    {/* Chapter 5 — Your mission */}
-    <section className="chapter chapter--missions" id="missoes" aria-labelledby="missions-title">
-      <div className="chapter__inner">
-        <div className="chapter-head chapter-head--center">
-          <div><ChapterTag index={4} label={h.episodes[4]} /><h2 id="missions-title" data-reveal="lines">{h.missions.title}</h2><p data-reveal="up">{h.missions.intro}</p></div>
-        </div>
-        <div className="missions" data-reveal="stagger">{getServicos().map((service, index) => <article className="mission" key={service.id} style={{ "--glow": glows[index] } as CSSProperties}>
-          <span className="mission__glow" aria-hidden="true" />
-          <MissionIcon kind={homeServiceSubjects[service.id]} />
-          <p className="mission__label">{h.missions.labels[index]}</p>
-          <h3>{service.titulo[lang]}</h3>
-          <p>{service.descricao[lang]}</p>
-          <Link className="mission__cta" href={`/${lang}/servicos?assunto=${homeServiceSubjects[service.id]}#contato`}>{d.journey.closing.actions[index]}<span aria-hidden="true"> →</span></Link>
-        </article>)}</div>
-      </div>
-    </section>
+    {/* Chapter 5 — Workshops and mentoring: the only offers block on the Home (formats, topics, CTAs). */}
+    <OfferFormats lang={lang} className="chapter chapter--missions" tag={<ChapterTag index={4} label={h.episodes[4]} />} />
+
+    <WorldsWarp lang={lang} />
 
     {/* Credits */}
     <section className="chapter chapter--credits" aria-labelledby="credits-title">
@@ -204,9 +209,11 @@ export default async function Home({ params }: { params: Promise<{ lang: string 
         <p className="chapter-tag"><span className="chapter-tag__ep" aria-hidden="true">END</span>{h.credits.end}</p>
         <h2 id="credits-title" data-reveal="lines">{h.credits.title}</h2>
         <p data-reveal="up">{h.credits.body}</p>
-        <div className="actions"><Link className="button primary" data-magnetic href={`/${lang}/servicos#contato`}>{h.credits.cta}</Link><a className="hero-link" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{h.credits.secondary} <span aria-hidden="true">↗</span></a></div>
+        <p className="cta-note" id="credits-cta-note">{commercial[lang].ctaNote}</p>
+        <div className="actions"><Link className="button primary" data-magnetic href={`/${lang}/servicos#contato`} aria-describedby="credits-cta-note">{commercial[lang].cta}</Link><a className="hero-link" href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer">{h.credits.secondary} <span aria-hidden="true">↗</span></a></div>
       </div>
     </section>
+    <MeteorShower lang={lang} events={getEventos().map(({ nome, cidade, ano }) => ({ nome, cidade, ano }))} />
     <HomeChoreography />
   </main>;
 }

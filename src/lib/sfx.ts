@@ -1,7 +1,7 @@
 // Hybrid Web Audio: real world samples and synthesized UI, off by default, opt-in only.
 import { worldSound } from "./world-sound";
 import { syncMusic } from "./music";
-export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "saber" | "error" | "success" | "levitate" | "deflect" | "rumble" | "splash" | "wind" | "ice" | "holo" | "r2" | "jawa" | "pod" | "cantina" | "sunset" | "zap" | "twinkle" | "lens" | "woof" | "beacon" | "ignite" | "launch" | "hangar" | "switch" | "hush" | "catch" | "wish" | "warp" | "pawstep" | "capsule" | "aurora" | "gust" | "scan" | "dust" | "sprout" | "bug"
+export type SoundKind = "blip" | "key" | "boot" | "granted" | "push" | "error" | "success" | "rumble" | "wind" | "ice" | "holo" | "twinkle" | "lens" | "woof" | "beacon" | "ignite" | "launch" | "hangar" | "switch" | "hush" | "catch" | "wish" | "warp" | "pawstep" | "capsule" | "aurora" | "gust" | "scan" | "dust" | "sprout" | "bug"
   | "type" | "return" | "disk-in" | "disk-out" | "crt-on" | "dig" | "thread" | "letter" | "snow" | "gust-dust" | "scan-sweep" | "static" | "build" | "brush"
   | "chime" | "page" | "prism" | "scanner" | "echo" | "link" | "dusk" | "refract" | "facet"
   | "implode" | "nova" | "shimmer" | "bloom" | "star-ping" | "slam" | "credits-chord" | "transmission" | "dive"
@@ -35,22 +35,12 @@ export const soundBank: Record<SoundKind, Tone[]> = {
   boot: [{ wave: "square", from: 110, to: 440, duration: .35, gain: .04 }],
   granted: [{ wave: "square", from: 660, to: 660, duration: .08, gain: .04 }, { wave: "square", from: 990, to: 990, duration: .14, gain: .04, delay: .09 }],
   push: [{ wave: "sawtooth", from: 180, to: 40, duration: .45, gain: .06 }, { wave: "triangle", from: 90, to: 30, duration: .5, gain: .08 }],
-  saber: [{ wave: "sawtooth", from: 70, to: 140, duration: .55, gain: .045 }, { wave: "square", from: 140, to: 220, duration: .3, gain: .02 }],
   error: [{ wave: "square", from: 160, to: 120, duration: .12, gain: .045 }, { wave: "square", from: 120, to: 90, duration: .16, gain: .045, delay: .13 }],
   success: [{ wave: "triangle", from: 523, to: 523, duration: .07, gain: .05 }, { wave: "triangle", from: 784, to: 784, duration: .07, gain: .05, delay: .08 }, { wave: "triangle", from: 1046, to: 1046, duration: .16, gain: .05, delay: .16 }],
-  levitate: [{ wave: "triangle", from: 90, to: 260, duration: .6, gain: .05 }, { wave: "sine", from: 180, to: 520, duration: .6, gain: .03 }],
-  deflect: [{ wave: "square", from: 1400, to: 300, duration: .12, gain: .035 }, { wave: "sawtooth", from: 220, to: 90, duration: .2, gain: .03, delay: .02 }],
   rumble: [{ wave: "sawtooth", from: 48, to: 36, duration: .6, gain: .07 }, { wave: "triangle", from: 96, to: 140, duration: .6, gain: .04, delay: .05 }],
-  splash: [{ wave: "square", from: 900, to: 120, duration: .22, gain: .03 }, { wave: "triangle", from: 260, to: 50, duration: .5, gain: .06, delay: .03 }],
   wind: [{ wave: "triangle", from: 300, to: 520, duration: .6, gain: .015 }, { wave: "sine", from: 600, to: 380, duration: .6, gain: .012, delay: .25 }],
   ice: [{ wave: "square", from: 2400, to: 900, duration: .08, gain: .03 }, { wave: "square", from: 1800, to: 600, duration: .1, gain: .03, delay: .07 }, { wave: "triangle", from: 900, to: 120, duration: .4, gain: .04, delay: .12 }],
   holo: [{ wave: "sine", from: 440, to: 660, duration: .3, gain: .03 }, { wave: "triangle", from: 880, to: 1320, duration: .4, gain: .02, delay: .15 }],
-  r2: [{ wave: "square", from: 1200, to: 2400, duration: .06, gain: .025 }, { wave: "square", from: 2600, to: 900, duration: .08, gain: .025, delay: .07 }, { wave: "square", from: 1800, to: 3000, duration: .05, gain: .025, delay: .17 }, { wave: "square", from: 900, to: 1600, duration: .1, gain: .025, delay: .24 }],
-  jawa: [{ wave: "triangle", from: 700, to: 900, duration: .07, gain: .04 }, { wave: "triangle", from: 1100, to: 1300, duration: .07, gain: .04, delay: .09 }, { wave: "triangle", from: 1400, to: 1000, duration: .12, gain: .04, delay: .18 }],
-  pod: [{ wave: "sawtooth", from: 80, to: 420, duration: .6, gain: .04 }, { wave: "square", from: 160, to: 840, duration: .6, gain: .015, delay: .05 }],
-  cantina: [{ wave: "triangle", from: 523, to: 523, duration: .09, gain: .04 }, { wave: "triangle", from: 659, to: 659, duration: .09, gain: .04, delay: 0.13 }, { wave: "triangle", from: 784, to: 784, duration: .09, gain: .04, delay: 0.26 }, { wave: "triangle", from: 880, to: 880, duration: .09, gain: .04, delay: 0.39 }, { wave: "triangle", from: 784, to: 784, duration: .09, gain: .04, delay: 0.52 }, { wave: "triangle", from: 659, to: 659, duration: .09, gain: .04, delay: 0.65 }, { wave: "triangle", from: 698, to: 698, duration: .09, gain: .04, delay: 0.78 }, { wave: "triangle", from: 587, to: 587, duration: .09, gain: .04, delay: 0.91 }, { wave: "triangle", from: 523, to: 523, duration: .09, gain: .04, delay: 1.04 }, { wave: "triangle", from: 659, to: 659, duration: .09, gain: .04, delay: 1.17 }, { wave: "triangle", from: 784, to: 784, duration: .09, gain: .04, delay: 1.3 }, { wave: "triangle", from: 1046, to: 1046, duration: .09, gain: .04, delay: 1.43 }],
-  sunset: [{ wave: "sine", from: 220, to: 220, duration: .6, gain: .03 }, { wave: "sine", from: 277, to: 277, duration: .6, gain: .025, delay: .15 }, { wave: "sine", from: 330, to: 330, duration: .6, gain: .025, delay: .3 }, { wave: "sine", from: 440, to: 440, duration: .6, gain: .02, delay: .45 }],
-  zap: [{ wave: "square", from: 3000, to: 200, duration: .15, gain: .03 }, { wave: "sawtooth", from: 1800, to: 100, duration: .25, gain: .03, delay: .05 }, { wave: "square", from: 2400, to: 300, duration: .1, gain: .03, delay: .18 }],
   // Galáxia Encantada: music-box chimes, a two-note bark and a soft rocket.
   twinkle: [{ wave: "triangle", from: 1568, to: 1568, duration: .08, gain: .03 }, { wave: "triangle", from: 2093, to: 2093, duration: .12, gain: .025, delay: .07 }],
   lens: [{ wave: "sine", from: 330, to: 660, duration: .3, gain: .03 }, { wave: "triangle", from: 1319, to: 1319, duration: .1, gain: .03, delay: .28 }, { wave: "triangle", from: 1760, to: 1760, duration: .18, gain: .03, delay: .36 }],

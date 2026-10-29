@@ -347,6 +347,33 @@
 .beyond-orbit__voyage[data-motion] .beyond-orbit__post-bar span:first-child { animation: bo-cursor 1.4s steps(1) infinite; }
 @keyframes bo-cursor { 50% { opacity: 0; } }
 
+/* The narrated episode: a button under the transmission that opens a CRT powering on, with the cartoon, sound,
+   controls and captions (same mould as the 404 one, in the Veil's palette). */
+.beyond-orbit__episode-slot { display: flex; justify-content: center; margin: 1.5rem auto 0; padding: 0 1.25rem; }
+.beyond-orbit__episode-dock { margin: 3rem auto 1rem; }
+.beyond-orbit__episode { display: inline-flex; gap: .9rem; align-items: center; min-height: 64px; padding: .4rem 1.1rem .4rem .4rem; color: #f3eee3; background: rgba(16, 21, 27, .9); border: 1px solid #83efac; text-align: left; font: inherit; cursor: pointer; box-shadow: 0 0 22px rgba(131, 239, 172, .12); transition: box-shadow .3s, translate .2s; }
+.beyond-orbit__episode:hover { box-shadow: 0 0 26px rgba(131, 239, 172, .4), 0 0 60px rgba(240, 127, 119, .18); translate: 0 -2px; }
+.beyond-orbit__episode i { position: relative; display: grid; place-items: center; width: 92px; aspect-ratio: 16 / 9; background: no-repeat 50% 50% / cover; box-shadow: 0 0 0 2px #83efac; }
+.beyond-orbit__episode b { color: #fff; font-size: 1.2rem; text-shadow: 0 0 10px #000; }
+.beyond-orbit__episode span { display: grid; gap: .2rem; font-weight: 700; }
+.beyond-orbit__episode small { color: #f0c98b; font: .62rem/1.4 var(--font-departure), monospace; letter-spacing: .16em; text-transform: uppercase; }
+.beyond-orbit-episode { width: min(1040px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); margin: auto; padding: 0; border: 0; background: transparent; color: #f3eee3; overflow: visible; }
+.beyond-orbit-episode::backdrop { background: rgba(6, 10, 24, .92); }
+.beyond-orbit-episode__tv { padding: clamp(.75rem, 2vw, 1.5rem); background: linear-gradient(180deg, #14232a, #070b14); border-radius: 18px; box-shadow: 0 0 0 3px #1d3a36, 0 0 0 6px #060a18, 0 30px 80px rgba(0, 0, 0, .8), 0 0 60px rgba(131, 239, 172, .18); }
+.beyond-orbit-episode__head { display: flex; justify-content: space-between; gap: 1rem; align-items: center; margin-bottom: .75rem; }
+.beyond-orbit-episode h2 { margin: 0; color: #f0c98b; font: clamp(.7rem, 1.6vw, .85rem)/1.5 var(--font-departure), monospace; letter-spacing: .12em; text-transform: uppercase; }
+.beyond-orbit-episode__close { min-height: 44px; padding: .5rem .9rem; color: #f3eee3; background: transparent; border: 1px solid #83efac; font: inherit; cursor: pointer; }
+.beyond-orbit-episode__close:focus-visible { outline: 3px solid #f0c98b; outline-offset: 3px; }
+.beyond-orbit-episode__screen { position: relative; overflow: hidden; border-radius: 14px / 18px; background: #000; box-shadow: inset 0 0 40px #000; }
+.beyond-orbit-episode__screen video { display: block; width: 100%; max-height: calc(100dvh - 9rem); aspect-ratio: 16 / 9; background: #000; }
+.beyond-orbit-episode__glass { position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(180deg, rgba(255, 255, 255, .03) 0 1px, transparent 1px 3px), radial-gradient(ellipse at 50% 40%, transparent 60%, rgba(0, 0, 0, .5)); }
+.beyond-orbit-episode__note { margin: .75rem 0 0; color: #b9cba4; font-size: .85rem; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .beyond-orbit-episode[data-crt="on"] .beyond-orbit-episode__screen { animation: bo-crt-on .55s cubic-bezier(.2, .8, .2, 1) both; }
+}
+@keyframes bo-crt-on { 0% { clip-path: inset(49.5% 0 49.5% 0); filter: brightness(3); } 45% { clip-path: inset(49.5% 0 49.5% 0); } 100% { clip-path: inset(0); filter: none; } }
+html:has(.beyond-orbit-episode[open]) :is(.fx-cursor, .fx-trail) { visibility: hidden; }
+
 /* The atlas on tablets: planet and card side by side. */
 @media (min-width: 700px) {
   .beyond-orbit__atlas:not([data-flight]) .beyond-orbit__world-stop { grid-template-columns: auto 1fr; justify-items: start; align-items: center; gap: 3rem; max-width: 46rem; width: 100%; }
@@ -448,3 +475,15 @@
 }
 .reduce-motion .beyond-orbit__finale[data-waiting] { visibility: visible; }
 .reduce-motion .beyond-orbit__voyage[data-waiting] { display: block; }
+
+/* The episode, on the left of the image under the copy (like the 404's). It is the reward of the last light: with motion
+   it only appears once the visitor has played the last star (and stays for later visits), never during the sequence. */
+.beyond-orbit__copy .beyond-orbit__episode-slot { position: relative; z-index: 2; justify-content: flex-start; margin: 1.25rem 0 0; padding: 0; }
+.beyond-orbit__hero:has(.beyond-orbit__experience:not([data-revealed])) .beyond-orbit__copy .beyond-orbit__episode-slot { display: none; }
+.beyond-orbit__hero:has(.beyond-orbit__experience:not([data-revealed])) .beyond-orbit__copy .beyond-orbit__episode-slot,
+.beyond-orbit__hero:has(.beyond-orbit__experience[data-theater]) .beyond-orbit__copy .beyond-orbit__episode-slot { visibility: hidden; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .beyond-orbit__hero:has(.beyond-orbit__experience[data-revealed]:not([data-theater])) .beyond-orbit__copy .beyond-orbit__episode { animation: bo-episode-in .9s cubic-bezier(.2, .7, .1, 1) both, bo-episode-glow 2.4s ease-in-out .9s 2; }
+}
+@keyframes bo-episode-in { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } }
+@keyframes bo-episode-glow { 50% { box-shadow: 0 0 30px rgba(131, 239, 172, .55), 0 0 70px rgba(240, 127, 119, .25); } }

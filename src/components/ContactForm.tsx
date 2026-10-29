@@ -8,9 +8,9 @@ import { submitContact } from '@/app/actions/contact';
 import { contactFields, contactOptions, contactSchema, contactServiceId, contactStepOf, contactSteps, contactValues, validateContactStep, type ContactErrors, type ContactField, type ContactState, type ContactValues } from '@/lib/contact-schema';
 import { ContactTurnstile } from './ContactTurnstile';
 
-export function ContactForm({ copy, lang, enabled = false, siteKey = '', subject = null }: {
+export function ContactForm({ copy, lang, enabled = false, siteKey = '', subject = null }: Readonly<{
   copy: Dictionary['services']; lang: Locale; enabled?: boolean; siteKey?: string; subject?: string | null;
-}) {
+}>) {
   // Remount only on an explicit change of subject; eggs never write into this form.
   return <ContactFields key={subject} copy={copy} lang={lang} enabled={enabled && Boolean(siteKey)} siteKey={siteKey} subject={subject} />;
 }

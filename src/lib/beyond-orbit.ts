@@ -33,7 +33,7 @@ export function poseStyle(actor: OrbitActor, pose: OrbitPose) {
 // (gain ≤ 1); the weight comes from the sequence, the doubled sub-bass hits and the silence before the nova.
 export const BEATS = {
   implode: 0, hush: 1.2, nova: 1.6, bloom: 2.2, react: 2.4, constellation: 3.5,
-  title: 6.4, slam: 7.6, postscript: 9.6, credits: 11.2, post: 22, end: 28,
+  title: 6.4, slam: 7.6, postscript: 9.6, credits: 11.2, post: 13.4, end: 19.4,
 } as const;
 export type Beat = keyof typeof BEATS;
 export const CUES: { at: number; sound: SoundKind; gain?: number; detune?: number }[] = [

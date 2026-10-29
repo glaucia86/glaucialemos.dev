@@ -34,6 +34,15 @@ Behind the scenery are real repositories, career records, publications, speaking
 
 > This README gives you the landscapes and the engineering. The discoveries are yours to make on the site.
 
+## What's new · November 2026 release (`v2026.11.0`)
+
+- **Clearer offer, easier contact.** A literal menu (Home · Crew · Projects · Events · Workshops & mentoring · Content), one "Request a proposal for my team" button across the site with a reply-time promise, a sticky call to action on reading pages, and a contact form that now delivers through **Resend** (Turnstile and Zod validation kept).
+- **Real social proof.** An approved portrait, a talk photo, the companies Glaucia worked with, the events where she spoke (with sources), a full BrazilJS talk you can watch in place, and a first-party testimonial form with manual approval.
+- **Formats and talk topics with life.** Pixel-art glyphs, a colour per format and light that follows the pointer; PDLC/SDLC workshops for any stack, Spec-Driven Development, Context and Harness Engineering.
+- **A seven-world jump.** Near the end of Home, the scroll becomes a hyperspace trip through every world's real plate, landing on the proposal button.
+- **50 secrets.** The galaxy now hides 50 discoveries. Home explains what they unlock, and the Comlink radio guides the way to the 2 secret pages.
+- **A narrated epilogue episode** with captions in three languages, unlocked by the last light.
+
 <a id="worlds"></a>
 
 ## Six worlds. One connected journey.
@@ -124,7 +133,7 @@ flowchart TD
     C --> F["Contact form"]
     F --> S["Server Action<br/>Honeypot + Zod validation"]
     S --> T["Turnstile verification"]
-    T --> E["Web3Forms delivery"]
+    T --> E["Resend delivery"]
 ```
 
 | Boundary | Responsibility |
@@ -148,7 +157,7 @@ There is no application database to provision. Editorial data and fallback snaps
 | Motion | GSAP 3 · `@gsap/react` · ScrollTrigger · SplitText · DrawSVG · Draggable · Lenis |
 | Graphics | Canvas 2D engines · SVG · CSS 3D · cobe WebGL globe |
 | Audio and video | Web Audio API · HTML audio/video · Ogg/MP3 effects · WebM/MP4 video |
-| Content and forms | Zod 4 · React Server Actions · Cloudflare Turnstile · Web3Forms |
+| Content and forms | Zod 4 · React Server Actions · Cloudflare Turnstile · Resend |
 | Verification | ESLint · TypeScript · Vitest · Playwright |
 | Fonts | Geist · Geist Mono · Departure Mono, served locally with `next/font/local` |
 
@@ -210,14 +219,16 @@ Copy-Item .env.example .env.local
 
 | Variable | Purpose |
 | --- | --- |
-| `WEB3FORMS_ACCESS_KEY` | Server-side credential for contact delivery |
+| `RESEND_API_KEY` | Sending-only Resend key restricted to the verified domain |
+| `CONTACT_FROM` | Sender on the verified domain (e.g. `Site <contato@mail.glaucialemos.dev>`) |
+| `CONTACT_TO` | Inbox that receives contact and testimonial messages |
 | `TURNSTILE_SECRET_KEY` | Server-side credential for challenge verification |
 | `TURNSTILE_SITE_KEY` | Public widget key, read by the server and passed to the widget |
 | `GITHUB_TOKEN` | Optional server-side token to raise the GitHub API rate limit; add it to `.env.local` if needed |
 
 Keep server credentials out of `NEXT_PUBLIC_*` variables. Restart the local server after changing the environment. Without the contact keys, form inputs and submission are disabled and LinkedIn stays available.
 
-Authorize your hostname in Turnstile and configure the recipient in Web3Forms. The current integration submits from the server; [Web3Forms requires a paid plan and server IP whitelisting for this usage](https://docs.web3forms.com/getting-started/api-reference).
+Authorize your hostname in Turnstile and verify the sending domain in Resend (DNS on Vercel: "Auto configure"). Until it is verified, use `onboarding@resend.dev` as the sender: it only delivers to your Resend account email.
 
 <a id="verification"></a>
 

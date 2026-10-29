@@ -189,7 +189,7 @@ describe("textos e segredos do Atlas", () => {
   });
 
   it("os três segredos têm nome, dica e frase nos três idiomas", () => {
-    expect(ids).toEqual(["orbital-trail", "constellation-route", "dog-navigation", "prince-antenna", "paw-stamp", "runaway-satellite"]);
+    expect(ids).toEqual(["orbital-trail", "constellation-route", "dog-navigation", "prince-antenna", "paw-stamp", "runaway-satellite", "orbital-selfie"]);
     for (const id of ids) for (const lang of ["pt", "en", "es"] as const) expect(comlink[lang].eggs[id].hint.length, `${lang} ${id}`).toBeGreaterThan(20);
     expect(matchPhrase("órbita")).toBe("orbital-trail");
     expect(matchPhrase("Constelação")).toBe("constellation-route");

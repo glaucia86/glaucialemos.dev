@@ -1,0 +1,92 @@
+/* Guides that make the experience easier to follow: the always-present CTA, the sound invitation and the first-visit
+   hint on the star radio. Fixed overlays stay below dialogs (top layer) and above the page. */
+.sticky-cta {
+  position: fixed; z-index: 60; left: 50%; bottom: calc(1rem + env(safe-area-inset-bottom)); translate: -50% 0;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .75rem 1.25rem;
+  width: max-content; max-width: calc(100% - 2rem); padding: .5rem;
+  color: var(--text-inverse); background: color-mix(in srgb, var(--color-space-0) 92%, transparent);
+  border: 1px solid var(--hud-line); border-radius: .75rem; box-shadow: 0 14px 40px rgb(0 0 0 / .45);
+}
+.sticky-cta[hidden] { display: none; }
+.sticky-cta__link { min-height: 44px; white-space: nowrap; }
+.sticky-cta[data-mode="nudge"] { flex-direction: column; align-items: stretch; width: min(30rem, calc(100% - 2rem)); padding: 1.1rem 1.25rem; }
+.sticky-cta__nudge p { margin: 0; color: var(--text-inverse-muted); line-height: 1.6; }
+.sticky-cta__nudge .sticky-cta__title { margin-bottom: .3rem; color: var(--text-inverse); font-weight: 700; font-size: 1.05rem; }
+.sticky-cta__actions { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
+.sticky-cta__close { min-height: 44px; padding: .5rem .75rem; color: var(--text-inverse-muted); background: transparent; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font: inherit; }
+.sticky-cta :is(a, button):focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 3px; }
+html[data-boot="pending"] .sticky-cta, html[data-contact-portal] .sticky-cta { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.reduce-motion) .sticky-cta { animation: sticky-cta-in .35s ease-out both; }
+}
+@keyframes sticky-cta-in { from { opacity: 0; translate: -50% 12px; } }
+@media (max-width: 600px) {
+  .sticky-cta:not([data-mode="nudge"]) { left: 1rem; right: 1rem; width: auto; translate: none; }
+  .sticky-cta:not([data-mode="nudge"]) .sticky-cta__link { flex: 1; justify-content: center; white-space: normal; text-align: center; }
+  @keyframes sticky-cta-in { from { opacity: 0; } }
+}
+
+/* Sound in the header: icon (on/off) + chevron (levels). */
+.sound-control { display: inline-flex; align-items: center; }
+.sound-control .audio-settings__toggle { width: 28px; padding: 0; display: inline-grid; place-items: center; border-left: 0; }
+.sound-control .audio-settings__panel { right: 0; }
+
+/* First-visit invitation to turn the sound on. Never plays anything by itself. */
+.sound-invite { position: fixed; z-index: 61; left: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom)); width: min(22rem, calc(100% - 2rem)); padding: 1rem 1.1rem; color: var(--text-inverse); background: var(--color-space-0); border: 1px solid var(--energy-blue); box-shadow: 0 14px 40px rgb(0 0 0 / .45); }
+.sound-invite p { margin: 0 0 .75rem; line-height: 1.5; }
+.sound-invite div { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
+.sound-invite__later { min-height: 44px; padding: .5rem .75rem; color: var(--text-inverse-muted); background: transparent; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; font: inherit; }
+.sound-invite :is(button):focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 3px; }
+html:has(.sound-invite) .sticky-cta { display: none; }
+
+/* Desktop menu: one line per item, so "05 Workshops e mentorias" never wraps and every gap looks the same. */
+@media (width >= 1440px) {
+  html body .site-header nav > a { white-space: nowrap; flex-shrink: 0; }
+}
+
+/* Home hero: one compact line saying the site has secrets and that finding them unlocks 2 secret pages. */
+.secrets-guide { display: flex; flex-wrap: wrap; align-items: baseline; gap: .15rem .5rem; max-width: 36rem; margin: .9rem 0 0; color: var(--text-inverse-muted); font-size: .8rem; line-height: 1.5; }
+.secrets-guide__star { color: var(--energy-green); }
+.secrets-guide button { min-height: 32px; padding: 0; color: var(--energy-green); background: none; border: 0; font: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.secrets-guide button:hover { color: var(--color-white); }
+.secrets-guide button:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 3px; }
+
+/* Supporting line under the proposal button: lowers the effort of reaching out. */
+.cta-note { margin: .6rem 0 0; color: var(--text-inverse-muted); font-size: .8rem; letter-spacing: .01em; }
+.chapter--credits .cta-note { margin: -.5rem 0 1rem; }
+.sticky-cta__note { color: var(--text-inverse-muted); font-size: .72rem; }
+@media (max-width: 600px) { .sticky-cta:not([data-mode="nudge"]) .sticky-cta__note { display: none; } }
+
+/* ——— The five secrets that close the catalogue at 50 (ExtraEggs.tsx). ——— */
+.egg-meteors { position: fixed; inset: 0; z-index: 80; pointer-events: none; overflow: hidden; }
+.egg-meteors__title { position: absolute; left: 50%; top: 18%; translate: -50% 0; margin: 0; padding: .5rem .9rem; color: var(--color-white); background: rgb(2 6 14 / .75); font: 400 .7rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
+.egg-meteors__meteor { position: absolute; left: var(--x); top: -10%; display: inline-flex; align-items: center; gap: .5rem; color: #fff0c9; font: 400 .62rem var(--font-pixel); white-space: nowrap; text-shadow: 0 0 8px #ffd166; animation: egg-meteor 2.6s cubic-bezier(.5, 0, .9, .6) calc(var(--i) * .32s) both; }
+.egg-meteors__meteor i { width: 70px; height: 2px; background: linear-gradient(90deg, transparent, #ffd166, #fff); box-shadow: 0 0 10px #ffd166; }
+@keyframes egg-meteor { from { transform: translate(-30vw, 0) rotate(18deg); opacity: 0; } 15% { opacity: 1; } to { transform: translate(30vw, 120vh) rotate(18deg); opacity: 0; } }
+.egg-floppy { position: fixed; z-index: 55; left: 1rem; bottom: 5.5rem; width: 44px; height: 44px; padding: 8px; border: 1px dashed var(--hud-line); background: rgb(2 6 14 / .6); cursor: grab; opacity: .55; transition: opacity .2s, rotate .2s; rotate: -12deg; }
+.egg-floppy:hover, .egg-floppy:focus-visible { opacity: 1; rotate: 0deg; }
+.egg-floppy svg { width: 100%; height: 100%; }
+dialog.egg-dialog { position: fixed; inset: 0; margin: auto; height: fit-content; max-height: calc(100dvh - 2rem); overflow: auto; }
+.egg-dialog { width: min(440px, calc(100% - 2rem)); padding: 1.5rem; color: var(--text-inverse); background: var(--color-space-0); border: 1px solid var(--energy-green); box-shadow: 0 24px 60px rgb(0 0 0 / .6); }
+.egg-dialog::backdrop { background: rgb(2 6 14 / .7); }
+dialog.egg-dialog h2 { margin: 0 0 .75rem; font-size: 1.25rem; line-height: 1.3; }
+.egg-dialog code { color: var(--energy-green); }
+.egg-dialog__kicker { margin: 0 0 .4rem; color: var(--energy-green); font: 400 .6rem var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; }
+.egg-dialog__actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1rem; }
+.egg-dialog__actions :is(a, button:not(.button)) { min-height: 44px; display: inline-flex; align-items: center; padding: .5rem .9rem; color: var(--color-white); background: transparent; border: 1px solid var(--energy-green); font: inherit; text-decoration: none; cursor: pointer; }
+.egg-selfie__photo { display: flex; align-items: flex-end; justify-content: center; gap: .5rem; height: 220px; margin: 0 0 1rem; padding: 1rem; background: radial-gradient(circle at 50% 120%, #1d6fa8, #05101f 70%); box-shadow: inset 0 0 0 6px #f3eee3, 0 0 0 1px var(--hud-line); }
+.egg-selfie__photo i { display: block; height: 100%; aspect-ratio: 1 / 2; background: no-repeat 50% 100% / contain; image-rendering: pixelated; }
+.egg-selfie__photo i + i { height: 60%; aspect-ratio: 1 / 1; }
+html[data-egg-flash] body::after { content: ""; position: fixed; inset: 0; z-index: 90; background: #fff; pointer-events: none; animation: egg-flash .5s ease-out both; }
+@keyframes egg-flash { to { opacity: 0; } }
+.egg-harvest { position: fixed; z-index: 62; right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom)); width: min(22rem, calc(100% - 2rem)); padding: 1.1rem 1.2rem; color: var(--text-inverse); background: var(--color-space-0); border: 1px solid var(--energy-green); box-shadow: 0 18px 44px rgb(0 0 0 / .5); }
+.egg-harvest p { margin: 0; line-height: 1.5; }
+.egg-harvest__flower { display: block; margin-bottom: .4rem; color: #f3a5d8; font-size: 2rem; animation: egg-bloom 1s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes egg-bloom { from { transform: scale(.2) rotate(-90deg); opacity: 0; } }
+html[data-deep-night] body::before { content: ""; position: fixed; inset: 0; z-index: 85; pointer-events: none; background: radial-gradient(circle 140px at var(--night-x, 50%) var(--night-y, 50%), transparent 0 60%, rgb(1 2 6 / .96) 100%); }
+.egg-night { position: fixed; z-index: 86; left: 50%; top: 5rem; translate: -50% 0; display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; width: min(36rem, calc(100% - 2rem)); padding: .8rem 1rem; color: var(--text-inverse); background: rgb(2 6 14 / .9); border: 1px solid #b89dfc; font-size: .85rem; }
+.egg-night p { flex: 1 1 18rem; margin: 0; }
+.egg-night button { min-height: 44px; padding: .5rem .9rem; color: var(--color-white); background: transparent; border: 1px solid #b89dfc; font: inherit; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .egg-meteors__meteor, .egg-harvest__flower, html[data-egg-flash] body::after { animation: none !important; } .egg-meteors__meteor { top: calc(25% + var(--i) * 4%); } }
+html.reduce-motion :is(.egg-meteors__meteor, .egg-harvest__flower) { animation: none !important; }
+html.reduce-motion .egg-meteors__meteor { top: calc(25% + var(--i) * 4%); }

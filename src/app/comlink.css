@@ -103,3 +103,20 @@
 }
 html.reduce-motion :is(.comlink-toggle, .comlink-toggle__tip, .comlink[open] .comlink__panel) { animation: none !important; }
 @media (prefers-reduced-motion: reduce) { :is(.comlink-toggle, .comlink-toggle__tip, .comlink[open] .comlink__panel) { animation: none !important; } }
+
+/* What the radio is for and the two secret pages, at the top of the panel. */
+.comlink__intro { margin: 0; color: var(--text-muted); font-size: .88rem; line-height: 1.6; }
+.comlink__pages h3 { margin: 0 0 .5rem; color: var(--color-accent-200); font: 400 .6rem var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; }
+.comlink__pages ul { display: grid; gap: 1px; margin: 0; padding: 0; list-style: none; background: var(--hud-line); border: 1px solid var(--hud-line); }
+.comlink__pages li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; align-items: center; gap: .75rem; padding: .65rem .8rem; background: var(--color-space-1); }
+.comlink__pages li[data-found] .comlink__icon { border: 1px solid var(--color-accent); color: var(--color-accent-200); }
+.comlink__pages a { display: inline-flex; align-items: center; min-height: 40px; padding: .45rem .75rem; border: 1px solid var(--energy-green); color: var(--color-white); font: 400 .58rem var(--font-pixel); text-decoration: none; }
+
+/* First visit: a one-line hint next to the radio button. */
+.header-tools { position: relative; }
+.comlink-hint { position: absolute; z-index: 45; top: calc(100% + .6rem); right: 0; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; width: max-content; max-width: min(280px, 80vw); margin: 0; padding: .7rem .85rem; color: var(--text-inverse); background: var(--color-space-0); border: 1px solid var(--energy-green); box-shadow: 0 10px 30px rgb(0 0 0 / .45); font-size: .82rem; line-height: 1.5; }
+.comlink-hint::before { content: ""; position: absolute; top: -6px; right: 14px; width: 10px; height: 10px; background: inherit; border-left: 1px solid var(--energy-green); border-top: 1px solid var(--energy-green); rotate: 45deg; }
+.comlink-hint button { min-height: 36px; padding: .3rem .6rem; color: var(--color-white); background: transparent; border: 1px solid var(--energy-green); font: inherit; cursor: pointer; }
+.header-tools:has(.comlink-hint) .comlink-toggle { animation: comlink-ring .5s steps(2) 6; }
+html.reduce-motion .header-tools:has(.comlink-hint) .comlink-toggle { animation: none; }
+@media (prefers-reduced-motion: reduce) { .header-tools:has(.comlink-hint) .comlink-toggle { animation: none; } }

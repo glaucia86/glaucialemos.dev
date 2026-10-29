@@ -16,6 +16,8 @@ import AtlasGlobe, { type Orbit } from "@/components/events/AtlasGlobe";
 import { EventLog } from "@/components/events/EventLog";
 import { SignalDeck } from "@/components/events/SignalDeck";
 import { AtlasEggs } from "@/components/events/AtlasEggs";
+import { OrbitalSelfie } from "@/components/eggs/ExtraEggs";
+import { SCENES } from "@/lib/scenes";
 import { AtlasVoyage } from "@/components/events/AtlasVoyage";
 import { OrbitalSunrise } from "@/components/events/OrbitalSunrise";
 import { LUMA_PROFILE, getUpcomingConnections } from "@/lib/luma";
@@ -217,6 +219,7 @@ export default async function Events({ params, searchParams }: Props) {
     </section>
 
     <AtlasEggs />
+    <OrbitalSelfie lang={lang} events={stats.eventos} countries={stats.paisesRepresentados} glaucia={SCENES["earth-orbit"].assets.actors.glaucia.cheer.src} prince={SCENES["earth-orbit"].assets.actors.prince.float.src} />
     <HomeChoreography />
   </main>;
 }
