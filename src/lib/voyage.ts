@@ -13,6 +13,11 @@ const PLATES: Partial<Record<EggPage, keyof typeof SCENES>> = { home: "earth-obs
 const PATHS: Record<(typeof DESTINATIONS)[number], string | null> = { home: "", about: "/sobre", projects: "/projetos", content: "/conteudo", events: "/eventos", services: "/servicos", notfound: null };
 
 export const VOYAGE_WORLDS: VoyageWorld[] = DESTINATIONS.map((page) => {
+  // The 404's video poster already includes Glaucia and Prince.
+  if (page === "notfound") return {
+    page, path: PATHS[page], plate: "/galaxia/scenes/red-tide/poster.webp",
+    palette: { base: "#0d0612", accent: "#f07072", glow: "#ffbc78" },
+  };
   const scene = PLATES[page] ? SCENES[PLATES[page]!] : null;
   return { page, path: PATHS[page], plate: scene?.assets.background.src ?? null, palette: scene?.palette ?? FAINT };
 });

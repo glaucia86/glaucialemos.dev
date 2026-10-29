@@ -74,8 +74,9 @@ describe("A Última Luz", () => {
     const credits = html.slice(0, html.indexOf('class="beyond-orbit__post"'));
     const post = html.slice(html.indexOf('class="beyond-orbit__post"'));
     const badges = credits.match(/class="beyond-orbit__world-badges">(.*?)<\/span>/)![1];
-    expect(badges.match(/<img /g)).toHaveLength(6);
+    expect(badges.match(/<img /g)).toHaveLength(7);
     expect(badges).toContain(SCENES.aurelia.assets.background.src);
+    expect(badges).toContain('/galaxia/scenes/red-tide/poster.webp');
     expect(credits).toContain(copy.worlds.services);
     expect(credits).toContain(copy.worlds.notfound);
     expect(credits).toContain(copy.mapped.replace("{total}", String(EGGS.length)));
