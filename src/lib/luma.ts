@@ -1,3 +1,4 @@
+import './zod-config';
 import { z } from "zod";
 import snapshot from "@/data/luma.json";
 import type { Format } from "./atlas-records";

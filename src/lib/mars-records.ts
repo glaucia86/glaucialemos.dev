@@ -1,3 +1,4 @@
+import './zod-config';
 // Real records behind Marte's secrets. Nothing here is invented: every item points to its public source.
 import { z } from "zod";
 import registros from "@/data/marte-registros.json";

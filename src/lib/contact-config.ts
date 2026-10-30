@@ -5,7 +5,9 @@ export function contactConfig() {
   const to = process.env.CONTACT_TO?.trim();
   const siteKey = process.env.TURNSTILE_SITE_KEY?.trim();
   const secretKey = process.env.TURNSTILE_SECRET_KEY?.trim();
-  return { apiKey, from, to, siteKey, secretKey, enabled: Boolean(apiKey && from && to && siteKey && secretKey) };
+  const signingSecret = process.env.WAITLIST_SIGNING_SECRET?.trim();
+  const waitlistSecret = signingSecret && signingSecret.length >= 32 ? signingSecret : undefined;
+  return { apiKey, from, to, siteKey, secretKey, waitlistSecret, enabled: Boolean(apiKey && from && to && siteKey && secretKey) };
 }
 
 export function isAllowedTurnstileHostname(hostname: unknown, additionalHosts = ''): boolean {

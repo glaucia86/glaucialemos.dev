@@ -1,3 +1,4 @@
+import './zod-config';
 import { z } from 'zod';
 import { singleLine } from './single-line';
 import type { Locale } from '@/i18n/config';

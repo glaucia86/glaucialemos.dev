@@ -35,6 +35,13 @@ describe('services copy guard', () => {
       expect(getDictionary(lang).services.waitlist).toBe(waitlistCopy[lang].submit);
     }
   });
+  it.each([
+    ['pt', 'Confira sua caixa de entrada e a pasta de spam. Abra o link do e-mail e confirme sua inscrição na lista de espera.'],
+    ['en', 'Check your inbox and spam folder. Open the email link and confirm your waitlist registration.'],
+    ['es', 'Revisa tu bandeja de entrada y la carpeta de spam. Abre el enlace del correo y confirma tu inscripción en la lista de espera.'],
+  ] as const)('asks for email confirmation before registration in %s', (lang, message) => {
+    expect(waitlistCopy[lang].success).toBe(message);
+  });
   it('has no obsolete pricing phrases anywhere in src', () => {
     for (const path of files('src').filter(path => /\.(ts|tsx|css|json)$/.test(path))) {
       expect(readFileSync(path, 'utf8'), path).not.toMatch(/sob consulta|on request|a consultar/i);

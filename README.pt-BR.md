@@ -221,14 +221,19 @@ Copy-Item .env.example .env.local
 | --- | --- |
 | `RESEND_API_KEY` | Chave do Resend só de envio, restrita ao domínio verificado |
 | `CONTACT_FROM` | Remetente no domínio verificado (ex.: `Site <contato@mail.glaucialemos.dev>`) |
-| `CONTACT_TO` | Caixa que recebe contatos e depoimentos |
+| `CONTACT_TO` | Caixa que recebe contatos, depoimentos e inscrições confirmadas na lista de espera |
 | `TURNSTILE_SECRET_KEY` | Credencial do servidor para verificar o desafio |
 | `TURNSTILE_SITE_KEY` | Chave pública do widget, lida pelo servidor e passada ao componente |
+| `WAITLIST_SIGNING_SECRET` | Obrigatório só para confirmar a lista de espera; mínimo de 32 caracteres após trim. Gere com `openssl rand -base64 48` |
+| `SITE_URL` | Origem HTTPS opcional dos links de confirmação; padrão `https://glaucialemos.dev`. Valores inválidos usam o padrão; nunca usa headers da requisição |
+| `TURNSTILE_ALLOWED_HOSTNAMES` | Hostnames extras opcionais para verificação, separados por vírgula; autorize-os também no Turnstile |
 | `GITHUB_TOKEN` | Token opcional do servidor para ampliar o limite da API do GitHub; adicione ao `.env.local` se necessário |
 
 Mantenha as credenciais do servidor fora de variáveis `NEXT_PUBLIC_*`. Reinicie o servidor local após mudar o ambiente. Sem as chaves de contato, os campos e o envio ficam desativados e o LinkedIn permanece disponível.
 
 Autorize seu hostname no Turnstile e verifique o domínio de envio no Resend (DNS na Vercel: "Auto configure"). Até a verificação, use `onboarding@resend.dev` como remetente: ele só entrega no e-mail da sua conta Resend.
+
+O envio da lista de espera manda apenas um e-mail de confirmação ao destinatário pelo Resend. O link assinado expira em 48 horas: GET mostra um botão de confirmação e POST notifica `CONTACT_TO`, com o endereço confirmado como reply-to. Sem `WAITLIST_SIGNING_SECRET`, apenas a lista fica desativada. O limite por destinatário é de uma confirmação a cada 10 minutos e três em 24 horas, com a mesma resposta de sucesso ao bloquear. Os limites ficam em memória por instância; tokens contêm dados pessoais, então exclua URLs/tokens de confirmação dos logs de acesso e analytics. Não há banco nem registro permanente de tokens usados; a proteção contra notificações duplicadas usa idempotência por conteúdo do Resend dentro da janela de retenção do provedor.
 
 <a id="verification"></a>
 

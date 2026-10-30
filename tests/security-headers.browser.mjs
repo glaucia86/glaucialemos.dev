@@ -1,4 +1,5 @@
-// Build with all five contact variables set (dummy values suffice: no mail is sent),
+// Build with all five contact variables and WAITLIST_SIGNING_SECRET (32+ chars)
+// set (dummy values suffice: no mail is sent),
 // then: node tests/run-browser.mjs security-headers
 // run-browser starts next start, or reuses BASE_URL. Never run against next dev.
 // All external browser requests are mocked/blocked; the real Turnstile challenge
@@ -18,9 +19,9 @@ const browser = await launchBrowser();
 
 async function exerciseTurnstile(page, contact) {
   const form = page.locator('#lista-de-espera form');
-  await expect(form.locator('[name=name]'), 'Build with the five contact variables to exercise Turnstile; do not silently skip it.').toBeEnabled();
+  await expect(form.locator('[name=name]'), 'Build with the five contact variables and WAITLIST_SIGNING_SECRET to exercise Turnstile; do not silently skip it.').toBeEnabled();
   await form.scrollIntoViewIfNeeded();
-  await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
+  await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token:waitlist');
   assert.ok(contact.challenges.some(url => new URL(url).pathname === '/turnstile/v0/api.js'));
 
   // The shared mock checks script loading/callbacks. These extra probes exercise

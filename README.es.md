@@ -221,14 +221,19 @@ Copy-Item .env.example .env.local
 | --- | --- |
 | `RESEND_API_KEY` | Clave de Resend solo de envío, restringida al dominio verificado |
 | `CONTACT_FROM` | Remitente en el dominio verificado (p. ej. `Site <contato@mail.glaucialemos.dev>`) |
-| `CONTACT_TO` | Bandeja que recibe contactos y testimonios |
+| `CONTACT_TO` | Bandeja que recibe contactos, testimonios e inscripciones confirmadas en la lista de espera |
 | `TURNSTILE_SECRET_KEY` | Credencial del servidor para verificar el desafío |
 | `TURNSTILE_SITE_KEY` | Clave pública del widget, leída por el servidor y enviada al componente |
+| `WAITLIST_SIGNING_SECRET` | Obligatorio solo para confirmar la lista de espera; mínimo de 32 caracteres tras recortar espacios. Genera con `openssl rand -base64 48` |
+| `SITE_URL` | Origen HTTPS opcional de los enlaces de confirmación; predeterminado `https://glaucialemos.dev`. Los valores inválidos usan el predeterminado; nunca usa headers de la solicitud |
+| `TURNSTILE_ALLOWED_HOSTNAMES` | Hostnames adicionales opcionales para verificación, separados por comas; autorízalos también en Turnstile |
 | `GITHUB_TOKEN` | Token opcional del servidor para ampliar el límite de la API de GitHub; añádelo a `.env.local` si lo necesitas |
 
 Mantén las credenciales del servidor fuera de las variables `NEXT_PUBLIC_*`. Reinicia el servidor local tras cambiar el entorno. Sin las claves de contacto, los campos y el envío quedan deshabilitados y LinkedIn permanece disponible.
 
 Autoriza tu hostname en Turnstile y verifica el dominio de envío en Resend (DNS en Vercel: "Auto configure"). Hasta verificarlo, usa `onboarding@resend.dev` como remitente: solo entrega en el correo de tu cuenta de Resend.
+
+El envío de la lista de espera manda solo un correo de confirmación al destinatario mediante Resend. El enlace firmado caduca en 48 horas: GET muestra un botón de confirmación y POST notifica a `CONTACT_TO`, con la dirección confirmada como reply-to. Sin `WAITLIST_SIGNING_SECRET`, solo la lista queda deshabilitada. El límite por destinatario es una confirmación cada 10 minutos y tres en 24 horas, con la misma respuesta de éxito al bloquear. Los límites están en memoria por instancia; los tokens contienen datos personales, por lo que se deben excluir las URLs/tokens de confirmación de los logs de acceso y analytics. No hay base de datos ni registro permanente de tokens usados; la protección contra notificaciones duplicadas usa idempotencia por contenido de Resend dentro de la ventana de retención del proveedor.
 
 <a id="verification"></a>
 

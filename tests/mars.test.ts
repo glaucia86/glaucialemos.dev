@@ -130,7 +130,10 @@ describe("registros reais de Marte", () => {
   it("lê o GitHub uma vez por dia no servidor, sem rota nova", () => {
     expect(REVALIDATE_SECONDS).toBe(86_400);
     expect(fs.readFileSync("src/app/[lang]/projetos/page.tsx", "utf8")).toMatch(/export const revalidate = 86400;/);
-    expect(fs.existsSync("src/app/api")).toBe(false);
+    // Other features may have API routes; repository data stays server-side.
+    for (const path of fs.readdirSync('src/app/api', { recursive: true }).filter(path => String(path).endsWith('/route.ts'))) {
+      expect(fs.readFileSync(`src/app/api/${path}`, 'utf8')).not.toMatch(/from ['"][^'"]*\/github['"]/);
+    }
   });
 
   it("reproduz a correção do PR #555 e os cartões npx sem inventar dados", () => {

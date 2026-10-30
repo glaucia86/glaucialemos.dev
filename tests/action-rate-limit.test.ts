@@ -35,6 +35,7 @@ beforeEach(() => {
   vi.stubEnv('RESEND_API_KEY', 'mock-key');
   vi.stubEnv('CONTACT_FROM', 'sender@example.com'); vi.stubEnv('CONTACT_TO', 'owner@example.com');
   vi.stubEnv('TURNSTILE_SITE_KEY', 'mock-site'); vi.stubEnv('TURNSTILE_SECRET_KEY', 'mock-secret');
+  vi.stubEnv('WAITLIST_SIGNING_SECRET', 'a'.repeat(40));
   fetchMock.mockReset(); vi.stubGlobal('fetch', fetchMock);
 });
 afterEach(() => { vi.unstubAllEnvs(); vi.unstubAllGlobals(); });
@@ -74,9 +75,19 @@ it('reserves the global quota synchronously across concurrent verified actions',
   acceptCaptcha();
   const results = await Promise.all(Array.from({ length: 61 }, (_, i) => {
     const [action, submit] = actions[i % actions.length];
-    return submit(null, form(action));
+    const data = form(action);
+    // Distinct recipients isolate the global cap from the recipient quota.
+    data.set('email', `person${i}@example.com`);
+    return submit(null, data);
   }));
   expect(results.filter(result => result.status === 'ok')).toHaveLength(60);
   expect(results.filter(result => result.status === 'rate-limited')).toHaveLength(1);
   expect(fetchMock.mock.calls.filter(([url]) => url === RESEND_URL)).toHaveLength(60);
+});
+
+it('reserves recipient quota synchronously across different IPs', async () => {
+  acceptCaptcha();
+  const results = await Promise.all(Array.from({ length: 3 }, () => submitWaitlist(null, form('waitlist'))));
+  expect(results).toEqual([{ status: 'ok' }, { status: 'ok' }, { status: 'ok' }]);
+  expect(fetchMock.mock.calls.filter(([url]) => url === RESEND_URL)).toHaveLength(1);
 });

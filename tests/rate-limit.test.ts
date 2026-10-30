@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { clientIp, consumeGlobalRateLimit, consumeRateLimit, evaluateGlobalRateLimit, evaluateRateLimit, MAX_RATE_LIMIT_KEYS, resetRateLimits, type RateLimitState } from '@/lib/rate-limit';
+import { consumeRecipientRateLimit, evaluateRecipientRateLimit } from '@/lib/rate-limit';
 
 const request = vi.hoisted(() => ({ headers: new Headers() }));
 vi.mock('next/headers', () => ({ headers: async () => request.headers }));
@@ -103,6 +104,41 @@ describe('janela deslizante de envios', () => {
     resetRateLimits();
     expect(consumeGlobalRateLimit()).toBe(true);
     expect(consumeRateLimit('a', 'contact')).toBe(true);
+  });
+});
+
+describe('recipient confirmation quota', () => {
+  it('allows one per ten minutes and three per rolling day across case variants', () => {
+    let state: RateLimitState = new Map();
+    const take = (now: number, email = 'ana@example.com') => {
+      const result = evaluateRecipientRateLimit(state, email, () => now);
+      state = result.state;
+      return result.allowed;
+    };
+    expect(take(0)).toBe(true);
+    expect(take(10 * MINUTE - 1, ' ANA@EXAMPLE.COM ')).toBe(false);
+    expect(take(10 * MINUTE)).toBe(true);
+    expect(take(20 * MINUTE)).toBe(true);
+    expect(take(30 * MINUTE)).toBe(false);
+    expect(take(30 * MINUTE, 'other@example.com')).toBe(true);
+    expect(take(24 * 60 * MINUTE - 1)).toBe(false);
+    expect(take(24 * 60 * MINUTE)).toBe(true);
+    for (const key of state.keys()) {
+      expect(key).toMatch(/^recipient:(short|day):[a-f0-9]{64}$/);
+      expect(key).not.toContain('@');
+    }
+  });
+  it('reserves synchronously, resets and fails closed at capacity', () => {
+    expect(consumeRecipientRateLimit('ana@example.com')).toBe(true);
+    expect(consumeRecipientRateLimit('ANA@example.com')).toBe(false);
+    resetRateLimits();
+    expect(consumeRecipientRateLimit('ana@example.com')).toBe(true);
+    const initial = new Map();
+    const first = evaluateRecipientRateLimit(initial, 'a@example.com', () => 0, 2);
+    expect(initial.size).toBe(0);
+    const second = evaluateRecipientRateLimit(first.state, 'b@example.com', () => 0, 2);
+    expect(second.allowed).toBe(false);
+    expect(second.state.size).toBe(2);
   });
 });
 

@@ -1,3 +1,4 @@
+import './zod-config';
 import { z } from 'zod';
 import { singleLine } from './single-line';
 import services from '@/data/servicos.json';

@@ -1,8 +1,9 @@
 import 'server-only';
+import { createHash } from 'node:crypto';
 import { isIP } from 'node:net';
 import { headers } from 'next/headers';
 
-type Action = 'contact' | 'waitlist' | 'testimonial';
+type Action = 'contact' | 'waitlist' | 'testimonial' | 'waitlist-confirm';
 type Window = { windowMs: number; timestamps: readonly number[] };
 export type RateLimitState = ReadonlyMap<string, Window>;
 export const MAX_RATE_LIMIT_KEYS = 5000;
@@ -40,10 +41,24 @@ export function evaluateGlobalRateLimit(previous: RateLimitState, clock = Date.n
   return evaluateRules(previous, [{ key: 'global', limit: 60, windowMs: 60 * MINUTE }], clock, 1);
 }
 
+export function evaluateRecipientRateLimit(previous: RateLimitState, email: string, clock = Date.now, maxKeys = MAX_RATE_LIMIT_KEYS) {
+  const key = createHash('sha256').update(email.trim().toLowerCase()).digest('hex');
+  return evaluateRules(previous, [
+    { key: `recipient:short:${key}`, limit: 1, windowMs: 10 * MINUTE },
+    { key: `recipient:day:${key}`, limit: 3, windowMs: 24 * 60 * MINUTE },
+  ], clock, maxKeys);
+}
+
 // Serverless instances have independent memory: this is a best-effort layer.
 // The Vercel Firewall rule is the real limit across instances and deployments.
 let state: RateLimitState = new Map();
 let globalState: RateLimitState = new Map();
+let recipientState: RateLimitState = new Map();
+export function consumeRecipientRateLimit(email: string) {
+  const result = evaluateRecipientRateLimit(recipientState, email);
+  recipientState = result.state;
+  return result.allowed;
+}
 export function consumeRateLimit(ip: string, action: Action) {
   // Failed CAPTCHA attempts still consume the per-IP quotas before any external request.
   const result = evaluateRateLimit(state, ip, action);
@@ -59,7 +74,7 @@ export function consumeGlobalRateLimit() {
   return result.allowed;
 }
 
-export function resetRateLimits() { state = new Map(); globalState = new Map(); }
+export function resetRateLimits() { state = new Map(); globalState = new Map(); recipientState = new Map(); }
 
 export async function clientIp(): Promise<string> {
   const requestHeaders = await headers();

@@ -1,16 +1,16 @@
 'use server';
 
 import { isLocale } from '@/i18n/config';
-import { waitlistCopy } from '@/i18n/waitlist';
-import { clientIp, consumeGlobalRateLimit, consumeRateLimit } from '@/lib/rate-limit';
+import { clientIp, consumeGlobalRateLimit, consumeRateLimit, consumeRecipientRateLimit } from '@/lib/rate-limit';
 import { contactConfig, verifyTurnstile } from '@/lib/contact-config';
-import { mailLines, sendMail } from '@/lib/mail';
+import { sendConfirmationMail } from '@/lib/mail';
+import { signWaitlistToken, waitlistOrigin } from '@/lib/waitlist-confirmation';
 import { waitlistSchema, waitlistValues, type WaitlistState } from '@/lib/waitlist-schema';
 
 export async function submitWaitlist(_previous: WaitlistState | null, data: FormData): Promise<WaitlistState> {
   if (data.get('website')) return { status: 'ok' };
   const config = contactConfig();
-  if (!config.enabled) return { status: 'unavailable' };
+  if (!config.enabled || !config.waitlistSecret) return { status: 'unavailable' };
   const locale = data.get('lang');
   const lang = typeof locale === 'string' && isLocale(locale) ? locale : 'pt';
   const values = waitlistValues(data);
@@ -21,17 +21,12 @@ export async function submitWaitlist(_previous: WaitlistState | null, data: Form
   if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'), { remoteIp: ip === 'unknown' ? undefined : ip, expectedAction: 'waitlist' })) return { status: 'captcha', values };
   if (!consumeGlobalRateLimit()) return { status: 'rate-limited' };
 
-  const label = waitlistCopy[lang].offerings[parsed.data.interest];
   const { name, email, interest } = parsed.data;
-  const text = mailLines([
-    ['Nome', name], ['E-mail', email], ['Interesse', `${label} (${interest})`], ['Idioma', lang],
-    ['Consentimento LGPD', 'sim'], ['Finalidade', 'avisar somente quando a modalidade escolhida estiver disponível'],
-  ]);
-  const sent = await sendMail(
-    { apiKey: config.apiKey!, from: config.from!, to: config.to! },
-    `Lista de espera glaucialemos.dev — ${label}`,
-    text,
-    { replyTo: email },
+  if (!consumeRecipientRateLimit(email)) return { status: 'ok' };
+  const token = signWaitlistToken({ name, email, interest, lang }, config.waitlistSecret);
+  const sent = await sendConfirmationMail(
+    { apiKey: config.apiKey!, from: config.from!, to: email },
+    { lang, interest, link: `${waitlistOrigin()}/api/waitlist/confirm?t=${token}` },
   );
   return sent ? { status: 'ok' } : { status: 'error', values };
 }

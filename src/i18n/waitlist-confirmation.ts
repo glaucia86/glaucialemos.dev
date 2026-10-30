@@ -1,0 +1,40 @@
+import type { Locale } from './config';
+
+export const waitlistConfirmationCopy = {
+  pt: {
+    subject: 'Confirme sua inscrição na lista de espera',
+    requested: 'Alguém solicitou entrar na lista de espera de glaucialemos.dev para a modalidade abaixo usando este endereço.',
+    ignore: 'Se não foi você, ignore esta mensagem: nada será armazenado na lista ou enviado a partir dessa solicitação.',
+    instructions: 'Para confirmar, abra o link e clique em “Confirmar inscrição”. O link expira em 48 horas.',
+    title: 'Confirmar inscrição na lista de espera', button: 'Confirmar inscrição',
+    prompt: 'Confirme para receber apenas o aviso sobre a modalidade escolhida.',
+    success: 'Inscrição confirmada. Você receberá um aviso quando a modalidade escolhida estiver disponível.',
+    invalid: 'Este link é inválido ou expirou. Solicite um novo link na lista de espera.',
+    unavailable: 'Não foi possível confirmar agora. Tente novamente mais tarde.',
+    back: 'Voltar à lista de espera',
+  },
+  en: {
+    subject: 'Confirm your waitlist registration',
+    requested: 'Someone requested to join the waitlist of glaucialemos.dev for the offering below using this address.',
+    ignore: 'If it was not you, ignore this message: nothing will be stored on the list or sent as a result of this request.',
+    instructions: 'To confirm, open the link and click “Confirm”. The link expires in 48 hours.',
+    title: 'Confirm your waitlist registration', button: 'Confirm',
+    prompt: 'Confirm to receive only the notification about your chosen offering.',
+    success: 'Registration confirmed. You will be notified when your chosen offering becomes available.',
+    invalid: 'This link is invalid or has expired. Request a new link from the waitlist.',
+    unavailable: 'We could not confirm right now. Please try again later.',
+    back: 'Back to the waitlist',
+  },
+  es: {
+    subject: 'Confirma tu inscripción en la lista de espera',
+    requested: 'Alguien solicitó unirse a la lista de espera de glaucialemos.dev para la modalidad indicada abajo usando esta dirección.',
+    ignore: 'Si no fuiste tú, ignora este mensaje: no se almacenará nada en la lista ni se enviará nada como resultado de esta solicitud.',
+    instructions: 'Para confirmar, abre el enlace y pulsa “Confirmar”. El enlace caduca en 48 horas.',
+    title: 'Confirmar inscripción en la lista de espera', button: 'Confirmar',
+    prompt: 'Confirma para recibir solo el aviso sobre la modalidad elegida.',
+    success: 'Inscripción confirmada. Recibirás un aviso cuando la modalidad elegida esté disponible.',
+    invalid: 'Este enlace no es válido o ha caducado. Solicita un enlace nuevo en la lista de espera.',
+    unavailable: 'No fue posible confirmar ahora. Inténtalo de nuevo más tarde.',
+    back: 'Volver a la lista de espera',
+  },
+} satisfies Record<Locale, Record<string, string>>;
