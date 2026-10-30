@@ -1,8 +1,9 @@
 import "../globals.css";
 import "../editorial.css";
-import "../jedi-effects.css";
+import "../reading-progress.css";
 import "../pixel-ui.css";
 import "../comlink.css";
+import "../site-guides.css";
 import "../responsive.css";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, locales } from "@/i18n/config";

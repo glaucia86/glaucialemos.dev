@@ -64,7 +64,8 @@ describe('Aurélia: final no terraço', () => {
   it('Glaucia, Prince e o sinalizador ficam nas marcas do palco do hero, sobre a placa', () => {
     const html = renderToStaticMarkup(createElement(FinaleTerrace));
     expect(html).toContain('/galaxia/scenes/aurelia/background.webp');
-    expect(html).toContain('/galaxia/actors/glaucia/aurelia/back.webp');
+    // Glaucia faces the visitor at the end (CX request, 28/10/2026).
+    expect(html).toContain('/galaxia/actors/glaucia/aurelia/idle.webp');
     expect(html).toContain('/galaxia/actors/prince/aurelia/front.webp');
     expect(html).toContain('communication-beacon-active');
     expect(html).toContain('aria-hidden="true"');

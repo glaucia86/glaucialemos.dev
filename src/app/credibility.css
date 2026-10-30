@@ -1,0 +1,194 @@
+/* Static, server-rendered commercial content. Only Home and Services opt in. */
+.commercial-page .commercial-intro {
+  display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.75rem);
+  max-width: min(46%, 560px); margin-top: 1rem;
+}
+.commercial-page .commercial-intro > h1 { min-width: 0; max-width: none; }
+.commercial-page .home-hero-v2 .commercial-intro .hero-name { font-size: clamp(2.6rem, 4vw, 4rem); }
+.commercial-page .credibility-portrait { position: relative; flex: 0 0 120px; margin: 0; }
+.commercial-page .credibility-portrait img {
+  display: block; width: 100%; height: auto; aspect-ratio: 631 / 649; object-fit: cover;
+  image-rendering: auto; border: 1px solid var(--hud-line); border-radius: .5rem;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--scene-accent, var(--aurora-teal)) 30%, transparent);
+}
+.commercial-page .credibility-portrait figcaption { position: absolute; right: .2rem; bottom: .2rem; }
+.commercial-page .credibility-portrait a {
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: .3rem;
+  background: var(--color-space-0); color: var(--text-inverse); text-decoration: none;
+}
+.commercial-page .credibility-experience { max-width: min(46%, 560px); margin-top: 1.5rem; }
+.commercial-page .credibility-kicker { margin: 0 0 .65rem; font: .7rem/1.6 var(--font-pixel); letter-spacing: .08em; color: var(--text-inverse-muted); }
+.commercial-page .credibility-experience ul { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; padding: 0; margin: 0; list-style: none; }
+.commercial-page .credibility-experience a { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; color: var(--text-inverse); font-size: .8rem; text-decoration: none; }
+.commercial-page .credibility-experience img { width: 32px; height: 32px; border-radius: .25rem; image-rendering: auto; }
+.commercial-page :is(.credibility-experience, .credibility-gallery) a:hover { text-decoration: underline; text-underline-offset: .2em; }
+.commercial-page :is(.commercial-intro, .credibility-experience, .credibility-formats, .credibility-gallery) a:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 4px; }
+.commercial-page :is(.credibility-formats, .credibility-gallery) { padding-block: clamp(2.5rem, 6vw, 5rem); color: var(--text-inverse); background: var(--color-space-0); }
+.commercial-page #formatos { scroll-margin-top: calc(var(--header-height) + 1rem); }
+.commercial-page .credibility-formats__heading { max-width: 780px; margin-bottom: 2rem; }
+.commercial-page :is(.credibility-formats, .credibility-gallery) h2 { margin: 0 0 1rem; font-size: clamp(1.65rem, 3vw, 2.7rem); line-height: 1.2; color: var(--text-inverse); }
+.commercial-page :is(.credibility-formats__heading, .credibility-gallery) > p { color: var(--text-inverse-muted); line-height: 1.7; }
+.commercial-page .credibility-offers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+.commercial-page .credibility-gallery__photos { display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem; }
+.commercial-page .credibility-gallery figure { flex: 1 1 300px; max-width: 640px; margin: 0; }
+.commercial-page .credibility-gallery img { display: block; width: 100%; height: auto; image-rendering: auto; border-radius: .5rem; }
+.commercial-page .credibility-gallery figcaption { margin-top: 1rem; font-size: .9rem; line-height: 1.7; color: var(--text-inverse-muted); }
+.commercial-page .credibility-gallery figcaption a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-inverse); }
+.commercial-page.services-page .commercial-intro { max-width: min(44%, 580px); }
+.commercial-page.services-page .commercial-intro h1 { font-size: clamp(1.65rem, 2.6vw, 2.6rem); }
+
+/* Same split between overlay and full-width plate as the existing motion controllers. */
+@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
+  html body .commercial-page .page-hero .commercial-intro,
+  .commercial-page .credibility-experience { max-width: min(100%, 720px); }
+  html body .commercial-page .page-hero .commercial-intro h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+  html body .commercial-page .page-hero .commercial-intro .hero-name { font-size: clamp(2.3rem, 6vw, 4rem); }
+}
+@media (max-width: 900px) {
+  .commercial-page .credibility-offers { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .commercial-page .credibility-portrait { flex-basis: 84px; }
+  html body .commercial-page .page-hero .commercial-intro h1 { font-size: 1.6rem; }
+  html body .commercial-page .page-hero .commercial-intro .hero-name { font-size: clamp(1.6rem, 7.5vw, 2.5rem); }
+  .commercial-page .credibility-experience { margin-top: 1rem; }
+  .commercial-page .credibility-experience ul { column-gap: .8rem; }
+  .commercial-page .credibility-experience img { width: 24px; height: 24px; }
+  .commercial-page .credibility-experience a { font-size: .72rem; gap: .35rem; }
+}
+
+/* Talk topics in plain words, under the three formats (Home chapter 5 and Services). */
+.commercial-page .credibility-topics { margin-top: clamp(2rem, 5vw, 3.5rem); padding-top: clamp(1.5rem, 3vw, 2.25rem); border-top: 1px solid var(--hud-line); }
+.commercial-page .credibility-topics h3 { margin: 0 0 .6rem; color: var(--text-inverse); font-size: clamp(1.25rem, 2.2vw, 1.75rem); }
+.commercial-page .credibility-topics > p { max-width: 70ch; margin: 0 0 1.5rem; color: var(--text-inverse-muted); line-height: 1.7; }
+.commercial-page .credibility-formats .chapter-tag { margin-bottom: 1rem; }
+
+/* Speaking venues as plain names (no third-party logos), each linked to its documented source. */
+.commercial-page .credibility-venues { margin-top: 1.25rem; }
+.commercial-page .credibility-venues ul { display: flex; flex-wrap: wrap; gap: .4rem; padding: 0; margin: 0; list-style: none; }
+.commercial-page .credibility-venues a { display: inline-flex; align-items: center; min-height: 36px; padding: .3rem .7rem; border: 1px solid var(--hud-line); border-radius: 999px; color: var(--text-inverse); font-size: .78rem; text-decoration: none; background: color-mix(in srgb, var(--color-space-0) 70%, transparent); }
+.commercial-page .credibility-venues a:hover { border-color: var(--scene-accent, var(--aurora-teal)); }
+.commercial-page .credibility-venues a:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 3px; }
+
+/* Testimonials: approved quotes as static cards, plus the form to send one (reviewed before publishing). */
+.commercial-page .credibility-testimonials { padding-block: clamp(2.5rem, 6vw, 5rem); color: var(--text-inverse); background: var(--color-space-0); scroll-margin-top: calc(var(--header-height) + 1rem); }
+.commercial-page .credibility-testimonials h2 { margin: 0 0 1rem; font-size: clamp(1.65rem, 3vw, 2.7rem); line-height: 1.2; color: var(--text-inverse); }
+.commercial-page .credibility-testimonials > .chapter__inner > p { max-width: 70ch; color: var(--text-inverse-muted); line-height: 1.7; }
+.commercial-page .credibility-testimonials__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1.25rem; margin: 2rem 0; padding: 0; list-style: none; }
+.commercial-page .credibility-testimonials__list li { padding: 1.25rem 1.4rem; border: 1px solid var(--hud-line); border-left: 3px solid var(--scene-accent, var(--aurora-teal)); border-radius: .5rem; background: var(--surface-dark); }
+.commercial-page .credibility-testimonials blockquote { margin: 0 0 1rem; }
+.commercial-page .credibility-testimonials blockquote p { margin: 0; color: var(--text-inverse); line-height: 1.7; }
+.commercial-page .credibility-testimonials__who { display: grid; gap: .2rem; margin: 0; font-weight: 700; color: var(--text-inverse); }
+.commercial-page .credibility-testimonials__who span { color: var(--text-inverse-muted); font-weight: 400; font-size: .85rem; }
+.commercial-page .testimonial-form { max-width: 720px; margin-top: 2rem; }
+.commercial-page .testimonial-form h3 { margin: 0 0 .5rem; color: var(--text-inverse); }
+.commercial-page .testimonial-form form { display: grid; gap: 1rem; }
+.commercial-page .testimonial-form label { display: grid; gap: .4rem; color: var(--text-inverse); }
+.commercial-page .testimonial-form :is(input:not([type=radio], [type=checkbox]), textarea) { min-height: 44px; padding: .65rem .8rem; color: var(--text-inverse); background: var(--surface-dark); border: 1px solid var(--hud-line); border-radius: .35rem; font: inherit; }
+.commercial-page .testimonial-form textarea { resize: vertical; }
+.commercial-page .testimonial-form small { justify-self: end; color: var(--text-inverse-muted); }
+.commercial-page .testimonial-form__contexts { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; margin: 0; padding: 0; border: 0; }
+.commercial-page .testimonial-form__contexts legend { margin-bottom: .4rem; color: var(--text-inverse); }
+.commercial-page .testimonial-form__contexts label { display: inline-flex; align-items: center; gap: .45rem; min-height: 44px; }
+.commercial-page .testimonial-form #testimonial-purpose { margin: 0; color: var(--text-inverse-muted); font-size: .85rem; }
+.commercial-page .testimonial-form .contact-consent { display: flex; align-items: flex-start; gap: .6rem; }
+.commercial-page .testimonial-form button[type=submit] { justify-self: start; }
+.commercial-page .testimonial-form :is(input, textarea):focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 2px; }
+.commercial-page .testimonial-form__done { padding: 1rem 1.2rem; border: 1px solid var(--scene-accent, var(--aurora-teal)); border-radius: .5rem; color: var(--text-inverse); }
+
+/* Photo and full talk side by side (stacked on phones); the player only loads after a click. */
+.commercial-page .credibility-gallery__photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); align-items: start; gap: clamp(1.25rem, 3vw, 2rem); }
+.commercial-page .credibility-gallery__photos > figure { max-width: none; margin: 0; }
+.commercial-page .credibility-video__frame { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: .5rem; background: #000; box-shadow: 0 0 0 1px var(--hud-line); }
+.commercial-page .credibility-video__frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.commercial-page .credibility-video__poster { position: absolute; inset: 0; display: block; }
+.commercial-page .credibility-video__poster img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; transition: transform .4s ease, filter .3s; }
+.commercial-page .credibility-video__play { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; place-items: center; width: 72px; height: 72px; padding-left: 5px; border-radius: 50%; color: #fff; font-size: 1.6rem; background: color-mix(in srgb, var(--scene-accent, var(--aurora-teal)) 85%, #000); box-shadow: 0 0 0 4px rgb(255 255 255 / .25), 0 10px 30px rgb(0 0 0 / .5); transition: scale .2s; }
+.commercial-page .credibility-video__poster:hover img { transform: scale(1.03); filter: brightness(1.08); }
+.commercial-page .credibility-video__poster:hover .credibility-video__play { scale: 1.08; }
+.commercial-page .credibility-video__poster:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 3px; }
+.commercial-page .credibility-video figcaption { margin-top: 1rem; font-size: .9rem; line-height: 1.7; color: var(--text-inverse-muted); }
+.commercial-page .credibility-video figcaption strong { color: var(--text-inverse); }
+.commercial-page .credibility-video figcaption small { display: block; font-size: .78rem; }
+@media (prefers-reduced-motion: reduce) { .commercial-page .credibility-video__poster :is(img, .credibility-video__play) { transition: none; } }
+
+/* ——— Format cards with life: each one has its own light (--glow), a pixel glyph, a beam that stretches on hover, a
+   spinning lit border and a glow that follows the pointer (CardGlow). Reduced motion keeps only the colours. ——— */
+.commercial-page .credibility-offer {
+  --mx: 50%; --my: 0%;
+  position: relative; isolation: isolate; display: flex; flex-direction: column; min-width: 0; overflow: hidden;
+  padding: clamp(1.5rem, 2.2vw, 2.25rem) clamp(1.25rem, 2vw, 2rem) clamp(1.25rem, 2vw, 1.75rem);
+  border-radius: .6rem; color: var(--text-inverse-muted);
+  background: linear-gradient(165deg, color-mix(in srgb, var(--glow) 10%, var(--color-space-2)), var(--color-space-0) 70%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glow) 28%, var(--hud-line));
+  transition: translate .35s var(--ease-out), box-shadow .35s;
+}
+.commercial-page .credibility-offer::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; padding: 2px; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: conic-gradient(from var(--glow-angle), transparent 0 55%, var(--glow) 75%, var(--color-white) 85%, var(--glow) 92%, transparent);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.commercial-page .credibility-offer::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity .3s; background: radial-gradient(380px circle at var(--mx) var(--my), color-mix(in srgb, var(--glow) 20%, transparent), transparent 62%); }
+.commercial-page .credibility-offer__beam { position: absolute; left: 1.5rem; right: 1.5rem; top: 0; height: 3px; background: var(--color-white); box-shadow: 0 0 6px var(--glow), 0 0 16px var(--glow), 0 0 30px var(--glow); transform: scaleX(.18); transform-origin: left; transition: transform .5s var(--ease-out); }
+.commercial-page .credibility-offer__top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.1rem; }
+.commercial-page .credibility-offer__glyph { width: 52px; height: 52px; color: var(--glow); filter: drop-shadow(0 0 10px color-mix(in srgb, var(--glow) 55%, transparent)); transition: transform .4s var(--ease-out); }
+.commercial-page .credibility-offer__label { margin: 0; color: var(--glow); font: 400 .62rem var(--font-pixel); letter-spacing: .14em; }
+.commercial-page .credibility-offer h3 { margin: 0 0 1.1rem; color: var(--text-inverse); font-size: 1.45rem; }
+.commercial-page .credibility-offer dl { display: grid; gap: .9rem; margin: 0 0 1rem; }
+.commercial-page .credibility-offer dt { color: var(--glow); font-size: .78rem; font-weight: 700; letter-spacing: .02em; }
+.commercial-page .credibility-offer dd { margin: .3rem 0 0; line-height: 1.6; }
+.commercial-page .credibility-offer > p { margin: 0 0 1.25rem; line-height: 1.7; }
+.commercial-page .credibility-offer .credibility-offer__price { margin: auto 0 1rem; }
+.commercial-page .credibility-offer__price span { display: inline-block; padding: .25rem .6rem; border: 1px dashed color-mix(in srgb, var(--glow) 55%, transparent); border-radius: 999px; color: var(--text-inverse); font-size: .75rem; }
+.commercial-page .credibility-offer__cta {
+  position: relative; z-index: 2; display: inline-flex; align-items: center; justify-content: space-between; gap: .75rem; align-self: stretch;
+  min-height: 46px; padding: .6rem 1.1rem; border: 1px solid var(--glow); border-radius: 999px;
+  color: var(--text-inverse); font: 400 .68rem/1.4 var(--font-pixel); letter-spacing: .06em; text-transform: uppercase; text-decoration: none;
+  background: color-mix(in srgb, var(--glow) 8%, transparent); transition: background .25s, color .25s;
+}
+.commercial-page .credibility-offer__cta span { transition: translate .25s; }
+.commercial-page .credibility-offer__cta:hover, .commercial-page .credibility-offer__cta:focus-visible { background: var(--glow); color: var(--color-space-0); }
+.commercial-page .credibility-offer__cta:hover span, .commercial-page .credibility-offer__cta:focus-visible span { translate: 4px 0; }
+.commercial-page .credibility-offer:is(:hover, :focus-within) { translate: 0 -4px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glow) 45%, var(--hud-line)), 0 18px 40px -18px color-mix(in srgb, var(--glow) 55%, transparent); }
+.commercial-page .credibility-offer:is(:hover, :focus-within)::before { opacity: 1; animation: glow-spin 2.6s linear infinite; }
+.commercial-page .credibility-offer:is(:hover, :focus-within)::after { opacity: 1; }
+.commercial-page .credibility-offer:is(:hover, :focus-within) .credibility-offer__beam { transform: scaleX(1); }
+.commercial-page .credibility-offer:is(:hover, :focus-within) .credibility-offer__glyph { transform: translateY(-3px) scale(1.06); }
+
+/* ——— Talk topics: numbered cards with their own glyph and light, 3 + 2 on wide screens, joined by a faint constellation. ——— */
+.commercial-page .credibility-topics__grid { position: relative; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 0 0 1.75rem; padding: 0; list-style: none; }
+.commercial-page .credibility-topics__grid::before { content: ""; position: absolute; left: 8%; right: 8%; top: 2.4rem; height: 1px; z-index: -1; background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--text-inverse) 30%, transparent) 0 4px, transparent 4px 10px); }
+.commercial-page .credibility-topic {
+  --mx: 50%; --my: 0%;
+  position: relative; isolation: isolate; overflow: hidden; display: grid; align-content: start; gap: .55rem;
+  flex: 1 1 280px; max-width: calc((100% - 2rem) / 3); padding: 1.2rem 1.25rem 1.35rem; border-radius: .6rem;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--glow) 9%, var(--color-space-1)), var(--color-space-0) 75%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glow) 25%, var(--hud-line)); transition: translate .35s var(--ease-out), box-shadow .35s;
+}
+.commercial-page .credibility-topic::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity .3s; background: radial-gradient(300px circle at var(--mx) var(--my), color-mix(in srgb, var(--glow) 18%, transparent), transparent 62%); }
+.commercial-page .credibility-topic__head { display: flex; align-items: center; justify-content: space-between; }
+.commercial-page .credibility-topic__glyph { width: 40px; height: 40px; color: var(--glow); filter: drop-shadow(0 0 8px color-mix(in srgb, var(--glow) 50%, transparent)); transition: transform .4s var(--ease-out); }
+.commercial-page .credibility-topic__number { color: color-mix(in srgb, var(--glow) 70%, var(--text-inverse)); font: 400 .7rem var(--font-pixel); letter-spacing: .12em; }
+.commercial-page .credibility-topic strong { color: var(--text-inverse); line-height: 1.4; }
+.commercial-page .credibility-topic > span:last-child { color: var(--text-inverse-muted); font-size: .9rem; line-height: 1.6; }
+.commercial-page .credibility-topic:hover { translate: 0 -3px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--glow) 50%, var(--hud-line)), 0 14px 30px -16px color-mix(in srgb, var(--glow) 60%, transparent); }
+.commercial-page .credibility-topic:hover::after { opacity: 1; }
+.commercial-page .credibility-topic:hover .credibility-topic__glyph { transform: rotate(-6deg) scale(1.08); }
+@media (max-width: 900px) {
+  .commercial-page .credibility-topic { max-width: calc((100% - 1rem) / 2); }
+  .commercial-page .credibility-topics__grid::before { display: none; }
+}
+@media (max-width: 600px) { .commercial-page .credibility-topic { max-width: 100%; } }
+
+/* Cards rise in sequence as the section scrolls in (scroll-driven, no JS); nothing moves with reduced motion. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.reduce-motion) .commercial-page :is(.credibility-offer, .credibility-topic) { animation: card-rise linear both; animation-timeline: view(); animation-range: entry calc(var(--i, 0) * 4%) entry calc(60% + var(--i, 0) * 4%); }
+  }
+}
+@keyframes card-rise { from { opacity: 0; transform: translateY(28px); } }
+@media (prefers-reduced-motion: reduce) { .commercial-page :is(.credibility-offer, .credibility-topic, .credibility-offer *, .credibility-topic *) { transition: none !important; animation: none !important; translate: none !important; } }
+html.reduce-motion .commercial-page :is(.credibility-offer, .credibility-topic, .credibility-offer *, .credibility-topic *) { transition: none !important; animation: none !important; translate: none !important; }
+.commercial-page .credibility-experience__initials { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: .25rem; color: var(--text-inverse); background: color-mix(in srgb, var(--text-inverse) 14%, transparent); font: 400 .55rem var(--font-pixel); }
+@media (max-width: 600px) { .commercial-page .credibility-experience__initials { width: 24px; height: 24px; } }

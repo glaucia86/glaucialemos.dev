@@ -15,7 +15,7 @@
 - O globo usa apenas eventos com latitude e longitude e é carregado dinamicamente exclusivamente em Eventos.
 - Os números de público permanecem informativos em cada fonte e nunca são agregados, pois podem se sobrepor e contêm intervalos textuais.
 - A troca de idioma substitui apenas o primeiro segmento da URL, preservando a página atual.
-- Sem qualquer uma de `WEB3FORMS_ACCESS_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` e `TURNSTILE_SECRET_KEY`, o formulário comunica a indisponibilidade e bloqueia o envio; nenhum email pessoal é incluído.
+- Envio pelo Resend no servidor (o Web3Forms gratuito recusa envio vindo do servidor). Sem qualquer uma de `RESEND_API_KEY`, `CONTACT_FROM`, `CONTACT_TO`, `TURNSTILE_SITE_KEY` e `TURNSTILE_SECRET_KEY`, o formulário comunica a indisponibilidade e bloqueia o envio; nenhum email pessoal é incluído.
 - Como o sandbox não possui rede, fontes do Google não podem ser baixadas no build. Foi usado `next/font/local` com Geist e Geist Mono livres já presentes no Next.js instalado; a mono cria a linguagem de títulos pixel sem recorrer a fontes oficiais de franquias.
 
 ## Redesign editorial + pixel art — outubro de 2026

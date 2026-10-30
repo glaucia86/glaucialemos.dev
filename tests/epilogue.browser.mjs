@@ -14,9 +14,9 @@ const gardens = {
   es: { name: "Aurélia, los Jardines Colgantes", allFound: "¡Todas las lunas encontradas!", next: ["Atlas de las Conexiones", "Marea Roja"], commands: ["florecer", "baliza", "anillos", "semillas", "invernadero", "polinizar jardín"] },
 };
 const copy = {
-  pt: { title: "Além da Última Órbita", command: "Além da última órbita", locked: "mais 3 mundos", elsewhere: "Serviços", back: "Voltar ao Observatório", revisit: "Revisitar o epílogo" },
-  en: { title: "Beyond the Last Orbit", command: "Beyond the Last Orbit", locked: "3 more worlds", elsewhere: "Services", back: "Back to the Observatory", revisit: "Revisit the epilogue" },
-  es: { title: "Más allá de la última órbita", command: "Más allá de la última órbita", locked: "3 mundos más", elsewhere: "Servicios", back: "Volver al Observatorio", revisit: "Volver al epílogo" },
+  pt: { title: "Além da Última Órbita", command: "Além da última órbita", locked: "mais 3 mundos", elsewhere: "Workshops e mentorias", back: "Voltar ao Observatório", revisit: "Revisitar o epílogo" },
+  en: { title: "Beyond the Last Orbit", command: "Beyond the Last Orbit", locked: "3 more worlds", elsewhere: "Workshops & mentoring", back: "Back to the Observatory", revisit: "Revisit the epilogue" },
+  es: { title: "Más allá de la última órbita", command: "Más allá de la última órbita", locked: "3 mundos más", elsewhere: "Talleres y mentorías", back: "Volver al Observatorio", revisit: "Volver al epílogo" },
 };
 const browser = await chromium.launch();
 const failures = [];

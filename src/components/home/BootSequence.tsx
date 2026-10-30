@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap, SCRAMBLE_CHARS } from "@/lib/gsap";
-import { BOOT_KEY, bootSeen, finishBoot } from "@/lib/boot";
+import { BOOT_KEY, bootSeen, finishBoot, skipsBoot } from "@/lib/boot";
 import { motionAllowed } from "@/lib/use-motion";
 import { play } from "@/lib/sfx";
 
@@ -54,7 +54,7 @@ export function BootSequence({ lines, granted, skip, label, storageKey = BOOT_KE
     mounted++;
     const finish = () => finishBoot(storageKey);
     const release = () => { mounted--; setTimeout(() => { if (!mounted && document.documentElement.dataset.boot === "pending") { finish(); window.__lenis?.start(); } }, 60); };
-    if (armOnNavigation && document.documentElement.dataset.boot !== "pending" && !bootSeen(storageKey) && motionAllowed()) document.documentElement.dataset.boot = "pending";
+    if (armOnNavigation && document.documentElement.dataset.boot !== "pending" && !bootSeen(storageKey) && !skipsBoot(location.hash) && motionAllowed()) document.documentElement.dataset.boot = "pending";
     if (!overlay || document.documentElement.dataset.boot !== "pending") return release;
     window.__lenis?.stop();
     // SmoothScroll turns lag smoothing off for Lenis. While the intro plays (Lenis is stopped), keep it on, so a heavy page

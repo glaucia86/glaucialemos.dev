@@ -4,9 +4,45 @@
 
 - `services.independent` nos dicionários PT/EN/ES aparece no hero e acima da lista de espera. Serviços, contato e epílogo têm um teste de guarda contra referências ao empregador/setor bancário; experiência/CV, Home, Sobre e Projetos não foram alterados. Um comentário em `holo-globe.ts` foi reescrito apenas para zerar a expressão inglesa antiga em todo `src`.
 - O conceito de preço saiu do catálogo/schema/componentes. Cards e flores apontam para `#lista-de-espera`, antes do contato, mantendo os links de conversa. A seção tem marcador `◇` próprio para preservar os sete códigos de capítulos existentes quando não há depoimentos.
-- `src/components/WaitlistForm.tsx`, `src/lib/waitlist-schema.ts`, `src/i18n/waitlist.ts` e `src/app/actions/waitlist.ts`: nome, e-mail, três interesses, consentimento LGPD, honeypot e Turnstile. `?interesse=workshop-corporativo|mentoria-grupo-noite|curso-gravado` seleciona a opção. Mesmas três variáveis de `contactConfig()`; helpers server-only em `src/lib/turnstile.ts` e `src/lib/web3forms.ts` compartilhados com contato, sem mudar seu comportamento. Sem JS/configuração: alternativa LinkedIn. Confirmação reutiliza as flores CSS, respeitando movimento reduzido.
+- `src/components/WaitlistForm.tsx`, `src/lib/waitlist-schema.ts`, `src/i18n/waitlist.ts` e `src/app/actions/waitlist.ts`: nome, e-mail, três interesses, consentimento LGPD, honeypot e Turnstile. `?interesse=workshop-corporativo|mentoria-grupo-noite|curso-gravado` seleciona a opção. Reusa as cinco variáveis de `contactConfig()`, `verifyTurnstile` e o envio Resend de contato/depoimentos, sem novas variáveis. Sem JS/configuração: alternativa LinkedIn. Confirmação reutiliza as flores CSS, respeitando movimento reduzido.
 - `src/data/depoimentos.json` começa em `[]`. Para adicionar um depoimento real autorizado, inclua `id`, `nome`, `cargo`, `texto: {pt,en,es}` e, opcionalmente, `empresa` e `url` HTTPS. `depoimentoSchema`/`getDepoimentos()` validam; `Testimonials.tsx` só renderiza com dados, depois de Provas, inserindo então seu capítulo. Vazio = nenhum DOM/label e numeração original intacta. Não adicionar exemplos fictícios ao JSON.
 - Validação: `npx vitest run` — 50 arquivos, 574 testes passando; `npx tsc --noEmit` e `npx eslint src tests` passaram. O typecheck apontou uma prop antiga no teste `aurelia-fx`, corrigida e validada novamente (9 testes). Sem rede, commit, build, servidor ou navegador; aparência/interação no navegador ainda não validada nesta rodada.
+
+## Retomada — rodada de CX + formulário (28/10/2026, branch `feat/prova-social-ofertas`, sem commit)
+
+Feedback do X e da Mariana (CX, `docs/feedback.txt`) aplicado; detalhes no `AGENTS.md` ("Rodada de CX"). O formulário falhava porque o
+Web3Forms gratuito recusa envio feito pelo servidor; agora o envio é pelo **Resend**. **Pendente com a Glaucia:**
+1. Criar a conta no Resend, verificar `mail.glaucialemos.dev` (DNS na Vercel, "Auto configure"), criar a chave só de envio e preencher
+   `RESEND_API_KEY`, `CONTACT_FROM`, `CONTACT_TO` no `.env.local` e na Vercel (sem as cinco variáveis o contato fica desativado).
+2. Testar um envio real no dev (com `onboarding@resend.dev` até o domínio verificar) e conferir `delivered` no painel do Resend.
+3. Validar no navegador: menu novo, Home sem ofertas duplicadas, pop-up da trajetória, CTA fixo e convite do rodapé, rádio com páginas
+   secretas, convite de som, retrato/foto, "Onde já palestrei", depoimentos. Rodar `tests/holonet.browser.mjs` e `tests/epilogue.browser.mjs`.
+4. Feito: linha do hero "Liderança • IA • Engenharia"; a 5ª parte do episódio fica sem legenda; assets e componentes Star Wars sem uso removidos
+   (preservados em `archive/star-wars`).
+Lint, typecheck e 539 testes (47 arquivos) passando. Sem build, servidor ou navegador.
+
+## Retomada — episódio narrado do epílogo (27/10/2026, branch `feat/prova-social-ofertas`, sem commit)
+
+`/[lang]/alem-da-ultima-orbita` ganhou o episódio narrado no molde do da 404 (`BeyondOrbitEpisode.tsx`, CSS em `beyond-orbit.css`,
+copy `episode` em `src/i18n/beyond-orbit.ts`). Fonte renomeada para `approved-source/GE-EP-08-beyond-orbit.mp4` (74 s). O botão fica
+logo abaixo da transmissão "Sinal interceptado" (antes de "A próxima estrela"); antes da `last-light` fica numa doca depois da viagem
+oculta. Assets em `public/galaxia/scenes/beyond-orbit/episode.*`. Lint, typecheck e 502 testes passando. **Pendente:** texto da 5ª parte
+(60–74 s, ainda sem legenda), conferir os tempos das legendas no navegador e validar visualmente (somente a Glaucia). Detalhes no `AGENTS.md`.
+
+## Retomada — atualização comercial Home/Serviços (27/10/2026)
+
+Branch `feat/prova-social-ofertas`, criada da `main` em `1899358`, sem commit. Os dois prompts de arte não rastreados foram preservados.
+Home e Serviços ganharam a apresentação aprovada e `#formatos` logo após o hero: palestras, workshops e mentorias com o mesmo peso,
+público/foco/descrição/preço sob consulta e CTAs com `?assunto=...#contato`. Menu “Serviços”, metadata/copy PT/EN/ES, logos locais
+de Microsoft/Itaú/Zup identificados como experiência profissional **somente em Serviços** (retirados da Home após correção da Glaucia).
+Cenas, segredos, formulário e controlador do portal intactos; Sobre não foi alterada.
+Componentes em `src/components/credibility/`, referências em `src/data/prova-social.ts`, copy em `src/i18n/commercial.ts`, CSS
+restrito por `.commercial-page`. **Fotografias ainda aguardam escolha explícita da Glaucia**: candidatas e fontes em
+`docs/prova-social/SELECAO.md`; sem retrato/galeria vazios nem imagens não aprovadas no site. Integração só após essa escolha.
+Lint/typecheck e 496 testes (45 arquivos) passaram. Revisão independente sem defeitos críticos/importantes; dois ajustes menores
+aplicados. Roteiro `tests/commercial.browser.mjs` e instruções em `docs/prova-social/VALIDACAO.md`: 1440×900/390×844, três idiomas,
+teclado, movimento reduzido, sem JS, assuntos e portal com envio interceptado. Sintaxe conferida; navegador/build somente pela Glaucia.
+Build, comparação visual, fotos e integração na main continuam pendentes. Registro detalhado em `docs/prova-social/IMPLEMENTACAO.md`.
 
 ## Próximo — Serviços (Aurélia) com efeito WOW e sons reais (itens 1–3 e 5 implementados, sem commit; item 4 em outra sessão)
 **Rodada 3 (27/10/2026):** giroscópio sci-fi (`OrbitGyroscope` + `gyro-engine.ts`) no lugar de `OrbitRings`/`RingAlignment`; eclipse

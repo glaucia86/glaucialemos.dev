@@ -5,13 +5,16 @@ export const AURELIA_BOOT_KEY = "aurelia-boot";
 export const LUMINA_BOOT_KEY = "lumina-boot";
 export const ATLAS_BOOT_KEY = "atlas-boot";
 export const BOOT_DONE_EVENT = "holonet:boot-done";
+// Arriving to talk (a "Workshops e mentorias" CTA from any page) skips the intro: the contact portal opens at once.
+export const SKIP_BOOT_HASH = "#contato";
+export const skipsBoot = (hash: string) => hash === SKIP_BOOT_HASH;
 
 export function shouldBoot({ seen, systemReduced, manualReduced }: { seen: boolean; systemReduced: boolean; manualReduced: boolean }) {
   return !seen && !systemReduced && !manualReduced;
 }
 
 // Runs before the page paints. Without JavaScript the overlay is never shown.
-export const bootScriptFor = (key: string) => `(function(){try{var d=document.documentElement;var seen=sessionStorage.getItem("${key}")==="done";var manual=localStorage.getItem("reduce-motion")==="true";var system=matchMedia("(prefers-reduced-motion: reduce)").matches;if(!seen&&!manual&&!system){d.dataset.boot="pending";}}catch(e){}})();`;
+export const bootScriptFor = (key: string) => `(function(){try{var d=document.documentElement;var seen=sessionStorage.getItem("${key}")==="done";var manual=localStorage.getItem("reduce-motion")==="true";var system=matchMedia("(prefers-reduced-motion: reduce)").matches;var talk=location.hash==="${SKIP_BOOT_HASH}";if(!seen&&!manual&&!system&&!talk){d.dataset.boot="pending";}}catch(e){}})();`;
 export const bootScript = bootScriptFor(BOOT_KEY);
 
 export function bootSeen(key = BOOT_KEY) {

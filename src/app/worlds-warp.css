@@ -1,0 +1,32 @@
+/* "Salto pelos 7 mundos" (WorldsWarp.tsx). Static by default: a row of the 7 worlds with links. With motion on a wide
+   desktop (data-warp, set by WorldsWarpMotion) the stage is pinned and the portals fly through the camera. */
+.worlds-warp { position: relative; padding: clamp(4rem, 9vw, 7rem) 0; overflow: clip; background: radial-gradient(ellipse at 50% 40%, #0d1838, var(--color-space-0) 70%); }
+.worlds-warp__stage { position: relative; width: min(var(--content-width), calc(100% - 2 * var(--gutter))); margin: 0 auto; }
+.worlds-warp__sky { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; image-rendering: pixelated; }
+.worlds-warp__heading { position: relative; z-index: 2; max-width: 40rem; margin-bottom: 2rem; }
+.worlds-warp__kicker { margin: 0 0 .6rem; color: var(--energy-green); font: 400 .66rem var(--font-pixel); letter-spacing: .14em; text-transform: uppercase; }
+.worlds-warp__heading h2 { margin: 0 0 .75rem; color: var(--text-inverse); font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1.1; }
+.worlds-warp__heading p:last-child { margin: 0; color: var(--text-inverse-muted); }
+.worlds-warp__worlds { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+.worlds-warp__world { display: grid; gap: .5rem; align-content: start; }
+@media (min-width: 1100px) { .worlds-warp__worlds { grid-template-columns: repeat(7, minmax(0, 1fr)); } }
+.worlds-warp__portal { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; border-radius: .5rem; box-shadow: 0 0 0 1px var(--hud-line), 0 10px 30px -12px rgb(0 0 0 / .7); }
+.worlds-warp__portal img { width: 100%; height: 100%; object-fit: cover; }
+.worlds-warp__world[data-secret] .worlds-warp__portal img { filter: blur(6px) brightness(.55) saturate(1.4); }
+.worlds-warp__label { display: flex; gap: .5rem; align-items: baseline; color: var(--text-inverse); text-decoration: none; font-size: .9rem; }
+a.worlds-warp__label:hover .worlds-warp__name { color: var(--energy-green); }
+.worlds-warp__number { color: var(--energy-green); font: 400 .6rem var(--font-pixel); }
+.worlds-warp__next { margin: 2rem 0 0; color: var(--text-inverse); font: 400 clamp(.9rem, 1.6vw, 1.2rem) var(--font-pixel); letter-spacing: .08em; text-transform: uppercase; }
+.worlds-warp__flash { display: none; }
+
+/* The flight: everything stacks at the vanishing point inside a full-screen pinned stage. */
+.worlds-warp[data-warp] { padding: 0; }
+.worlds-warp[data-warp] .worlds-warp__stage { width: 100%; height: calc(100svh - var(--header-height)); perspective: 900px; display: grid; place-items: center; }
+.worlds-warp[data-warp] .worlds-warp__heading { position: absolute; left: 50%; top: 50%; translate: -50% -50%; text-align: center; margin: 0; }
+.worlds-warp[data-warp] .worlds-warp__worlds { position: absolute; inset: 0; display: block; }
+.worlds-warp[data-warp] .worlds-warp__world { position: absolute; left: 50%; top: 48%; width: min(46vw, 640px); translate: -50% -50%; opacity: 0; visibility: hidden; will-change: transform, opacity; }
+.worlds-warp[data-warp] .worlds-warp__portal { border-radius: .75rem; box-shadow: 0 0 0 2px rgb(255 255 255 / .35), 0 0 60px 10px rgb(111 242 208 / .25), 0 30px 80px -20px rgb(0 0 0 / .8); }
+.worlds-warp[data-warp] .worlds-warp__label { justify-content: center; font: 400 clamp(.9rem, 1.5vw, 1.3rem) var(--font-pixel); letter-spacing: .1em; text-transform: uppercase; text-shadow: 0 0 12px rgb(0 0 0 / .9); }
+.worlds-warp[data-warp] .worlds-warp__number { font-size: .8rem; }
+.worlds-warp[data-warp] .worlds-warp__next { position: absolute; left: 50%; top: 50%; translate: -50% -50%; margin: 0; opacity: 0; visibility: hidden; font-size: clamp(1.4rem, 3vw, 2.4rem); text-align: center; text-shadow: 0 0 24px rgb(111 242 208 / .6); }
+.worlds-warp[data-warp] .worlds-warp__flash { display: block; position: absolute; inset: 0; z-index: 5; background: #fff; opacity: 0; visibility: hidden; pointer-events: none; }

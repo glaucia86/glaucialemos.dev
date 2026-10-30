@@ -11,6 +11,11 @@ import { FxLayer } from "./motion/FxLayer";
 import { getAudioLevels, isSoundEnabled, setAudioLevels, setSoundEnabled } from "@/lib/sfx";
 import { KONAMI_GESTURES, discover, emitEgg, gestureOf, konamiStep, onEgg } from "@/lib/eggs";
 import { Comlink } from "./Comlink";
+import { StickyCta } from "./StickyCta";
+import { DeepNight } from "./eggs/ExtraEggs";
+import { whenBootDone } from "@/lib/boot";
+
+const SOUND_INVITE_KEY = "sound-invite-seen";
 
 // Secret star map: the stars draw "GL" and, beside it, Prince's paw.
 const MAP_STARS = [[6, 6], [2, 10], [2, 18], [6, 22], [11, 20], [11, 15], [8, 15], [17, 6], [17, 22], [24, 22], [33, 14], [30, 9], [33, 7], [36, 9], [39, 12], [32, 18], [38, 18]] as const;
@@ -22,9 +27,10 @@ function StarMap() {
   </svg>;
 }
 
-const routes = [["home", ""], ["about", "sobre"], ["projects", "projetos"], ["content", "conteudo"], ["events", "eventos"], ["services", "servicos"]] as const;
+// Reading order: who I am, what I built, where I spoke, how to hire me; content (mostly external links) last.
+export const routes = [["home", ""], ["about", "sobre"], ["projects", "projetos"], ["events", "eventos"], ["services", "servicos"], ["content", "conteudo"]] as const;
 
-export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dictionary: Dictionary; children: ReactNode }) {
+export function SiteChrome({ lang, dictionary, children }: Readonly<{ lang: Locale; dictionary: Dictionary; children: ReactNode }>) {
   const pathname = usePathname(); const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);
@@ -32,6 +38,22 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
   const [sound, setSound] = useState(false); const [scrolled, setScrolled] = useState(false); const [comlinkSlot, setComlinkSlot] = useState<HTMLSpanElement | null>(null);
   const [audioOpen, setAudioOpen] = useState(false);
   const [levels, setLevels] = useState({ music: .3, effects: 1 });
+  // First visit: one quiet invitation to turn the sound on (nothing plays before a click); then the radio hint.
+  const [invite, setInvite] = useState(false); const [guideReady, setGuideReady] = useState(false);
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const stop = whenBootDone(() => { timer = setTimeout(() => {
+      let seen = true;
+      try { seen = localStorage.getItem(SOUND_INVITE_KEY) === "1"; } catch { /* No storage: no invitation. */ }
+      if (!seen && !isSoundEnabled()) setInvite(true); else setGuideReady(true);
+    }, 1500); });
+    return () => { stop(); clearTimeout(timer); };
+  }, []);
+  const answerInvite = (on: boolean) => {
+    setInvite(false); setGuideReady(true);
+    try { localStorage.setItem(SOUND_INVITE_KEY, "1"); } catch { /* The choice still applies now. */ }
+    if (on && !sound) { setSoundEnabled(true); setSound(true); }
+  };
   useEffect(() => { try { setReduced(localStorage.getItem("reduce-motion") === "true"); } catch { setReduced(false); } setSound(isSoundEnabled()); setLevels(getAudioLevels()); }, []);
   useEffect(() => { if (reduced === null) return; document.documentElement.classList.toggle("reduce-motion", reduced); try { localStorage.setItem("reduce-motion", String(reduced)); } catch { /* Browsing without storage still supports the control. */ } }, [reduced]);
   useEffect(() => { const code = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"]; let position = 0; const onKey = (event: KeyboardEvent) => { position = event.key?.toLowerCase() === code[position]?.toLowerCase() ? position + 1 : 0; if (position === code.length) { emitEgg("star-map"); position = 0; } }; addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey); }, []);
@@ -87,21 +109,24 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
     <a className="skip-link" href="#main">{dictionary.accessibility.skip}</a>
     <header className="site-header" data-scrolled={scrolled}>
       <Link href={`/${lang}`} className="brand" onClick={(event) => { if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); go(`/${lang}`); }}><span className="brand__mark" aria-hidden="true" />GL<span>.</span></Link>
-      <nav id="primary-navigation" className={menuOpen ? "is-open" : ""} aria-label={dictionary.accessibility.primaryNav}>{routes.map(([key, slug], index) => { const href = `/${lang}${slug ? `/${slug}` : ""}`; return <Link className={pathname === href ? "active" : ""} aria-current={pathname === href ? "page" : undefined} href={href} key={key} onClick={(event) => { if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); go(href); }}><span className="nav-index" aria-hidden="true">0{index}</span>{dictionary.nav[key]}</Link>; })}<div className="nav-preferences">
-        <button className="sound-toggle" type="button" aria-pressed={sound} aria-label={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} title={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} onClick={toggleSound}>
-          <svg viewBox="0 0 16 16" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false"><path fill="currentColor" d="M2 6h3V5h1V4h1V3h1v10H7v-1H6v-1H5v-1H2z" />{sound ? <path fill="currentColor" d="M10 6h1v4h-1zM12 4h1v8h-1zM14 2h1v12h-1z" /> : <path fill="currentColor" d="M10 5h1v1h1v1h1V6h1V5h1v1h-1v1h-1v2h1v1h1v1h-1v-1h-1V9h-1v1h-1v1h-1v-1h1V9h1V7h-1V6h-1z" />}</svg>
-        </button>
-        <div className="audio-settings" onKeyDown={event => { if (event.key === 'Escape' && audioOpen) { event.stopPropagation(); setAudioOpen(false); event.currentTarget.querySelector<HTMLButtonElement>('.audio-settings__toggle')?.focus(); } }}>
-          <button type="button" className="audio-settings__toggle" aria-expanded={audioOpen} aria-controls="audio-settings-panel" onClick={() => setAudioOpen(value => !value)}>{dictionary.holonet.sound.settings}</button>
-          <div id="audio-settings-panel" className="audio-settings__panel" hidden={!audioOpen}>
-            {(['music', 'effects'] as const).map(channel => <label key={channel}>{dictionary.holonet.sound[channel]} <output>{Math.round(levels[channel] * 100)}%</output>
-              <input type="range" min="0" max="100" value={Math.round(levels[channel] * 100)} onChange={event => { const next = { ...levels, [channel]: Number(event.target.value) / 100 }; setLevels(next); setAudioLevels(next); }} />
-            </label>)}
-          </div>
-        </div>
+      <nav id="primary-navigation" className={menuOpen ? "is-open" : ""} aria-label={dictionary.accessibility.primaryNav}>{routes.map(([key, slug], index) => { const href = `/${lang}${slug ? `/${slug}` : ""}`; return <Link className={pathname === href ? "active" : ""} aria-current={pathname === href ? "page" : undefined} href={href} key={key} onClick={(event) => { if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; event.preventDefault(); go(href); }}><span className="nav-index" aria-hidden="true">0{index + 1}</span>{dictionary.nav[key]}</Link>; })}<div className="nav-preferences">
         <button className="motion-toggle" type="button" aria-pressed={Boolean(reduced)} onClick={() => setReduced((value) => !value)}>{reduced ? dictionary.motion.enable : dictionary.motion.reduce}</button>
       </div></nav>
       <div className="header-tools">
+        {/* Sound: always visible (also on phones). The icon toggles it; the chevron opens music and effects levels. */}
+        <div className="sound-control">
+          <button className="sound-toggle" type="button" aria-pressed={sound} aria-label={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} title={sound ? dictionary.holonet.sound.off : dictionary.holonet.sound.on} onClick={toggleSound}>
+            <svg viewBox="0 0 16 16" width="16" height="16" shapeRendering="crispEdges" aria-hidden="true" focusable="false"><path fill="currentColor" d="M2 6h3V5h1V4h1V3h1v10H7v-1H6v-1H5v-1H2z" />{sound ? <path fill="currentColor" d="M10 6h1v4h-1zM12 4h1v8h-1zM14 2h1v12h-1z" /> : <path fill="currentColor" d="M10 5h1v1h1v1h1V6h1V5h1v1h-1v1h-1v2h1v1h1v1h-1v-1h-1V9h-1v1h-1v1h-1v-1h1V9h1V7h-1V6h-1z" />}</svg>
+          </button>
+          <div className="audio-settings" onKeyDown={event => { if (event.key === 'Escape' && audioOpen) { event.stopPropagation(); setAudioOpen(false); event.currentTarget.querySelector<HTMLButtonElement>('.audio-settings__toggle')?.focus(); } }}>
+            <button type="button" className="audio-settings__toggle" aria-expanded={audioOpen} aria-controls="audio-settings-panel" aria-label={dictionary.holonet.sound.settings} title={dictionary.holonet.sound.settings} onClick={() => setAudioOpen(value => !value)}><span aria-hidden="true">▾</span></button>
+            <div id="audio-settings-panel" className="audio-settings__panel" hidden={!audioOpen}>
+              {(['music', 'effects'] as const).map(channel => <label key={channel}>{dictionary.holonet.sound[channel]} <output>{Math.round(levels[channel] * 100)}%</output>
+                <input type="range" min="0" max="100" value={Math.round(levels[channel] * 100)} onChange={event => { const next = { ...levels, [channel]: Number(event.target.value) / 100 }; setLevels(next); setAudioLevels(next); }} />
+              </label>)}
+            </div>
+          </div>
+        </div>
         <label className="sr-only" htmlFor="locale">{dictionary.nav.language}</label><select id="locale" value={lang} onChange={(event) => go(localizePath(pathname, event.target.value as Locale))}>{locales.map((locale) => <option value={locale} key={locale}>{locale.toUpperCase()}</option>)}</select>
         <span className="comlink-slot" ref={setComlinkSlot} />
       </div>
@@ -111,13 +136,19 @@ export function SiteChrome({ lang, dictionary, children }: { lang: Locale; dicti
     <PageEffects />
     <SmoothScroll />
     <FxLayer />
+    <StickyCta lang={lang} pathname={pathname} />
+    <DeepNight lang={lang} />
     <footer>
       <div className="footer-hud" aria-hidden="true"><span>GL-OS // GALÁXIA ENCANTADA</span><span className="footer-hud__signal"><i /><i /><i /><i /></span><span>{dictionary.holonet.credits.end}</span></div>
       <div><strong>Glaucia Lemos</strong><p>{dictionary.footer.tagline}</p></div><SocialLinks labels={dictionary.footer.socialLabels} />
       <small>© {new Date().getFullYear()} · {dictionary.footer.rights}<button type="button" className="footer-top" onClick={top}>{dictionary.holonet.credits.top} <span aria-hidden="true">↑</span></button></small>
       <p className="footer-notice">{dictionary.footer.independenceNotice}</p>
     </footer>
-    <Comlink copy={dictionary.comlink} pathname={pathname} slot={comlinkSlot} />
+    {invite && <aside className="sound-invite" aria-label={dictionary.holonet.sound.settings}>
+      <p>{dictionary.holonet.sound.invite}</p>
+      <div><button type="button" className="button primary" onClick={() => answerInvite(true)}>{dictionary.holonet.sound.inviteOn}</button><button type="button" className="sound-invite__later" onClick={() => answerInvite(false)}>{dictionary.holonet.sound.inviteOff}</button></div>
+    </aside>}
+    <Comlink copy={dictionary.comlink} pathname={pathname} slot={comlinkSlot} hintReady={guideReady} />
     <dialog ref={dialogRef} className="egg-overlay" aria-label={dictionary.easterEgg.message} onCancel={() => setEgg(false)}><StarMap /><p>{dictionary.easterEgg.message}</p><button autoFocus onClick={() => setEgg(false)}>{dictionary.easterEgg.close}</button></dialog>
   </>;
 }

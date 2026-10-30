@@ -36,12 +36,12 @@ describe("journey constellation", () => {
     expect(next).not.toContain("events");
   });
   it("charts Aurélia through its six secrets and preserves the bridge as a separate star", () => {
-    const ids = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination"];
+    const ids = ["garden-bloom", "beacon-relay", "ring-alignment", "seed-vault", "greenhouse-dusk", "pollination", "proposal-harvest"];
     const serviceStars = stars.filter((star) => star.world === "services");
     expect(serviceStars.map((star) => star.id).sort()).toEqual([...ids, "epilogue-signal"].sort());
     const trip = journey(["first-page", ...ids, "garden-bloom", "epilogue-signal", "last-light"]);
     expect(trip.worlds).toEqual(["content", "services"]);
-    expect(trip.found).toBe(9);
+    expect(trip.found).toBe(10);
     expect(trip.total).toBe(EGGS.length);
     expect(trip.path.map((star) => star.id)).toEqual(["first-page", ...ids, "epilogue-signal", "last-light"]);
     const bridgeOnly = EGGS.filter((egg) => egg.page !== "services" || egg.id === "epilogue-signal");

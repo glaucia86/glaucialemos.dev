@@ -25,16 +25,16 @@ describe("easter eggs", () => {
     expect(pageOf("/en/servicos/")).toBe("services");
     expect(pageOf("/pt/rota-perdida")).toBe("notfound");
     expect(pageOf("/pt/projetos/qualquer-coisa")).toBe("notfound");
-    expect(eggsFor("home").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "focus-lens", "launch-charge", "dog-signal", "hangar-check", "dark-sky", "wish"]);
-    expect(eggsFor("notfound").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "signal-recovered", "paw-rescue"]);
-    expect(eggsFor("about").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "paw-tracks", "memory-capsule", "whiteout", "aurora-prism", "snowdrift", "between-lines", "borrowed-star"]);
+    expect(eggsFor("home").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "focus-lens", "launch-charge", "dog-signal", "hangar-check", "dark-sky", "wish", "meteor-shower", "deep-night"]);
+    expect(eggsFor("notfound").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "signal-recovered", "paw-rescue", "deep-night"]);
+    expect(eggsFor("about").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "paw-tracks", "memory-capsule", "whiteout", "aurora-prism", "snowdrift", "between-lines", "borrowed-star", "deep-night"]);
     expect(new Set(EGGS.flatMap((egg) => egg.phrases)).size).toBe(EGGS.flatMap((egg) => egg.phrases).length);
   });
 
   it("reconhece os segredos de Marte na página de Projetos", () => {
     expect(pageOf("/pt/projetos")).toBe("projects");
     expect(pageOf("/en/projetos/")).toBe("projects");
-    expect(eggsFor("projects").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "rover-scan", "sample-cache", "terminal-launch", "first-sprout", "before-pretty", "lost-bug", "dust-fall"]);
+    expect(eggsFor("projects").map((egg) => egg.id)).toEqual(["star-map", "curious-letter", "rover-scan", "sample-cache", "terminal-launch", "first-sprout", "before-pretty", "lost-bug", "dust-fall", "lost-commit", "deep-night"]);
     expect(matchPhrase("npx glaucia_lemos86")).toBe("terminal-launch");
     expect(matchPhrase("Varredura")).toBe("rover-scan");
     expect(matchPhrase("Carcaça")).toBe("before-pretty");

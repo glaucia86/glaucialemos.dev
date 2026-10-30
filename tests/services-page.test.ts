@@ -9,8 +9,9 @@ afterEach(() => { vi.restoreAllMocks(); vi.unstubAllEnvs(); });
 const page = async (lang = 'pt', interesse: string | string[] = '') => renderToStaticMarkup(await Services({ params: Promise.resolve({ lang }), searchParams: Promise.resolve({ interesse }) }));
 it.each(['pt', 'en', 'es'] as const)('keeps empty testimonials absent and chapter codes unchanged (%s)', async lang => {
   const html = await page(lang);
-  expect(html).not.toContain('depoimentos');
-  expect(html).not.toContain(getDictionary(lang).services.testimonials);
+  expect(html).not.toContain('id="depoimentos"');
+  expect(html).not.toContain('class="chapter chapter--testimonials"');
+  expect(html).toContain('id="enviar-depoimento"');
   const jumps = [...html.matchAll(/class="chapter-jump__label">(.*?) <b>(.*?)<\/b>/g)];
   expect(jumps.map(match => match[1])).toEqual(['◆ 03', '◆ 04', '◆ 05', '◆ 06']);
   const chapterCodes = [...html.matchAll(/class="chapter-tag__ep" aria-hidden="true">(.*?)<\/span>/g)].map(match => match[1]);

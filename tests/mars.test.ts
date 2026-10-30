@@ -153,7 +153,7 @@ describe("textos de Marte", () => {
 
   it("todo segredo de Marte tem nome e dica no rádio estelar nos três idiomas", () => {
     const ids = EGGS.filter((egg) => egg.page === "projects").map((egg) => egg.id);
-    expect(ids).toHaveLength(7);
+    expect(ids).toHaveLength(8);
     for (const lang of ["pt", "en", "es"] as const) for (const id of ids) {
       expect(comlink[lang].eggs[id]?.name, `${lang}/${id}`).toBeTruthy();
       expect(comlink[lang].eggs[id]?.hint, `${lang}/${id}`).toBeTruthy();

@@ -45,5 +45,10 @@ export const EGGS = [
   { id: "signal-recovered", page: "notfound", phrases: ["coordenadas", "coordinates", "recalibrar", "recalibrate"] },
   { id: "paw-rescue", page: "notfound", phrases: ["resgate", "rescue", "rescate", "farejar", "sniff", "olfatear"] },
   { id: "last-light", page: "epilogue", phrases: ["ultimaluz", "lastlight", "ultimaluzestelar"] },
+  { id: "meteor-shower", page: "home", phrases: ["chuva", "meteoros", "meteorshower", "lluvia"] },
+  { id: "lost-commit", page: "projects", phrases: ["commit", "primeirocommit", "firstcommit", "disquete"] },
+  { id: "orbital-selfie", page: "events", phrases: ["selfie", "fotoorbital", "orbitalselfie"] },
+  { id: "proposal-harvest", page: "services", phrases: ["colheita", "harvest", "cosecha", "proposta", "proposal", "propuesta"] },
+  { id: "deep-night", page: "global", phrases: ["lua", "moon", "luna", "noiteprofunda", "deepnight", "nocheprofunda"] },
 ] as const satisfies readonly { id: string; page: EggPage; phrases: readonly string[] }[];
 export type EggId = (typeof EGGS)[number]["id"];

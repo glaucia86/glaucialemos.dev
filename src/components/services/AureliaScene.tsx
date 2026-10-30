@@ -49,7 +49,7 @@ export function FinaleTerrace(){
     <div className="finale-terrace__plane finale-terrace__actors">
       <i className="finale-terrace__beacon" style={{...boxStyle(propBox(aureliaScene,'communication-beacon-active',74.5,93)),...sprite(props['communication-beacon-active'].src)}}/>
       <i className="finale-terrace__prince" style={actorStyle('prince','front')}/>
-      <i className="finale-terrace__glaucia" style={actorStyle('glaucia','back')}/>
+      <i className="finale-terrace__glaucia" style={actorStyle('glaucia','idle')}/>
     </div>
   </div>;
 }

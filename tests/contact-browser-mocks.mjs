@@ -6,9 +6,9 @@ export async function mockContact(page, base) {
   await page.route('**/*', async route => {
     const request = route.request();
     const url = new URL(request.url());
-    if (url.hostname === 'api.web3forms.com') {
+    if (url.hostname === 'api.resend.com') {
       mock.providers.push(request.url());
-      return route.fulfill({ status: 200, json: { success: true } });
+      return route.fulfill({ status: 200, json: { id: 'browser-mock-email' } });
     }
     if (url.hostname === 'challenges.cloudflare.com') {
       mock.challenges.push(request.url());

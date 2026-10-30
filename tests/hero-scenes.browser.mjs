@@ -47,7 +47,6 @@ try {
         }
       } else {
         assert.equal(await page.locator(".aurelia-hot").count(), 4);
-        assert.equal(await page.locator(".saber-assembly").count(), 0);
         for (const actor of [".aurelia-crew", ".aurelia-prince"]) {
           assert.equal(await plane.locator(actor).count(), 1);
         }
@@ -65,15 +64,6 @@ try {
         );
         assert.ok(stopped, `${route}, ${width}px: ${preference} reduced-motion`);
         assert.equal(await page.locator(".hero-scene-layer").evaluate((layer) => getComputedStyle(layer).opacity), "1");
-        if (route === "/pt") {
-          const character = await page.locator(".dagobah-character").evaluate((element) => {
-            const style = getComputedStyle(element);
-            return { animations: element.getAnimations().length, transform: style.transform, opacity: style.opacity, height: element.getBoundingClientRect().height };
-          });
-          assert.equal(character.animations, 0);
-          assert.equal(character.opacity, "1");
-          assert.ok(character.height > 0);
-        }
         if (preference === "manual") await page.locator(".motion-toggle").click();
       }
       await page.emulateMedia({ reducedMotion: "no-preference" });

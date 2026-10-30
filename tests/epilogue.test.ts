@@ -36,7 +36,7 @@ describe("epilogue eligibility", () => {
   });
   it.each(["pt", "en", "es"])("maps the route in %s", lang => {
     expect(pageOf(`/${lang}/alem-da-ultima-orbita`)).toBe("epilogue");
-    expect(EGGS).toHaveLength(45);
+    expect(EGGS).toHaveLength(50);
   });
 });
 
@@ -67,8 +67,8 @@ it.each(["pt", "en", "es"] as const)("renders an accessible static finale and lo
   expect(gardens).toContain(copy.worlds.services);
   expect(gardens).toContain('/galaxia/scenes/aurelia/background.webp');
   expect(gardens).toContain(`href="/${lang}/servicos"`);
-  expect(gardens).toContain(copy.found.replace("{found}", "0").replace("{total}", "6"));
-  expect(gardens.match(/<i style=/g)).toHaveLength(6);
+  expect(gardens).toContain(copy.found.replace("{found}", "0").replace("{total}", "7"));
+  expect(gardens.match(/<i style=/g)).toHaveLength(7);
   expect(gardens).not.toContain(copy.faint);
   expect(gardens).not.toContain(copy.signalTitle);
   for (const egg of EGGS.filter((egg) => egg.page === "services" && egg.id !== "epilogue-signal")) {

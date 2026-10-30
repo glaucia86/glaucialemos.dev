@@ -1,6 +1,6 @@
 # AGENTS.md
 
-- Serviços (29/10/2026): `services.independent` (PT/EN/ES) no hero e acima da lista de espera; fontes de Serviços/contato/epílogo protegidas por `tests/services-copy.test.ts`. Preços removidos do catálogo/schema/UI; cards mantêm conversa e oferecem `#lista-de-espera`. `src/components/WaitlistForm.tsx`, `src/lib/waitlist-schema.ts`, `src/i18n/waitlist.ts`, `src/app/actions/waitlist.ts`: nome/e-mail, três interesses, LGPD, honeypot e Turnstile; `?interesse=` aceita `workshop-corporativo`, `mentoria-grupo-noite`, `curso-gravado`. Reusa `contactConfig()` e helpers server-only `src/lib/turnstile.ts`/`src/lib/web3forms.ts` também usados pelo contato, sem novas variáveis. Dados só para aviso da modalidade escolhida, sem spam. Seção antes do contato com marcador `◇`, preservando os códigos dos capítulos existentes.
+- Serviços (29/10/2026): `services.independent` (PT/EN/ES) no hero e acima da lista de espera; fontes de Serviços/contato/epílogo protegidas por `tests/services-copy.test.ts`. Preços removidos do catálogo/schema/UI; cards mantêm conversa e oferecem `#lista-de-espera`. `src/components/WaitlistForm.tsx`, `src/lib/waitlist-schema.ts`, `src/i18n/waitlist.ts`, `src/app/actions/waitlist.ts`: nome/e-mail, três interesses, LGPD, honeypot e Turnstile; `?interesse=` aceita `workshop-corporativo`, `mentoria-grupo-noite`, `curso-gravado`. Reusa `contactConfig()`, `verifyTurnstile` e o Resend de contato/depoimentos, sem novas variáveis. Dados só para aviso da modalidade escolhida, sem spam. Seção antes do contato com marcador `◇`, preservando os códigos dos capítulos existentes.
 - Depoimentos: `src/data/depoimentos.json` = `[]`, `depoimentoSchema` em `src/lib/types.ts`, `getDepoimentos()` em `src/lib/data.ts`, componente server `src/components/services/Testimonials.tsx`. Adicionar somente relatos reais autorizados com `id`, `nome`, `cargo`, `texto: {pt,en,es}`, opcionais `empresa` e `url` HTTPS. Vazio não renderiza nada nem altera capítulos; com dados entra após Provas, com label e código próprios. Testes `tests/testimonials.test.ts` e `tests/services-page.test.ts`.
 
 - Epílogo funcional em `/[lang]/alem-da-ultima-orbita` (PT/EN/ES), `noindex`, fora do menu: `src/app/beyond-orbit.css`,
@@ -34,7 +34,49 @@
   por `eggs.ts`. `last-light` revela o final e permite replay; SSR/no-JS/reduced motion mantêm copy visível. Comlink tem
   comandos PT/EN/ES e revisita; persistência/reset continuam únicos. Testes: `tests/epilogue.test.ts` e
   `tests/beyond-orbit.test.ts` e `tests/epilogue.browser.mjs` (navegador somente pela usuária). Retomada atual no início do handoff.
+  Episódio narrado (desenho, 74 s, narração em PT; fonte `approved-source/GE-EP-08-beyond-orbit.mp4`): `BeyondOrbitEpisode.tsx`, mesmo
+  molde do da 404 (botão com miniatura → `<dialog>` com TV CRT, `preload="none"`, sem autoplay, legendas `episode.{pt,en,es}.vtt` com
+  `default` no idioma). Fica logo depois do `.beyond-orbit__post`, fora dele (o diretor clona só o post), em `.beyond-orbit__episode-slot`;
+  enquanto a viagem espera a `last-light` (`data-waiting`, oculta) ele vai para `.beyond-orbit__episode-dock`, fora da viagem. Aberto,
+  silencia o site sem tocar no `sfx.ts`: tira `data-sound-world` do `<main>` (o `FxLayer` sai do mundo: para música/ambiente),
+  `blockMusic("episode")` e barra hover/clique de dentro do diálogo. Web em `public/galaxia/scenes/beyond-orbit/`: `episode.mp4`
+  (H.264 960 px CRF 31, AAC 80k, faststart, ~7,2 MB), `episode.webm` (VP9 2 passes 720k + Opus 80k, ~7,5 MB), `episode-poster.webp`
+  (quadro de 26,5 s). Legendas medidas pelo áudio (voz bem acima da trilha) e pelos quadros; a 5ª parte (60–74 s) fica sem
+  legenda por decisão da Glaucia.
 
+- Rodada de CX (feedback do X + Mariana, `docs/feedback.txt`, 28/10/2026):
+  - Contato e depoimentos enviam pelo **Resend** (REST, `src/lib/mail.ts`; o Web3Forms gratuito recusa envio do servidor). Variáveis:
+    `RESEND_API_KEY`, `CONTACT_FROM`, `CONTACT_TO`, `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY` (todas obrigatórias, só servidor);
+    `verifyTurnstile` em `contact-config.ts`; `Idempotency-Key` = hash do conteúdo; nada de dado pessoal no log. Testes: `contact-action` e
+    `testimonial-action`. Domínio `mail.glaucialemos.dev` (DNS na Vercel → "Auto configure"); antes disso, remetente `onboarding@resend.dev`.
+  - Menu (`routes` em `SiteChrome.tsx`): 01 Início · 02 Tripulante (/sobre) · 03 Projetos · 04 Eventos · 05 Workshops e mentorias · 06 Conteúdo.
+  - Home linear: um único `OfferFormats` (`#formatos`, capítulo 5, formatos + `speakingTopics`); Tripulante com LinkedIn e `CareerDialog`
+    (o `CareerMap` com `embedded`, sem `?era=`/rolagem; CSS do mapa em `src/app/career-map.css`, compartilhado com Sobre). Títulos literais
+    (`holonet.episodes`, `galaxy.title/intro`, `holocron.archive`, `journey.demo.context`); Sobre literal (`niveora` chapters/log/map, `aurora.title`).
+  - `StickyCta.tsx` (barra após a 1ª tela, vira convite "Chegou até aqui?" no rodapé; não aparece em Serviços/páginas secretas).
+    `#contato` pula a intro (`skipsBoot`, script de boot e `armOnNavigation`) e o portal abre direto; X do portal à direita (pedido do CX);
+    formulário centralizado e os dois retratos (`.contact-crew`) no canto superior esquerdo do painel.
+  - Comlink: introdução + "Páginas secretas (2)" (`copy.guide`, `epilogueRemaining`); dica da 1ª visita (`comlink-hint-seen`). Som no cabeçalho
+    (`.sound-control`, também no celular) e convite da 1ª visita (`sound-invite-seen`), que só liga com clique. CSS em `src/app/site-guides.css`.
+  - Prova social: retrato SDD e foto palestrando aprovados (`public/prova-social/glaucia-*.webp`); "Onde já palestrei" (`speakingVenues` →
+    `venueSources(eventos.json)`) no hero de Serviços; depoimentos (`Testimonials`/`TestimonialForm`, `submitTestimonial`) chegam por e-mail
+    para aprovação e só aparecem após entrar em `testimonials` (`src/data/prova-social.ts`). Testes: `tests/cx-flow.test.ts`.
+  - Galeria de Serviços: foto + palestra da BrazilJS 2024 (`talkVideos`, `TalkVideo.tsx`, pôster local, player youtube-nocookie só após clique).
+  - CTA principal "Pedir uma proposta para o meu time" + `ctaNote` (2 dias úteis). Formatos e temas com `PixelGlyph`/`CardGlow` (cor por card).
+    Experiência: + Packt, Pagar.me e GlobalLogic LATAM (sem logo oficial: iniciais). Epílogo: episódio à esquerda no texto do topo, só depois da
+    `last-light`; a sequência da estrela não rola mais os créditos (BEATS post 13,4 / end 19,4). Rádio: "Coordenadas perdidas" só dá a pista
+    com 5 segredos (`LOST_UNLOCK`); `COMLINK_OPEN_EVENT` abre o rádio (botão `SecretsGuide` no hero do Início).
+  - Catálogo fechado em 50 segredos: `meteor-shower` (Início, 3 cliques no título de Eventos), `lost-commit` (Projetos, disquete fixo),
+    `orbital-selfie` (Eventos, segurar o hero 2 s), `proposal-harvest` (Serviços, formatos 01→02→03), `deep-night` (global, "lua"; Esc sai).
+    Todos em `src/components/eggs/ExtraEggs.tsx` (CSS no fim de `site-guides.css`).
+  - "Salto pelos 7 mundos" (`WorldsWarp.tsx` + `WorldsWarpMotion.tsx`, CSS `src/app/worlds-warp.css`) entre o capítulo 5 e o convite final do
+    Início: em `HERO_OVERLAY` com movimento, pin + hiperespaço + 7 portais (placas reais; o epílogo aparece como "Uma estrela fora do mapa",
+    sem link) e clarão; sai pulsando o botão de proposta. Celular/movimento reduzido/sem JS: fileira estática com links.
+  - LinkedIn em tempo real ficou fora (API de leitura `r_member_social` fechada). Linha do hero da Home: "Liderança • IA • Engenharia".
+  - Assets e componentes do tema Star Wars removidos (`public/pixel`, Yoda/Leia/Dagobah, `jedi-effects`, regras antigas de `hero-scenes.css`,
+    10 sons sem uso do `sfx.ts` e 4 testes de navegador antigos); seguem na branch `archive/star-wars`. Nomes internos (`holonet`, `--jedi-*`)
+    ficaram porque fazem parte do tema atual. Atenção: o antigo `jedi-effects.css` também tinha regras do tema atual (`.portrait-viewport`,
+    `.reading-progress`), agora em `src/app/reading-progress.css`; sem elas o SVG do progresso vira uma tela preta gigante na Home.
 - Handoff da migração: `docs/galaxia-encantada/HANDOFF.md` (comece pela seção “Retomada”).
 - Eventos (Atlas das Conexões) está na branch `feat/atlas-eventos`, aguardando as folhas GE-GL-05B/GE-DOG-05B (prompts no HANDOFF).
 - Migração Galáxia Encantada (Home, Sobre, Projetos, Conteúdo e o epílogo na `main`; o tema Star Wars está congelado em
@@ -49,7 +91,7 @@
   Assets web por cena: `node scripts/build-galaxia-assets.mjs <scene-id> [--debug]` gera `public/galaxia/**` e
   `src/data/galaxia/<cena>.json` (poses recortadas, piscar como camada sobre `idle`, âncora dos quadris em `ANCHORS`;
   props passam por `keyDark`, que tira a margem preta da folha original). Pixel art no estilo das imagens do Star Wars (referência:
-  `public/pixel/servicos-vader.jpg`, pixels finos de 1–2 px): `src/data/galaxia/layout.json` guarda por cena `grid: 1` (atores e
+  pixels finos de 1–2 px): `src/data/galaxia/layout.json` guarda por cena `grid: 1` (atores e
   props reduzidos para 1 pixel de arte por pixel da placa, borda dura), `plateGrid: 0` (placa aprovada intocada), `colors`
   (160 atores / 128 props, sem dithering), os palcos e a escala dos props. A Glaucia rejeitou G = 3 ("pixelado demais").
   Os JSON mantêm o tamanho lógico (`w`/`h`) e o real em `px`; atores e props usam `image-rendering: pixelated`, a placa não.
@@ -241,5 +283,3 @@
   (sobrescreveu o clipe de 8 s do loop). Som da ponte: `ambience.ogg/.mp3` (áudio do clipe original, com a explosão, em loop com o
   mesmo cruzamento) toca baixo (`AMBIENCE_VOLUME`) só com o som do cabeçalho ligado (`isSoundEnabled`/`SOUND_EVENT`, sem mexer no
   `sfx.ts`), para em aba oculta e enquanto o `<dialog>` do episódio está aberto. Prompt do vídeo do epílogo: `docs/art/galaxia-encantada/prompts/GE-PL-08-beyond-orbit-video.md`.
-- Yoda na pose da Força: arte-fonte em `docs/art/segments-yoda`; regenere as camadas com
-  `node scripts/build-yoda-force.mjs`. Estágios do hero em `data-force-stage` (idle/charging/force/xwing).

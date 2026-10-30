@@ -19,6 +19,7 @@ import { RepoBench, SiteBench } from "@/components/projects/Bench";
 import { PartnerStations } from "@/components/projects/PartnerStations";
 import { DustPanel } from "@/components/projects/DustPanel";
 import { MarsEggs } from "@/components/projects/MarsEggs";
+import { LostCommit } from "@/components/eggs/ExtraEggs";
 import { languageColor } from "@/components/projects/languages";
 import { repoAnchor } from "@/components/projects/repo-events";
 import { isLocale } from "@/i18n/config";
@@ -181,6 +182,7 @@ export default async function Projects({ params }: Props) {
     </section>
 
     <MarsEggs />
+    <LostCommit lang={lang} records={Object.values(firstCommits).map(({ repo, date, message, url }) => ({ repo, date, message, url }))} />
     <HomeChoreography />
   </main>;
 }

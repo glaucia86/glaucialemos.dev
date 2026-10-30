@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { isLocale } from "@/i18n/config";
 import { beyondOrbit } from "@/i18n/beyond-orbit";
 import { BeyondOrbitScene } from "@/components/epilogue/BeyondOrbitScene";
+import { BeyondOrbitEpisode } from "@/components/epilogue/BeyondOrbitEpisode";
 import { EpilogueVoyage } from "@/components/epilogue/EpilogueVoyage";
 import "../../beyond-orbit.css";
 
@@ -29,6 +30,8 @@ export default async function BeyondOrbit({ params }: Props) {
         <p className="beyond-orbit__intro">{copy.intro}</p>
         <p className="beyond-orbit__body">{copy.body}</p>
         <p className="beyond-orbit__coords" aria-hidden="true">{copy.coordinates}</p>
+        {/* The narrated episode, on the left of the image like the 404's; with motion it appears once the last light has played. */}
+        <div className="beyond-orbit__episode-slot"><BeyondOrbitEpisode copy={copy.episode} lang={lang} /></div>
       </div>
       <BeyondOrbitScene copy={copy} />
     </section>

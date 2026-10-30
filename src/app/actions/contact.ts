@@ -1,10 +1,9 @@
 'use server';
 
-import { verifyTurnstile } from '@/lib/turnstile';
-import { postWeb3Forms } from '@/lib/web3forms';
 import { isLocale } from '@/i18n/config';
-import { contactConfig } from '@/lib/contact-config';
+import { contactConfig, verifyTurnstile } from '@/lib/contact-config';
 import { contactOptions, contactSchema, contactValues, type ContactState } from '@/lib/contact-schema';
+import { mailLines, sendMail } from '@/lib/mail';
 
 export async function submitContact(_previous: ContactState | null, data: FormData): Promise<ContactState> {
   // Do not reflect bot content or make any external request.
@@ -16,11 +15,12 @@ export async function submitContact(_previous: ContactState | null, data: FormDa
   const values = contactValues(data);
   const parsed = contactSchema(lang).safeParse(values);
   if (!parsed.success) return { status: 'invalid', errors: parsed.error.flatten().fieldErrors, values };
-  if (!await verifyTurnstile(data.get('cf-turnstile-response'), config.secretKey)) return { status: 'captcha', values };
+  if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'))) return { status: 'captcha', values };
+
+  // Delivered from the server through Resend (Web3Forms' free plan rejects server-side submissions).
   const service = contactOptions(lang).find(option => option.value === parsed.data.service)!;
-  const sent = await postWeb3Forms(config.accessKey, {
-    subject: `Contato glaucialemos.dev — ${service.label}`,
-    ...parsed.data, service: service.label, service_id: service.value, lang,
-  });
+  const { name, company, linkedin, message } = parsed.data;
+  const text = `${mailLines([['Nome', name], ['Empresa', company], ['LinkedIn', linkedin], ['Interesse', `${service.label} (${service.value})`], ['Idioma', lang], ['Consentimento LGPD', 'sim']])}\n\n${message}`;
+  const sent = await sendMail({ apiKey: config.apiKey!, from: config.from!, to: config.to! }, `Contato glaucialemos.dev — ${service.label}`, text);
   return sent ? { status: 'ok' } : { status: 'error', values };
 }

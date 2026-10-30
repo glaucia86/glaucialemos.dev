@@ -20,7 +20,7 @@ const ACTOR_IDS = ["glaucia", "prince"] as const;
 // Server content is visible until motion is enabled after hydration. The same discovery snapshot handles revisits,
 // local resets and cross-tab updates. With motion, the last star plays "A Última Luz", a ~28 s sequence that the
 // visitor can skip at any time (button, Esc, wheel or touch); it always lands on the same static final state.
-export function BeyondOrbitMotion({ children, finale: ending, ambient, overlays, skip, hint }: { children: ReactNode; finale: ReactNode; ambient: ReactNode; overlays: ReactNode; skip: string; hint: string }) {
+export function BeyondOrbitMotion({ children, finale: ending, ambient, overlays, skip, hint }: Readonly<{ children: ReactNode; finale: ReactNode; ambient: ReactNode; overlays: ReactNode; skip: string; hint: string }>) {
   const enabled = useMotionEnabled();
   const overlay = useMediaQuery(HERO_OVERLAY);
   const fine = useMediaQuery(FINE_POINTER);
@@ -344,14 +344,12 @@ export function BeyondOrbitMotion({ children, finale: ending, ambient, overlays,
         beat("postscript")();
         animations.push(postscript.animate([{ opacity: 0, filter: "blur(8px)", transform: "translateY(10px)" }, { opacity: 1, filter: "blur(0)", transform: "none" }], { duration: 1400, easing: "ease-out", fill: "backwards" }));
       });
-      // 7. Credits roll inside the letterbox: an aria-hidden copy of the real list below.
+      // 7. The scene fades towards the transmission. The credits are no longer rolled here: the full list lives in the
+      // voyage below, so the visitor never sees them twice.
       at(BEATS.credits, () => {
         beat("credits")();
-        const reel = page.querySelector(".beyond-orbit__credit-reel");
-        if (reel) track.replaceChildren(clean(reel));
         animations.push(continued.animate([{ transform: "scale(1)" }, { transform: "scale(.55)", opacity: .2 }], { duration: 1600, easing: "ease-in", fill: "forwards" }));
       });
-      timeline.fromTo(track, { yPercent: 0, y: () => scene.clientHeight }, { yPercent: -100, y: 0, duration: BEATS.post - BEATS.credits - .4, ease: "none" }, BEATS.credits);
       // 8. Post-credits: black, then an intercepted transmission with the next coordinates.
       at(BEATS.post, () => {
         beat("post")();
