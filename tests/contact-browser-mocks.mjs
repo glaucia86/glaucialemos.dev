@@ -34,7 +34,8 @@ export async function mockContact(page, base) {
       // Includes native/no-JS form submissions: never forward these to the server.
       return route.fulfill({ status: 200, contentType: 'text/html', body: '<p>Contact POST intercepted by browser test.</p>' });
     }
-    return route.continue();
+    // Allow suites to install an offline guard underneath these provider mocks.
+    return route.fallback();
   });
   return mock;
 }

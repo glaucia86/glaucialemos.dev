@@ -2,7 +2,7 @@
 
 import { isLocale } from '@/i18n/config';
 import { waitlistCopy } from '@/i18n/waitlist';
-import { clientIp, consumeRateLimit } from '@/lib/rate-limit';
+import { clientIp, consumeGlobalRateLimit, consumeRateLimit } from '@/lib/rate-limit';
 import { contactConfig, verifyTurnstile } from '@/lib/contact-config';
 import { mailLines, sendMail } from '@/lib/mail';
 import { waitlistSchema, waitlistValues, type WaitlistState } from '@/lib/waitlist-schema';
@@ -19,6 +19,7 @@ export async function submitWaitlist(_previous: WaitlistState | null, data: Form
   const ip = await clientIp();
   if (!consumeRateLimit(ip, 'waitlist')) return { status: 'rate-limited' };
   if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'), { remoteIp: ip === 'unknown' ? undefined : ip, expectedAction: 'waitlist' })) return { status: 'captcha', values };
+  if (!consumeGlobalRateLimit()) return { status: 'rate-limited' };
 
   const label = waitlistCopy[lang].offerings[parsed.data.interest];
   const { name, email, interest } = parsed.data;

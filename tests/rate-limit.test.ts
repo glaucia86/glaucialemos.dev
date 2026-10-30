@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { clientIp, consumeRateLimit, evaluateRateLimit, MAX_RATE_LIMIT_KEYS, resetRateLimits, type RateLimitState } from '@/lib/rate-limit';
+import { clientIp, consumeGlobalRateLimit, consumeRateLimit, evaluateGlobalRateLimit, evaluateRateLimit, MAX_RATE_LIMIT_KEYS, resetRateLimits, type RateLimitState } from '@/lib/rate-limit';
 
 const request = vi.hoisted(() => ({ headers: new Headers() }));
 vi.mock('next/headers', () => ({ headers: async () => request.headers }));
@@ -10,6 +10,11 @@ function limiter(maxKeys = MAX_RATE_LIMIT_KEYS) {
   return {
     take(ip = 'ip-a', action: 'contact' | 'waitlist' | 'testimonial' = 'contact') {
       const result = evaluateRateLimit(state, ip, action, () => now, maxKeys);
+      state = result.state;
+      return result.allowed;
+    },
+    global() {
+      const result = evaluateGlobalRateLimit(state, () => now);
       state = result.state;
       return result.allowed;
     },
@@ -55,18 +60,18 @@ describe('janela deslizante de envios', () => {
     const l = limiter();
     for (let i = 0; i < 60; i++) {
       l.time(i * 1000);
-      expect(l.take(`ip-${i}`, i % 2 ? 'waitlist' : 'contact')).toBe(true);
+      expect(l.global()).toBe(true);
     }
-    expect(l.take('another', 'testimonial')).toBe(false);
-    l.time(60 * MINUTE - 1); expect(l.take('another')).toBe(false);
-    l.time(60 * MINUTE); expect(l.take('another')).toBe(true);
-    expect(l.take('another')).toBe(false);
+    expect(l.global()).toBe(false);
+    l.time(60 * MINUTE - 1); expect(l.global()).toBe(false);
+    l.time(60 * MINUTE); expect(l.global()).toBe(true);
+    expect(l.global()).toBe(false);
   });
   it('não altera o estado de entrada nem consome outras cotas ao negar', () => {
     const input: RateLimitState = new Map();
     const first = evaluateRateLimit(input, 'a', 'contact', () => 0);
     expect(input.size).toBe(0);
-    expect(first.state.size).toBe(3);
+    expect(first.state.size).toBe(2);
     const l = limiter();
     for (let i = 0; i < 3; i++) l.take();
     const before = l.state;
@@ -75,25 +80,28 @@ describe('janela deslizante de envios', () => {
     expect(l.state).not.toBe(before);
   });
   it('remove entradas expiradas e mantém tamanho limitado sem descartar contadores ativos', () => {
-    const l = limiter(5);
+    const l = limiter(4);
     expect(l.take('a')).toBe(true);
     expect(l.take('b')).toBe(true);
-    expect(l.state.size).toBe(5);
+    expect(l.state.size).toBe(4);
     for (let i = 0; i < 100; i++) expect(l.take(`new-${i}`)).toBe(false);
-    expect(l.state.size).toBe(5);
+    expect(l.state.size).toBe(4);
     expect(l.take('a')).toBe(true);
     expect(l.take('a')).toBe(true);
     expect(l.take('a')).toBe(false);
     l.time(24 * 60 * MINUTE);
     expect(l.take('c')).toBe(true);
-    expect([...l.state.keys()].sort()).toEqual(['action:contact:c', 'global', 'ip:c']);
+    expect([...l.state.keys()].sort()).toEqual(['action:contact:c', 'ip:c']);
     expect(MAX_RATE_LIMIT_KEYS).toBe(5000);
   });
   it('reseta o estado compartilhado entre testes', () => {
     vi.useFakeTimers();
     for (let i = 0; i < 3; i++) expect(consumeRateLimit('a', 'contact')).toBe(true);
     expect(consumeRateLimit('a', 'contact')).toBe(false);
+    for (let i = 0; i < 60; i++) expect(consumeGlobalRateLimit()).toBe(true);
+    expect(consumeGlobalRateLimit()).toBe(false);
     resetRateLimits();
+    expect(consumeGlobalRateLimit()).toBe(true);
     expect(consumeRateLimit('a', 'contact')).toBe(true);
   });
 });

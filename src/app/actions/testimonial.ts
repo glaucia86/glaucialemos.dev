@@ -2,7 +2,7 @@
 
 import { isLocale } from '@/i18n/config';
 import { testimonialCopy } from '@/i18n/testimonial';
-import { clientIp, consumeRateLimit } from '@/lib/rate-limit';
+import { clientIp, consumeGlobalRateLimit, consumeRateLimit } from '@/lib/rate-limit';
 import { contactConfig, verifyTurnstile } from '@/lib/contact-config';
 import { mailLines, sanitizeHeader, sendMail } from '@/lib/mail';
 import { testimonialSchema, testimonialValues, type TestimonialState } from '@/lib/testimonial-schema';
@@ -20,6 +20,7 @@ export async function submitTestimonial(_previous: TestimonialState | null, data
   const ip = await clientIp();
   if (!consumeRateLimit(ip, 'testimonial')) return { status: 'rate-limited' };
   if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'), { remoteIp: ip === 'unknown' ? undefined : ip, expectedAction: 'testimonial' })) return { status: 'captcha', values };
+  if (!consumeGlobalRateLimit()) return { status: 'rate-limited' };
 
   const { name, role, linkedin, context, quote } = parsed.data;
   const text = `${mailLines([['Nome', name], ['Cargo e empresa', role], ['LinkedIn', linkedin || '—'], ['Contexto', testimonialCopy.pt.contexts[context]], ['Idioma', lang], ['Autorizou publicar', 'sim']])}\n\n“${quote}”\n\nPara publicar: adicione em testimonials (src/data/prova-social.ts).`;

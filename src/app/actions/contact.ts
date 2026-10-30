@@ -1,7 +1,7 @@
 'use server';
 
 import { isLocale } from '@/i18n/config';
-import { clientIp, consumeRateLimit } from '@/lib/rate-limit';
+import { clientIp, consumeGlobalRateLimit, consumeRateLimit } from '@/lib/rate-limit';
 import { contactConfig, verifyTurnstile } from '@/lib/contact-config';
 import { contactOptions, contactSchema, contactValues, type ContactState } from '@/lib/contact-schema';
 import { mailLines, sendMail } from '@/lib/mail';
@@ -19,6 +19,7 @@ export async function submitContact(_previous: ContactState | null, data: FormDa
   const ip = await clientIp();
   if (!consumeRateLimit(ip, 'contact')) return { status: 'rate-limited' };
   if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'), { remoteIp: ip === 'unknown' ? undefined : ip, expectedAction: 'contact' })) return { status: 'captcha', values };
+  if (!consumeGlobalRateLimit()) return { status: 'rate-limited' };
 
   // Delivered from the server through Resend (Web3Forms' free plan rejects server-side submissions).
   const service = contactOptions(lang).find(option => option.value === parsed.data.service)!;
