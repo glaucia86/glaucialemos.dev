@@ -5,6 +5,7 @@ import "../pixel-ui.css";
 import "../comlink.css";
 import "../site-guides.css";
 import "../responsive.css";
+import "../mobile-eggs.css";
 import { getDictionary } from "@/i18n/dictionaries";
 import { isLocale, locales } from "@/i18n/config";
 import { notFound } from "next/navigation";

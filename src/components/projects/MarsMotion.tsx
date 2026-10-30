@@ -1,5 +1,6 @@
 "use client";
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import { useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
@@ -88,7 +89,7 @@ export function MarsMotion({ children, labelledBy, locale, copy, scans, oldest }
         else { sampleCase.dataset.case = "open"; show({ kind: "sample", repo: oldest }); say(copy.status.sample); }
       };
       const ids: Record<string, EggId> = { glaucia: "rover-scan", rover: "rover-scan", console: "rover-scan", prince: "sample-cache" };
-      const click = (event: Event) => run(ids[(event.currentTarget as HTMLElement).dataset.hot!]);
+      const click = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) run(ids[(event.currentTarget as HTMLElement).dataset.hot!]); };
       hotspots.forEach((button) => button.addEventListener("click", click));
       const stop = onEgg(HERO_EGGS, (id) => void bringIntoView(section).then(() => { if (!disposed) run(id); }));
       return () => {
@@ -155,7 +156,7 @@ export function MarsMotion({ children, labelledBy, locale, copy, scans, oldest }
 
     const actions: Record<string, () => void> = { glaucia: roverScan, rover: roverScan, console: roverScan, prince: sampleCache };
     const replays: Record<string, () => void> = { "rover-scan": roverScan, "sample-cache": sampleCache };
-    const onHot = (event: Event) => actions[(event.currentTarget as HTMLElement).dataset.hot!]?.();
+    const onHot = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) actions[(event.currentTarget as HTMLElement).dataset.hot!]?.(); };
     hotspots.forEach((button) => button.addEventListener("click", onHot));
     const stopEggs = onEgg(HERO_EGGS, (id) => void bringIntoView(section).then(() => { if (!disposed) replays[id]?.(); }));
 

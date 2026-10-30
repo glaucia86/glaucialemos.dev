@@ -20,8 +20,8 @@ describe("mobile hotspot contract", () => {
   it("imports and runs without browser globals", async () => {
     expect(typeof window).toBe("undefined");
     expect(typeof document).toBe("undefined");
-    const module = await import("@/lib/mobile-eggs");
-    expect(() => module.assertMobileHotspots()).not.toThrow();
+    const mobileModule = await import("@/lib/mobile-eggs");
+    expect(() => mobileModule.assertMobileHotspots()).not.toThrow();
     expect(MOBILE_EGG_QUERY).toContain("(orientation: portrait) and (max-width: 820px)");
     expect(MOBILE_EGG_QUERY).toContain("(pointer: coarse) and (max-width: 820px)");
     expect(MOBILE_EGG_QUERY).toContain("(pointer: coarse) and (orientation: landscape) and (max-height: 520px)");
@@ -256,7 +256,7 @@ describe("scan timing", () => {
 });
 
 describe("mobile copy", () => {
-  const uiKeys = ["scanLabel", "scanAria", "sheetTitle", "sheetClose", "armHint", "holdHint", "lockedHint", "edgeLeftAria", "edgeRightAria", "panoramaAria"];
+  const uiKeys = ["hotspotAria", "scanLabel", "scanAria", "sheetTitle", "sheetClose", "armHint", "holdHint", "lockedHint", "edgeLeftAria", "edgeRightAria", "panoramaAria"];
   it("has exactly the supported locales", () => {
     expect(Object.keys(mobileEggs).sort()).toEqual([...locales].sort());
     expect(Object.keys(mobileEggs).sort()).toEqual(["en", "es", "pt"]);

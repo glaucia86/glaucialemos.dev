@@ -1,3 +1,4 @@
+import { MobileEggLayer } from "@/components/mobile/MobileEggLayer";
 import type { CSSProperties } from "react";
 import { SCENES, boxStyle, poseBox, type Box } from "@/lib/scenes";
 
@@ -67,7 +68,7 @@ const pose = (actor: "glaucia" | "prince", name: string, box: Box): CSSPropertie
 };
 
 export function AtlasScene({ holoLabel }: { holoLabel: string }) {
-  return <div className="hero-scene-layer hero-scene-layer--atlas" data-paused="true" aria-hidden="true">
+  return <><MobileEggLayer world="events" projection="cover" /><div className="hero-scene-layer hero-scene-layer--atlas" data-paused="true" aria-hidden="true">
     <div className="atlas-plane">
       <canvas className="atlas-sky atlas-sky--back" />
       {/* The projection beam rising from the pedestal, and the hologram it carries. */}
@@ -91,7 +92,7 @@ export function AtlasScene({ holoLabel }: { holoLabel: string }) {
       </span>
       <canvas className="atlas-sky atlas-sky--front" />
     </div>
-  </div>;
+  </div></>;
 }
 
 type HotLabels = Record<keyof typeof HOTSPOTS, string>;

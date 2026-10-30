@@ -3,7 +3,7 @@ import type { Locale } from "./config";
 
 export type MobileEggCopy = {
   ui: {
-    scanLabel: string; scanAria: string; sheetTitle: string; sheetClose: string;
+    hotspotAria: string; scanLabel: string; scanAria: string; sheetTitle: string; sheetClose: string;
     armHint: string; holdHint: string; lockedHint: string;
     edgeLeftAria: string; edgeRightAria: string; panoramaAria: string;
   };
@@ -14,6 +14,7 @@ export type MobileEggCopy = {
 export const mobileEggs: Record<Locale, MobileEggCopy> = {
   pt: {
     ui: {
+      hotspotAria: "Ponto de interesse",
       scanLabel: "Escanear", scanAria: "Iluminar brevemente os sinais da cena",
       sheetTitle: "Rádio estelar", sheetClose: "Fechar rádio",
       armHint: "Toque de novo para ativar", holdHint: "Segure para ativar",
@@ -76,6 +77,7 @@ export const mobileEggs: Record<Locale, MobileEggCopy> = {
   },
   en: {
     ui: {
+      hotspotAria: "Point of interest",
       scanLabel: "Scan", scanAria: "Briefly light up the signals in the scene",
       sheetTitle: "Star radio", sheetClose: "Close radio",
       armHint: "Tap again to activate", holdHint: "Hold to activate",
@@ -138,6 +140,7 @@ export const mobileEggs: Record<Locale, MobileEggCopy> = {
   },
   es: {
     ui: {
+      hotspotAria: "Punto de interés",
       scanLabel: "Escanear", scanAria: "Iluminar brevemente las señales de la escena",
       sheetTitle: "Radio estelar", sheetClose: "Cerrar radio",
       armHint: "Toca de nuevo para activar", holdHint: "Mantén pulsado para activar",

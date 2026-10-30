@@ -1,0 +1,135 @@
+/* MOBILE_EGG_QUERY: (orientation: portrait) and (max-width: 820px), (pointer: coarse) and (max-width: 820px), (pointer: coarse) and (orientation: landscape) and (max-height: 520px) */
+@media (orientation: portrait) and (max-width: 820px), (pointer: coarse) and (max-width: 820px), (pointer: coarse) and (orientation: landscape) and (max-height: 520px) {
+  /* The first screen uses the landscape spacer contract even without JavaScript.
+     :has scopes the layout to the six page-hero worlds, not the later special frames. */
+  html body .page-hero {
+    --hero-frame-height: calc(100svh - var(--header-height));
+    --hero-copy-top: clamp(1rem, 6svh, 3.5rem);
+    --scene-y: 100%;
+    background: var(--color-space-1);
+    touch-action: pan-y;
+  }
+  html body .page-hero :is(.page-hero__image, .page-hero__shade, .hero-scene-layer,
+    .observatory-layer, .niveora-layer, .mars-layer, .lumina-layer, .atlas-layer, .aurelia-layer,
+    .sky-particles, .sky-vignette, .atlas-glass-flash) {
+    inset: 0 0 auto; height: var(--hero-frame-height);
+  }
+  html body .page-hero .page-hero__image { height: var(--hero-frame-height) !important; }
+  html body .page-hero .page-hero__shade {
+    z-index: 1;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--color-space-0) 90%, transparent),
+      color-mix(in srgb, var(--color-space-0) 75%, transparent) 22%, transparent 40%, transparent 85%, var(--color-space-1));
+  }
+  html body .page-hero .page-hero__content {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: max-content max-content minmax(0, 1fr);
+    align-items: start; justify-items: stretch; gap: .75rem;
+    width: 100%; padding: var(--hero-copy-top) max(1rem, env(safe-area-inset-right)) max(1.5rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  }
+  html body .page-hero .page-hero__content::before {
+    content: ""; grid-column: 1; grid-row: 1 / 4;
+    min-height: calc(var(--hero-frame-height) - var(--hero-copy-top)); pointer-events: none;
+  }
+  html body .page-hero .page-hero__content > *,
+  html body .page-hero .actions > * { grid-column: 1; grid-row: auto; order: 0; max-width: 100%; width: 100%; }
+  html body .page-hero .page-hero__content > .chapter-tag { grid-row: 1; font-size: .75rem; line-height: 1.3; }
+  html body .page-hero .page-hero__content > :is(h1, .commercial-intro) { grid-row: 2; max-width: 100%; }
+  html body .page-hero .page-hero__content h1 { font-size: clamp(1.4rem, min(6vw, 5svh), 2.5rem); line-height: 1.08; }
+  html body .page-hero .commercial-intro .hero-name { font-size: clamp(1.8rem, min(8.5vw, 6svh), 3rem); }
+  html body .page-hero .credibility-portrait { flex-basis: clamp(3rem, min(20vw, 10svh), 5rem); }
+  html body .page-hero .commercial-intro { gap: .875rem; }
+  html body .page-hero .actions { display: contents; }
+  /* Only the identity occupies the explicit rows. Everything else auto-flows
+     after the spanning spacer, including previously positioned landscape CTAs. */
+  html body .page-hero .page-hero__content > :not(.chapter-tag, h1, .commercial-intro, .actions),
+  html body .page-hero .actions > * {
+    grid-row: auto; order: 0; max-width: 100%;
+    padding: 1rem; border: 1px solid var(--border-inverse); border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--color-space-2) 94%, transparent);
+    color: var(--color-neutral-50); font-size: 1rem; line-height: 1.55;
+  }
+  html body .page-hero .actions > .primary { background: var(--color-accent-200); color: var(--color-space-0); }
+  html body .page-hero .page-hero__content .hero-role { font-size: .875rem; }
+
+  /* Existing signals may still power desktop effects; none of their counts,
+     discovery marks or duplicate targets belong in the mobile scene. */
+  html body :is(.comlink-toggle__count, .comlink__progress, .comlink__pages, .comlink__intro,
+    .comlink__feedback, .comlink__reset, .comlink__channel, .comlink__envelope, .comlink-fresh,
+    .secrets-guide, .niveora-discoveries, .mars-discoveries, .lumina-discoveries, .atlas-discoveries,
+    .aurelia-discoveries, .sky-counters, .ignition-meter, .niveora-status, .mars-status, .lumina-status,
+    .atlas-status, .transmission__locked, .transmission__lights, .transmission__worlds span) { display: none !important; }
+  html body .transmission__worlds li[data-found] { border-color: var(--aurelia-line); }
+  html body .page-hero :is(.hero-hud, .chapter-tag__ep, .sky-touch-hint, .atlas-dock, .niveora-readout, .observatory-countdown) { display: none !important; }
+  html body :is(.observatory-hot, .niveora-hot, .mars-hot, .lumina-hot, .atlas-hot, .aurelia-hot) { display: none !important; pointer-events: none !important; }
+  html body :is(.observatory-hot, .niveora-hot, .mars-hot, .lumina-hot, .atlas-hot, .aurelia-hot)::after,
+  html body .page-hero :is(.observatory-layer, .niveora-layer, .mars-layer, .lumina-layer, .atlas-layer, .aurelia-layer, .atlas-satellite) { pointer-events: none !important; }
+  html body .comlink__list :is(.comlink__icon, b, button) { display: none; }
+  html body .comlink__list li { grid-template-columns: minmax(0, 1fr); }
+  html body .comlink__text small { color: var(--text-body); }
+  html body .comlink-toggle[data-fresh] { animation: none; }
+
+  .mobile-eggs {
+    position: absolute; inset: 0 0 auto; width: 100%; height: var(--mobile-frame-height, var(--hero-frame-height));
+    z-index: 4; container-type: size; overflow: clip; pointer-events: none;
+    --mobile-dock-bottom: max(.75rem, env(safe-area-inset-bottom));
+    color: var(--color-neutral-50); font-family: var(--font-sans);
+  }
+  /* responsive.css caps the invitation at 25svh. Reserve its actual measured
+     footprint while it exists, with a CSS fallback before the observer runs. */
+  body:has(.sound-invite) .mobile-eggs { --mobile-dock-bottom: calc(var(--mobile-sound-space, 25svh) + 1rem); }
+  .mobile-eggs .mobile-eggs__plane {
+    position: absolute; width: max(100cqw, 177.777778cqh); height: max(100cqh, 56.25cqw);
+    left: var(--scene-x, 78%); top: var(--scene-y, 100%);
+    transform: translate(calc(-1 * var(--scene-x, 78%)), calc(-1 * var(--scene-y, 100%)));
+    pointer-events: none;
+  }
+  .mobile-eggs[data-projection="custom"] .mobile-eggs__plane {
+    width: var(--mobile-plane-width); height: var(--mobile-plane-height);
+    left: var(--mobile-plane-left); top: var(--mobile-plane-top); transform: var(--mobile-plane-transform);
+  }
+  .mobile-eggs .mobile-eggs__hot {
+    position: absolute; translate: -50% -50%; min-width: 60px; min-height: 60px; aspect-ratio: 1;
+    padding: 0; border: 0; border-radius: var(--radius-full); background: transparent; box-shadow: none;
+    color: var(--color-accent-200); pointer-events: auto; touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none;
+  }
+  .mobile-eggs .mobile-eggs__hot::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0;
+    background: radial-gradient(circle, color-mix(in srgb, var(--color-accent-200) 55%, transparent), transparent 68%);
+  }
+  .mobile-eggs[data-motion="true"] .mobile-eggs__hot[data-glow]::after { animation: mobile-egg-glow 2.4s ease-out both; }
+  .mobile-eggs[data-scan] .mobile-eggs__hot::after { opacity: .65; animation: none; }
+  .mobile-eggs button:focus-visible { outline: 2px solid var(--focus-inverse); outline-offset: 3px; }
+  .mobile-eggs .mobile-eggs__ring { width: 28px; height: 28px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; rotate: -90deg; }
+  .mobile-eggs .mobile-eggs__ring circle { stroke-dasharray: 1; stroke-dashoffset: 0; }
+  .mobile-eggs .mobile-eggs__hold { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+  .mobile-eggs[data-motion="true"] .mobile-eggs__hold circle { animation: mobile-egg-hold var(--hold-duration) linear both; }
+  .mobile-eggs .mobile-eggs__edge { position: absolute; top: 48%; font-size: 2rem; color: var(--color-accent-200); opacity: .7; text-shadow: 0 1px 8px var(--color-space-0); }
+  .mobile-eggs .mobile-eggs__edge--left { left: .5rem; }
+  .mobile-eggs .mobile-eggs__edge--right { right: .5rem; }
+  .mobile-eggs .mobile-eggs__tooltip {
+    position: absolute; bottom: calc(var(--mobile-dock-bottom) + 4.5rem); left: 1rem; right: 1rem;
+    max-width: 28rem; margin-inline: auto; padding: .875rem 1rem; border-radius: var(--radius-lg);
+    border: 1px solid var(--color-accent-200); background: var(--color-space-1);
+    font-size: .9375rem; line-height: 1.5; box-shadow: var(--shadow-lift); visibility: hidden;
+  }
+  .mobile-eggs .mobile-eggs__tooltip[data-visible] { visibility: visible; }
+  .mobile-eggs .mobile-eggs__tooltip span { display: block; margin-top: .5rem; color: var(--color-accent-200); font-size: .8125rem; }
+  .mobile-eggs .mobile-eggs__dock {
+    position: absolute; bottom: var(--mobile-dock-bottom); right: max(1rem, env(safe-area-inset-right));
+    left: max(1rem, env(safe-area-inset-left)); display: flex; justify-content: flex-end; gap: .5rem;
+  }
+  .mobile-eggs .mobile-eggs__dock button {
+    display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; min-width: 44px;
+    padding: .5rem .875rem; border: 1px solid var(--color-primary-200); border-radius: var(--radius-full);
+    background: var(--color-space-1); color: var(--color-neutral-50); font: 500 .875rem/1.3 var(--font-sans); pointer-events: auto;
+  }
+  .mobile-eggs .mobile-eggs__dock button:disabled { opacity: .55; }
+  .mobile-eggs .mobile-eggs__scan .mobile-eggs__ring circle { stroke-dashoffset: calc(1 - var(--scan-progress, 1)); }
+  @keyframes mobile-egg-glow { 0%, 100% { opacity: 0; } 30% { opacity: .7; } }
+  @keyframes mobile-egg-hold { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-eggs .mobile-eggs__hot::after, .mobile-eggs .mobile-eggs__hold circle { animation: none !important; }
+    .mobile-eggs .mobile-eggs__ring circle { stroke-dashoffset: 0 !important; }
+  }
+}

@@ -1,4 +1,5 @@
 "use client";
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
@@ -49,6 +50,13 @@ export function SiteChrome({ lang, dictionary, children }: Readonly<{ lang: Loca
     }, 1500); });
     return () => { stop(); clearTimeout(timer); };
   }, []);
+  useEffect(() => {
+    const toast = document.querySelector<HTMLElement>(".sound-invite");
+    if (!invite || !toast) return;
+    const update = () => document.documentElement.style.setProperty("--mobile-sound-space", `${toast.getBoundingClientRect().height + (parseFloat(getComputedStyle(toast).bottom) || 0)}px`);
+    const observer = new ResizeObserver(update); observer.observe(toast); update();
+    return () => { observer.disconnect(); document.documentElement.style.removeProperty("--mobile-sound-space"); };
+  }, [invite]);
   const answerInvite = (on: boolean) => {
     setInvite(false); setGuideReady(true);
     try { localStorage.setItem(SOUND_INVITE_KEY, "1"); } catch { /* The choice still applies now. */ }
@@ -60,7 +68,7 @@ export function SiteChrome({ lang, dictionary, children }: Readonly<{ lang: Loca
   // Konami on touch screens: swipe ↑ ↑ ↓ ↓ ← → ← → and tap twice.
   useEffect(() => {
     let position = 0; let start: { x: number; y: number; t: number } | null = null;
-    const down = (event: TouchEvent) => { const touch = event.touches[0]; start = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY, t: performance.now() } : null; };
+    const down = (event: TouchEvent) => { if (matchMedia(MOBILE_EGG_QUERY).matches && (event.target as Element).closest(".page-hero")) { start = null; return; } const touch = event.touches[0]; start = event.touches.length === 1 ? { x: touch.clientX, y: touch.clientY, t: performance.now() } : null; };
     const up = (event: TouchEvent) => {
       const touch = event.changedTouches[0]; if (!start || !touch) return;
       const gesture = gestureOf(touch.clientX - start.x, touch.clientY - start.y, performance.now() - start.t); start = null;

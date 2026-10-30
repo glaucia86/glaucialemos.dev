@@ -1,5 +1,6 @@
 "use client";
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import { useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
@@ -85,7 +86,7 @@ export function LuminaMotion({ children, labelledBy, locale, copy, whispers, fir
         if (id === "crystal-whisper") { show({ kind: "whisper", article: nextWhisper() }); say(copy.status.whispered); }
         else { books.dataset.books = "open"; show({ kind: "first", article: first }); say(copy.status.found); }
       };
-      const click = (event: Event) => run(ids[(event.currentTarget as HTMLElement).dataset.hot!]);
+      const click = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) run(ids[(event.currentTarget as HTMLElement).dataset.hot!]); };
       hotspots.forEach((button) => button.addEventListener("click", click));
       const stop = onEgg(HERO_EGGS, (id) => void bringIntoView(section).then(() => { if (!disposed) run(id); }));
       return () => {
@@ -153,7 +154,7 @@ export function LuminaMotion({ children, labelledBy, locale, copy, whispers, fir
 
     const actions: Record<string, () => void> = { glaucia: crystalWhisper, crystal: crystalWhisper, prince: firstPage, books: firstPage };
     const replays: Record<string, () => void> = { "crystal-whisper": crystalWhisper, "first-page": firstPage };
-    const onHot = (event: Event) => actions[(event.currentTarget as HTMLElement).dataset.hot!]?.();
+    const onHot = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) actions[(event.currentTarget as HTMLElement).dataset.hot!]?.(); };
     hotspots.forEach((button) => button.addEventListener("click", onHot));
     // Hovering or focusing Prince at rest makes him wag; nothing plays on its own.
     const princeHot = hotspots.find((button) => button.dataset.hot === "prince");

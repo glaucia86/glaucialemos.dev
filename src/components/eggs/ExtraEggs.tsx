@@ -1,5 +1,6 @@
 "use client";
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Locale } from "@/i18n/config";
@@ -71,6 +72,7 @@ export function OrbitalSelfie({ lang, events, countries, glaucia, prince }: { la
     // Listen on the window: the hero has layered canvases and hotspots above the image.
     let timer: ReturnType<typeof setTimeout> | undefined;
     const down = (event: PointerEvent) => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       const hero = document.querySelector<HTMLElement>("main .page-hero")?.getBoundingClientRect();
       if (!hero || event.clientY < hero.top || event.clientY > hero.bottom || (event.target as Element).closest("a, button, input, textarea, select")) return;
       timer = setTimeout(() => emitEgg("orbital-selfie"), 2000);

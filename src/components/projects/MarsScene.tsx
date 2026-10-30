@@ -1,3 +1,4 @@
+import { MobileEggLayer } from "@/components/mobile/MobileEggLayer";
 import type { CSSProperties } from "react";
 import { SCENES, boxStyle, poseBox, propBox, type Box } from "@/lib/scenes";
 
@@ -58,7 +59,7 @@ const pose = (actor: "glaucia" | "prince", name: string, box: Box): CSSPropertie
 };
 
 export function MarsScene() {
-  return <div className="hero-scene-layer hero-scene-layer--mars" data-paused="true" aria-hidden="true">
+  return <><MobileEggLayer world="projects" projection="cover" /><div className="hero-scene-layer hero-scene-layer--mars" data-paused="true" aria-hidden="true">
     <div className="scene-image-plane mars-plane">
       <canvas className="mars-sky mars-sky--back" />
       <span className="mars-beacon" style={boxStyle(beacon)}><i className="mars-beacon__art" style={art(props["data-beacon"].src)} /><i className="mars-beacon__lamp" /></span>
@@ -85,7 +86,7 @@ export function MarsScene() {
       </span>
       <canvas className="mars-sky mars-sky--front" />
     </div>
-  </div>;
+  </div></>;
 }
 
 type HotLabels = Record<keyof typeof HOTSPOTS, string>;

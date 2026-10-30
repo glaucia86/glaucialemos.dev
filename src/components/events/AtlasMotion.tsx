@@ -1,5 +1,6 @@
 "use client";
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger, Draggable, useGSAP, heroScrollStart, HERO_OVERLAY } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
@@ -122,19 +123,20 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
         if (event.lat !== null && event.lon !== null) holo?.focus(event.lat, event.lon);
         show({ kind: "visor", event }); say(event.formato === "presencial" ? copy.status.locked : copy.status.signal);
       };
-      const click = (event: Event) => run(ids[(event.currentTarget as HTMLElement).dataset.hot!]);
+      const click = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) run(ids[(event.currentTarget as HTMLElement).dataset.hot!]); };
       hotspots.forEach((button) => button.addEventListener("click", click));
       controls.current = { constellation: () => { setTablet(false); run("constellation"); }, orbit: () => { setTablet(false); run("orbit"); } };
       // The satellite is parked in the sky and still catchable.
       gsap.set(satellite, { left: "88%", top: "12%" });
       const catchParked = () => { fromKeyboard(); discover("runaway-satellite"); show({ kind: "postcard", event: nextCard() }); say(copy.prince.caught); };
-      satellite.addEventListener("click", catchParked);
+      const parkedClick = () => { if (!matchMedia(MOBILE_EGG_QUERY).matches) catchParked(); };
+      satellite.addEventListener("click", parkedClick);
       const stopSatellite = onEgg("runaway-satellite", () => void bringIntoView(section).then(catchParked));
       const stop = onEgg(HERO_EGGS, (id) => void bringIntoView(section).then(() => { if (!disposed) run(id === "constellation-route" ? "constellation" : "visor"); }));
       return () => {
         disposed = true; stop(); clearTimeout(statusTimer); holo?.destroy();
         hotspots.forEach((button) => { button.hidden = true; button.removeEventListener("click", click); });
-        satellite.hidden = true; satellite.removeEventListener("click", catchParked); stopSatellite(); gsap.set(satellite, { clearProps: "left,top" });
+        satellite.hidden = true; satellite.removeEventListener("click", parkedClick); stopSatellite(); gsap.set(satellite, { clearProps: "left,top" });
         for (const key of ["stage", "pose", "prince"]) delete section.dataset[key];
         delete crew.dataset.acting; delete prince.dataset.acting; orb.dataset.orb = "idle"; holoEl.dataset.holo = "idle"; delete holoEl.dataset.ready;
         status.textContent = ""; status.style.removeProperty("opacity"); status.style.removeProperty("visibility");
@@ -226,7 +228,7 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
     controls.current = { constellation: () => { setTablet(false); constellationRoute(); }, orbit: () => { setTablet(false); holoOrbit(); } };
     const actions: Record<string, () => void> = { glaucia: openTablet, prince: dogNavigation, orb: dogNavigation, holo: holoOrbit };
     const replays: Record<string, () => void> = { "constellation-route": constellationRoute, "dog-navigation": dogNavigation };
-    const onHot = (event: Event) => actions[(event.currentTarget as HTMLElement).dataset.hot!]?.();
+    const onHot = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) actions[(event.currentTarget as HTMLElement).dataset.hot!]?.(); };
     hotspots.forEach((button) => button.addEventListener("click", onHot));
     // ——— The runaway satellite: it crosses the window now and then; catch it and the orb fetches a postcard ———
     const flight = gsap.timeline({ repeat: -1, repeatDelay: 12, delay: 6 })
@@ -246,7 +248,8 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
       later(() => { setPrince("wag"); show({ kind: "postcard", event: nextCard() }); play("citylights"); }, 1300);
       later(() => { settle(); flight.restart(true); }, 3600);
     };
-    satellite.addEventListener("click", catchSatellite);
+    const satelliteClick = () => { if (!matchMedia(MOBILE_EGG_QUERY).matches) catchSatellite(); };
+    satellite.addEventListener("click", satelliteClick);
     const stopSatellite = onEgg("runaway-satellite", () => void bringIntoView(section).then(() => { gsap.set(satellite, { left: "80%", top: "8%", autoAlpha: 1, scale: 1 }); catchSatellite(); }));
     const stopFlight = observeMotionActivity(layer, (on) => { if (on) flight.resume(); else flight.pause(); });
     const stopEggs = onEgg(HERO_EGGS, (id) => void bringIntoView(section).then(() => { if (!disposed) replays[id]?.(); }));
@@ -283,7 +286,7 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
       [...crewPoses, ...princePoses].forEach((element) => { delete element.dataset.active; });
       orb.dataset.orb = "idle"; holoEl.dataset.holo = "idle";
       hotspots.forEach((button) => { button.hidden = true; button.removeEventListener("click", onHot); });
-      flight.kill(); stopFlight(); stopSatellite(); satellite.removeEventListener("click", catchSatellite); satellite.hidden = true; gsap.set(satellite, { clearProps: "all" });
+      flight.kill(); stopFlight(); stopSatellite(); satellite.removeEventListener("click", satelliteClick); satellite.hidden = true; gsap.set(satellite, { clearProps: "all" });
     };
   }, { scope: hero, dependencies: [motion, overlay], revertOnUpdate: true });
 

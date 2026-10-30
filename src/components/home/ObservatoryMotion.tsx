@@ -1,5 +1,6 @@
 "use client";
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import { useRef, type ReactNode } from "react";
 import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY, FINE_POINTER, SCRAMBLE_CHARS } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
@@ -151,7 +152,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
 
     // Pointer: the aurora leans towards it, and on a mouse, touching a meteor catches it.
     const move = (event: PointerEvent) => {
-      if (!fine) return;
+      if (!fine || matchMedia(MOBILE_EGG_QUERY).matches) return;
       const uv = toUV(event.clientX, event.clientY);
       sky.pointer(uv);
       if (sky.catchAt(uv, 36)) caught();
@@ -280,6 +281,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
       setStage("idle");
     };
     const down = (event: PointerEvent) => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       if ((event.target as Element).closest(INTERACTIVE) || event.button !== 0) return;
       if (sky.catchAt(toUV(event.clientX, event.clientY), 48)) { caught(); return; }
       if (busy()) return;
@@ -290,10 +292,11 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
     };
     const drag = (event: PointerEvent) => { if (press && Math.hypot(event.clientX - press.x, event.clientY - press.y) > 10) cancelPress(); };
     const up = (event: PointerEvent) => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       if (press) { cancelPress(); sky.burst(toUV(event.clientX, event.clientY), 18); play("twinkle"); return; }
       if (stage === "countdown") { play("error"); settle(); }
     };
-    const abort = () => { cancelPress(); if (stage === "countdown") settle(); };
+    const abort = () => { if (matchMedia(MOBILE_EGG_QUERY).matches) return; cancelPress(); if (stage === "countdown") settle(); };
     const noMenu = (event: Event) => { if (stage === "charging" || stage === "countdown") event.preventDefault(); };
 
     // Replays from the star radio, and the same phrases typed straight onto the page.
@@ -313,6 +316,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
 
     const actions: Record<string, () => void> = { glaucia: focusLens, prince: dogSignal, hangar: hangarCheck, console: hangarCheck };
     const onHot = (event: Event) => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       const key = (event.currentTarget as HTMLElement).dataset.hot!;
       if (key.startsWith("lantern-")) lantern(Number(key.slice(8))); else actions[key]?.();
     };

@@ -1,5 +1,6 @@
 "use client";
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import { useRef, type ReactNode } from "react";
 import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY, FINE_POINTER } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
@@ -88,7 +89,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
         status.style.opacity = "1"; status.style.visibility = "visible";
       };
       const ids: Record<string, EggId> = { prince: "paw-tracks", glaucia: "memory-capsule", capsule: "memory-capsule", station: "whiteout", crystal: "aurora-prism" };
-      const click = (event: Event) => run(ids[(event.currentTarget as HTMLElement).dataset.hot!]);
+      const click = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) run(ids[(event.currentTarget as HTMLElement).dataset.hot!]); };
       let buffer = "";
       const typed = (event: KeyboardEvent) => {
         if (event.key === "Escape") { calmSound(); return; }
@@ -374,6 +375,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     // Three taps on the thermometer call the storm too (touch screens).
     let taps: number[] = [];
     const tapReadout = () => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       const now = performance.now();
       taps = [...taps.filter((time) => now - time < 1400), now];
       if (taps.length >= 3) { taps = []; emitEgg("whiteout"); }
@@ -391,7 +393,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     };
 
     const actions: Record<string, () => void> = { glaucia: memoryCapsule, capsule: memoryCapsule, prince: pawTracks, crystal: auroraPrism, station: whiteout };
-    const onHot = (event: Event) => actions[(event.currentTarget as HTMLElement).dataset.hot!]?.();
+    const onHot = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) actions[(event.currentTarget as HTMLElement).dataset.hot!]?.(); };
     const enterPrince = (event: PointerEvent) => { if (event.pointerType !== "touch") hovered = true; };
     const leavePrince = () => { hovered = false; };
     const focusPrince = () => { focused = princeButton.matches(":focus-visible"); };

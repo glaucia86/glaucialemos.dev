@@ -1,5 +1,6 @@
 'use client';
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY } from '@/lib/gsap';
 import { useMediaQuery, useMotionEnabled } from '@/lib/use-motion';
@@ -82,7 +83,7 @@ export function AureliaMotion({children,copy,records,lang}:{children:ReactNode;c
       const current=++request;
       void bringIntoView(section).then(()=>{if(!disposed&&request===current)run(id);});
     });
-    const click=(event:Event)=>emitEgg(['glaucia','garden'].includes((event.currentTarget as HTMLElement).dataset.hot!)?'garden-bloom':'beacon-relay');
+    const click=(event:Event)=>{if(matchMedia(MOBILE_EGG_QUERY).matches)return;emitEgg(['glaucia','garden'].includes((event.currentTarget as HTMLElement).dataset.hot!)?'garden-bloom':'beacon-relay');};
     buttons.forEach(button=>{button.hidden=false;button.addEventListener('click',click);});
     let stopIntro=()=>{};
     let jump:ReturnType<typeof createPetalJump>|null=null;
