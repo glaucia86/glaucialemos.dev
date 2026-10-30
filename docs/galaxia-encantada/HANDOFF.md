@@ -1,5 +1,13 @@
 # Handoff — Migração Galáxia Encantada
 
+## Retomada — Serviços independentes, lista de espera e depoimentos (29/10/2026)
+
+- `services.independent` nos dicionários PT/EN/ES aparece no hero e acima da lista de espera. Serviços, contato e epílogo têm um teste de guarda contra referências ao empregador/setor bancário; experiência/CV, Home, Sobre e Projetos não foram alterados. Um comentário em `holo-globe.ts` foi reescrito apenas para zerar a expressão inglesa antiga em todo `src`.
+- O conceito de preço saiu do catálogo/schema/componentes. Cards e flores apontam para `#lista-de-espera`, antes do contato, mantendo os links de conversa. A seção tem marcador `◇` próprio para preservar os sete códigos de capítulos existentes quando não há depoimentos.
+- `src/components/WaitlistForm.tsx`, `src/lib/waitlist-schema.ts`, `src/i18n/waitlist.ts` e `src/app/actions/waitlist.ts`: nome, e-mail, três interesses, consentimento LGPD, honeypot e Turnstile. `?interesse=workshop-corporativo|mentoria-grupo-noite|curso-gravado` seleciona a opção. Reusa as cinco variáveis de `contactConfig()`, `verifyTurnstile` e o envio Resend de contato/depoimentos, sem novas variáveis. Sem JS/configuração: alternativa LinkedIn. Confirmação reutiliza as flores CSS, respeitando movimento reduzido.
+- `src/data/depoimentos.json` começa em `[]`. Para adicionar um depoimento real autorizado, inclua `id`, `nome`, `cargo`, `texto: {pt,en,es}` e, opcionalmente, `empresa` e `url` HTTPS. `depoimentoSchema`/`getDepoimentos()` validam; `Testimonials.tsx` só renderiza com dados, depois de Provas, inserindo então seu capítulo. Vazio = nenhum DOM/label e numeração original intacta. Não adicionar exemplos fictícios ao JSON.
+- Validação: `npx vitest run` — 50 arquivos, 574 testes passando; `npx tsc --noEmit` e `npx eslint src tests` passaram. O typecheck apontou uma prop antiga no teste `aurelia-fx`, corrigida e validada novamente (9 testes). Sem rede, commit, build, servidor ou navegador; aparência/interação no navegador ainda não validada nesta rodada.
+
 ## Retomada — rodada de CX + formulário (28/10/2026, branch `feat/prova-social-ofertas`, sem commit)
 
 Feedback do X e da Mariana (CX, `docs/feedback.txt`) aplicado; detalhes no `AGENTS.md` ("Rodada de CX"). O formulário falhava porque o

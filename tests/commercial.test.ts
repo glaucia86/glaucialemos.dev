@@ -20,7 +20,8 @@ describe('apresentação comercial e fontes', () => {
       for (const text of Object.values(offer.copy[lang])) expect(text.trim()).not.toBe('');
       expect(html).toContain(offer.copy[lang].title);
     }
-    expect(html).toContain(getDictionary(lang).services.price);
+    expect(html.match(new RegExp(`href="/${lang}/servicos#lista-de-espera"`, 'g'))).toHaveLength(3);
+    expect(html).toContain(getDictionary(lang).services.waitlist);
     expect(offers.map(offer => offer.subject)).toEqual(['palestra', 'workshop', 'mentoria']);
     expect(commercial[lang].mentoringAudience).toBe(offers[2].copy[lang].audience);
   });

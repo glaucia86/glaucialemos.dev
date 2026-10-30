@@ -8,9 +8,9 @@ import { TestimonialForm } from './TestimonialForm';
 // testimonial yet, only the invitation and the form are shown: never an empty grid.
 export function Testimonials({ lang, enabled, siteKey, items = approved }: { lang: Locale; enabled: boolean; siteKey: string; items?: readonly Testimonial[] }) {
   const copy = commercial[lang].testimonials;
-  return <section className="credibility-testimonials" id="depoimentos" aria-labelledby="testimonials-title">
+  return <section className="credibility-testimonials" id="enviar-depoimento" aria-labelledby="testimonial-submission-title">
     <div className="chapter__inner">
-      <h2 id="testimonials-title">{items.length ? copy.title : testimonialCopy[lang].title}</h2>
+      <h2 id="testimonial-submission-title">{items.length ? copy.title : testimonialCopy[lang].title}</h2>
       <p>{items.length ? copy.intro : testimonialCopy[lang].intro}</p>
       {items.length > 0 && <ul className="credibility-testimonials__list">{items.map(item => <li key={`${item.name}-${item.received}`}>
         <blockquote lang={item.lang}><p>“{item.quote}”</p></blockquote>

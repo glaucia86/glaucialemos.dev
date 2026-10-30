@@ -1,5 +1,8 @@
 # AGENTS.md
 
+- Serviços (29/10/2026): `services.independent` (PT/EN/ES) no hero e acima da lista de espera; fontes de Serviços/contato/epílogo protegidas por `tests/services-copy.test.ts`. Preços removidos do catálogo/schema/UI; cards mantêm conversa e oferecem `#lista-de-espera`. `src/components/WaitlistForm.tsx`, `src/lib/waitlist-schema.ts`, `src/i18n/waitlist.ts`, `src/app/actions/waitlist.ts`: nome/e-mail, três interesses, LGPD, honeypot e Turnstile; `?interesse=` aceita `workshop-corporativo`, `mentoria-grupo-noite`, `curso-gravado`. Reusa `contactConfig()`, `verifyTurnstile` e o Resend de contato/depoimentos, sem novas variáveis. Dados só para aviso da modalidade escolhida, sem spam. Seção antes do contato com marcador `◇`, preservando os códigos dos capítulos existentes.
+- Depoimentos: `src/data/depoimentos.json` = `[]`, `depoimentoSchema` em `src/lib/types.ts`, `getDepoimentos()` em `src/lib/data.ts`, componente server `src/components/services/Testimonials.tsx`. Adicionar somente relatos reais autorizados com `id`, `nome`, `cargo`, `texto: {pt,en,es}`, opcionais `empresa` e `url` HTTPS. Vazio não renderiza nada nem altera capítulos; com dados entra após Provas, com label e código próprios. Testes `tests/testimonials.test.ts` e `tests/services-page.test.ts`.
+
 - Epílogo funcional em `/[lang]/alem-da-ultima-orbita` (PT/EN/ES), `noindex`, fora do menu: `src/app/beyond-orbit.css`,
   `src/components/epilogue/*`, copy em `src/i18n/beyond-orbit.ts`. Arte 08 integrada: nebulosa sem terraço, Glaucia à esquerda
   espelhada, Prince à direita, ambos flutuando e olhando para o centro (ângulo levemente lateral aceito). Fontes: placa
@@ -224,7 +227,7 @@
 - Serviços (Aurélia, os Jardins Suspensos): `src/app/[lang]/servicos/page.tsx` + `src/app/aurelia.css`,
   `className="home-page services-page"`, `data-sound-world="aurelia"`, copy PT/EN/ES em `src/i18n/aurelia.ts` (`d.aurelia`).
   Quatro capítulos: hero, órbitas, canteiros de serviços e colaboração/contato. `ContactForm` e `EpilogueSignal` intactos;
-  metadata, `formId`, preço sob consulta e assuntos `workshop`/`mentoria`/`palestra` preservados. Registros em
+  metadata, `formId` e assuntos `workshop`/`mentoria`/`palestra` preservados. Registros em
   `src/lib/aurelia-records.ts` vêm de `getServicos()`; controles puros separados em `aurelia-controls.ts` para não levar
   datasets/dictionaries ao bundle dos controles. Nenhum segredo escreve ou envia o formulário; o sinalizador apenas
   rola até `#contato` e foca seu título. Pré-preenchimento continua por links explícitos com `?assunto=...#contato`.

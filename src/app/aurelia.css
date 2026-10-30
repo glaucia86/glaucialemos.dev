@@ -96,6 +96,20 @@
 .aurelia-relay { display: inline-flex; gap: .75rem; align-items: center; min-height: 48px; padding: .8rem 1.2rem; border: 1px solid var(--scene-accent); background: var(--scene-bg); color: var(--text-inverse); cursor: pointer; }
 .aurelia-relay span { color: var(--scene-glow); }.aurelia-channel-status:empty { display: none; }
 .aurelia-channel-status { color: var(--scene-accent); }
+.services-page .aurelia-independent { display: flex; align-items: baseline; gap: .65rem; max-width: 62ch; margin: 1.25rem 0; color: var(--aurelia-cream); font-size: .9rem; line-height: 1.6; }
+.services-page .aurelia-copy > .aurelia-independent { max-width: min(44%,580px); }
+.aurelia-independent > span { flex: 0 0 auto; color: var(--scene-accent); }
+.chapter--waitlist { scroll-margin-top: 6rem; background: radial-gradient(ellipse at 20% 30%,var(--scene-bg),transparent 60%),var(--color-space-0); }
+.chapter--waitlist .chapter__inner { max-width: 920px; }
+.services-page .waitlist-panel { background: linear-gradient(135deg,#183b3d40,transparent 45%),var(--surface-soft); }
+.waitlist-success { padding: 1rem; border-inline-start: 2px solid var(--scene-accent); color: var(--scene-accent); background: #87e4c10c; }
+.waitlist-success p { margin-bottom: 0; }
+.aurelia-testimonials { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,300px),1fr)); gap: 1.5rem; }
+.aurelia-testimonials figure { margin: 0; padding: clamp(1.25rem,3vw,2rem); border: 1px solid var(--aurelia-line); background: var(--color-space-1); }
+.aurelia-testimonials blockquote { margin: 0 0 1.5rem; color: var(--aurelia-cream); line-height: 1.7; }
+.aurelia-testimonials blockquote p { margin: 0; white-space: pre-line; }
+.aurelia-testimonials figcaption { display: grid; gap: .35rem; color: var(--text-inverse-muted); }
+.aurelia-testimonials figcaption strong { color: var(--scene-accent); }
 .services-page .contact-panel { margin: 2rem 0 0; width: 100%; max-width: none; padding: clamp(1.25rem,4vw,3rem); border: 1px solid var(--aurelia-line); scroll-margin-top: 7rem; }
 .services-page .contact-panel[data-relay] { border-color: var(--scene-accent); box-shadow: 0 0 28px #87e4c122; }
 .services-page .contact-panel h2 { font-size: clamp(1.4rem,3vw,2rem); }
@@ -138,6 +152,7 @@
   .services-page .aurelia-hero { display: block; min-height: 0; padding-bottom: 56.25%; }
   .services-page .aurelia-hero .page-hero__content { padding-block: 4.5rem 2rem; }
   .aurelia-copy > :is(.chapter-tag,.aurelia-world,h1,.page-hero__subtitle,.page-hero__extra,.actions) { max-width: min(100%,720px); }
+  .services-page .aurelia-copy > .aurelia-independent { max-width: min(100%,62ch); }
   .services-page .aurelia-hero h1 { font-size: clamp(2rem,6vw,3.2rem); }
   .aurelia-hero :is(.page-hero__image,.hero-scene-layer--aurelia,.aurelia-layer,.page-hero__shade) { top: auto !important; bottom: 0; left: 0; right: 0; width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; }
   .aurelia-hero .page-hero__shade { background: var(--hero-overlay-scene); }

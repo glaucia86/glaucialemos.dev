@@ -9,6 +9,7 @@ import { PlanetEclipse } from '@/components/services/PlanetEclipse';
 import { ServiceGarden } from '@/components/services/ServiceGarden';
 import { gardenRecords } from '@/lib/aurelia-records';
 import { EGGS } from '@/lib/egg-catalog';
+import { waitlistCopy } from '@/i18n/waitlist';
 import { aurelia } from '@/i18n/aurelia';
 
 describe('Aurélia: giroscópio', () => {
@@ -53,7 +54,7 @@ describe('Aurélia: enxame do Prince', () => {
     dwell[0] = .5; dwellStep(dwell, -1, .1, done); expect(dwell[0]).toBeCloseTo(.3);
   });
   it('os cards não têm mais botões de polinização', () => {
-    const html = renderToStaticMarkup(createElement(ServiceGarden, { records: gardenRecords(), copy: aurelia.pt.garden, lang: 'pt', price: 'x', princeFace: '/f.webp' }));
+    const html = renderToStaticMarkup(createElement(ServiceGarden, { records: gardenRecords(), copy: aurelia.pt.garden, lang: 'pt', waitlist: waitlistCopy.pt.submit, princeFace: '/f.webp' }));
     expect(html).not.toContain('service-garden__connect');
     expect(html.match(/<article/g)).toHaveLength(gardenRecords().length);
   });

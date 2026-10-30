@@ -15,9 +15,9 @@ const KIND: Record<GardenRecord['subject'], FlowerKind> = { workshop: 'coral', m
 
 /**
  * The garden blooms with the scroll: a sticky stage where each real service grows from a seed into its own pixel flower,
- * while its title, description, price and call to action open beside it. Without JS or with reduced motion: a list.
+ * while its title, description, waitlist and call to action open beside it. Without JS or with reduced motion: a list.
  */
-export function GardenBloom({ records, copy, lang, price }: { records: GardenRecord[]; copy: AureliaStoryCopy['bloom']; lang: Locale; price: string }) {
+export function GardenBloom({ records, copy, lang, waitlist }: { records: GardenRecord[]; copy: AureliaStoryCopy['bloom']; lang: Locale; waitlist: string }) {
   const root = useRef<HTMLDivElement>(null);
   const motion = useMotionEnabled();
   const total = String(records.length).padStart(2, '0');
@@ -59,7 +59,7 @@ export function GardenBloom({ records, copy, lang, price }: { records: GardenRec
           <p className="aurelia-kicker">{copy.count.replace('{n}', String(i + 1).padStart(2, '0')).replace('{total}', total)}</p>
           <h3>{service.titulo[lang]}</h3>
           <p>{service.descricao[lang]}</p>
-          <strong>{service.preco === 'sob consulta' ? price : service.preco}</strong>
+          <a className="hero-link" href="#lista-de-espera">{waitlist}</a>
           <Link className="button primary" data-magnetic href={serviceHref(lang, subject)}>{copy.cta}</Link>
         </li>)}</ol>
         <p className="bloom__scroll" aria-hidden="true">{copy.scroll}<i /></p>

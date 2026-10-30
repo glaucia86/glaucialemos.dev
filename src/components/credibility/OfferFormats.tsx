@@ -36,7 +36,7 @@ export function OfferFormats({ lang, tag, className = '' }: { lang: Locale; tag?
           <h3>{item.title}</h3>
           <dl><div><dt>{copy.audience}</dt><dd>{item.audience}</dd></div><div><dt>{copy.focus}</dt><dd>{item.focus}</dd></div></dl>
           <p>{item.description}</p>
-          <p className="credibility-offer__price"><span>{getDictionary(lang).services.price}</span></p>
+          <Link className="credibility-offer__waitlist" href={`/${lang}/servicos#lista-de-espera`}>{getDictionary(lang).services.waitlist}</Link>
           <Link className="credibility-offer__cta" href={serviceHref(lang, offer.subject)}>{item.cta}<span aria-hidden="true">→</span></Link>
         </article>;
       })}</div>

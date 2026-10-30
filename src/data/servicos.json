@@ -10,8 +10,7 @@
       "pt": "Workshop prático ao vivo para levar agentes de IA a todo o ciclo de produto e de desenvolvimento, do requisito à produção, independentemente da linguagem de programação do time.",
       "en": "Live hands-on workshop to bring AI agents into the whole product and software development lifecycle, from requirement to production, whatever programming language your team uses.",
       "es": "Taller práctico en vivo para llevar agentes de IA a todo el ciclo de producto y de desarrollo, del requisito a producción, sin importar el lenguaje de programación del equipo."
-    },
-    "preco": "sob consulta"
+    }
   },
   {
     "id": "mentoria-consultoria-lideranca-tecnica",
@@ -24,8 +23,7 @@
       "pt": "Acompanhamento personalizado em estratégia técnica, carreira, liderança e adoção responsável de IA.",
       "en": "Personalized guidance on technical strategy, career development, leadership, and responsible AI adoption.",
       "es": "Acompañamiento personalizado en estrategia técnica, carrera, liderazgo y adopción responsable de IA."
-    },
-    "preco": "sob consulta"
+    }
   },
   {
     "id": "palestras",
@@ -38,7 +36,6 @@
       "pt": "Palestras para eventos e empresas sobre TypeScript, JavaScript, desenvolvimento de software e IA.",
       "en": "Talks for events and companies about TypeScript, JavaScript, software development, and AI.",
       "es": "Conferencias para eventos y empresas sobre TypeScript, JavaScript, desarrollo de software e IA."
-    },
-    "preco": "sob consulta"
+    }
   }
 ]
