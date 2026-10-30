@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { singleLine } from './single-line';
 import type { Locale } from '@/i18n/config';
 import { waitlistCopy } from '@/i18n/waitlist';
 
@@ -10,12 +11,12 @@ export type WaitlistErrors = Partial<Record<WaitlistField, string[]>>;
 export type WaitlistState =
   | { status: 'ok' }
   | { status: 'invalid'; errors: WaitlistErrors; values: WaitlistValues }
-  | { status: 'unavailable' | 'captcha' | 'error'; values?: WaitlistValues };
+  | { status: 'unavailable' | 'captcha' | 'error' | 'rate-limited'; values?: WaitlistValues };
 
 export function waitlistSchema(lang: Locale) {
   const e = waitlistCopy[lang].errors;
   return z.object({
-    name: z.string({ error: e.name }).trim().min(1, e.name).max(120, e.name),
+    name: z.string({ error: e.name }).transform(singleLine).pipe(z.string().min(1, e.name).max(120, e.name)),
     email: z.string({ error: e.email }).trim().email(e.email).max(254, e.email),
     interest: z.enum(waitlistInterests, { error: e.interest }),
     consent: z.boolean({ error: e.consent }).refine(value => value === true, e.consent),

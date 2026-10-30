@@ -2,8 +2,9 @@
 
 import { isLocale } from '@/i18n/config';
 import { testimonialCopy } from '@/i18n/testimonial';
+import { clientIp, consumeRateLimit } from '@/lib/rate-limit';
 import { contactConfig, verifyTurnstile } from '@/lib/contact-config';
-import { mailLines, sendMail } from '@/lib/mail';
+import { mailLines, sanitizeHeader, sendMail } from '@/lib/mail';
 import { testimonialSchema, testimonialValues, type TestimonialState } from '@/lib/testimonial-schema';
 
 // A testimonial is never published here: it reaches Glaucia's inbox for review, with the permission to publish.
@@ -16,10 +17,12 @@ export async function submitTestimonial(_previous: TestimonialState | null, data
   const values = testimonialValues(data);
   const parsed = testimonialSchema(lang).safeParse(values);
   if (!parsed.success) return { status: 'invalid', errors: parsed.error.flatten().fieldErrors, values };
-  if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'))) return { status: 'captcha', values };
+  const ip = await clientIp();
+  if (!consumeRateLimit(ip, 'testimonial')) return { status: 'rate-limited' };
+  if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'), { remoteIp: ip === 'unknown' ? undefined : ip, expectedAction: 'testimonial' })) return { status: 'captcha', values };
 
   const { name, role, linkedin, context, quote } = parsed.data;
   const text = `${mailLines([['Nome', name], ['Cargo e empresa', role], ['LinkedIn', linkedin || '—'], ['Contexto', testimonialCopy.pt.contexts[context]], ['Idioma', lang], ['Autorizou publicar', 'sim']])}\n\n“${quote}”\n\nPara publicar: adicione em testimonials (src/data/prova-social.ts).`;
-  const sent = await sendMail({ apiKey: config.apiKey!, from: config.from!, to: config.to! }, `Depoimento para aprovar — ${name}`, text);
+  const sent = await sendMail({ apiKey: config.apiKey!, from: config.from!, to: config.to! }, `Depoimento para aprovar — ${sanitizeHeader(name)}`, text);
   return sent ? { status: 'ok' } : { status: 'error', values };
 }

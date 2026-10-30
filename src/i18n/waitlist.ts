@@ -3,11 +3,12 @@ import type { Locale } from './config';
 type WaitlistCopy = {
   title: string; intro: string; details: string; name: string; email: string; interest: string; website: string;
   offerings: { 'workshop-corporativo': string; 'mentoria-grupo-noite': string; 'curso-gravado': string };
-  purpose: string; consent: string; submit: string; sending: string; success: string; error: string; unavailable: string;
+  purpose: string; consent: string; submit: string; sending: string; rateLimited: string; success: string; error: string; unavailable: string;
   errors: { name: string; email: string; interest: string; consent: string };
 };
 export const waitlistCopy = {
   pt: {
+    rateLimited: 'Recebemos muitas tentativas de envio. Por favor, aguarde um pouco antes de tentar novamente.',
     title: 'Lista de espera', intro: 'Receba uma notificação quando a modalidade escolhida estiver disponível.',
     details: 'Seus dados', name: 'Nome', email: 'E-mail', interest: 'Tenho interesse em', website: 'Site',
     offerings: { 'workshop-corporativo': 'Workshop corporativo', 'mentoria-grupo-noite': 'Mentoria em grupo à noite', 'curso-gravado': 'Curso gravado' },
@@ -20,6 +21,7 @@ export const waitlistCopy = {
     errors: { name: 'Informe seu nome (até 120 caracteres).', email: 'Informe um e-mail válido (até 254 caracteres).', interest: 'Selecione uma das três modalidades.', consent: 'É necessário consentir com o uso dos dados para receber o aviso.' },
   },
   en: {
+    rateLimited: 'We have received too many submission attempts. Please wait a while before trying again.',
     title: 'Waitlist', intro: 'Get notified when your chosen offering becomes available.',
     details: 'Your details', name: 'Name', email: 'Email', interest: 'I am interested in', website: 'Website',
     offerings: { 'workshop-corporativo': 'Corporate workshop', 'mentoria-grupo-noite': 'Evening group mentoring', 'curso-gravado': 'Recorded course' },
@@ -32,6 +34,7 @@ export const waitlistCopy = {
     errors: { name: 'Enter your name (up to 120 characters).', email: 'Enter a valid email (up to 254 characters).', interest: 'Select one of the three offerings.', consent: 'Consent is required to use your data to send the notification.' },
   },
   es: {
+    rateLimited: 'Hemos recibido demasiados intentos de envío. Espera un poco antes de intentarlo de nuevo.',
     title: 'Lista de espera', intro: 'Recibe un aviso cuando la modalidad elegida esté disponible.',
     details: 'Tus datos', name: 'Nombre', email: 'Correo electrónico', interest: 'Me interesa', website: 'Sitio web',
     offerings: { 'workshop-corporativo': 'Taller corporativo', 'mentoria-grupo-noite': 'Mentoría en grupo por la noche', 'curso-gravado': 'Curso grabado' },

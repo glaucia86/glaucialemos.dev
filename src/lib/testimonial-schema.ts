@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { singleLine } from './single-line';
 import type { Locale } from '@/i18n/config';
 import { testimonialCopy } from '@/i18n/testimonial';
 import { LINKEDIN_PROFILE } from './contact-schema';
@@ -13,11 +14,11 @@ export type TestimonialValues = Record<Exclude<TestimonialField, 'consent'>, str
 export type TestimonialState =
   | { status: 'ok' }
   | { status: 'invalid'; errors: TestimonialErrors; values: TestimonialValues }
-  | { status: 'captcha' | 'unavailable' | 'error'; values?: TestimonialValues };
+  | { status: 'captcha' | 'unavailable' | 'error' | 'rate-limited'; values?: TestimonialValues };
 
 export function testimonialSchema(lang: Locale) {
   const errors = testimonialCopy[lang].errors;
-  const text = (message: string, max: number) => z.string({ error: message }).trim().min(1, message).max(max, message);
+  const text = (message: string, max: number) => z.string({ error: message }).transform(singleLine).pipe(z.string().trim().min(1, message).max(max, message));
   return z.object({
     name: text(errors.name, 120),
     role: text(errors.role, 160),

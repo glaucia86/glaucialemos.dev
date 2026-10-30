@@ -2,6 +2,7 @@
 
 import { isLocale } from '@/i18n/config';
 import { waitlistCopy } from '@/i18n/waitlist';
+import { clientIp, consumeRateLimit } from '@/lib/rate-limit';
 import { contactConfig, verifyTurnstile } from '@/lib/contact-config';
 import { mailLines, sendMail } from '@/lib/mail';
 import { waitlistSchema, waitlistValues, type WaitlistState } from '@/lib/waitlist-schema';
@@ -15,7 +16,9 @@ export async function submitWaitlist(_previous: WaitlistState | null, data: Form
   const values = waitlistValues(data);
   const parsed = waitlistSchema(lang).safeParse(values);
   if (!parsed.success) return { status: 'invalid', errors: parsed.error.flatten().fieldErrors, values };
-  if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'))) return { status: 'captcha', values };
+  const ip = await clientIp();
+  if (!consumeRateLimit(ip, 'waitlist')) return { status: 'rate-limited' };
+  if (!await verifyTurnstile(config.secretKey!, data.get('cf-turnstile-response'), { remoteIp: ip === 'unknown' ? undefined : ip, expectedAction: 'waitlist' })) return { status: 'captcha', values };
 
   const label = waitlistCopy[lang].offerings[parsed.data.interest];
   const { name, email, interest } = parsed.data;
@@ -27,6 +30,7 @@ export async function submitWaitlist(_previous: WaitlistState | null, data: Form
     { apiKey: config.apiKey!, from: config.from!, to: config.to! },
     `Lista de espera glaucialemos.dev — ${label}`,
     text,
+    { replyTo: email },
   );
   return sent ? { status: 'ok' } : { status: 'error', values };
 }

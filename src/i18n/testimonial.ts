@@ -4,12 +4,13 @@ export type TestimonialCopy = {
   title: string; intro: string; name: string; role: string; linkedin: string; context: string;
   contexts: { talk: string; workshop: string; mentoring: string };
   quote: string; consent: string; purpose: string; send: string; sending: string;
-  success: string; error: string; invalid: string; captcha: string; unavailable: string; empty: string;
+  rateLimited: string; success: string; error: string; invalid: string; captcha: string; unavailable: string; empty: string;
   errors: { name: string; role: string; linkedin: string; context: string; quote: string; consent: string };
 };
 
 export const testimonialCopy: Record<Locale, TestimonialCopy> = {
   pt: {
+    rateLimited: 'Recebemos muitas tentativas de envio. Por favor, aguarde um pouco antes de tentar novamente.',
     title: 'Deixe um depoimento', intro: 'Participou de uma palestra, workshop ou mentoria? Conte como foi. Eu leio cada depoimento e só publico com a sua autorização.',
     name: 'Nome', role: 'Cargo e empresa', linkedin: 'Perfil no LinkedIn (opcional)', context: 'Onde nos conhecemos',
     contexts: { talk: 'Palestra', workshop: 'Workshop', mentoring: 'Mentoria' },
@@ -22,6 +23,7 @@ export const testimonialCopy: Record<Locale, TestimonialCopy> = {
     errors: { name: 'Informe seu nome.', role: 'Informe seu cargo e empresa.', linkedin: 'Use um perfil do LinkedIn (linkedin.com/in/...) ou deixe em branco.', context: 'Escolha onde nos conhecemos.', quote: 'Escreva entre 20 e 600 caracteres.', consent: 'Autorize a publicação para enviar.' },
   },
   en: {
+    rateLimited: 'We have received too many submission attempts. Please wait a while before trying again.',
     title: 'Leave a testimonial', intro: 'Attended a talk, workshop or mentoring session? Tell me how it went. I read every testimonial and only publish it with your permission.',
     name: 'Name', role: 'Role and company', linkedin: 'LinkedIn profile (optional)', context: 'Where we met',
     contexts: { talk: 'Talk', workshop: 'Workshop', mentoring: 'Mentoring' },
@@ -34,6 +36,7 @@ export const testimonialCopy: Record<Locale, TestimonialCopy> = {
     errors: { name: 'Enter your name.', role: 'Enter your role and company.', linkedin: 'Use a LinkedIn profile (linkedin.com/in/...) or leave it blank.', context: 'Choose where we met.', quote: 'Write between 20 and 600 characters.', consent: 'Allow publication to send it.' },
   },
   es: {
+    rateLimited: 'Hemos recibido demasiados intentos de envío. Espera un poco antes de intentarlo de nuevo.',
     title: 'Deja un testimonio', intro: '¿Participaste en una charla, taller o mentoría? Cuéntame cómo fue. Leo cada testimonio y solo lo publico con tu autorización.',
     name: 'Nombre', role: 'Cargo y empresa', linkedin: 'Perfil de LinkedIn (opcional)', context: 'Dónde nos conocimos',
     contexts: { talk: 'Charla', workshop: 'Taller', mentoring: 'Mentoría' },
