@@ -147,6 +147,9 @@
   .mobile-eggs[data-motion="true"] .mobile-eggs__hot[data-glow]::after { animation: mobile-egg-glow 2.4s ease-out both; }
   .mobile-eggs[data-scan] .mobile-eggs__hot::after { opacity: .65; animation: none; }
   .mobile-eggs .mobile-eggs__hot[data-reveal]::after { opacity: .65; animation: none; }
+  .beyond-orbit__frame:has(.mobile-eggs[data-revealing="last-light"]) .beyond-orbit__star {
+    box-shadow: 0 0 24px 8px color-mix(in srgb, var(--color-accent-200) 55%, transparent);
+  }
   .mobile-eggs button:focus-visible { outline: 2px solid var(--focus-inverse); outline-offset: 3px; }
   .mobile-eggs .mobile-eggs__ring { width: 28px; height: 28px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; rotate: -90deg; }
   .mobile-eggs .mobile-eggs__ring circle { stroke-dasharray: 1; stroke-dashoffset: 0; }

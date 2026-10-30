@@ -4,7 +4,7 @@ import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { useParams } from "next/navigation";
 import { defaultLocale, isLocale } from "@/i18n/config";
 import { mobileEggs } from "@/i18n/mobile-eggs";
-import { emitEgg, getFoundSnapshot, remainingDiscoveries, type EggId } from "@/lib/eggs";
+import { emitEgg, getFoundSnapshot, onEgg, remainingDiscoveries, type EggId } from "@/lib/eggs";
 import {
   ARM_WINDOW_MS, HOLD_MS, INITIAL_MOBILE_EGG_STATE, MIN_HOTSPOT_PX,
   MOBILE_EGG_QUERY, MOBILE_HOTSPOTS, MOBILE_REVEAL_EVENT, SCAN_HIGHLIGHT_MS, edgeCues, mobileEggReducer, nextGlowId,
@@ -216,6 +216,10 @@ function MountedLayer({ world, projection }: Required<Props>) {
       revealEnd = window.setTimeout(() => { setRevealed(null); scheduleGlow(); }, SCAN_HIGHLIGHT_MS);
     };
     window.addEventListener(MOBILE_REVEAL_EVENT, reveal);
+    // The visible finale star owns its click outside this layer.
+    const stopFinale = world === "epilogue" ? onEgg("last-light", () => {
+      clearTimeout(revealEnd); setRevealed(null);
+    }) : undefined;
     frame.addEventListener("mobile-eggs:motion", visibility);
     const observer = new ResizeObserver(() => { cancel(); updateEdges(); }); observer.observe(frame);
     const activity = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; scheduleGlow(); if (!visible) cancel(); }); activity.observe(frame);
@@ -233,6 +237,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
     return () => {
       cancel(); clearTimeout(glowTimer); clearTimeout(glowEnd); clearInterval(scanTimer); clearTimeout(revealEnd);
       window.removeEventListener(MOBILE_REVEAL_EVENT, reveal);
+      stopFinale?.();
       observer.disconnect(); activity.disconnect();
       frame.removeEventListener("mobile-eggs:motion", visibility);
       document.removeEventListener("visibilitychange", visibility); document.removeEventListener("pointerdown", outside, true);
@@ -245,7 +250,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
 
   const text = hint ? hint.locked ? copy.ui.lockedHint : copy.hints[hint.id] : "";
   const cue = hint && !hint.locked ? MOBILE_HOTSPOTS[world].find(h => h.id === hint.id)?.kind === "hold" ? copy.ui.holdHint : copy.ui.armHint : "";
-  return <div ref={root} className="mobile-eggs" data-world={world} data-projection={projection} data-motion={motion} data-scan={scan.highlighted || undefined}>
+  return <div ref={root} className="mobile-eggs" data-world={world} data-projection={projection} data-motion={motion} data-scan={scan.highlighted || undefined} data-revealing={revealed ?? undefined}>
     <div className="mobile-eggs__plane" role="group" aria-label={copy.ui.panoramaAria}>
       {MOBILE_HOTSPOTS[world].filter(h => h.id !== "last-light").map(h => <button key={h.id} type="button" className="mobile-eggs__hot" data-egg={h.id} data-kind={h.kind}
         data-glow={glow === h.id || undefined} data-reveal={revealed === h.id || undefined} data-holding={holding === h.id || undefined}

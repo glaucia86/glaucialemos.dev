@@ -4,6 +4,10 @@ import { useEffect, useRef, useState } from "react";
 import type { MobileEggCopy } from "@/i18n/mobile-eggs";
 import { MOBILE_REVEAL_EVENT, sessionHintOrder, type MobileWorld } from "@/lib/mobile-eggs";
 
+// Browser-visit fallback also survives route remounts when storage is denied.
+// Never populated by SSR, and contains hint order only, not discovery history.
+const visitOrders = new Map<MobileWorld, ReturnType<typeof sessionHintOrder>>();
+
 // Mounted only in MOBILE_EGG_QUERY. No discovery subscription or found-state input.
 export function MobileComlinkSheet({ world, copy, open, onDismiss }: {
   world: MobileWorld; copy: MobileEggCopy; open: boolean; onDismiss: () => void;
@@ -12,9 +16,14 @@ export function MobileComlinkSheet({ world, copy, open, onDismiss }: {
   const opener = useRef<HTMLElement | null>(null);
   const swipe = useRef<{ x: number; y: number } | null>(null);
   const [hints] = useState(() => {
+    if (typeof window === "undefined") return sessionHintOrder(world);
+    const saved = visitOrders.get(world);
+    if (saved) return saved;
     let storage: Storage | undefined;
     try { storage = sessionStorage; } catch { /* Private browsing can deny storage. */ }
-    return sessionHintOrder(world, storage);
+    const order = sessionHintOrder(world, storage);
+    visitOrders.set(world, order);
+    return order;
   });
 
   useEffect(() => {

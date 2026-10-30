@@ -22,6 +22,7 @@ describe("mobile frame controls", () => {
       const html = renderToStaticMarkup(<MobileEggLayer world="epilogue" projection="beyond-orbit" />);
       expect(html).not.toContain('data-egg="last-light"');
       expect(html).not.toContain('class="mobile-eggs__hot"');
+      expect(html).not.toContain('class="mobile-eggs__scan"');
       expect(html).toContain('aria-label="Rádio estelar"');
       expect(html).toContain('class="mobile-eggs__icon"');
     } finally { media.mobile = false; }
