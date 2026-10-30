@@ -39,7 +39,7 @@ html[data-boot="pending"] .boot--observatory { background: radial-gradient(ellip
 /* ——— 1. Observatory hero ——— */
 .home-page { overflow: clip; }
 .home-hero { background: var(--color-space-0); }
-.home-page .home-hero-v2 { min-height: max(640px, calc(100svh - var(--header-height))); cursor: crosshair; }
+.home-page .home-hero-v2 { min-height: calc(100vh - var(--header-height)); min-height: calc(100svh - var(--header-height)); cursor: crosshair; }
 .home-hero-v2 .page-hero__content { padding-block: 6rem 5rem; }
 .home-hero-v2 :is(.chapter-tag, .hero-name, .hero-role, .page-hero__subtitle, .actions) { max-width: min(46%, 35rem); }
 .home-page .home-hero-v2 .hero-name {
@@ -474,10 +474,7 @@ html.reduce-motion .crew-portrait *, html.reduce-motion .crew-portrait__aurora i
 /* ——— Responsive ——— */
 @media (max-width: 1100px) { .hero-hud .hud-signal { display: none; } }
 @media (max-width: 900px) {
-  .home-page .home-hero-v2 { min-height: 0; cursor: auto; }
-  .home-hero-v2 :is(.chapter-tag, .hero-name, .hero-role, .page-hero__subtitle, .actions) { max-width: 100%; }
-  .home-hero-v2 .page-hero__content { padding-block: 4.5rem 2rem; }
-  .home-page .home-hero-v2 .hero-name { font-size: clamp(3.2rem, 14vw, 6rem); }
+  .home-page .home-hero-v2 { cursor: auto; }
   .observatory-signal-star__label { font-size: .5rem; }
   .hero-hud { inset: 1rem var(--gutter) auto; height: 3rem; }
   .hero-hud :is(.hud-location, .hud-hint, .hud-signal, .hud-corner) { display: none; }
@@ -523,7 +520,6 @@ html.reduce-motion .home-page .home-hero-v2 { cursor: auto; }
   .sky-touch-hint span { width: 6px; height: 6px; background: var(--aurora-mint); animation: hud-blink 1s steps(1) infinite; }
   .home-hero-v2[data-stage]:not([data-stage="idle"]) .sky-touch-hint { opacity: 0; }
   .home-hero-v2 { -webkit-touch-callout: none; touch-action: pan-y; }
-  .home-hero-v2 :is(.hero-scene-layer, .sky-particles) { -webkit-user-select: none; user-select: none; }
 }
 
 /* Plain-language line under a themed title, for readers who are not engineers (HR, event organizers). */

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY } from '@/lib/gsap';
+import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY } from '@/lib/gsap';
 import { useMediaQuery, useMotionEnabled } from '@/lib/use-motion';
 import { observeMotionActivity } from '@/lib/motion';
 import { whenBootDone } from '@/lib/boot';
@@ -91,7 +91,7 @@ export function AureliaMotion({children,copy,records,lang}:{children:ReactNode;c
       stopIntro=whenBootDone(()=>intro.play());
       if(overlay){
         jump=createPetalJump(canvas.current!);const state={progress:0};
-        gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:section,start:'top top',end:'+=120%',pin:true,scrub:.8,anticipatePin:1,refreshPriority:1}})
+        gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:section,start:()=>heroScrollStart(section),end:'+=120%',pin:true,scrub:.8,anticipatePin:1,refreshPriority:1}})
           .to([q('.page-hero__image'),layer,q('.aurelia-layer')],{scale:1.25,transformOrigin:'80% 80%',duration:.65},0)
           .to('.aurelia-copy',{autoAlpha:0,xPercent:-10,duration:.3},0)
           .to(['.hero-hud','.aurelia-readout'],{autoAlpha:0,duration:.2},0)

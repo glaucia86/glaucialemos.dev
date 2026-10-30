@@ -4,7 +4,6 @@
   max-width: min(46%, 35rem); margin-top: 1rem;
 }
 .commercial-page .commercial-intro > h1 { min-width: 0; max-width: none; }
-.commercial-page .home-hero-v2 .commercial-intro .hero-name { font-size: clamp(2.6rem, 4vw, 4rem); }
 .commercial-page .credibility-portrait { position: relative; flex: 0 0 120px; margin: 0; }
 .commercial-page .credibility-portrait img {
   display: block; width: 100%; height: auto; aspect-ratio: 631 / 649; object-fit: cover;
@@ -34,23 +33,11 @@
 .commercial-page .credibility-gallery img { display: block; width: 100%; height: auto; image-rendering: auto; border-radius: .5rem; }
 .commercial-page .credibility-gallery figcaption { margin-top: 1rem; font-size: .9rem; line-height: 1.7; color: var(--text-inverse-muted); }
 .commercial-page .credibility-gallery figcaption a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-inverse); }
-.commercial-page.services-page .commercial-intro { max-width: min(44%, 36.25rem); }
-.commercial-page.services-page .commercial-intro h1 { font-size: clamp(1.65rem, 2.6vw, 2.6rem); }
 
-/* Same split between overlay and full-width plate as the existing motion controllers. */
-@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  html body .commercial-page .page-hero .commercial-intro,
-  .commercial-page .credibility-experience { max-width: min(100%, 45rem); }
-  html body .commercial-page .page-hero .commercial-intro h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-  html body .commercial-page .page-hero .commercial-intro .hero-name { font-size: clamp(2.3rem, 6vw, 4rem); }
-}
 @media (max-width: 900px) {
   .commercial-page .credibility-offers { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .commercial-page .credibility-portrait { flex-basis: 84px; }
-  html body .commercial-page .page-hero .commercial-intro h1 { font-size: 1.6rem; }
-  html body .commercial-page .page-hero .commercial-intro .hero-name { font-size: clamp(1.6rem, 7.5vw, 2.5rem); }
   .commercial-page .credibility-experience { margin-top: 1rem; }
   .commercial-page .credibility-experience ul { column-gap: .8rem; }
   .commercial-page .credibility-experience img { width: 24px; height: 24px; }

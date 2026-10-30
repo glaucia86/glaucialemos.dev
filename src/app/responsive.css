@@ -1,4 +1,4 @@
-/* Shared layout contracts. HERO_OVERLAY in lib/gsap.ts uses the same query. */
+/* Shared layout contracts: cover composition is independent of pointer and motion. */
 :root { --header-height: 4.5rem; }
 html { scroll-padding-top: calc(var(--header-height) + 1rem); }
 html body :is(section[id], h2[id], .event-history, .shelf-card, .repo-card) { scroll-margin-top: 1rem; }
@@ -32,6 +32,10 @@ main :is(article, section, form, fieldset, li, label),
 :is(.actions, .header-tools, .nav-preferences) > *,
 :is(.chapter, .events-atlas, .event-stats, .stats, .contact-grid, .rings, .telemetry-grid, .crew-grid, .stellar-grid) > * { min-width: 0; }
 main :is(h1, h2, h3, p, a, label, summary, button, dt, dd), dialog { overflow-wrap: anywhere; }
+/* Hero type must fit whole words; emergency wrapping is only a fallback. */
+html body :is(.page-hero, .red-tide, .beyond-orbit__hero) h1 {
+  overflow-wrap: break-word; hyphens: manual;
+}
 html body :is(.actions, .retro-tv__actions) { flex-wrap: wrap; }
 html body :is(.button, .hero-link, .motion-toggle) { white-space: normal; max-width: 100%; height: auto; }
 main :is(input, select, textarea), dialog :is(input, select, textarea) { min-width: 0; max-width: 100%; }
@@ -48,53 +52,116 @@ html body dialog {
 html body dialog.comlink { margin-block: max(1rem, env(safe-area-inset-top)); }
 html body .telescope { padding: 1rem; }
 
+/* Every viewport uses the plate's cover projection. Motion queries only select
+   choreography; they never change image/copy geometry. */
+html body .page-hero {
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100svh - var(--header-height));
+  height: auto; padding: 0; display: block;
+  background-color: #292440;
+  background-image: radial-gradient(ellipse at 65% 35%, #426477, #4a335d 45%, #292440 85%);
+}
+html body .page-hero :is(.page-hero__image, .hero-scene-layer, .observatory-layer, .niveora-layer, .mars-layer, .lumina-layer, .atlas-layer, .aurelia-layer, .sky-particles, .sky-vignette, .page-hero__shade) {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+html body .page-hero .page-hero__image {
+  object-fit: cover; object-position: var(--scene-x, 78%) var(--scene-y, 100%);
+}
+html body .page-hero .page-hero__shade {
+  /* A dark text region, with an open window onto the crew on the right. */
+  background: linear-gradient(90deg, #101026ed 0%, #101026db 38%, #10102666 56%, transparent 76%);
+}
+html body .page-hero .page-hero__content {
+  width: min(var(--content-width), calc(100% - 2 * var(--gutter)));
+  margin: 0 auto; padding: max(3.5rem, env(safe-area-inset-top)) 0 max(2rem, env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; align-items: flex-start; gap: clamp(.5rem, 1.3svh, 1rem);
+  pointer-events: none; z-index: 3;
+}
+html body .page-hero__content :is(a, button, input, select) { pointer-events: auto; }
+html body .page-hero .page-hero__content > * { max-width: min(48%, 36rem); margin-block: 0; }
+html body .page-hero .page-hero__content h1 {
+  max-width: 100%; font-size: clamp(1.6rem, min(3.3vw, 6svh), 3.5rem); line-height: 1.06;
+}
+html body .page-hero .page-hero__content > h1 { max-width: min(48%, 36rem); }
+html body .page-hero .commercial-intro { gap: clamp(.65rem, 1.5vw, 1.5rem); }
+html body .page-hero .commercial-intro .hero-name { font-size: clamp(1.6rem, min(4vw, 8svh), 4rem); line-height: 1; }
+html body .page-hero .credibility-portrait { flex: 0 0 clamp(3rem, min(10vw, 16svh), 7.5rem); }
+html body .page-hero .hero-role { font-size: clamp(.75rem, 1vw, .85rem); line-height: 1.4; letter-spacing: .08em; }
+html body .page-hero :is(.page-hero__subtitle, .page-hero__extra) { font-size: clamp(.875rem, 1.1vw, 1.125rem); line-height: 1.5; }
+html body .page-hero .actions { gap: .5rem 1rem; }
+html body .page-hero .actions .primary { min-height: 48px; padding: .65rem 1rem; line-height: 1.3; }
 @media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  /* One 16:9 coordinate box for the image, effects and hotspots.
-     Short landscape screens letterbox horizontally instead of cropping the plate. */
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero {
-    --scene-height: min(56.25cqw, calc(100svh - var(--header-height)));
-    container-type: inline-size;
-    display: block; min-height: 0; height: auto; padding-bottom: 0;
-  }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero::before { content: ""; display: block; height: var(--scene-height); }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .page-hero__content { padding-block: 2rem; }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .page-hero__content > :is(.chapter-tag, .eyebrow, h1, .hero-role, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 45rem); }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero h1 { font-size: clamp(2rem, 7vw, 3.5rem); }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .hero-name { font-size: clamp(2.8rem, 12vw, 6rem); }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero :is(.page-hero__image, .hero-scene-layer, .observatory-layer, .niveora-layer, .mars-layer, .lumina-layer, .atlas-layer, .aurelia-layer, .sky-particles, .sky-vignette, .page-hero__shade) {
-    top: 0 !important; bottom: auto !important; left: 0; right: 0;
-    width: calc(var(--scene-height) * 16 / 9) !important; height: var(--scene-height) !important;
-    margin-inline: auto; aspect-ratio: 16 / 9; scale: none;
-  }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .page-hero__image { object-fit: contain; object-position: center; }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .hero-hud { inset: 1rem max(var(--gutter), calc((100% - var(--scene-height) * 16 / 9) / 2 + 1rem)) auto; height: 2rem; }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .hero-hud :is(.hud-location, .hud-hint, .hud-signal, .hud-corner) { display: none; }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .hud-top {
-    top: 0; left: 0; display: block; max-width: 100%;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    font-size: .6875rem;
+  html body .page-hero .hero-hud { inset: 1rem var(--gutter) auto; height: 1.5rem; }
+  html body .page-hero .hero-hud :is(.hud-location, .hud-hint, .hud-signal, .hud-corner) { display: none; }
+  html body .page-hero .hud-top {
+    top: 0; left: 0; display: block; max-width: 100%; margin: 0;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .75rem;
   }
   html body .page-hero .hud-top :is(.hud-rec, .hud-sep) { display: inline-block; margin-right: .6rem; }
   html body .page-hero .hud-top .hud-sep { margin-left: .6rem; }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero :is(.sky-counters, .niveora-status, .mars-status, .lumina-status, .atlas-status) { top: 3rem; bottom: auto; right: max(1rem, calc((100% - var(--scene-height) * 16 / 9) / 2 + 1rem)); max-width: calc(var(--scene-height) * 16 / 9 - 2rem); }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .sky-touch-hint {
-    top: calc(var(--scene-height) - .5rem); bottom: auto; translate: -50% -100%;
-    max-width: min(calc(100% - 2rem), calc(var(--scene-height) * 16 / 9 - 2rem));
-    white-space: normal; overflow-wrap: normal; text-align: center;
+}
+html body .page-hero :is(.sky-counters, .niveora-status, .mars-status, .lumina-status, .atlas-status) { top: 3rem; bottom: auto; right: 1rem; max-width: calc(100% - 2rem); }
+html body .page-hero .sky-touch-hint { bottom: .5rem; max-width: calc(100% - 2rem); white-space: normal; overflow-wrap: normal; text-align: center; }
+html body .page-hero .sky-touch-hint span { flex-shrink: 0; }
+html body .hero-bar__scroll { white-space: normal; text-align: center; justify-content: center; justify-self: center; max-width: calc(100% - 2rem); }
+html body .hero-bar__scroll i { flex-shrink: 0; }
+html body .page-hero .ignition-meter { top: 5rem; bottom: auto; right: 1rem; max-width: calc(100% - 2rem); flex-wrap: wrap; }
+
+/* Portrait: frame the actors at the right of the crop, leaving sky above and
+   a shaded reading column at left. Percentages also move every effect plane. */
+@media (orientation: portrait) {
+  html body .observatory-hero { --scene-x: 87%; --scene-y: 100%; }
+  html body .niveora-hero { --scene-x: 85%; --scene-y: 100%; }
+  html body .mars-hero { --scene-x: 86%; --scene-y: 100%; }
+  html body .lumina-hero { --scene-x: 87%; --scene-y: 100%; }
+  html body .atlas-hero { --scene-x: 96%; --scene-y: 100%; }
+  html body .aurelia-hero { --scene-x: 87%; --scene-y: 100%; }
+  html body .page-hero .page-hero__shade {
+    background: linear-gradient(180deg, #101026e6, #101026b8 26%, transparent 48%, #10102666 78%, #101026db),
+      linear-gradient(90deg, #101026d9, #101026a6 42%, transparent 72%);
   }
-  html body .page-hero .sky-touch-hint span { flex-shrink: 0; }
-  html body .hero-bar__scroll { white-space: normal; text-align: center; justify-content: center; justify-self: center; max-width: calc(100% - 2rem); }
-  html body .hero-bar__scroll i { flex-shrink: 0; }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero .ignition-meter { top: 5rem; bottom: auto; right: max(1rem, calc((100% - var(--scene-height) * 16 / 9) / 2 + 1rem)); max-width: calc(100% - 2rem); flex-wrap: wrap; }
-  html body main:is(.home-page, .inner-page, .events-page, .not-found) .page-hero :is(.lumina-readout, .mars-readout) { position: relative; inset: auto; width: auto; max-width: min(45rem, calc(100% - 2 * var(--gutter))); margin: 1rem auto; }
+  html body .page-hero .page-hero__content {
+    width: 100%; padding-inline: max(1rem, env(safe-area-inset-left)) max(1rem, env(safe-area-inset-right));
+    padding-top: max(2.75rem, env(safe-area-inset-top));
+  }
+  html body .page-hero .page-hero__content > * { max-width: 100%; }
+  /* Match the direct-h1 selector above so the desktop 48% cap cannot win.
+     At 320px, 1.4rem leaves room for conhecimento/conocimiento, including
+     the portrait and gap beside the shorter Services titles. */
+  html body .page-hero .page-hero__content > h1 { max-width: 100%; }
+  html body .page-hero .page-hero__content h1 { font-size: clamp(1.4rem, min(6vw, 4.8svh), 3.2rem); }
+  html body .page-hero .commercial-intro .hero-name { font-size: clamp(1.4rem, min(8.5vw, 6svh), 4rem); }
+  html body :is(.red-tide .red-tide__copy, .beyond-orbit__hero .beyond-orbit__copy) h1 {
+    font-size: clamp(1.4rem, min(6vw, 4svh), 3rem);
+  }
+  html body .page-hero .credibility-portrait { flex-basis: clamp(3rem, min(20vw, 12svh), 7.5rem); }
+  /* Primary actions precede supporting paragraphs visually. No copy is removed. */
+  html body .page-hero .page-hero__content > :is(.chapter-tag, .aurelia-world) { order: 0; }
+  html body .page-hero .page-hero__content > :is(h1, .commercial-intro) { order: 1; }
+  html body .page-hero .hero-role { order: 2; }
+  html body .page-hero .actions { display: contents; }
+  html body .page-hero .actions > .primary { order: 3; max-width: 100%; font-size: .875rem; }
+  html body .page-hero .page-hero__content > .page-hero__subtitle { order: 4; max-width: 56%; }
+  html body .page-hero .page-hero__content > .cta-note { order: 5; }
+  html body .page-hero .actions > .hero-link { order: 6; }
+  html body .page-hero .page-hero__content > :is(.page-hero__extra, .aurelia-independent, .credibility-experience, .secrets-guide) { order: 7; }
+  html body .page-hero .page-hero__content > .page-hero__extra { max-width: 56%; }
 }
 
-@media (min-width: 1200px) and (min-height: 680px) and (hover: hover) and (pointer: fine) {
-  html body .home-page .home-hero-v2 { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
-  /* Top padding clears the HUD line (clock and location) on short screens. */
-  html body .home-hero-v2 .page-hero__content { padding-block: max(4rem, 7vh) clamp(2rem, 5vh, 4rem); }
-  html body .home-page .home-hero-v2 .hero-name { font-size: clamp(3.4rem, 6vw, 6.2rem); }
+/* Compact identity for landscape; very short screens get a bounded scene below. */
+@media (max-height: 680px) and (orientation: landscape) {
+  html body .page-hero .page-hero__content { padding-top: 2.5rem; gap: .375rem; }
+  html body .page-hero .page-hero__content > * { max-width: 55%; }
+  html body .page-hero .page-hero__content h1 { font-size: clamp(1.5rem, min(3.3vw, 6svh), 2.5rem); }
+  html body .page-hero .commercial-intro .hero-name { font-size: clamp(1.5rem, min(4vw, 8svh), 3rem); }
+  html body .page-hero .credibility-portrait { flex-basis: clamp(3rem, 14svh, 5rem); }
+  html body .page-hero .page-hero__content > :is(.chapter-tag, .aurelia-world) { order: 0; }
+  html body .page-hero .page-hero__content > :is(h1, .commercial-intro) { order: 1; }
+  html body .page-hero .hero-role { order: 2; }
+  html body .page-hero .actions { display: contents; }
+  html body .page-hero .actions > .primary { order: 3; max-width: 55%; font-size: .875rem; }
+  html body .page-hero .page-hero__content > :is(.page-hero__subtitle, .page-hero__extra, .aurelia-independent, .credibility-experience, .cta-note, .secrets-guide),
+  html body .page-hero .actions > .hero-link { order: 4; }
 }
 
 @media (max-width: 600px) {
@@ -163,6 +230,91 @@ html body .telescope { padding: 1rem; }
 @media (max-width: 600px) {
   html body .sound-invite { max-height: 25svh; }
   html body .sound-invite button { padding-inline: .9rem; overflow-wrap: normal; }
+}
+
+/* Phone portrait: supporting copy crosses the actors, so shade the foreground
+   as well as the plate while leaving the primary identity over the sky. */
+@media (orientation: portrait) and (max-width: 500px) {
+  html body .page-hero .page-hero__shade {
+    z-index: 1;
+    background: linear-gradient(180deg, #101026cc, #10102680 24%, #10102688 42%, #101026c7 68%, #101026f2),
+      linear-gradient(90deg, #101026b3, #10102666 42%, transparent 76%);
+  }
+  html body .red-tide__shade {
+    background: linear-gradient(180deg, #0d0612cc, #0d061280 24%, #0d061288 42%, #0d0612c7 68%, #0d0612f2),
+      linear-gradient(90deg, #0d0612b3, transparent 76%);
+  }
+}
+@media (orientation: portrait) and (max-width: 500px) and (max-height: 700px) {
+  html body .page-hero .page-hero__content { gap: .375rem; }
+  html body .page-hero .page-hero__subtitle,
+  html body .red-tide__body { font-size: .8125rem; line-height: 1.4; }
+  html body .red-tide__copy { gap: .375rem; }
+}
+
+/* One first-screen frame for every world, including the 404. The 16:9 planes
+   retain their cover projection inside these bounded image/effect containers. */
+@media (orientation: landscape) and (max-height: 520px) {
+  html body :is(.page-hero, .red-tide) {
+    --hero-frame-height: calc(100svh - var(--header-height));
+    --hero-copy-top: clamp(2rem, 9vh, 2.5rem);
+    --hero-ground: #101026;
+    --scene-y: 100%;
+    background: var(--hero-ground);
+  }
+  html body .red-tide { --hero-ground: var(--rt-night); }
+  html body :is(.page-hero, .red-tide) :is(.page-hero__image, .page-hero__shade,
+    .hero-scene-layer, .observatory-layer, .niveora-layer, .mars-layer, .lumina-layer,
+    .atlas-layer, .aurelia-layer, .sky-particles, .sky-vignette, .red-tide__frame, .red-tide__shade) {
+    inset: 0 0 auto; height: var(--hero-frame-height);
+  }
+  /* Next Image fill supplies height: 100% inline, relative to the whole hero. */
+  html body .page-hero .page-hero__image { height: var(--hero-frame-height) !important; }
+  html body :is(.page-hero .page-hero__shade, .red-tide__shade) {
+    z-index: 1;
+    background: linear-gradient(0deg, var(--hero-ground), transparent 18%),
+      linear-gradient(90deg, var(--hero-ground), transparent 76%);
+  }
+  html body :is(.page-hero .page-hero__content, .red-tide__copy) {
+    display: grid; grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(5, max-content) minmax(0, 1fr);
+    align-items: start; justify-items: start; gap: clamp(.125rem, 1vh, .375rem);
+    padding-top: var(--hero-copy-top);
+  }
+  /* This spanning spacer reserves the first screen without a fixed copy height.
+     Explicit primary rows overlap it; all supporting copy flows after row six. */
+  html body :is(.page-hero .page-hero__content, .red-tide__copy)::before {
+    content: ""; grid-column: 1; grid-row: 1 / 7; pointer-events: none;
+    min-height: calc(var(--hero-frame-height) - var(--hero-copy-top));
+  }
+  html body :is(.page-hero .page-hero__content, .red-tide__copy) > *,
+  html body :is(.page-hero, .red-tide) .actions > * { grid-column: 1; }
+  html body :is(.page-hero, .red-tide) .actions { display: contents; }
+  html body .page-hero .page-hero__content > .chapter-tag,
+  html body .red-tide__world { grid-row: 1; font-size: clamp(.75rem, 3vh, .8rem); line-height: 1.3; }
+  html body .page-hero .aurelia-world,
+  html body .red-tide__code { grid-row: 2; }
+  html body .page-hero .page-hero__content > :is(h1, .commercial-intro),
+  html body .red-tide h1 { grid-row: 3; }
+  html body .page-hero .hero-role { grid-row: 4; }
+  html body :is(.page-hero, .red-tide) .actions > .primary {
+    grid-row: 5; align-self: start; min-height: 44px; padding: .5rem .75rem; font-size: .875rem;
+  }
+  html body .page-hero .page-hero__content h1,
+  html body .red-tide h1 { font-size: clamp(1.25rem, 5.5vh, 1.75rem); line-height: 1.06; }
+  html body .page-hero .commercial-intro .hero-name { font-size: clamp(1.25rem, 6vh, 1.75rem); }
+  html body .page-hero .credibility-portrait { flex-basis: clamp(2.75rem, 12vh, 3.75rem); }
+  html body .page-hero .commercial-intro { gap: .75rem; }
+  html body .page-hero :is(.hero-role, .aurelia-world) { font-size: .75rem; line-height: 1.3; letter-spacing: .04em; }
+  html body .red-tide__code { font-size: clamp(1.5rem, 6vh, 2rem); }
+
+  html body .sound-invite {
+    right: auto; width: auto; max-width: min(26rem, calc(100% - 1rem - env(safe-area-inset-left) - env(safe-area-inset-right)));
+    height: 56px; max-height: 56px; padding: 5px .5rem; border-radius: 1.75rem;
+    grid-template-columns: minmax(0, 1fr) auto; gap: .5rem;
+  }
+  html body .sound-invite div { grid-template-columns: auto auto; }
+  html body .sound-invite button { height: 44px; padding: .25rem .5rem; white-space: nowrap; }
 }
 
 /* 2560px → 20px, 3840px → 28px; ordinary desktop widths keep the 16px baseline. */

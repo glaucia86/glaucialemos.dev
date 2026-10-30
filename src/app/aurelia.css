@@ -18,9 +18,8 @@
 .reading-progress__leaf { position: absolute; width: 16px; height: 16px; bottom: 0; left: 50%; translate: -50% 0; image-rendering: pixelated; }
 .aurelia-hero-wrap { background: var(--color-space-0); }
 .aurelia-hero { --scene-x: 80%; --scene-y: 100%; }
-.services-page .aurelia-hero { min-height: min(calc(100svh - var(--header-height)),56.25vw); }
+.services-page .aurelia-hero { min-height: calc(100vh - var(--header-height)); min-height: calc(100svh - var(--header-height)); }
 .aurelia-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
-.services-page .aurelia-hero .page-hero__content { padding-block: clamp(3rem,7vh,5rem) clamp(2rem,5vh,3.5rem); }
 .aurelia-copy > :is(.chapter-tag,.aurelia-world,h1,.page-hero__subtitle,.page-hero__extra,.actions) { max-width: min(44%,36.25rem); }
 .services-page .aurelia-hero h1 { font-size: clamp(2.1rem,3.3vw,3.5rem); line-height: 1.08; letter-spacing: -.04em; text-wrap: balance; }
 .aurelia-world { margin: .9rem 0; color: var(--scene-glow); font: .75rem/1.5 var(--font-pixel); letter-spacing: .2em; text-transform: uppercase; }
@@ -97,7 +96,6 @@
 .aurelia-relay span { color: var(--scene-glow); }.aurelia-channel-status:empty { display: none; }
 .aurelia-channel-status { color: var(--scene-accent); }
 .services-page .aurelia-independent { display: flex; align-items: baseline; gap: .65rem; max-width: 62ch; margin: 1.25rem 0; color: var(--aurelia-cream); font-size: .9rem; line-height: 1.6; }
-.services-page .aurelia-copy > .aurelia-independent { max-width: min(44%,36.25rem); }
 .aurelia-independent > span { flex: 0 0 auto; color: var(--scene-accent); }
 .chapter--waitlist { scroll-margin-top: 6rem; background: radial-gradient(ellipse at 20% 30%,var(--scene-bg),transparent 60%),var(--color-space-0); }
 .chapter--waitlist .chapter__inner { max-width: 57.5rem; }
@@ -148,14 +146,7 @@
 }
 @keyframes aurelia-breathe { 50% { scale: 1 1.003; } }
 .hero-scene-layer--aurelia[data-paused="true"] * { animation-play-state: paused !important; }
-@media (width < 1200px),(height < 680px),(hover:none),(pointer:coarse) {
-  .services-page .aurelia-hero .page-hero__content { padding-block: 4.5rem 2rem; }
-  .aurelia-copy > :is(.chapter-tag,.aurelia-world,h1,.page-hero__subtitle,.page-hero__extra,.actions) { max-width: min(100%,45rem); }
-  .services-page .aurelia-copy > .aurelia-independent { max-width: min(100%,62ch); }
-  .services-page .aurelia-hero h1 { font-size: clamp(2rem,6vw,3.2rem); }
-  .aurelia-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  .aurelia-hero .hud-hint { display: none; }
-}
+/* Hero composition and focal points are shared in responsive.css. */
 @media (max-width:900px) {
   .services-page .aurelia-cards { grid-template-columns: 1fr; }
 

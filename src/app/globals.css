@@ -167,7 +167,8 @@ main {
 .page-hero {
   position: relative;
   isolation: isolate;
-  min-height: clamp(560px,66vw,720px);
+  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100svh - var(--header-height));
   display: flex;
   align-items: center;
   overflow: hidden;
@@ -812,9 +813,6 @@ footer small {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
-  .page-hero {
-    min-height: 620px;
-  }
   .page-hero__image {
     object-position: right center;
   }
@@ -851,9 +849,6 @@ footer small {
   .motion-toggle {
     max-width: 104px;
     line-height: 1.05;
-  }
-  .page-hero {
-    min-height: 650px;
   }
   .page-hero__content {
     width: calc(100% - 2rem);

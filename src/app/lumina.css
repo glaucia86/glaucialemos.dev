@@ -24,12 +24,10 @@ html[data-boot="pending"] .boot--lumina { background: radial-gradient(ellipse at
 
 /* ——— 1. Hero ——— */
 .lumina-hero-wrap { background: var(--color-space-0); }
-/* The plate is always a whole 16:9 picture. Wide and tall screens: the hero is the plate's height (capped by the viewport)
-   and the copy sits over its quiet left side. Everything else: copy on top, the full 16:9 scene below it. */
+/* Image and effects share the full-bleed cover projection on every viewport. */
 .lumina-hero { --scene-x: 80%; --scene-y: 100%; }
 .lumina-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
-.content-page .lumina-hero { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
-.content-page .lumina-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
+.content-page .lumina-hero { min-height: calc(100vh - var(--header-height)); min-height: calc(100svh - var(--header-height)); }
 .lumina-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 36.25rem); }
 .content-page .lumina-hero h1 { margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--lum-night) 80%, transparent); }
 .content-page .lumina-hero h1 span { display: inline; color: transparent; background: linear-gradient(90deg, var(--lum-pink), var(--lum-violet) 45%, var(--lum-cyan) 90%); -webkit-background-clip: text; background-clip: text; -webkit-box-decoration-break: clone; box-decoration-break: clone; text-shadow: none; }
@@ -390,13 +388,7 @@ html[data-boot="pending"] .boot--lumina { background: radial-gradient(ellipse at
 .content-page[data-dusk] .dusk-shelf { position: relative; z-index: 41; }
 
 /* ——— Responsive ——— */
-@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  .content-page .lumina-hero .page-hero__content { padding-block: 4.5rem 2rem; }
-  .lumina-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 45rem); }
-  .content-page .lumina-hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); }
-  .lumina-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  .lumina-hero .hud-hint { display: none; }
-}
+/* Hero composition and focal points are shared in responsive.css. */
 @media (max-width: 1100px) {
   .shelves__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .rings { grid-template-columns: 1fr; }

@@ -23,12 +23,10 @@ html[data-boot="pending"] .boot--atlas { background: radial-gradient(ellipse at 
 
 /* ——— 1. Hero ——— */
 .atlas-hero-wrap { background: var(--color-space-0); }
-/* The plate is always a whole 16:9 picture. Wide and tall screens: the hero is the plate's height (capped by the viewport)
-   and the copy sits over its quiet left wall. Everything else: copy on top, the full 16:9 scene below it. */
+/* Image and effects share the full-bleed cover projection on every viewport. */
 .atlas-hero { --scene-x: 80%; --scene-y: 100%; }
 .atlas-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
-.events-page .atlas-hero { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
-.events-page .atlas-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
+.events-page .atlas-hero { min-height: calc(100vh - var(--header-height)); min-height: calc(100svh - var(--header-height)); }
 .atlas-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 36.25rem); }
 .events-page .atlas-hero h1 { margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--atlas-night) 80%, transparent); }
 .events-page .atlas-hero h1 span { display: inline; color: transparent; background: linear-gradient(90deg, var(--atlas-gold), var(--atlas-teal) 50%, var(--atlas-cyan) 90%); -webkit-background-clip: text; background-clip: text; -webkit-box-decoration-break: clone; box-decoration-break: clone; text-shadow: none; }
@@ -328,13 +326,7 @@ html[data-boot="pending"] .boot--atlas { background: radial-gradient(ellipse at 
 .events-page .orbit-end { margin: 1rem auto 0 !important; color: var(--text-inverse-muted) !important; font: 400 .6rem var(--font-pixel) !important; letter-spacing: .14em; text-transform: uppercase; }
 
 /* ——— Responsive ——— */
-@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  .events-page .atlas-hero .page-hero__content { padding-block: 4.5rem 2rem; }
-  .atlas-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 45rem); }
-  .events-page .atlas-hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); }
-  .atlas-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  .atlas-hero .hud-hint { display: none; }
-}
+/* Hero composition and focal points are shared in responsive.css. */
 @media (max-width: 1100px) {
   .atlas-board, .signals { grid-template-columns: 1fr; }
   .log__form { grid-template-columns: repeat(2, minmax(0, 1fr)); }

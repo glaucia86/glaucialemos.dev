@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap, ScrollTrigger, HERO_OVERLAY } from "@/lib/gsap";
+import { gsap, ScrollTrigger, WIDE_MOTION } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { play } from "@/lib/sfx";
 import { createHyperspace } from "./hyperspace";
@@ -12,7 +12,7 @@ import { createHyperspace } from "./hyperspace";
 export function WorldsWarpMotion() {
   const anchor = useRef<HTMLElement>(null);
   const motion = useMotionEnabled();
-  const overlay = useMediaQuery(HERO_OVERLAY);
+  const overlay = useMediaQuery(WIDE_MOTION);
   useEffect(() => {
     const section = anchor.current?.closest<HTMLElement>(".worlds-warp");
     if (!section || !motion || !overlay) return;

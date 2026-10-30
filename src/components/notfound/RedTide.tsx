@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { gsap, SCRAMBLE_CHARS } from '@/lib/gsap';
 import { motionAllowed, useMotionEnabled } from '@/lib/use-motion';
@@ -150,6 +151,7 @@ export function RedTide({ forcedLang }: { forcedLang?: Locale }) {
   return <main id="main" className="red-tide-page" tabIndex={-1}>
     <section ref={root} className="red-tide" aria-labelledby="red-tide-title" data-paused="true" data-motion={motion || undefined}>
       <div className="red-tide__frame">
+        <Image className="red-tide__image" src="/galaxia/scenes/red-tide/poster.webp" alt="" fill priority fetchPriority="high" sizes="100vw" />
         <div className="red-tide__plane">
           <video className="red-tide__video" autoPlay muted loop playsInline preload="metadata" poster="/galaxia/scenes/red-tide/poster.webp" aria-hidden="true">
             <source src="/galaxia/scenes/red-tide/background.webm" type="video/webm" />

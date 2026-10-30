@@ -20,12 +20,10 @@ html[data-boot="pending"] .boot--niveora { background: radial-gradient(ellipse a
 
 /* ——— 1. Nivéora hero ——— */
 .niveora-hero-wrap { background: var(--color-space-0); }
-/* The plate is always a whole 16:9 picture. Wide and tall screens: the hero is exactly the plate's height (capped by the
-   viewport) and the copy sits over its quiet left side. Everything else: copy on top, the full 16:9 scene below it. */
+/* The plate and every actor share a cover projection; copy overlays the quiet part of the scene. */
 .niveora-hero { --scene-x: 80%; --scene-y: 100%; }
 .niveora-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
-.about-page .niveora-hero { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
-.about-page .niveora-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
+.about-page .niveora-hero { min-height: calc(100vh - var(--header-height)); min-height: calc(100svh - var(--header-height)); }
 .niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 36.25rem); }
 .about-page .niveora-hero h1 { max-width: min(44%, 36.25rem); margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--color-primary-900) 80%, transparent); }
 /* Each line of the highlighted half gets the whole aurora gradient, so a wrap never splits the colours. */
@@ -292,14 +290,8 @@ html.reduce-motion .niveora-portrait * { animation: none !important; }
 @media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .ice-block:not([data-shattered]) .ice-block__hint { animation: hud-blink 1.6s steps(1) infinite; } }
 
 /* ——— Responsive ——— */
-/* Phones, tablets and short laptop screens: the shared image-first layout lives in responsive.css. */
-@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  .about-page .niveora-hero .page-hero__content { padding-block: 4.5rem 2rem; }
-  .niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 45rem); }
-  .about-page .niveora-hero h1 { max-width: min(100%, 45rem); font-size: clamp(2rem, 6vw, 3.2rem); }
-  .niveora-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  .niveora-hero .hud-hint { display: none; }
-}
+
+/* Hero composition and focal points are shared in responsive.css. */
 @media (max-width: 900px) {
   .niveora-hud .niveora-readout { left: 0; right: auto; top: 1.5rem; align-items: flex-start !important; }
   .niveora-readout > span:last-child { display: none; }

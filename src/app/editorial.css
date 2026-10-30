@@ -16,7 +16,6 @@ h1, h2, h3 { text-wrap: balance; }
 .site-header nav a { padding-block: .6rem; }
 .header-tools select, .motion-toggle { min-height: 36px; }
 .motion-toggle { font-size: .7rem; }
-.page-hero { min-height: clamp(580px, 46vw, 700px); }
 .page-hero__content { width: min(var(--content-width), calc(100% - 2 * var(--gutter))); }
 .page-hero__subtitle { line-height: 1.7; }
 .page-hero h1 span { color: var(--color-primary-200); }
@@ -37,7 +36,6 @@ h1, h2, h3 { text-wrap: balance; }
 .text-link:hover { text-decoration: underline; text-underline-offset: 5px; }
 .text-link:hover span { transform: translate(2px, -2px); }
 .home-hero { position: relative; background: var(--surface-dark); }
-.home-hero .page-hero { min-height: clamp(630px, 48vw, 760px); }
 .home-hero .page-hero h1 { font-size: clamp(4.5rem, 7.4vw, 7rem); line-height: .94; letter-spacing: -.075em; }
 .home-hero .page-hero__content > :is(.eyebrow, h1, .page-hero__subtitle, .actions) { max-width: 41%; }
 .home-hero .page-hero__subtitle { font-size: clamp(1.05rem, 1.3vw, 1.15rem); max-width: 39%; margin-top: 2rem; }
@@ -134,11 +132,6 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
   .site-header { height: var(--header-height); gap: .7rem; }
   .site-header nav { top: var(--header-height); padding: 1rem var(--gutter); }
   .site-header nav a { min-height: 44px; }
-  .home-hero .page-hero { min-height: 0; }
-  .home-hero .page-hero__content > :is(.eyebrow, h1, .page-hero__subtitle, .actions) { max-width: 100%; }
-  .home-hero .page-hero h1 { font-size: clamp(4rem, 10vw, 6.5rem); }
-  .home-hero .page-hero__subtitle { max-width: 54ch; }
-  .home-hero .page-hero__content { padding: 3rem 0 2rem; }
   .scene-caption { font-size: .56rem; }
   .about-preview, .service-teaser { grid-template-columns: 1fr; gap: 3rem; }
   .portrait-frame { width: min(440px, 90%); margin-inline: auto; }
@@ -154,8 +147,6 @@ html.reduce-motion *, html.reduce-motion *::before, html.reduce-motion *::after 
 }
 @media (max-width: 600px) {
   .page-hero__content { width: calc(100% - 2 * var(--gutter)); }
-  .home-hero .page-hero h1 { font-size: clamp(3.75rem, 17vw, 5.5rem); }
-  .home-hero .page-hero__subtitle { margin-top: 1.5rem; font-size: 1rem; }
   .home-hero .actions { gap: 1rem; }
   .home-hero .button { font-size: .77rem; }
   .section-intro { align-items: start; flex-direction: column; gap: .75rem; }

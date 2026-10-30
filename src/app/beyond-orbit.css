@@ -10,24 +10,33 @@
   padding: 0 0 2rem;
   overflow: clip;
 }
-.beyond-orbit__hero { position: relative; }
+.beyond-orbit__hero { position: relative; display: grid; }
+.beyond-orbit__hero > :is(.beyond-orbit__copy, .beyond-orbit__experience) { grid-area: 1 / 1; min-width: 0; }
 
-/* The frame shows the 16:9 stage (.beyond-orbit__scene, where every coordinate lives) like `object-fit: cover`:
-   the stage is at least as large as the frame and is shifted by --fx/--fy to keep the crew and the star in view.
-   Landscape tablets and short desktops: the frame is 16:9 itself (the whole plate). Portrait screens: 4:5, focused on
-   the crew. Wide desktops: the whole screen below the menu. */
-.beyond-orbit__frame { --fx: .5; --fy: .5; position: relative; overflow: hidden; container-type: size; aspect-ratio: 16 / 9; background: #060a18; }
+/* The same cover projection on every viewport; the copy shares the scene's grid cell. */
+.beyond-orbit__frame { --fx: .7; --fy: .5; position: relative; overflow: hidden; container-type: size; grid-area: 1 / 1; height: 100%; min-height: calc(100vh - var(--bo-header)); min-height: calc(100svh - var(--bo-header)); background: #292440; }
 .beyond-orbit__frame > * {
   --sw: max(100cqw, 100cqh * 16 / 9); --sh: max(100cqh, 100cqw * 9 / 16);
   --sl: calc((100cqw - var(--sw)) * var(--fx)); --st: calc((100cqh - var(--sh)) * var(--fy));
 }
 @media (max-aspect-ratio: 3 / 4) {
-  .beyond-orbit__frame { --fx: .92; aspect-ratio: 4 / 5; }
+  .beyond-orbit__frame { --fx: .82; }
   /* The calm sky on the left is cropped out: the constellation slides into view, only during the finale. */
   .beyond-orbit__constellation { transform: translateX(52%); }
   .beyond-orbit__experience[data-revealed]:not([data-theater]) .beyond-orbit__constellation { opacity: 0; }
 }
-.beyond-orbit__copy { position: relative; z-index: 1; padding: clamp(1.25rem, 4vw, 4rem); }
+.beyond-orbit__copy { position: relative; z-index: 1; align-self: start; width: min(48%, 40rem); padding: max(2rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 2rem max(1rem, env(safe-area-inset-left)); background: linear-gradient(90deg, #060a18e6, #060a18a6 70%, transparent); pointer-events: none; }
+.beyond-orbit__copy :is(a, button) { pointer-events: auto; }
+@media (orientation: portrait) {
+  .beyond-orbit__copy { width: 100%; background: linear-gradient(180deg, #060a18e6, #060a1880 65%, transparent); }
+  html body .beyond-orbit__copy h1 { font-size: clamp(1.6rem, min(6vw, 4svh), 3rem); }
+  .beyond-orbit__copy .beyond-orbit__body { max-width: 52%; font-size: .875rem; line-height: 1.5; }
+}
+@media (max-height: 500px) {
+  .beyond-orbit__copy { padding-block: 1rem; }
+  html body .beyond-orbit__copy h1 { font-size: clamp(1.5rem, 6svh, 2.5rem); margin-block: .5rem; }
+  .beyond-orbit__copy .beyond-orbit__body { font-size: .875rem; line-height: 1.5; }
+}
 .beyond-orbit__chapter, .beyond-orbit__eyebrow, .beyond-orbit__coords { font-family: var(--font-departure), monospace; font-size: .8rem; letter-spacing: .08em; color: #b9cba4; }
 .beyond-orbit__eyebrow { color: #83efac; }
 .beyond-orbit__coords { margin-top: 1.75rem; font-size: .7rem; color: #7d86a8; opacity: .85; font-variant-numeric: tabular-nums; }
@@ -44,7 +53,7 @@
 }
 
 /* The experience: ambilight, curtain, the 16:9 scene, the finale and the credits. */
-.beyond-orbit__experience { position: relative; z-index: 0; isolation: isolate; --dive-bars: 0%; --theater-bars: 0%; --charge: 0; }
+.beyond-orbit__experience { display: grid; position: relative; z-index: 0; isolation: isolate; --dive-bars: 0%; --theater-bars: 0%; --charge: 0; }
 .beyond-orbit__ambient { position: absolute; inset: -22% -30% -6%; z-index: -1; pointer-events: none; opacity: .55;
   mask-image: radial-gradient(ellipse 50% 50% at 50% 45%, #000 45%, transparent 100%); }
 .beyond-orbit__ambient img { display: block; width: 100%; height: 100%; object-fit: fill; filter: blur(42px) saturate(1.35); }
@@ -52,7 +61,7 @@
 .beyond-orbit__scene { position: absolute; left: var(--sl); top: var(--st); width: var(--sw); height: var(--sh); overflow: hidden; background: #060a18; isolation: isolate; }
 .beyond-orbit__camera, .beyond-orbit__layer, .beyond-orbit__art { position: absolute; inset: 0; }
 .beyond-orbit__art { pointer-events: none; transition: filter 1.2s ease; }
-.beyond-orbit__plate { display: block; width: 100%; height: 100%; object-fit: contain; }
+.beyond-orbit__plate { display: block; width: 100%; height: 100%; object-fit: cover; }
 .beyond-orbit__glow { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 .beyond-orbit__filters { position: absolute; width: 0; height: 0; }
 
@@ -155,8 +164,8 @@
 .beyond-orbit__roll .beyond-orbit__post h3 { color: #c75b76; letter-spacing: .4em; font-size: inherit; }
 .beyond-orbit__roll .beyond-orbit__post ul { list-style: none; padding: 0; color: #fff0c9; }
 
-/* The finale: below the scene on compact screens, over the Veil (top right, away from the copy) on wide ones. */
-.beyond-orbit__finale { position: relative; z-index: 3; padding: 1.75rem 1rem 0; text-align: center; line-height: 1.5; pointer-events: none; }
+/* The finale stays over the scene: low on portrait screens and top right on wide ones. */
+.beyond-orbit__finale { grid-area: 1 / 1; align-self: end; position: relative; z-index: 3; padding: 1.75rem 1rem; text-align: center; line-height: 1.5; pointer-events: none; }
 .beyond-orbit__finale[data-waiting] { visibility: hidden; }
 .beyond-orbit__continued { color: #f0c98b; font-family: var(--font-departure), monospace; font-size: clamp(1.5rem, 6.4vw, 2.8rem); letter-spacing: .02em; margin: 0;
   text-shadow: 0 0 2px #fff, 0 0 18px rgba(240, 127, 119, .65), 0 0 46px rgba(131, 239, 172, .25); transform-origin: 50% 55%; }
@@ -463,8 +472,7 @@ html:has(.beyond-orbit-episode[open]) :is(.fx-cursor, .fx-trail) { visibility: h
 }
 @media (min-width: 1200px) and (min-height: 680px) {
   /* The frame covers the whole screen below the menu; the stage keeps the crew and the star in view. */
-  .beyond-orbit__frame { --fx: .7; aspect-ratio: auto; height: calc(100vh - var(--bo-header)); height: calc(100svh - var(--bo-header)); }
-  .beyond-orbit__copy { position: absolute; width: min(39%, 40rem); top: 0; padding: clamp(2rem, 7vh, 5rem) 0 0 clamp(2rem, 5vw, 6rem); box-sizing: border-box; }
+  .beyond-orbit__copy { width: min(39%, 40rem); padding: clamp(2rem, 7vh, 5rem) 0 0 clamp(2rem, 5vw, 6rem); box-sizing: border-box; }
   .beyond-orbit__finale { position: absolute; left: 42%; right: 2%; top: calc((100svh - var(--bo-header)) * .135); padding: 0; }
   .beyond-orbit__continued { font-size: clamp(2rem, 4.2vw, 4.4rem); }
   .beyond-orbit__experience[data-revealed]:not([data-theater]) .beyond-orbit__constellation { opacity: 0; }
@@ -488,7 +496,3 @@ html:has(.beyond-orbit-episode[open]) :is(.fx-cursor, .fx-trail) { visibility: h
 @keyframes bo-episode-in { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } }
 @keyframes bo-episode-glow { 50% { box-shadow: 0 0 30px rgba(131, 239, 172, .55), 0 0 70px rgba(240, 127, 119, .25); } }
 
-/* Keep the complete stage under the header on short landscape screens. */
-@media (max-height: 500px) and (min-aspect-ratio: 16 / 9) {
-  .beyond-orbit__frame { width: min(100%, calc((100svh - var(--header-height)) * 16 / 9)); margin-inline: auto; }
-}
