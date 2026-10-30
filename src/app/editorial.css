@@ -93,7 +93,7 @@ h1, h2, h3 { text-wrap: balance; }
 .mini-services h3 span { margin-left: auto; color: var(--link); }
 .mini-services article p { font-size: .85rem; line-height: 1.75; margin-bottom: 0; }
 .home-contact { position: relative; overflow: hidden; padding: var(--section-space) max(var(--gutter), calc((100vw - var(--content-width)) / 2)); background: var(--surface-dark); color: var(--text-inverse); }
-.home-contact > div:last-child { position: relative; max-width: 660px; }
+.home-contact > div:last-child { position: relative; max-width: 41.25rem; }
 .home-contact h2 { color: var(--text-inverse); font-size: clamp(2.6rem, 4.6vw, 4.5rem); }
 .home-contact .eyebrow { color: var(--accent-light); }
 .home-contact p:not(.eyebrow) { color: var(--text-inverse-muted); max-width: 48ch; margin-bottom: 2rem; line-height: 1.8; }

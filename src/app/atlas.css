@@ -29,7 +29,7 @@ html[data-boot="pending"] .boot--atlas { background: radial-gradient(ellipse at 
 .atlas-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
 .events-page .atlas-hero { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
 .events-page .atlas-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
-.atlas-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 580px); }
+.atlas-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 36.25rem); }
 .events-page .atlas-hero h1 { margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--atlas-night) 80%, transparent); }
 .events-page .atlas-hero h1 span { display: inline; color: transparent; background: linear-gradient(90deg, var(--atlas-gold), var(--atlas-teal) 50%, var(--atlas-cyan) 90%); -webkit-background-clip: text; background-clip: text; -webkit-box-decoration-break: clone; box-decoration-break: clone; text-shadow: none; }
 .atlas-hero .page-hero__subtitle { margin-top: 1.1rem; font-size: clamp(1rem, 1.25vw, 1.12rem); }
@@ -329,13 +329,10 @@ html[data-boot="pending"] .boot--atlas { background: radial-gradient(ellipse at 
 
 /* ——— Responsive ——— */
 @media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  .events-page .atlas-hero { display: block; min-height: 0; padding-bottom: 56.25%; }
   .events-page .atlas-hero .page-hero__content { padding-block: 4.5rem 2rem; }
-  .atlas-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 720px); }
+  .atlas-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 45rem); }
   .events-page .atlas-hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); }
-  .atlas-hero :is(.page-hero__image, .hero-scene-layer--atlas, .atlas-layer, .page-hero__shade) { top: auto !important; bottom: 0; left: 0; right: 0; width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; }
   .atlas-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  .atlas-status { top: auto; bottom: calc(56.25vw - 3.4rem); }
   .atlas-hero .hud-hint { display: none; }
 }
 @media (max-width: 1100px) {
@@ -353,7 +350,7 @@ html[data-boot="pending"] .boot--atlas { background: radial-gradient(ellipse at 
   .log__meter { display: none; }
   .atlas-stats > div { min-height: 84px; }
   .signal-timeline ol { height: 190px; gap: .2rem; }
-  .signal-timeline__count { font-size: .48rem; }
+  .signal-timeline__count { font-size: .75rem; }
   .signal-timeline__year { font-size: .46rem; writing-mode: vertical-rl; rotate: 180deg; }
   .signal-meter li { grid-template-columns: 6rem minmax(0, 1fr) 2rem; }
 }
@@ -485,7 +482,7 @@ main.events-page { overflow: clip; }
 /* The dock under the scene (touch / small screens only). */
 .atlas-dock { display: none; }
 @media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  .atlas-dock { position: absolute; z-index: 3; left: 0; right: 0; bottom: .6rem; display: flex; justify-content: center; flex-wrap: wrap; gap: .4rem; padding: 0 var(--gutter); }
+  .atlas-dock { position: relative; z-index: 3; display: flex; justify-content: center; flex-wrap: wrap; gap: .4rem; padding: .5rem var(--gutter); }
   .atlas-dock button { background: color-mix(in srgb, var(--atlas-night) 85%, transparent); }
   .atlas-hero .sky-touch-hint { display: none !important; }
   .atlas-tablet { position: relative; right: auto; top: auto; margin: 0 auto 1rem; }
@@ -499,11 +496,8 @@ main.events-page { overflow: clip; }
 @media (max-width: 640px) { .chapter--orbit .credits { margin-top: 82svh; } .orbit-watchers { width: 64px; } }
 /* Touch / small screens: the dock gets its own strip under the scene instead of covering it. */
 @media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  .events-page .atlas-hero { padding-bottom: calc(56.25% + 60px); }
-  .atlas-hero :is(.page-hero__image, .hero-scene-layer--atlas, .atlas-layer, .page-hero__shade) { bottom: 60px !important; }
-  .atlas-dock { bottom: 8px; flex-wrap: nowrap; gap: .3rem; }
-  .atlas-dock button { flex: 1 1 0; min-width: 0; padding: .4rem .3rem; font-size: .48rem; }
-  .atlas-status { bottom: calc(56.25vw + 60px - 3.4rem); }
+  .atlas-dock { gap: .5rem; }
+  .atlas-dock button { flex: 1 1 0; min-width: 0; padding: .4rem .3rem; font-size: .75rem; }
 }
 @media (max-width: 480px) { .atlas-dock button { flex: 1 1 0; } }
 /* 05B: Glaucia blinks on her rest pose (hand on hip); the overlay only shows while that pose is on. */

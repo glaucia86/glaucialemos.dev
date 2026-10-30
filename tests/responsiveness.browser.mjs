@@ -98,17 +98,17 @@ for (const engine of (process.env.BROWSER_ENGINE === "webkit" ? [webkit] : [chro
         assert.deepEqual(await audit(page), []);
         await page.keyboard.press("Escape");
         const compact = await page.evaluate(() => !matchMedia("(min-width: 1200px) and (min-height: 680px) and (hover: hover) and (pointer: fine)").matches);
-        if (compact) {
+        if (compact && await page.locator(".page-hero").count()) {
           const geometry = await page.locator(".page-hero").first().evaluate(el => {
             const img = el.querySelector(".page-hero__image");
             const a = img.getBoundingClientRect();
             const b = el.querySelector(".page-hero__content").getBoundingClientRect();
-            const planes = [...el.querySelectorAll('.observatory-plane,.niveora-plane,.mars-plane,.lumina-plane')];
+            const planes = [...el.querySelectorAll('.observatory-plane,.niveora-plane,.mars-plane,.lumina-plane,.atlas-plane,.aurelia-plane')];
             const aligned = planes.every(plane => {
               const p = plane.getBoundingClientRect();
               return Math.abs(p.left - a.left) < 2 && Math.abs(p.top - a.top) < 2 && Math.abs(p.width - a.width) < 2 && Math.abs(p.height - a.height) < 2;
             });
-            return { separated: b.bottom <= a.top + 2, aligned, ratio: a.width / a.height, naturalRatio: img.naturalWidth / img.naturalHeight };
+            return { separated: a.bottom <= b.top + 2, aligned, ratio: a.width / a.height, naturalRatio: img.naturalWidth / img.naturalHeight };
           });
           assert.ok(geometry.separated, "copy overlaps scene");
           assert.ok(geometry.aligned, "effects/hotspot plane does not match plate");

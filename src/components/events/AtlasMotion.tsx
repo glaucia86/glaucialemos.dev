@@ -255,7 +255,7 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
 
     // The camera voyage lives in its own sticky section right after the hero (AtlasVoyage): here the copy only drifts away.
     // The approach, as on the other worlds: the hero stays pinned while the camera pushes into the window, then a flash of
-    // glass hands over to the voyage below (which opens on the cracking window). Elsewhere the hero simply drifts away.
+    // glass hands over to the voyage below (which opens on the cracking window). Stacked layouts keep both the plate and copy static.
     const zoom = [q(".page-hero__image"), layer, q(".atlas-layer")];
     if (overlay) {
       gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: section, start: "top top", end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 } })
@@ -265,11 +265,8 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
         .to(".page-hero__shade", { autoAlpha: .2, duration: .4 }, 0)
         .fromTo(".atlas-glass-flash", { autoAlpha: 0 }, { autoAlpha: 1, duration: .12, ease: "power2.in" }, .82)
         .to(".atlas-glass-flash", { autoAlpha: 0, duration: .06 }, .94);
-    } else {
-      gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: .6 } })
-        .fromTo(".atlas-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: 0 }, 0)
-        .fromTo(zoom, { scale: 1 }, { scale: 1.4, transformOrigin: "78% 30%" }, 0);
     }
+    // No compact zoom/fade: the complete plate precedes the readable copy.
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 
@@ -320,16 +317,16 @@ export function AtlasMotion({ children, labelledBy, locale, copy, types, events,
   const place = event && (event.formato === "presencial" ? copy.readout.origin.replace("{city}", [event.cidade, event.pais].filter(Boolean).join(", ")) : copy.readout.remoteOrigin);
 
   return <section ref={hero} className="page-hero home-hero-v2 atlas-hero" aria-labelledby={labelledBy} data-motion={motion}>
-    {children}
-    <span className="sky-vignette" aria-hidden="true" />
-    <p className="atlas-status" role="status" aria-live="polite" />
-    <p className="sky-touch-hint" aria-hidden="true"><span />{copy.touch}</p>
-    <span className="atlas-glass-flash" aria-hidden="true" />
     {/* Touch and small screens: the scene's hotspots are tiny there, so the same actions live in a dock under it. */}
     <div className="atlas-dock" role="group" aria-label={copy.dock.label}>
       {([["glaucia", copy.dock.tablet], ["holo", copy.dock.holo], ["prince", copy.dock.prince]] as const).map(([hot, label]) => <button key={hot} type="button" data-dock={hot} onClick={() => hero.current?.querySelector<HTMLButtonElement>(`.atlas-hot--${hot}`)?.click()}>{label}</button>)}
       <button type="button" data-dock="satellite" onClick={() => emitEgg("runaway-satellite")}>{copy.dock.satellite}</button>
     </div>
+    {children}
+    <span className="sky-vignette" aria-hidden="true" />
+    <p className="atlas-status" role="status" aria-live="polite" />
+    <p className="sky-touch-hint" aria-hidden="true"><span />{copy.touch}</p>
+    <span className="atlas-glass-flash" aria-hidden="true" />
     {tablet && <div className="atlas-tablet" role="dialog" aria-labelledby="atlas-tablet-title" onKeyDown={tabletKey}>
       <p className="atlas-tablet__title" id="atlas-tablet-title">{copy.tablet.title}</p>
       <div className="atlas-tablet__pad" ref={pad} tabIndex={0} role="application" aria-label={copy.tablet.rotate} title={copy.tablet.rotate}><i className="atlas-tablet__knob" /></div>

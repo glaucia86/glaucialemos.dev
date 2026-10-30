@@ -30,7 +30,7 @@ html[data-boot="pending"] .boot--lumina { background: radial-gradient(ellipse at
 .lumina-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
 .content-page .lumina-hero { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
 .content-page .lumina-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
-.lumina-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 580px); }
+.lumina-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 36.25rem); }
 .content-page .lumina-hero h1 { margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--lum-night) 80%, transparent); }
 .content-page .lumina-hero h1 span { display: inline; color: transparent; background: linear-gradient(90deg, var(--lum-pink), var(--lum-violet) 45%, var(--lum-cyan) 90%); -webkit-background-clip: text; background-clip: text; -webkit-box-decoration-break: clone; box-decoration-break: clone; text-shadow: none; }
 .lumina-hero .page-hero__subtitle { margin-top: 1.1rem; font-size: clamp(1rem, 1.25vw, 1.12rem); }
@@ -391,13 +391,10 @@ html[data-boot="pending"] .boot--lumina { background: radial-gradient(ellipse at
 
 /* ——— Responsive ——— */
 @media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  .content-page .lumina-hero { display: block; min-height: 0; padding-bottom: 56.25%; }
   .content-page .lumina-hero .page-hero__content { padding-block: 4.5rem 2rem; }
-  .lumina-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 720px); }
+  .lumina-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 45rem); }
   .content-page .lumina-hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); }
-  .lumina-hero :is(.page-hero__image, .hero-scene-layer--lumina, .lumina-layer, .page-hero__shade) { top: auto !important; bottom: 0; left: 0; right: 0; width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; }
   .lumina-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  .lumina-status { top: auto; bottom: calc(56.25vw - 3.4rem); }
   .lumina-hero .hud-hint { display: none; }
 }
 @media (max-width: 1100px) {

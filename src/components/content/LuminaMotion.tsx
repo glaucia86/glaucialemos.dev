@@ -190,9 +190,8 @@ export function LuminaMotion({ children, labelledBy, locale, copy, whispers, fir
         .to(".hero-jump__label", { autoAlpha: 1, letterSpacing: ".6em", duration: .2 }, .78)
         .to(".hero-jump__flash", { autoAlpha: 1, duration: .06 }, .9)
         .to(".hero-jump__flash", { autoAlpha: 0, duration: .04 }, .96);
-    } else {
-      gsap.fromTo(".lumina-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: .2, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true } });
     }
+    // The stacked copy enters below the plate and stays fully readable.
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 

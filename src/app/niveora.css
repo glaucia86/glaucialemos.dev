@@ -26,8 +26,8 @@ html[data-boot="pending"] .boot--niveora { background: radial-gradient(ellipse a
 .niveora-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
 .about-page .niveora-hero { min-height: min(calc(100svh - var(--header-height)), 56.25vw); }
 .about-page .niveora-hero .page-hero__content { padding-block: clamp(2.5rem, 7vh, 4.5rem) clamp(2rem, 5vh, 3.5rem); }
-.niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 580px); }
-.about-page .niveora-hero h1 { max-width: min(44%, 580px); margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--color-primary-900) 80%, transparent); }
+.niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(44%, 36.25rem); }
+.about-page .niveora-hero h1 { max-width: min(44%, 36.25rem); margin: 0; font-size: clamp(2.1rem, 3.3vw, 3.5rem); line-height: 1.06; letter-spacing: -.04em; text-wrap: balance; text-shadow: 0 .05em 0 color-mix(in srgb, var(--color-primary-900) 80%, transparent); }
 /* Each line of the highlighted half gets the whole aurora gradient, so a wrap never splits the colours. */
 .about-page .niveora-hero h1 span { display: inline; color: transparent; background: linear-gradient(90deg, var(--niv-cyan), var(--niv-glacier) 45%, var(--niv-lilac) 80%, var(--niv-pink)); -webkit-background-clip: text; background-clip: text; -webkit-box-decoration-break: clone; box-decoration-break: clone; text-shadow: none; }
 .niveora-hero .page-hero__subtitle { margin-top: 1.1rem; font-size: clamp(1rem, 1.25vw, 1.12rem); }
@@ -292,15 +292,12 @@ html.reduce-motion .niveora-portrait * { animation: none !important; }
 @media (prefers-reduced-motion: no-preference) { html:not(.reduce-motion) .ice-block:not([data-shattered]) .ice-block__hint { animation: hud-blink 1.6s steps(1) infinite; } }
 
 /* ——— Responsive ——— */
-/* Phones, tablets and short laptop screens: copy first, then the whole 16:9 plate at full width, never cropped. */
+/* Phones, tablets and short laptop screens: the shared image-first layout lives in responsive.css. */
 @media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  .about-page .niveora-hero { --scene-height: 56.25vw; display: block; min-height: 0; padding-bottom: 56.25%; }
   .about-page .niveora-hero .page-hero__content { padding-block: 4.5rem 2rem; }
-  .niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 720px); }
-  .about-page .niveora-hero h1 { max-width: min(100%, 720px); font-size: clamp(2rem, 6vw, 3.2rem); }
-  .niveora-hero :is(.page-hero__image, .hero-scene-layer--niveora, .niveora-layer, .page-hero__shade) { top: auto !important; bottom: 0; left: 0; right: 0; width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; }
+  .niveora-copy > :is(.chapter-tag, h1, .page-hero__subtitle, .page-hero__extra, .actions) { max-width: min(100%, 45rem); }
+  .about-page .niveora-hero h1 { max-width: min(100%, 45rem); font-size: clamp(2rem, 6vw, 3.2rem); }
   .niveora-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  .niveora-status { top: auto; bottom: calc(var(--scene-height) - 3.4rem); }
   .niveora-hero .hud-hint { display: none; }
 }
 @media (max-width: 900px) {
@@ -357,7 +354,7 @@ html.reduce-motion .reading-progress--niveora .reading-progress__fill { backgrou
 .prince-trail__actor { position: absolute; inset: 0; transform: scaleX(-1); }
 .prince-trail__pose { position: absolute; bottom: 0; background: center / 100% 100% no-repeat; image-rendering: pixelated; }
 .prince-trail__cargo { position: absolute; width: 19px; height: 19px; left: 12px; bottom: 17px; filter: drop-shadow(0 0 4px #ffd27a); }
-.borrowed-star { max-width: 520px; margin: 0 auto 1.5rem; text-align: left; }
+.borrowed-star { max-width: 32.5rem; margin: 0 auto 1.5rem; text-align: left; }
 .borrowed-star__tracks { display: block; color: var(--niv-glacier); letter-spacing: .75rem; text-align: center; }
 .borrowed-star summary { display: flex; align-items: center; justify-content: center; gap: 1rem; min-height: 56px; padding: .75rem; border: 1px solid #ffd27a; color: #fff2c8; background: #142338; font: .65rem/1.8 var(--font-pixel); cursor: pointer; }
 .borrowed-star summary svg { width: 28px; height: 28px; flex-shrink: 0; }
@@ -379,7 +376,7 @@ html.reduce-motion .reading-progress--niveora .reading-progress__fill { backgrou
 .chapter--aurora { --signal: var(--niv-cyan); overflow: visible; }
 .chapter--aurora[data-signal="en"] { --signal: var(--niv-lilac); }
 .chapter--aurora[data-signal="es"] { --signal: #f3a5d8; }
-.aurora-heading { max-width: 780px; margin-bottom: 2rem; }
+.aurora-heading { max-width: 48.75rem; margin-bottom: 2rem; }
 .chapter .aurora-kicker { color: var(--niv-glacier); font: .65rem/1.8 var(--font-pixel); letter-spacing: .12em; }
 .aurora-crossing { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: center; gap: clamp(1.5rem, 4vw, 3rem); }
 .aurora-lake { position: relative; border: 1px solid #5c8aa4; box-shadow: 0 6px 0 #142d44, 0 0 45px color-mix(in srgb, var(--signal) 12%, transparent); color: var(--signal); }

@@ -95,7 +95,7 @@
 }
 
 :root {
-  --content-width: 1180px;
+  --content-width: 73.75rem;
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --section-space: clamp(4.5rem, 9vw, 8rem);
   --surface-editorial: #f6f3f8;

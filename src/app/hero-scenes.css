@@ -6,3 +6,9 @@
   position: absolute;
   display: block;
 }
+
+/* Palette placeholder is visible before image decode, including without JS/motion. */
+.page-hero__image {
+  background-color: #292440;
+  background-image: radial-gradient(ellipse at 65% 35%, #426477, #4a335d 45%, #292440 85%);
+}

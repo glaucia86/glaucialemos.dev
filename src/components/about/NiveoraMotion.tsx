@@ -428,9 +428,8 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
         .to(".hero-jump__label", { autoAlpha: 1, letterSpacing: ".6em", duration: .2 }, .55)
         .to(".hero-jump__flash", { autoAlpha: 1, duration: .06 }, .9)
         .to(".hero-jump__flash", { autoAlpha: 0, duration: .04 }, .96);
-    } else {
-      gsap.fromTo(".niveora-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: .2, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true } });
     }
+    // The stacked copy enters below the plate and stays fully readable.
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 

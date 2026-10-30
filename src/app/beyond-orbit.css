@@ -4,7 +4,7 @@
 /* `overflow: clip` on both axes: the global `main { overflow: hidden }` would make <main> a scroll container and break
    every `position: sticky` of the voyage. */
 .beyond-orbit {
-  --bo-header: 72px;
+  --bo-header: var(--header-height);
   background: #060a18;
   color: #f3eee3;
   padding: 0 0 2rem;
@@ -487,3 +487,8 @@ html:has(.beyond-orbit-episode[open]) :is(.fx-cursor, .fx-trail) { visibility: h
 }
 @keyframes bo-episode-in { from { opacity: 0; transform: translateY(14px); filter: blur(6px); } }
 @keyframes bo-episode-glow { 50% { box-shadow: 0 0 30px rgba(131, 239, 172, .55), 0 0 70px rgba(240, 127, 119, .25); } }
+
+/* Keep the complete stage under the header on short landscape screens. */
+@media (max-height: 500px) and (min-aspect-ratio: 16 / 9) {
+  .beyond-orbit__frame { width: min(100%, calc((100svh - var(--header-height)) * 16 / 9)); margin-inline: auto; }
+}

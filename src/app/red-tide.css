@@ -85,10 +85,15 @@ html:has(.red-tide-episode[open]) :is(.fx-cursor,.fx-trail) { visibility: hidden
 @media (prefers-reduced-motion:reduce) { .red-tide__video,.red-tide__plasma { display: none; } .red-tide * { animation: none !important; transition: none !important; } }
 html.reduce-motion .red-tide__video,html.reduce-motion .red-tide__plasma { display: none; }
 html.reduce-motion .red-tide * { animation: none !important; transition: none !important; }
-@media (max-width:900px) {
-  .red-tide { align-items: start; }
-  .red-tide__frame { --scene-x: 74%; }
-  .red-tide__shade { background: linear-gradient(180deg,#0d0612f5 0,#0d0612d9 45%,#0d061266 70%,transparent 88%); }
-  .red-tide__copy { margin: 0 auto; padding-block: 2.5rem 42svh; }
+/* Same image-first order as the shared heroes, with a video/poster coordinate plane. */
+@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
+  .red-tide { display: block; min-height: 0; container-type: inline-size; }
+  .red-tide__frame {
+    position: relative; inset: auto; width: min(100%, calc((100svh - var(--header-height)) * 16 / 9));
+    aspect-ratio: 16 / 9; margin-inline: auto; background-color: #482435;
+  }
+  .red-tide__shade { display: none; }
+  .red-tide__copy { margin: 0 auto; padding-block: 2rem; }
   .red-tide__hud { display: none; }
 }
+

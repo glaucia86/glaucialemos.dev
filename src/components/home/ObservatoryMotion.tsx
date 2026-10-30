@@ -350,9 +350,8 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
         .to(".hero-jump__label", { autoAlpha: 1, letterSpacing: ".6em", duration: .2 }, .55)
         .to(".hero-jump__flash", { autoAlpha: 1, duration: .06 }, .9)
         .to(".hero-jump__flash", { autoAlpha: 0, duration: .04 }, .96);
-    } else {
-      gsap.fromTo(".hero-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: .2, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true } });
     }
+    // Stacked layouts keep the copy readable as it enters below the plate.
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 
