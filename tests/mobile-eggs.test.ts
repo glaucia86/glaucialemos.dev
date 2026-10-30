@@ -3,7 +3,7 @@ import { EGGS, type EggId } from "@/lib/egg-catalog";
 import {
   ARM_WINDOW_MS, HOLD_MS, INITIAL_MOBILE_EGG_STATE, MIN_HOTSPOT_PX, MOBILE_EGG_QUERY, MOBILE_HOTSPOTS,
   SCAN_COOLDOWN_MS, SCAN_HIGHLIGHT_MS, assertMobileHotspots, edgeCues, hotspotScreenPoint,
-  mobileEggReducer, nextGlowId, panStep, scanState, sceneXToReveal,
+  mobileEggReducer, nextGlowId, panStep, scanState, sceneXToReveal, mobilePanBinding,
   type MobileEggState, type MobileHotspot, type MobileWorld,
 } from "@/lib/mobile-eggs";
 import { mobileEggs } from "@/i18n/mobile-eggs";
@@ -283,5 +283,20 @@ describe("mobile copy", () => {
       }
       if (h.kind === "hold") expect(hint).toMatch(holdWord);
     }
+  });
+});
+
+
+describe("special frame panning", () => {
+  it.each(["cover", "red-tide", "beyond-orbit"] as const)("keeps %s art and hit projection aligned after a drag", projection => {
+    const binding = mobilePanBinding(projection);
+    const initial = projection === "beyond-orbit" ? ".82" : "78%";
+    const start = binding.read(initial);
+    const next = panStep(start, 100, 390, 772);
+    expect(binding.read(binding.write(next))).toBeCloseTo(next);
+    const point = hotspotScreenPoint(hotspot("last-light"), start, 390, 772);
+    const moved = hotspotScreenPoint(hotspot("last-light"), next, 390, 772);
+    expect(moved.x - point.x).toBeCloseTo(100);
+    expect(binding.property).toBe(projection === "beyond-orbit" ? "--fx" : projection === "red-tide" ? "--red-tide-x" : "--scene-x");
   });
 });

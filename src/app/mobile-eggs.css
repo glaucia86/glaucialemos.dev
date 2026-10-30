@@ -1,5 +1,8 @@
 /* MOBILE_EGG_QUERY: (orientation: portrait) and (max-width: 820px), (pointer: coarse) and (max-width: 820px), (pointer: coarse) and (orientation: landscape) and (max-height: 520px) */
 @media (orientation: portrait) and (max-width: 820px), (pointer: coarse) and (max-width: 820px), (pointer: coarse) and (orientation: landscape) and (max-height: 520px) {
+  /* Clip decorative planes without creating a horizontal scroll container. */
+  html, body { max-width: 100%; overflow-x: clip; }
+  html body :is(.page-hero, .red-tide, .beyond-orbit__hero) { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
   /* The first screen uses the landscape spacer contract even without JavaScript.
      .page-hero scopes layout to the six worlds, not the later special frames. */
   html body .page-hero {
@@ -32,12 +35,13 @@
   }
   html body .page-hero .page-hero__content > *,
   html body .page-hero .actions > * { grid-column: 1; grid-row: auto; order: 0; max-width: 100%; width: 100%; }
-  html body .page-hero .page-hero__content > .chapter-tag { grid-row: 1; font-size: .75rem; line-height: 1.3; }
-  html body .page-hero .page-hero__content > :is(h1, .commercial-intro) { grid-row: 2; max-width: 100%; }
+  html body .page-hero .page-hero__content > .chapter-tag { grid-row: 1; padding-right: 72px; font-size: .75rem; line-height: 1.3; }
+  html body .page-hero .page-hero__content > :is(h1, .commercial-intro) { grid-row: 2; max-width: 100%; padding-right: 72px; }
   html body .page-hero .page-hero__content h1 { font-size: clamp(1.4rem, min(6vw, 5svh), 2.5rem); line-height: 1.08; }
   html body .page-hero .commercial-intro .hero-name { font-size: clamp(1.8rem, min(8.5vw, 6svh), 3rem); }
   html body .page-hero .credibility-portrait { flex-basis: clamp(3rem, min(20vw, 10svh), 5rem); }
-  html body .page-hero .commercial-intro { gap: .875rem; }
+  html body .page-hero .commercial-intro { gap: .875rem; min-width: 0; }
+  html body .page-hero .commercial-intro > :is(h1, div) { min-width: 0; }
   html body .page-hero .actions { display: contents; }
   /* Only the identity occupies the explicit rows. Everything else auto-flows
      after the spanning spacer, including previously positioned landscape CTAs. */
@@ -71,17 +75,24 @@
   .mobile-eggs {
     position: absolute; inset: 0 0 auto; width: 100%; height: var(--mobile-frame-height, var(--hero-frame-height));
     z-index: 4; container-type: size; overflow: clip; pointer-events: none;
-    --mobile-dock-bottom: max(.75rem, env(safe-area-inset-bottom));
+    --mobile-hint-bottom: max(.75rem, env(safe-area-inset-bottom));
     color: var(--color-neutral-50); font-family: var(--font-sans);
   }
-  /* responsive.css caps the invitation at 25svh. Reserve its actual measured
-     footprint while it exists, with a CSS fallback before the observer runs. */
-  body:has(.sound-invite) .mobile-eggs { --mobile-dock-bottom: calc(var(--mobile-sound-space, 25svh) + 1rem); }
+  /* Keep the temporary hint above the sound invitation while it exists. */
+  body:has(.sound-invite) .mobile-eggs { --mobile-hint-bottom: calc(var(--mobile-sound-space, 25svh) + 1rem); }
   .mobile-eggs .mobile-eggs__plane {
     position: absolute; width: max(100cqw, 177.777778cqh); height: max(100cqh, 56.25cqw);
     left: var(--scene-x, 78%); top: var(--scene-y, 100%);
     transform: translate(calc(-1 * var(--scene-x, 78%)), calc(-1 * var(--scene-y, 100%)));
     pointer-events: none;
+  }
+  .mobile-eggs[data-projection="red-tide"] .mobile-eggs__plane {
+    left: var(--red-tide-x); top: 100%; transform: none;
+    translate: calc(-1 * var(--red-tide-x)) -100%;
+  }
+  .mobile-eggs[data-projection="beyond-orbit"] .mobile-eggs__plane {
+    left: calc((100cqw - max(100cqw, 177.777778cqh)) * var(--fx));
+    top: calc((100cqh - max(100cqh, 56.25cqw)) * var(--fy)); transform: none;
   }
   .mobile-eggs[data-projection="custom"] .mobile-eggs__plane {
     width: var(--mobile-plane-width); height: var(--mobile-plane-height);
@@ -108,7 +119,7 @@
   .mobile-eggs .mobile-eggs__edge--left { left: .5rem; }
   .mobile-eggs .mobile-eggs__edge--right { right: .5rem; }
   .mobile-eggs .mobile-eggs__tooltip {
-    position: absolute; bottom: calc(var(--mobile-dock-bottom) + 4.5rem); left: 1rem; right: 1rem;
+    position: absolute; bottom: var(--mobile-hint-bottom); left: 1rem; right: 1rem;
     max-width: 28rem; margin-inline: auto; padding: .875rem 1rem; border-radius: var(--radius-lg);
     border: 1px solid var(--color-accent-200); background: var(--color-space-1);
     font-size: .9375rem; line-height: 1.5; box-shadow: var(--shadow-lift); visibility: hidden;
@@ -116,14 +127,16 @@
   .mobile-eggs .mobile-eggs__tooltip[data-visible] { visibility: visible; }
   .mobile-eggs .mobile-eggs__tooltip span { display: block; margin-top: .5rem; color: var(--color-accent-200); font-size: .8125rem; }
   .mobile-eggs .mobile-eggs__dock {
-    position: absolute; bottom: var(--mobile-dock-bottom); right: max(1rem, env(safe-area-inset-right));
-    left: max(1rem, env(safe-area-inset-left)); display: flex; justify-content: flex-end; gap: .5rem;
+    position: absolute; top: 8%; right: max(.75rem, env(safe-area-inset-right));
+    display: flex; flex-direction: column; gap: .5rem; width: 56px;
   }
   .mobile-eggs .mobile-eggs__dock button {
-    display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 48px; min-width: 44px;
-    padding: .5rem .875rem; border: 1px solid var(--color-primary-200); border-radius: var(--radius-full);
+    position: relative; display: flex; align-items: center; justify-content: center; width: 56px; height: 56px; flex: none;
+    padding: 0; border: 1px solid var(--color-primary-200); border-radius: var(--radius-full);
     background: var(--color-space-1); color: var(--color-neutral-50); font: 500 .875rem/1.3 var(--font-sans); pointer-events: auto;
   }
+  .mobile-eggs .mobile-eggs__icon { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .mobile-eggs .mobile-eggs__scan .mobile-eggs__ring { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .mobile-eggs .mobile-eggs__dock button:disabled { opacity: .55; }
   .mobile-eggs .mobile-eggs__scan .mobile-eggs__ring circle { stroke-dashoffset: calc(1 - var(--scan-progress, 1)); }
   @keyframes mobile-egg-glow { 0%, 100% { opacity: 0; } 30% { opacity: .7; } }

@@ -8,14 +8,11 @@ import { emitEgg, getFoundSnapshot, remainingDiscoveries, type EggId } from "@/l
 import {
   ARM_WINDOW_MS, HOLD_MS, INITIAL_MOBILE_EGG_STATE, MIN_HOTSPOT_PX,
   MOBILE_EGG_QUERY, MOBILE_HOTSPOTS, edgeCues, mobileEggReducer, nextGlowId,
-  panStep, scanState, sceneXToReveal, type MobileEggEvent, type MobileWorld,
+  panStep, scanState, sceneXToReveal, mobilePanBinding, type MobileEggProjection, type MobileEggEvent, type MobileWorld,
 } from "@/lib/mobile-eggs";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 
-// Custom projections supply --mobile-plane-{width,height,left,top,transform} and
-// --mobile-frame-height on a [data-mobile-egg-host]. --scene-x remains the pan input.
-// This keeps the interaction independent of the next pass's special scene framing.
-export type MobileEggProjection = "cover" | "custom";
+// Each frame owns its pan variable; desktop projection defaults remain in CSS.
 type Props = { world: MobileWorld; projection?: MobileEggProjection };
 type Hint = { id: EggId; locked: boolean } | null;
 
@@ -62,10 +59,11 @@ function MountedLayer({ world, projection }: Required<Props>) {
     let suppressUntil = 0;
     let visible = true;
     let press: { id: number; x: number; y: number; sx: number; lastX: number; lastAt: number; velocity: number; dragged: boolean } | null = null;
-    const originalX = hero.style.getPropertyValue("--scene-x");
-    const readX = () => parseFloat(getComputedStyle(hero).getPropertyValue("--scene-x")) || 0;
+    const binding = mobilePanBinding(projection);
+    const originalX = hero.style.getPropertyValue(binding.property);
+    const readX = () => binding.read(getComputedStyle(hero).getPropertyValue(binding.property));
     const updateEdges = () => setEdges(edgeCues(readX(), frame.clientWidth, frame.clientHeight));
-    const pan = (x: number) => { hero.style.setProperty("--scene-x", `${x}%`); updateEdges(); };
+    const pan = (x: number) => { hero.style.setProperty(binding.property, binding.write(x)); updateEdges(); };
     const clearHold = () => { clearTimeout(holdTimer); setHolding(null); };
     const clear = () => {
       clearTimeout(armTimer); clearHold();
@@ -116,7 +114,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
       if (!event.isPrimary || event.button !== 0) { clear(); press = null; return; }
       const bounds = frame.getBoundingClientRect();
       const target = event.target as Element;
-      if (event.clientY < bounds.top || event.clientY > bounds.bottom || target.closest("a, input, select, textarea, dialog, [popover], button:not(.mobile-eggs__hot)")) return;
+      if (event.clientY < bounds.top || event.clientY > bounds.bottom || target.closest("a, input, select, textarea, dialog, [popover], button:not(.mobile-eggs__hot, .beyond-orbit__star)")) return;
       press = { id: event.pointerId, x: event.clientX, y: event.clientY, sx: readX(), lastX: event.clientX, lastAt: performance.now(), velocity: 0, dragged: false };
       const button = hotspot(target);
       if (button) startHold(button);
@@ -188,15 +186,15 @@ function MountedLayer({ world, projection }: Required<Props>) {
       }
     };
     const focus = (event: FocusEvent) => {
-      const button = hotspot(event.target);
+      const button = event.target instanceof HTMLButtonElement ? event.target : null;
       if (!button || !button.matches(":focus-visible")) return;
-      const h = MOBILE_HOTSPOTS[world].find(h => h.id === button.dataset.egg);
+      const h = MOBILE_HOTSPOTS[world].find(h => h.id === (button.matches(".beyond-orbit__star") ? "last-light" : button.dataset.egg));
       if (h) { cancelAnimationFrame(inertia); pan(sceneXToReveal(h, frame.clientWidth, frame.clientHeight, MIN_HOTSPOT_PX / 2)); }
     };
     const blur = () => { endHold(); };
     const scheduleGlow = () => {
       clearTimeout(glowTimer); clearTimeout(glowEnd); setGlow(null);
-      if (!motionRef.current || document.hidden || !visible) return;
+      if (world === "epilogue" || !motionRef.current || document.hidden || !visible) return;
       glowTimer = window.setTimeout(() => {
         if (!scanState(performance.now(), lastScan).highlighted && !state.armed) {
           previousGlow = nextGlowId(world, previousGlow, Math.random); setGlow(previousGlow);
@@ -216,7 +214,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
     window.addEventListener("pointerup", up); window.addEventListener("pointercancel", cancel);
     hero.addEventListener("click", click, true);
     frame.addEventListener("keydown", keydown); frame.addEventListener("keyup", keyup);
-    frame.addEventListener("focusin", focus); frame.addEventListener("focusout", blur);
+    hero.addEventListener("focusin", focus); frame.addEventListener("focusout", blur);
     const noMenu = (event: Event) => { if (hotspot(event.target)) event.preventDefault(); };
     frame.addEventListener("contextmenu", noMenu);
     updateEdges(); scheduleGlow();
@@ -227,8 +225,8 @@ function MountedLayer({ world, projection }: Required<Props>) {
       document.removeEventListener("visibilitychange", visibility); document.removeEventListener("pointerdown", outside, true);
       hero.removeEventListener("pointerdown", down); hero.removeEventListener("pointermove", move); hero.removeEventListener("click", click, true);
       window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", cancel);
-      frame.removeEventListener("keydown", keydown); frame.removeEventListener("keyup", keyup); frame.removeEventListener("focusin", focus); frame.removeEventListener("focusout", blur); frame.removeEventListener("contextmenu", noMenu);
-      if (originalX) hero.style.setProperty("--scene-x", originalX); else hero.style.removeProperty("--scene-x");
+      frame.removeEventListener("keydown", keydown); frame.removeEventListener("keyup", keyup); hero.removeEventListener("focusin", focus); frame.removeEventListener("focusout", blur); frame.removeEventListener("contextmenu", noMenu);
+      if (originalX) hero.style.setProperty(binding.property, originalX); else hero.style.removeProperty(binding.property);
     };
   }, [world, projection]);
 
@@ -236,7 +234,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
   const cue = hint && !hint.locked ? MOBILE_HOTSPOTS[world].find(h => h.id === hint.id)?.kind === "hold" ? copy.ui.holdHint : copy.ui.armHint : "";
   return <div ref={root} className="mobile-eggs" data-projection={projection} data-motion={motion} data-scan={scan.highlighted || undefined}>
     <div className="mobile-eggs__plane" role="group" aria-label={copy.ui.panoramaAria}>
-      {MOBILE_HOTSPOTS[world].map(h => <button key={h.id} type="button" className="mobile-eggs__hot" data-egg={h.id} data-kind={h.kind}
+      {MOBILE_HOTSPOTS[world].filter(h => h.id !== "last-light").map(h => <button key={h.id} type="button" className="mobile-eggs__hot" data-egg={h.id} data-kind={h.kind}
         data-glow={glow === h.id || undefined} data-holding={holding === h.id || undefined}
         aria-label={copy.ui.hotspotAria} aria-describedby={hint?.id === h.id ? tipId : undefined}
         style={{ left: `${h.x}%`, top: `${h.y}%`, width: `max(${h.size}%, ${MIN_HOTSPOT_PX}px)`, "--hold-duration": `${HOLD_MS}ms` } as CSSProperties}>
@@ -251,9 +249,9 @@ function MountedLayer({ world, projection }: Required<Props>) {
     <div className="mobile-eggs__dock">
       <button type="button" className="mobile-eggs__scan" disabled={!scan.ready} aria-label={copy.ui.scanAria}
         style={{ "--scan-progress": motion ? scan.cooldownProgress : 1 } as CSSProperties}>
-        <Ring /><span>{copy.ui.scanLabel}</span>
+        <Ring /><svg className="mobile-eggs__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><path d="M12 12 18 6M12 2v2M2 12h2M20 12h2M12 20v2" /></svg>
       </button>
-      <button type="button" className="mobile-eggs__comlink" aria-haspopup="dialog"><span aria-hidden="true">⌁</span>{copy.ui.sheetTitle}</button>
+      <button type="button" className="mobile-eggs__comlink" aria-label={copy.ui.sheetTitle} aria-haspopup="dialog"><svg className="mobile-eggs__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3" /><path d="m7 8 10-5M14 12h3M14 16h3" /><circle cx="9" cy="14" r="2" /></svg></button>
     </div>
   </div>;
 }

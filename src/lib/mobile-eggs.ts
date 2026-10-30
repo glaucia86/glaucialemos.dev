@@ -70,7 +70,19 @@ export function assertMobileHotspots(hotspots: Record<MobileWorld, readonly Mobi
 }
 
 const clamp = (value: number, min = 0, max = 100) => Math.max(min, Math.min(max, value));
-const plateWidth = (cw: number, ch: number) => Math.max(cw, 1.7778 * ch);
+const plateWidth = (cw: number, ch: number) => Math.max(cw, 16 / 9 * ch);
+
+export type MobileEggProjection = "cover" | "custom" | "red-tide" | "beyond-orbit";
+
+/** Normalize percentage anchors and the epilogue's unitless fraction for shared drag math. */
+export function mobilePanBinding(projection: MobileEggProjection) {
+  const fraction = projection === "beyond-orbit";
+  return {
+    property: fraction ? "--fx" : projection === "red-tide" ? "--red-tide-x" : "--scene-x",
+    read: (value: string) => (parseFloat(value) || 0) * (fraction ? 100 : 1),
+    write: (value: number) => fraction ? String(clamp(value) / 100) : `${clamp(value)}%`,
+  };
+}
 
 /** dxPx is pointer displacement: dragging right moves the plate right, reducing sceneX. */
 export function panStep(startSceneX: number, dxPx: number, containerW: number, containerH: number): number {

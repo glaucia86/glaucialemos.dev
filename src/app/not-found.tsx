@@ -1,5 +1,6 @@
 import "./globals.css";
 import "./red-tide.css";
+import "./mobile-eggs.css";
 import { RedTide } from "@/components/notfound/RedTide";
 
 export default function RootNotFound() {
