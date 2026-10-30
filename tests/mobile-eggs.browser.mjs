@@ -164,12 +164,27 @@ async function activate(page, cdp, id, kind) {
   return hint;
 }
 
+async function settle(locator) {
+  const viewportHeight = locator.page().viewportSize().height;
+  let previous = null;
+  await expect.poll(async () => {
+    const box = await locator.boundingBox();
+    const stable = box !== null && previous !== null
+      && box.x === previous.x && box.y === previous.y
+      && box.width === previous.width && box.height === previous.height
+      && box.y + box.height <= viewportHeight + 1;
+    previous = box;
+    return stable;
+  }, { intervals: [120], timeout: 3000, message: "sheet must stop sliding and fit inside the viewport" }).toBe(true);
+}
+
 async function sheetChecks(page, cdp, expectedHints, finale) {
   const opener = page.locator(".comlink-toggle");
   await opener.focus();
   await opener.tap({ force: true });
   const sheet = page.locator(".mobile-comlink-sheet");
   await expect(sheet).toBeVisible();
+  await settle(sheet);
   const rows = sheet.locator("li button");
   const order = await rows.allTextContents();
   assert.equal(order.length, finale ? 1 : expectedHints.length);
@@ -188,6 +203,7 @@ async function sheetChecks(page, cdp, expectedHints, finale) {
   // The dock uses comlink:open; verify it reaches the same sheet and preserves session ordering.
   await page.locator(".mobile-eggs__comlink").tap({ force: true });
   await expect(sheet).toBeVisible();
+  await settle(sheet);
   assert.deepEqual(await rows.allTextContents(), order);
   await rows.first().tap({ force: true });
   await expect(sheet).not.toBeVisible();
@@ -201,20 +217,27 @@ async function sheetChecks(page, cdp, expectedHints, finale) {
   assert.deepEqual(await page.evaluate(() => window.__mobileEggPlays), [], "sheet selection must never activate an egg");
   await expect(page.locator(".mobile-eggs")).not.toHaveAttribute("data-revealing", id, { timeout: 2500 });
   await opener.tap({ force: true });
+  await expect(sheet).toBeVisible();
+  await settle(sheet);
   const head = await sheet.locator("header").boundingBox();
   await touchDrag(page, cdp, { x: 110, y: head.y + 15 }, { x: 110, y: head.y + 100 });
   await expect(sheet).not.toBeVisible();
   await opener.tap({ force: true });
+  await expect(sheet).toBeVisible();
+  await settle(sheet);
   const bounds = await sheet.boundingBox();
   await page.touchscreen.tap(10, bounds.y - 20);
   await expect(sheet).not.toBeVisible();
   await opener.tap({ force: true });
+  await expect(sheet).toBeVisible();
+  await settle(sheet);
   await close.tap({ force: true });
   await expect(sheet).not.toBeVisible();
   await page.reload();
   await expect(page.locator(".mobile-eggs")).toBeVisible();
   await opener.tap({ force: true });
   await expect(sheet).toBeVisible();
+  await settle(sheet);
   assert.deepEqual(await rows.allTextContents(), order, "session shuffle survives remounts and reloads");
 }
 
