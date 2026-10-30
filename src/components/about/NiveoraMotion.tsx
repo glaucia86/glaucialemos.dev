@@ -65,12 +65,13 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     const princeButton = hotspots.find((button) => button.dataset.hot === "prince")!;
     const calm = calmButton.current!;
 
-    capsuleFound.current = capsuleKnown(getFoundSnapshot());
+    capsuleFound.current = !matchMedia(MOBILE_EGG_QUERY).matches && capsuleKnown(getFoundSnapshot());
 
     // Reduced motion still exposes every hero secret, with immediate results and no acting/particles.
     if (!motion) {
       let pendingReset = false;
       let stormSoundTimer: ReturnType<typeof setTimeout> | undefined;
+      let narrativeTimer = 0;
       const calmSound = () => { clearTimeout(stormSoundTimer); stop("blizzard"); };
       const reveal = () => {
         capsuleFound.current = true; capsule.dataset.capsule = "found";
@@ -87,6 +88,10 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
         }
         if (id === "aurora-prism") status.textContent = labels.status.prism;
         status.style.opacity = "1"; status.style.visibility = "visible";
+        if (matchMedia(MOBILE_EGG_QUERY).matches) {
+          clearTimeout(narrativeTimer);
+          narrativeTimer = window.setTimeout(() => { status.textContent = ""; capsule.dataset.capsule = "hidden"; capsuleFound.current = false; }, 4000);
+        }
       };
       const ids: Record<string, EggId> = { prince: "paw-tracks", glaucia: "memory-capsule", capsule: "memory-capsule", station: "whiteout", crystal: "aurora-prism" };
       const click = (event: Event) => { if (!matchMedia(MOBILE_EGG_QUERY).matches) run(ids[(event.currentTarget as HTMLElement).dataset.hot!]); };
@@ -101,6 +106,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       hotspots.forEach((button) => { button.hidden = button === capsuleButton && !capsuleFound.current; button.addEventListener("click", click); });
       if (capsuleFound.current) reveal();
       const syncMemory = () => {
+        if (matchMedia(MOBILE_EGG_QUERY).matches) return;
         if (!capsuleKnown(getFoundSnapshot()) && document.querySelector("dialog.capsule[open]")) { pendingReset = true; return; }
         capsuleFound.current = capsuleKnown(getFoundSnapshot());
         capsule.dataset.capsule = capsuleFound.current ? "found" : "hidden";
@@ -111,7 +117,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       const stopMemory = subscribeFound(syncMemory);
       const stopEggs = onEgg(HERO_EGGS, run); addEventListener("keydown", typed);
       return () => {
-        disposed = true; calmSound(); stopEggs(); stopMemory(); removeEventListener(CAPSULE_CLOSED, afterClose); removeEventListener("keydown", typed);
+        disposed = true; clearTimeout(narrativeTimer); calmSound(); stopEggs(); stopMemory(); removeEventListener(CAPSULE_CLOSED, afterClose); removeEventListener("keydown", typed);
         hotspots.forEach((button) => { button.hidden = true; button.removeEventListener("click", click); });
         tracks.forEach((track) => { delete track.dataset.on; });
         delete section.dataset.stage; delete capsule.dataset.capsule;
@@ -192,6 +198,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       trailStarted = null; placePrince(); setStage("idle");
       const rest = ambientPoses(actorTime, { storm, gust: gustActive });
       setPose(rest.glaucia); setPrince(rest.prince); placePrince();
+      if (matchMedia(MOBILE_EGG_QUERY).matches) { capsuleFound.current = false; setCapsule("hidden"); hideTracks(); }
       if (resetPending) { resetPending = false; capsuleFound.current = false; setCapsule("hidden"); hideTracks(); }
     };
     const start = (next: Stage) => { if (busy()) return false; setStage(next); return true; };
@@ -203,6 +210,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     };
     addEventListener(RESET_EVENT, resetMemory);
     const stopMemory = subscribeFound(() => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       const known = capsuleKnown(getFoundSnapshot());
       if (!known) { if (capsuleFound.current) resetMemory(); return; }
       capsuleFound.current = known;

@@ -66,7 +66,11 @@ export function LuminaMotion({ children, labelledBy, locale, copy, whispers, fir
     const say = (text: string, ms = 2800) => {
       clearTimeout(statusTimer);
       status.textContent = text;
-      if (!motion) { status.style.opacity = "1"; status.style.visibility = "visible"; return; }
+      if (!motion) {
+        status.style.opacity = "1"; status.style.visibility = "visible";
+        if (matchMedia(MOBILE_EGG_QUERY).matches) statusTimer = window.setTimeout(() => { status.textContent = ""; }, ms);
+        return;
+      }
       gsap.fromTo(status, { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: .3, ease: "steps(3)", overwrite: true });
       statusTimer = window.setTimeout(() => gsap.to(status, { autoAlpha: 0, duration: .3, ease: "steps(3)", onComplete: () => { status.textContent = ""; } }), ms);
     };

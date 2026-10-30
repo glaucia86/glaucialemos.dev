@@ -168,6 +168,25 @@ export function mobileEggReducer(
 
 export const SCAN_COOLDOWN_MS = 15000;
 export const SCAN_HIGHLIGHT_MS = 1600;
+export const MOBILE_REVEAL_EVENT = "mobile-eggs:reveal";
+
+/** Session order contains ids only, never discovery history. Invalid old tables are reshuffled. */
+export function sessionHintOrder(world: MobileWorld, storage?: Pick<Storage, "getItem" | "setItem">, rand = Math.random): MobileHotspot[] {
+  const entries = MOBILE_HOTSPOTS[world];
+  const key = `mobile-eggs:hints:${world}`;
+  try {
+    const saved: unknown = JSON.parse(storage?.getItem(key) ?? "null");
+    if (Array.isArray(saved) && saved.length === entries.length && new Set(saved).size === entries.length
+      && saved.every(id => entries.some(h => h.id === id))) return saved.map(id => entries.find(h => h.id === id)!);
+  } catch { /* Storage can be denied or from an older session. */ }
+  const order = [...entries];
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.min(i, Math.floor(clamp(rand(), 0, 1) * (i + 1)));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  try { storage?.setItem(key, JSON.stringify(order.map(h => h.id))); } catch { /* Keep this mounted session's order. */ }
+  return order;
+}
 
 /** null means never scanned; zero is a valid timestamp. Progress is for a ring, never a counter. */
 export function scanState(now: number, lastScanAt: number | null): { ready: boolean; highlighted: boolean; cooldownProgress: number } {

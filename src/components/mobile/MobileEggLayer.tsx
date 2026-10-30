@@ -7,7 +7,7 @@ import { mobileEggs } from "@/i18n/mobile-eggs";
 import { emitEgg, getFoundSnapshot, remainingDiscoveries, type EggId } from "@/lib/eggs";
 import {
   ARM_WINDOW_MS, HOLD_MS, INITIAL_MOBILE_EGG_STATE, MIN_HOTSPOT_PX,
-  MOBILE_EGG_QUERY, MOBILE_HOTSPOTS, edgeCues, mobileEggReducer, nextGlowId,
+  MOBILE_EGG_QUERY, MOBILE_HOTSPOTS, MOBILE_REVEAL_EVENT, SCAN_HIGHLIGHT_MS, edgeCues, mobileEggReducer, nextGlowId,
   panStep, scanState, sceneXToReveal, mobilePanBinding, type MobileEggProjection, type MobileEggEvent, type MobileWorld,
 } from "@/lib/mobile-eggs";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
@@ -43,6 +43,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
   const [hint, setHint] = useState<Hint>(null);
   const [holding, setHolding] = useState<EggId | null>(null);
   const [glow, setGlow] = useState<EggId | null>(null);
+  const [revealed, setRevealed] = useState<EggId | null>(null);
   const [scan, setScan] = useState(() => scanState(0, null));
   const [edges, setEdges] = useState({ left: false, right: false });
 
@@ -51,7 +52,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
     const hero = frame?.closest<HTMLElement>(".page-hero, [data-mobile-egg-host]");
     if (!frame || !hero) return;
     let state = { ...INITIAL_MOBILE_EGG_STATE };
-    let armTimer = 0, holdTimer = 0, glowTimer = 0, glowEnd = 0, inertia = 0, scanTimer = 0;
+    let armTimer = 0, holdTimer = 0, glowTimer = 0, glowEnd = 0, inertia = 0, scanTimer = 0, revealEnd = 0;
     let lastScan: number | null = null;
     let scanCancelled = false, consumedHold = false;
     setScan(scanState(0, null));
@@ -79,7 +80,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
         clearTimeout(armTimer); armTimer = window.setTimeout(clear, ARM_WINDOW_MS + 1);
       } else if (result.effect === "trigger" && id) {
         if (event.type === "holdEnd") { consumedHold = true; suppressUntil = performance.now() + 800; }
-        clear(); setGlow(null); clearTimeout(glowEnd);
+        clear(); setGlow(null); clearTimeout(glowEnd); setRevealed(null); clearTimeout(revealEnd);
         // End an active scan too: activation must leave no feedback attached to the egg.
         scanCancelled = true;
         setScan(current => ({ ...current, highlighted: false }));
@@ -204,6 +205,17 @@ function MountedLayer({ world, projection }: Required<Props>) {
       }, 3600 + Math.random() * 3000);
     };
     const visibility = () => { cancel(); scheduleGlow(); };
+    const reveal = (event: Event) => {
+      const h = MOBILE_HOTSPOTS[world].find(h => h.id === (event as CustomEvent<unknown>).detail);
+      if (!h) return;
+      cancel(); clearTimeout(glowTimer); clearTimeout(glowEnd); clearTimeout(revealEnd); setGlow(null);
+      scanCancelled = true; setScan(current => ({ ...current, highlighted: false }));
+      frame.scrollIntoView({ block: "center", behavior: "instant" });
+      pan(sceneXToReveal(h, frame.clientWidth, frame.clientHeight, MIN_HOTSPOT_PX / 2));
+      setRevealed(h.id);
+      revealEnd = window.setTimeout(() => { setRevealed(null); scheduleGlow(); }, SCAN_HIGHLIGHT_MS);
+    };
+    window.addEventListener(MOBILE_REVEAL_EVENT, reveal);
     frame.addEventListener("mobile-eggs:motion", visibility);
     const observer = new ResizeObserver(() => { cancel(); updateEdges(); }); observer.observe(frame);
     const activity = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; scheduleGlow(); if (!visible) cancel(); }); activity.observe(frame);
@@ -219,7 +231,8 @@ function MountedLayer({ world, projection }: Required<Props>) {
     frame.addEventListener("contextmenu", noMenu);
     updateEdges(); scheduleGlow();
     return () => {
-      cancel(); clearTimeout(glowTimer); clearTimeout(glowEnd); clearInterval(scanTimer);
+      cancel(); clearTimeout(glowTimer); clearTimeout(glowEnd); clearInterval(scanTimer); clearTimeout(revealEnd);
+      window.removeEventListener(MOBILE_REVEAL_EVENT, reveal);
       observer.disconnect(); activity.disconnect();
       frame.removeEventListener("mobile-eggs:motion", visibility);
       document.removeEventListener("visibilitychange", visibility); document.removeEventListener("pointerdown", outside, true);
@@ -232,10 +245,10 @@ function MountedLayer({ world, projection }: Required<Props>) {
 
   const text = hint ? hint.locked ? copy.ui.lockedHint : copy.hints[hint.id] : "";
   const cue = hint && !hint.locked ? MOBILE_HOTSPOTS[world].find(h => h.id === hint.id)?.kind === "hold" ? copy.ui.holdHint : copy.ui.armHint : "";
-  return <div ref={root} className="mobile-eggs" data-projection={projection} data-motion={motion} data-scan={scan.highlighted || undefined}>
+  return <div ref={root} className="mobile-eggs" data-world={world} data-projection={projection} data-motion={motion} data-scan={scan.highlighted || undefined}>
     <div className="mobile-eggs__plane" role="group" aria-label={copy.ui.panoramaAria}>
       {MOBILE_HOTSPOTS[world].filter(h => h.id !== "last-light").map(h => <button key={h.id} type="button" className="mobile-eggs__hot" data-egg={h.id} data-kind={h.kind}
-        data-glow={glow === h.id || undefined} data-holding={holding === h.id || undefined}
+        data-glow={glow === h.id || undefined} data-reveal={revealed === h.id || undefined} data-holding={holding === h.id || undefined}
         aria-label={copy.ui.hotspotAria} aria-describedby={hint?.id === h.id ? tipId : undefined}
         style={{ left: `${h.x}%`, top: `${h.y}%`, width: `max(${h.size}%, ${MIN_HOTSPOT_PX}px)`, "--hold-duration": `${HOLD_MS}ms` } as CSSProperties}>
         {holding === h.id && <Ring className="mobile-eggs__hold" />}
@@ -247,10 +260,10 @@ function MountedLayer({ world, projection }: Required<Props>) {
       {text}{cue && <span>{cue}</span>}
     </div>
     <div className="mobile-eggs__dock">
-      <button type="button" className="mobile-eggs__scan" disabled={!scan.ready} aria-label={copy.ui.scanAria}
+      {world !== "epilogue" && <button type="button" className="mobile-eggs__scan" disabled={!scan.ready} aria-label={copy.ui.scanAria}
         style={{ "--scan-progress": motion ? scan.cooldownProgress : 1 } as CSSProperties}>
         <Ring /><svg className="mobile-eggs__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="4" /><path d="M12 12 18 6M12 2v2M2 12h2M20 12h2M12 20v2" /></svg>
-      </button>
+      </button>}
       <button type="button" className="mobile-eggs__comlink" aria-label={copy.ui.sheetTitle} aria-haspopup="dialog"><svg className="mobile-eggs__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="8" width="16" height="12" rx="3" /><path d="m7 8 10-5M14 12h3M14 16h3" /><circle cx="9" cy="14" r="2" /></svg></button>
     </div>
   </div>;

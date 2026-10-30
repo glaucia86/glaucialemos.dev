@@ -80,7 +80,12 @@ export function SiteChrome({ lang, dictionary, children }: Readonly<{ lang: Loca
     const stop = onEgg("star-map", () => { discover("star-map"); setEgg(true); });
     return () => { removeEventListener("touchstart", down); removeEventListener("touchend", up); stop(); };
   }, []);
-  useEffect(() => { const dialog = dialogRef.current; if (!dialog) return; if (egg && !reduced && !matchMedia("(prefers-reduced-motion: reduce)").matches && !dialog.open) dialog.showModal(); if ((!egg || reduced) && dialog.open) dialog.close(); }, [egg, reduced]);
+  useEffect(() => {
+    const dialog = dialogRef.current; if (!dialog) return;
+    const allowed = matchMedia(MOBILE_EGG_QUERY).matches || (!reduced && !matchMedia("(prefers-reduced-motion: reduce)").matches);
+    if (egg && allowed && !dialog.open) dialog.showModal();
+    if ((!egg || !allowed) && dialog.open) dialog.close();
+  }, [egg, reduced]);
   useEffect(() => { setMenuOpen(false); }, [pathname]);
   useEffect(() => {
     if (menuOpen) document.querySelector<HTMLAnchorElement>("#primary-navigation a")?.focus();

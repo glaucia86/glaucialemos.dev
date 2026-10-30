@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "@/lib/gsap";
-import { motionAllowed } from "@/lib/use-motion";
+import { motionAllowed, useMediaQuery } from "@/lib/use-motion";
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
+import { defaultLocale, isLocale } from "@/i18n/config";
 import { bringIntoView, buzz, discover, onEgg } from "@/lib/eggs";
 import { play } from "@/lib/sfx";
 import type { LuminaCopy } from "@/i18n/lumina";
@@ -16,6 +18,9 @@ type Props = { series: Series[]; copy: LuminaCopy["collections"]; locale: string
 // constellation and shows the series' real span; a crystal out of order softly puts the chain out. Without JavaScript the
 // series are plain ordered lists of links.
 export function Collections({ series, copy, locale }: Props) {
+  const mobile = useMediaQuery(MOBILE_EGG_QUERY);
+  const lang = locale.split("-")[0];
+  const completed = { pt: "As histórias agora brilham juntas.", en: "The stories now shine together.", es: "Las historias ahora brillan juntas." }[isLocale(lang) ? lang : defaultLocale];
   const [lit, setLit] = useState<Record<string, number>>({});
   const [wrong, setWrong] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
@@ -23,6 +28,11 @@ export function Collections({ series, copy, locale }: Props) {
   const dates = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
   const format = (article: Artigo) => dates.format(new Date(`${article.data}T00:00:00Z`));
   useEffect(() => setReady(true), []);
+  useEffect(() => {
+    if (!mobile || !series.some(item => lit[item.id] === item.parts.length)) return;
+    const timer = setTimeout(() => setLit({}), 4000);
+    return () => clearTimeout(timer);
+  }, [mobile, lit, series]);
 
   const light = (id: SeriesId, index: number, total: number) => {
     const count = lit[id] ?? 0;
@@ -64,7 +74,7 @@ export function Collections({ series, copy, locale }: Props) {
           </li>)}
         </ol>
         <p className="series__status" role="status" aria-live="polite">
-          {complete ? copy.complete.replace("{n}", String(parts.length)).replace("{first}", format(first)).replace("{last}", format(last)) : wrong === id ? copy.wrong : ""}
+          {complete ? mobile ? completed : copy.complete.replace("{n}", String(parts.length)).replace("{first}", format(first)).replace("{last}", format(last)) : wrong === id ? copy.wrong : ""}
         </p>
       </li>;
     })}

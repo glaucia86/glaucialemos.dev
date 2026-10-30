@@ -60,8 +60,11 @@
   html body :is(.comlink-toggle__count, .comlink__progress, .comlink__pages, .comlink__intro,
     .comlink__feedback, .comlink__reset, .comlink__channel, .comlink__envelope, .comlink-fresh,
     .secrets-guide, .niveora-discoveries, .mars-discoveries, .lumina-discoveries, .atlas-discoveries,
-    .aurelia-discoveries, .sky-counters, .ignition-meter, .niveora-status, .mars-status, .lumina-status,
-    .atlas-status, .transmission__locked, .transmission__lights, .transmission__worlds span) { display: none !important; }
+    .aurelia-discoveries, .sky-counters, .ignition-meter,
+    .transmission__locked, .transmission__lights, .transmission__worlds, .transmission__scope,
+    .series__meta, .egg-selfie > p, .egg-floppy,
+    .observatory-signal-star__label, .aurelia-cards article > .aurelia-kicker,
+    .services-page .credibility-offer__label) { display: none !important; }
   html body .transmission__worlds li[data-found] { border-color: var(--aurelia-line); }
   html body .page-hero :is(.hero-hud, .chapter-tag__ep, .sky-touch-hint, .atlas-dock, .niveora-readout, .observatory-countdown) { display: none !important; }
   html body :is(.observatory-hot, .niveora-hot, .mars-hot, .lumina-hot, .atlas-hot, .aurelia-hot) { display: none !important; pointer-events: none !important; }
@@ -71,6 +74,39 @@
   html body .comlink__list li { grid-template-columns: minmax(0, 1fr); }
   html body .comlink__text small { color: var(--text-body); }
   html body .comlink-toggle[data-fresh] { animation: none; }
+  /* Narrative beats remain readable; they expire in their owners, including reduced motion. */
+  html body :is(.niveora-status, .mars-status, .lumina-status, .atlas-status) {
+    top: calc(var(--hero-frame-height) - 7rem); bottom: auto; left: 1rem; right: 1rem;
+    width: auto; max-width: none; transform: none; font: 400 .9375rem/1.5 var(--font-sans);
+  }
+  html body :is(.niveora-status, .mars-status, .lumina-status, .atlas-status):empty { display: none; }
+  html body .beyond-orbit__constellation { display: none !important; }
+
+  .mobile-comlink-sheet {
+    position: fixed; inset: auto 0 0; margin: 0 auto; padding: 0; width: 100%; max-width: 38rem;
+    max-height: 70svh; border: 1px solid var(--color-primary-200); border-bottom: 0;
+    border-radius: 1.5rem 1.5rem 0 0; background: var(--color-space-1); color: var(--color-neutral-50);
+    overflow: hidden; font: 400 1rem/1.5 var(--font-sans);
+  }
+  .mobile-comlink-sheet[open] { animation: mobile-sheet-enter .22s ease-out; }
+  .mobile-comlink-sheet::backdrop { background: rgb(3 7 18 / .65); }
+  .mobile-comlink-sheet__panel { display: flex; flex-direction: column; max-height: 70svh; }
+  .mobile-comlink-sheet__head {
+    position: relative; flex: none; padding: 2rem max(1.25rem, env(safe-area-inset-right)) 1rem max(1.25rem, env(safe-area-inset-left));
+    touch-action: none;
+  }
+  .mobile-comlink-sheet__handle { position: absolute; top: .65rem; left: calc(50% - 1.25rem); width: 2.5rem; height: .25rem; border-radius: 1rem; background: var(--color-primary-200); }
+  .mobile-comlink-sheet__head h2 { margin: 0; padding-right: 3rem; font: 600 1.15rem/1.5 var(--font-sans); }
+  .mobile-comlink-sheet__head button { position: absolute; right: max(.75rem, env(safe-area-inset-right)); top: 1.5rem; width: 44px; height: 44px; font-size: 1.5rem; }
+  .mobile-comlink-sheet button { color: inherit; background: transparent; border: 0; border-radius: .5rem; cursor: pointer; }
+  .mobile-comlink-sheet button:focus-visible { outline: 2px solid var(--focus-inverse); outline-offset: -2px; }
+  .mobile-comlink-sheet__hints {
+    list-style: none; margin: 0; padding: 0 max(.75rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(.75rem, env(safe-area-inset-left));
+    min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y;
+  }
+  .mobile-comlink-sheet__hints li + li { border-top: 1px solid var(--border-inverse); }
+  .mobile-comlink-sheet__hints button { width: 100%; min-height: 60px; padding: 1rem .75rem; text-align: left; font: inherit; overflow-wrap: anywhere; }
+  @keyframes mobile-sheet-enter { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
   .mobile-eggs {
     position: absolute; inset: 0 0 auto; width: 100%; height: var(--mobile-frame-height, var(--hero-frame-height));
@@ -110,6 +146,7 @@
   }
   .mobile-eggs[data-motion="true"] .mobile-eggs__hot[data-glow]::after { animation: mobile-egg-glow 2.4s ease-out both; }
   .mobile-eggs[data-scan] .mobile-eggs__hot::after { opacity: .65; animation: none; }
+  .mobile-eggs .mobile-eggs__hot[data-reveal]::after { opacity: .65; animation: none; }
   .mobile-eggs button:focus-visible { outline: 2px solid var(--focus-inverse); outline-offset: 3px; }
   .mobile-eggs .mobile-eggs__ring { width: 28px; height: 28px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; rotate: -90deg; }
   .mobile-eggs .mobile-eggs__ring circle { stroke-dasharray: 1; stroke-dashoffset: 0; }
@@ -126,6 +163,12 @@
   }
   .mobile-eggs .mobile-eggs__tooltip[data-visible] { visibility: visible; }
   .mobile-eggs .mobile-eggs__tooltip span { display: block; margin-top: .5rem; color: var(--color-accent-200); font-size: .8125rem; }
+  .mobile-egg-narrative {
+    position: absolute; z-index: 5; top: calc(var(--hero-frame-height) - 7rem); left: 1rem; right: 1rem;
+    margin: 0; padding: 1rem; background: var(--color-space-1); color: var(--color-neutral-50);
+    border: 1px solid var(--color-primary-200); border-radius: var(--radius-lg); pointer-events: none;
+  }
+  .mobile-egg-narrative--fixed { position: fixed; top: auto; bottom: max(1rem, env(safe-area-inset-bottom)); }
   .mobile-eggs .mobile-eggs__dock {
     position: absolute; top: 8%; right: max(.75rem, env(safe-area-inset-right));
     display: flex; flex-direction: column; gap: .5rem; width: 56px;
@@ -142,7 +185,13 @@
   @keyframes mobile-egg-glow { 0%, 100% { opacity: 0; } 30% { opacity: .7; } }
   @keyframes mobile-egg-hold { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
   @media (prefers-reduced-motion: reduce) {
+    .egg-overlay .star-map__line { animation: none; stroke-dashoffset: 0; }
+    .egg-overlay .star-map__star { animation: none; opacity: 1; }
+    .mobile-comlink-sheet[open] { animation: none; }
     .mobile-eggs .mobile-eggs__hot::after, .mobile-eggs .mobile-eggs__hold circle { animation: none !important; }
     .mobile-eggs .mobile-eggs__ring circle { stroke-dashoffset: 0 !important; }
   }
+  html.reduce-motion .mobile-comlink-sheet[open] { animation: none; }
+  html.reduce-motion .egg-overlay .star-map__line { animation: none; stroke-dashoffset: 0; }
+  html.reduce-motion .egg-overlay .star-map__star { animation: none; opacity: 1; }
 }

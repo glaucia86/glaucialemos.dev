@@ -1,6 +1,13 @@
 import type { EggId } from "@/lib/egg-catalog";
 import type { Locale } from "./config";
 
+// Static outcomes for motion-disabled owners, removed after the short narrative beat.
+export const mobileEggOutcomes = {
+  pt: { "focus-lens": "O telescópio abre os caminhos da viagem.", "dog-signal": "O Prince encontrou um brilho no céu.", "hangar-check": "O hangar responde. A nave está pronta.", "dark-sky": "As lanternas se apagam e a Via Láctea aparece.", wish: "Seu desejo ganhou uma constelação.", "launch-charge": "A nave partiu. Seu rastro ficou entre as estrelas.", snowdrift: "A neve repousa sobre a paisagem." },
+  en: { "focus-lens": "The telescope opens the paths of the journey.", "dog-signal": "Prince found a glow in the sky.", "hangar-check": "The hangar answers. The ship is ready.", "dark-sky": "The lanterns go dark and the Milky Way appears.", wish: "Your wish became a constellation.", "launch-charge": "The ship has left. Its trail rests among the stars.", snowdrift: "Snow settles over the landscape." },
+  es: { "focus-lens": "El telescopio abre los caminos del viaje.", "dog-signal": "Prince encontró un brillo en el cielo.", "hangar-check": "El hangar responde. La nave está lista.", "dark-sky": "Los faroles se apagan y aparece la Vía Láctea.", wish: "Tu deseo se convirtió en una constelación.", "launch-charge": "La nave partió. Su estela quedó entre las estrellas.", snowdrift: "La nieve reposa sobre el paisaje." },
+} satisfies Record<Locale, Record<string, string>>;
+
 export type MobileEggCopy = {
   ui: {
     hotspotAria: string; scanLabel: string; scanAria: string; sheetTitle: string; sheetClose: string;

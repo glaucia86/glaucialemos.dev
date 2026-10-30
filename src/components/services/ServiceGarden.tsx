@@ -8,12 +8,20 @@ import { play } from '@/lib/sfx';
 import type { Locale } from '@/i18n/config';
 import type { AureliaCopy } from '@/i18n/aurelia';
 import { PrinceSwarm } from './PrinceSwarm';
+import { MOBILE_EGG_QUERY } from '@/lib/mobile-eggs';
+import { useMediaQuery } from '@/lib/use-motion';
 
 export function ServiceGarden({records,copy,lang,waitlist,princeFace}:{records:GardenRecord[];copy:AureliaCopy['garden'];lang:Locale;waitlist:string;princeFace:string}){
+  const mobile=useMediaQuery(MOBILE_EGG_QUERY);
   const root=useRef<HTMLDivElement>(null),vault=useRef<HTMLDetailsElement>(null);
   const [ready,setReady]=useState(false),[lit,setLit]=useState<boolean[]>(()=>records.map(()=>false)),[seed,setSeed]=useState(0);
   const seedIndex=useRef(0);
   const count=lit.filter(Boolean).length,complete=count===records.length;
+  useEffect(()=>{
+    if(!mobile||!complete)return;
+    const timer=setTimeout(()=>setLit(records.map(()=>false)),4000);
+    return()=>clearTimeout(timer);
+  },[mobile,complete,records]);
   useEffect(()=>{setReady(true);let disposed=false;
     const stop=onEgg(['seed-vault','pollination'],id=>void bringIntoView(id==='seed-vault'?vault.current:root.current).then(()=>{
       if(disposed)return;
@@ -42,8 +50,8 @@ export function ServiceGarden({records,copy,lang,waitlist,princeFace}:{records:G
         <Link href={serviceHref(lang,subject)} className="hero-link">{copy.contact} <span aria-hidden="true">↗</span></Link>
       </article>)}
     </div>
-    <p className="service-garden__status" role="status" hidden={!ready}>{complete?copy.completed:copy.progress.replace('{n}',String(count)).replace('{total}',String(records.length))}</p>
-    {count>0&&<button type="button" className="aurelia-reset" onClick={()=>setLit(records.map(()=>false))}>{copy.reset}</button>}
+    <p className="service-garden__status" role="status" hidden={!ready}>{complete?copy.completed:mobile?'':copy.progress.replace('{n}',String(count)).replace('{total}',String(records.length))}</p>
+    {!mobile&&count>0&&<button type="button" className="aurelia-reset" onClick={()=>setLit(records.map(()=>false))}>{copy.reset}</button>}
     <details ref={vault} className="seed-vault" onToggle={event=>{if(event.currentTarget.open){discover('seed-vault');play('seed');}}}>
       <summary><span aria-hidden="true">◇</span> {copy.seed}</summary><div className="seed-vault__body"><p>{copy.seedNote}</p><h3>{selected.service.titulo[lang]}</h3><p>{selected.service.descricao[lang]}</p><a className="hero-link" href="#lista-de-espera">{waitlist}</a><Link className="hero-link" href={serviceHref(lang,selected.subject)}>{copy.contact} ↗</Link>
       <button hidden={!ready} type="button" onClick={()=>emitEgg('seed-vault')}>{copy.open}</button></div>
