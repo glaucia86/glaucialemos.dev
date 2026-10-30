@@ -1,7 +1,7 @@
 /* MOBILE_EGG_QUERY: (orientation: portrait) and (max-width: 820px), (pointer: coarse) and (max-width: 820px), (pointer: coarse) and (orientation: landscape) and (max-height: 520px) */
 @media (orientation: portrait) and (max-width: 820px), (pointer: coarse) and (max-width: 820px), (pointer: coarse) and (orientation: landscape) and (max-height: 520px) {
   /* The first screen uses the landscape spacer contract even without JavaScript.
-     :has scopes the layout to the six page-hero worlds, not the later special frames. */
+     .page-hero scopes layout to the six worlds, not the later special frames. */
   html body .page-hero {
     --hero-frame-height: calc(100svh - var(--header-height));
     --hero-copy-top: clamp(1rem, 6svh, 3.5rem);

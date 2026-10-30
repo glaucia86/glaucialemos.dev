@@ -37,6 +37,11 @@ function MountedLayer({ world, projection }: Required<Props>) {
   const copy = mobileEggs[lang];
   const root = useRef<HTMLDivElement>(null);
   const motion = useMotionEnabled();
+  const motionRef = useRef(motion);
+  useEffect(() => {
+    motionRef.current = motion;
+    root.current?.dispatchEvent(new Event("mobile-eggs:motion"));
+  }, [motion]);
   const tipId = useId();
   const [hint, setHint] = useState<Hint>(null);
   const [holding, setHolding] = useState<EggId | null>(null);
@@ -75,6 +80,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
         setHint({ id, locked: false });
         clearTimeout(armTimer); armTimer = window.setTimeout(clear, ARM_WINDOW_MS + 1);
       } else if (result.effect === "trigger" && id) {
+        if (event.type === "holdEnd") { consumedHold = true; suppressUntil = performance.now() + 800; }
         clear(); setGlow(null); clearTimeout(glowEnd);
         // End an active scan too: activation must leave no feedback attached to the egg.
         scanCancelled = true;
@@ -139,7 +145,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
       if (hero.hasPointerCapture(event.pointerId)) hero.releasePointerCapture(event.pointerId);
       if (!released?.dragged) return;
       suppressUntil = performance.now() + 800;
-      if (!motion || performance.now() - released.lastAt > 100) return;
+      if (!motionRef.current || performance.now() - released.lastAt > 100) return;
       let velocity = Math.max(-2, Math.min(2, released.velocity)), last = performance.now();
       const coast = (now: number) => {
         const dt = Math.min(32, now - last); last = now;
@@ -150,7 +156,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
       };
       inertia = requestAnimationFrame(coast);
     };
-    const cancel = () => { press = null; clear(); cancelAnimationFrame(inertia); };
+    const cancel = () => { press = null; consumedHold = false; clear(); cancelAnimationFrame(inertia); };
     const outside = (event: PointerEvent) => { if (!hotspot(event.target) || !frame.contains(event.target as Node)) clear(); };
     const click = (event: MouseEvent) => {
       if (performance.now() < suppressUntil) { event.preventDefault(); event.stopImmediatePropagation(); return; }
@@ -190,7 +196,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
     const blur = () => { endHold(); };
     const scheduleGlow = () => {
       clearTimeout(glowTimer); clearTimeout(glowEnd); setGlow(null);
-      if (!motion || document.hidden || !visible) return;
+      if (!motionRef.current || document.hidden || !visible) return;
       glowTimer = window.setTimeout(() => {
         if (!scanState(performance.now(), lastScan).highlighted && !state.armed) {
           previousGlow = nextGlowId(world, previousGlow, Math.random); setGlow(previousGlow);
@@ -200,6 +206,7 @@ function MountedLayer({ world, projection }: Required<Props>) {
       }, 3600 + Math.random() * 3000);
     };
     const visibility = () => { cancel(); scheduleGlow(); };
+    frame.addEventListener("mobile-eggs:motion", visibility);
     const observer = new ResizeObserver(() => { cancel(); updateEdges(); }); observer.observe(frame);
     const activity = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; scheduleGlow(); if (!visible) cancel(); }); activity.observe(frame);
     document.addEventListener("visibilitychange", visibility);
@@ -216,13 +223,14 @@ function MountedLayer({ world, projection }: Required<Props>) {
     return () => {
       cancel(); clearTimeout(glowTimer); clearTimeout(glowEnd); clearInterval(scanTimer);
       observer.disconnect(); activity.disconnect();
+      frame.removeEventListener("mobile-eggs:motion", visibility);
       document.removeEventListener("visibilitychange", visibility); document.removeEventListener("pointerdown", outside, true);
       hero.removeEventListener("pointerdown", down); hero.removeEventListener("pointermove", move); hero.removeEventListener("click", click, true);
       window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", cancel);
       frame.removeEventListener("keydown", keydown); frame.removeEventListener("keyup", keyup); frame.removeEventListener("focusin", focus); frame.removeEventListener("focusout", blur); frame.removeEventListener("contextmenu", noMenu);
       if (originalX) hero.style.setProperty("--scene-x", originalX); else hero.style.removeProperty("--scene-x");
     };
-  }, [world, motion, projection]);
+  }, [world, projection]);
 
   const text = hint ? hint.locked ? copy.ui.lockedHint : copy.hints[hint.id] : "";
   const cue = hint && !hint.locked ? MOBILE_HOTSPOTS[world].find(h => h.id === hint.id)?.kind === "hold" ? copy.ui.holdHint : copy.ui.armHint : "";
