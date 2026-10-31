@@ -16,14 +16,23 @@ export async function mockContact(page, base) {
         contentType: 'application/javascript',
         body: `(() => {
           const widgets = new Map(); let sequence = 0;
-          const complete = id => setTimeout(() => widgets.get(id)?.callback('browser-mock-token'), 0);
+          const complete = id => setTimeout(() => {
+            const options = widgets.get(id);
+            options?.callback('browser-mock-token:' + options.action);
+          }, 0);
           window.turnstile = {
             render(container, options) { const id = String(++sequence); widgets.set(id, options); complete(id); return id; },
             reset(id) { complete(id); }, remove(id) { widgets.delete(id); }
           };
         })();`,
       });
-      return route.fulfill({ status: 200, json: { success: true } });
+      if (url.pathname === '/turnstile/v0/siteverify') {
+        const data = request.postDataJSON();
+        const action = String(data?.response ?? '').split(':')[1];
+        const success = ['contact', 'waitlist', 'testimonial'].includes(action);
+        return route.fulfill({ status: 200, json: { success, hostname: new URL(base).hostname, action } });
+      }
+      return route.fulfill({ status: 200, json: { success: true, hostname: new URL(base).hostname, action: 'contact' } });
     }
     if (url.origin === new URL(base).origin && request.method() === 'POST') {
       mock.posts.push(request.postData() ?? '');
@@ -34,7 +43,8 @@ export async function mockContact(page, base) {
       // Includes native/no-JS form submissions: never forward these to the server.
       return route.fulfill({ status: 200, contentType: 'text/html', body: '<p>Contact POST intercepted by browser test.</p>' });
     }
-    return route.continue();
+    // Allow suites to install an offline guard underneath these provider mocks.
+    return route.fallback();
   });
   return mock;
 }

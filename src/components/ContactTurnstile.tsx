@@ -7,7 +7,7 @@ import { contactCopy } from '@/i18n/contact';
 
 type Turnstile = {
   render: (container: HTMLElement, options: {
-    sitekey: string; language: string; size: string; 'response-field': boolean;
+    sitekey: string; action: string; language: string; size: string; 'response-field': boolean;
     callback: (token: string) => void;
     'expired-callback': () => void; 'error-callback': () => void;
   }) => string;
@@ -16,8 +16,8 @@ type Turnstile = {
 };
 declare global { interface Window { turnstile?: Turnstile } }
 
-// Shared by the contact and testimonial forms (any Server Action state with a status resets the widget).
-export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; lang: Locale; result: { status: string } | null }) {
+// Shared by all three forms (any Server Action state with a status resets the widget).
+export function ContactTurnstile({ siteKey, lang, result, action }: { action: 'contact' | 'waitlist' | 'testimonial'; siteKey: string; lang: Locale; result: { status: string } | null }) {
   const copy = contactCopy[lang];
   const instance = useId();
   const container = useRef<HTMLDivElement>(null);
@@ -52,7 +52,7 @@ export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; l
     let id: string;
     try {
       id = api.render(container.current, {
-        sitekey: siteKey, language: lang, size: 'compact', 'response-field': false,
+        sitekey: siteKey, action, language: lang, size: 'compact', 'response-field': false,
         callback: value => { setToken(value); setFailed(false); },
         'expired-callback': invalidate, 'error-callback': invalidate,
       });
@@ -62,7 +62,7 @@ export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; l
     }
     widget.current = id;
     return () => { api.remove(id); widget.current = null; };
-  }, [loaded, siteKey, lang, attempt]);
+  }, [loaded, siteKey, lang, attempt, action]);
 
   useEffect(() => {
     if (!result) return;
@@ -80,7 +80,7 @@ export function ContactTurnstile({ siteKey, lang, result }: { siteKey: string; l
     {visible && <Script key={attempt} id={`contact-turnstile-${instance}-${attempt}`}
       src={`https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit${attempt ? `&retry=${attempt}` : ''}`}
       onReady={() => { setLoaded(true); setFailed(false); }} onError={() => setFailed(true)} />}
-    <div ref={container} />
+    <div ref={container} data-action={action} />
     <input type="hidden" name="cf-turnstile-response" value={token} />
     {!token && !failed && visible && <p role="status">{copy.captchaLoading}</p>}
     {failed && <><p role="alert">{copy.captcha}</p><button type="button" className="button secondary" onClick={retry}>{copy.retry}</button></>}

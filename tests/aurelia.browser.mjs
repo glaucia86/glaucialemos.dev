@@ -185,7 +185,7 @@ try{
         await panel.scrollIntoViewIfNeeded();await page.waitForTimeout(300);
         assert.deepEqual(contact.challenges,[], 'Turnstile waits for the last step');
         await fillSteps(panel.locator('form'));await expect.poll(()=>contact.challenges.length).toBe(1);
-        await expect(panel.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
+        await expect(panel.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token:contact');
       }
       assert.deepEqual(contact.posts,[]);assert.deepEqual(contact.providers,[]);
     }finally{await context.close();}
@@ -206,7 +206,7 @@ try{
       const form=panel.locator('form');
       if(await form.locator('[name=name]').isEnabled()){
         await fillSteps(form,{linkedin:'https://linkedin.com/in/teste-local'});
-        await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
+        await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token:contact');
         // An inline submission lifts the form into the portal: the signal climbs from the garden to the stars.
         await form.locator('[type=submit]').click();
         await expect(page.locator('.contact-portal')).toHaveAttribute('data-open','true');
@@ -255,7 +255,7 @@ try{
       await expect.poll(()=>contact.challenges.length).toBe(1);
       await back.click();await expect(panel).toHaveAttribute('data-contact-step','1');await expect(name).toHaveValue('Teste local');await next.click();
       await message.fill('Teste interceptado');await submit.click();await expect(consent).toBeFocused();await expect(consent).toHaveAttribute('aria-invalid','true');assert.deepEqual(posts,[]);
-      await consent.check();await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token');
+      await consent.check();await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token:contact');
       await submit.click();await expect(form.getByRole('status').filter({hasText:'Mensagem enviada.'})).toHaveText('Mensagem enviada. Obrigada!');assert.equal(posts.length,1);await expect(name).toHaveValue('');
       await expect(panel).toHaveAttribute('data-contact-step','0');
       await expect(cinema).toHaveAttribute('data-cinema','success');await expect(cinema).toHaveAttribute('data-paused','true');

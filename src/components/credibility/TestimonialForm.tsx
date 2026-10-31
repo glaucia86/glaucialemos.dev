@@ -58,10 +58,11 @@ export function TestimonialForm({ lang, enabled, siteKey, heading = true }: { la
         <p id="testimonial-purpose">{c.purpose}</p>
         <label htmlFor="testimonial-consent" className="contact-consent"><input {...attributes('consent')} type="checkbox" aria-describedby="testimonial-purpose" defaultChecked={values?.consent} /><span>{c.consent}</span></label>
         {error('consent')}
-        {!unavailable && <ContactTurnstile siteKey={siteKey} lang={lang} result={state} />}
+        {!unavailable && <ContactTurnstile action="testimonial" siteKey={siteKey} lang={lang} result={state} />}
         <button className="button primary" type="submit" disabled={unavailable || pending}>{pending ? c.sending : c.send}</button>
         {Object.keys(errors).length > 0 && <p role="alert">{c.invalid}</p>}
         {(captchaError || state?.status === 'captcha') && <p role="alert">{c.captcha}</p>}
+        {state?.status === 'rate-limited' && <p role="alert">{c.rateLimited}</p>}
         {state?.status === 'error' && <p role="alert">{c.error}</p>}
       </form>}
   </div>;

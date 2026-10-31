@@ -120,7 +120,7 @@ export default async function Services({params,searchParams}:Props){
     <section className="chapter chapter--waitlist" id="lista-de-espera" aria-labelledby="waitlist-title"><div className="chapter__inner">
       <div className="chapter-head"><div><ChapterTag code="◇" label={w.title}/><h2 id="waitlist-title">{w.title}</h2><p>{w.intro}</p></div></div>
       <p className="aurelia-independent"><span aria-hidden="true">◇</span> {d.services.independent}</p>
-      <WaitlistForm lang={lang} interest={interest} enabled={contact.enabled} siteKey={contact.enabled ? contact.siteKey : undefined}/>
+      <WaitlistForm lang={lang} interest={interest} enabled={contact.enabled && Boolean(contact.waitlistSecret)} siteKey={contact.enabled && contact.waitlistSecret ? contact.siteKey : undefined}/>
     </div></section>
     <ChapterJump code={chapterCode(5)} label={label(5)}/>
     <section className="chapter chapter--collaboration" aria-labelledby="collaboration-title"><div className="chapter__inner">

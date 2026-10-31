@@ -1,3 +1,4 @@
+import './zod-config';
 import { z } from "zod";
 import { getContribuicoes, getGithubStats, getProjetos } from "./data";
 import { languageShare, reposByYear, totals } from "./repos";

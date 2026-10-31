@@ -2,6 +2,7 @@ import type { Locale } from './config';
 
 export const contactCopy = {
   pt: {
+    rateLimited: 'Recebemos muitas tentativas de envio. Por favor, aguarde um pouco antes de tentar novamente.',
     steps: ['Do que seu time precisa?', 'Quem está chamando?', 'Sua mensagem'], stepOf: 'Etapa {n} de {total}', next: 'Continuar', back: 'Voltar',
     company: 'Empresa', service: 'Tipo de serviço', choose: 'Selecione um serviço',
     linkedinUrl: 'URL do seu LinkedIn', consent: 'Concordo com o uso dos meus dados para responder a este contato (LGPD).',
@@ -20,6 +21,7 @@ export const contactCopy = {
     },
   },
   en: {
+    rateLimited: 'We have received too many submission attempts. Please wait a while before trying again.',
     steps: ['What does your team need?', 'Who is reaching out?', 'Your message'], stepOf: 'Step {n} of {total}', next: 'Continue', back: 'Back',
     company: 'Company', service: 'Service type', choose: 'Select a service',
     linkedinUrl: 'Your LinkedIn URL', consent: 'I consent to the use of my data to respond to this inquiry (LGPD).',
@@ -38,6 +40,7 @@ export const contactCopy = {
     },
   },
   es: {
+    rateLimited: 'Hemos recibido demasiados intentos de envío. Espera un poco antes de intentarlo de nuevo.',
     steps: ['¿Qué necesita tu equipo?', '¿Quién nos escribe?', 'Tu mensaje'], stepOf: 'Paso {n} de {total}', next: 'Continuar', back: 'Volver',
     company: 'Empresa', service: 'Tipo de servicio', choose: 'Selecciona un servicio',
     linkedinUrl: 'URL de tu LinkedIn', consent: 'Acepto el uso de mis datos para responder a este contacto (LGPD).',

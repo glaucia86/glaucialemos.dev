@@ -1,3 +1,4 @@
+import './zod-config';
 import depoimentosJson from "@/data/depoimentos.json";
 import artigosJson from "@/data/artigos.json";
 import eventosJson from "@/data/eventos.json";

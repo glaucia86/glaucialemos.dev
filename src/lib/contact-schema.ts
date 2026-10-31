@@ -1,4 +1,6 @@
+import './zod-config';
 import { z } from 'zod';
+import { singleLine } from './single-line';
 import services from '@/data/servicos.json';
 import { contactCopy } from '@/i18n/contact';
 import type { Locale } from '@/i18n/config';
@@ -27,14 +29,14 @@ export type ContactValues = Record<Exclude<ContactField, 'consent'>, string> & {
 export type ContactState =
   | { status: 'ok' }
   | { status: 'invalid'; errors: ContactErrors; values: ContactValues }
-  | { status: 'captcha' | 'unavailable' | 'error'; values?: ContactValues };
+  | { status: 'captcha' | 'unavailable' | 'error' | 'rate-limited'; values?: ContactValues };
 
 export function contactSchema(lang: Locale) {
   const errors = contactCopy[lang].errors;
   const text = (message: string, max: number) => z.string({ error: message }).trim().min(1, message).max(max, message);
   return z.object({
-    name: text(errors.name, 120),
-    company: text(errors.company, 160),
+    name: z.string({ error: errors.name }).transform(singleLine).pipe(text(errors.name, 120)),
+    company: z.string({ error: errors.company }).transform(singleLine).pipe(text(errors.company, 160)),
     service: z.string({ error: errors.service }).refine(value => contactOptions(lang).some(option => option.value === value), errors.service),
     message: text(errors.message, 5000),
     linkedin: z.string({ error: errors.linkedin }).max(300, errors.linkedin).regex(LINKEDIN_PROFILE, errors.linkedin),
