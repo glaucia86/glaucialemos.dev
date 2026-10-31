@@ -34,6 +34,7 @@ Para comparação com a main, se houver um servidor da versão anterior já disp
 - Sem JS/reduzido: conteúdo e referências visíveis; links nativos alcançam formatos e contato; ausência de molduras vazias.
 - Fotografias escolhidas: aparência natural, proporção correta, legenda e fonte; não atribuir workshop, voluntariado ou evento sem prova.
 - Conferir o menu curto “Serviços” e seus equivalentes, metadata e igualdade das três ofertas nos três idiomas.
+- Conferir em PT/EN/ES que Itaú aparece somente no contexto profissional/de carreira em Sobre e na trajetória da Home, sem referência ou logo em Serviços nem nos demais textos da Home e de Projetos.
 
 Também executar as regressões existentes: `node tests/holonet.browser.mjs` e `node tests/aurelia.browser.mjs`. Compartilhar resultados e capturas antes de decidir pela integração na main.
 
@@ -42,7 +43,7 @@ Também executar as regressões existentes: `node tests/holonet.browser.mjs` e `
 | Ponto | main de origem | Branch desta entrega |
 | --- | --- | --- |
 | Abertura Home | Engenharia/Liderança/IA; CTA de workshops/mentorias e projetos | Três formatos; apresentação aprovada; contato direto e `#formatos` |
-| Prova profissional | Mais abaixo na trajetória | Faixa estática de Microsoft, Itaú e Zup na abertura de Serviços; sem logos na Home |
+| Prova profissional | Mais abaixo na trajetória | Faixa estática de Microsoft, Zup Innovation, Packt, Pagar.me e GlobalLogic LATAM na abertura de Serviços; sem logos na Home |
 | Ofertas | Capítulo final da Home / jardim narrativo de Serviços | Três blocos equivalentes imediatamente após os dois heroes; detalhamento mantido |
 | Serviços/menu | Workshops e mentorias | Palestras, workshops e mentorias / menu “Serviços” |
 | Fotos reais | Ausentes | Componentes preparados; aguardam seleção explícita |

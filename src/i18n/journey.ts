@@ -13,7 +13,7 @@ export type JourneyCopy = {
 
 export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
   pt: {
-    intro: 'Comecei como desenvolvedora e levei o que aprendia para as comunidades. Na Microsoft, foram mais de seis anos em Developer Advocacy, levando JavaScript, TypeScript e IA a devs do mundo todo. Hoje, como AI Transformation Lead no Itaú, lidero a adoção de IA generativa e agêntica em squads de engenharia, com código, prática e contexto.',
+    intro: 'Comecei como desenvolvedora e levei o que aprendia para as comunidades. Na Microsoft, foram mais de seis anos em Developer Advocacy, levando JavaScript, TypeScript e IA a devs do mundo todo. Hoje, como AI Transformation Lead, lidero a adoção de IA generativa e agêntica em squads de engenharia, com código, prática e contexto.',
     milestones: ['Primeiros passos no desenvolvimento', 'Conexões pela América Latina', 'Developer Advocacy global com IA', 'Transformação com IA no Itaú'],
     demo: {
       title: 'IA com contexto, não com achismo.',
@@ -43,7 +43,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
     closing: { title: 'O próximo encontro pode ser com o seu time.', intro: 'Conte o que seu time precisa aprender ou decidir. Vamos escolher o formato a partir desse desafio.', actions: ['Planeje um workshop', 'Converse sobre mentoria', 'Convide para palestrar'] },
   },
   en: {
-    intro: 'I started as a developer and shared what I learned with communities. At Microsoft, I spent more than six years in Developer Advocacy, bringing JavaScript, TypeScript and AI to developers worldwide. Today, as AI Transformation Lead at Itaú, I lead the adoption of generative and agentic AI across engineering squads through code, practice and context.',
+    intro: 'I started as a developer and shared what I learned with communities. At Microsoft, I spent more than six years in Developer Advocacy, bringing JavaScript, TypeScript and AI to developers worldwide. Today, as AI Transformation Lead, I lead the adoption of generative and agentic AI across engineering squads through code, practice and context.',
     milestones: ['First steps in software development', 'Connecting Latin America', 'Global Developer Advocacy with AI', 'Leading AI transformation at Itaú'],
     demo: {
       title: 'AI grounded in context, not guesswork.',
@@ -73,7 +73,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
     closing: { title: 'Your team could be the next stop.', intro: 'Tell me what your team needs to learn or decide. We will choose a format around that challenge.', actions: ['Plan a workshop', 'Discuss mentoring', 'Invite me to speak'] },
   },
   es: {
-    intro: 'Empecé como desarrolladora y compartí lo que aprendía con las comunidades. En Microsoft pasé más de seis años en Developer Advocacy, llevando JavaScript, TypeScript e IA a desarrolladores de todo el mundo. Hoy, como AI Transformation Lead en Itaú, lidero la adopción de IA generativa y agéntica en squads de ingeniería, con código, práctica y contexto.',
+    intro: 'Empecé como desarrolladora y compartí lo que aprendía con las comunidades. En Microsoft pasé más de seis años en Developer Advocacy, llevando JavaScript, TypeScript e IA a desarrolladores de todo el mundo. Hoy, como AI Transformation Lead, lidero la adopción de IA generativa y agéntica en squads de ingeniería, con código, práctica y contexto.',
     milestones: ['Primeros pasos en desarrollo', 'Conexiones por América Latina', 'Developer Advocacy global con IA', 'Transformación con IA en Itaú'],
     demo: {
       title: 'IA con contexto, no con suposiciones.',

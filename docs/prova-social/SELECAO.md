@@ -16,7 +16,9 @@ Foram descartados desta seleção uma paisagem de viagem (`foto-eu-03.jpg`, sem 
 
 ## Experiência profissional
 
-Microsoft, Itaú Unibanco e Zup Innovation constam de `src/data/experiencia.json`, com as fontes preservadas em `src/data/prova-social.ts`. Os logos foram obtidos dos perfis oficiais das organizações no GitHub: [Microsoft](https://github.com/microsoft), [Itaú](https://github.com/itau) e [Zup](https://github.com/ZupIT). São vínculos de carreira, não depoimentos, clientes ou patrocínios.
+Microsoft, Zup Innovation, Packt, Pagar.me e GlobalLogic LATAM constam de `src/data/experiencia.json`, com as fontes preservadas em `src/data/prova-social.ts`. Os logos foram obtidos dos perfis oficiais das organizações no GitHub: [Microsoft](https://github.com/microsoft), [Zup](https://github.com/ZupIT), [Packt](https://github.com/PacktPublishing) e [Pagar.me](https://github.com/pagarme). GlobalLogic LATAM aparece com iniciais. São vínculos de carreira, não depoimentos, clientes ou patrocínios.
+
+Por decisão da Glaucia (31/10/2026), Itaú aparece somente no contexto profissional/de carreira em Sobre e na trajetória da Home, nunca em Serviços ou nos demais textos da Home e de Projetos. A entrada na faixa e o logo público foram removidos; o histórico de carreira foi preservado.
 
 As versões locais dos logos têm 96×96 px. A faixa fica somente em Serviços, conforme a correção da Glaucia; exibe 24–32 px, estática, com nomes e links para o vínculo. Os arquivos de origem ficam em `selecao/` para auditoria.
 

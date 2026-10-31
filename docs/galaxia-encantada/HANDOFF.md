@@ -34,7 +34,9 @@ oculta. Assets em `public/galaxia/scenes/beyond-orbit/episode.*`. Lint, typechec
 Branch `feat/prova-social-ofertas`, criada da `main` em `1899358`, sem commit. Os dois prompts de arte não rastreados foram preservados.
 Home e Serviços ganharam a apresentação aprovada e `#formatos` logo após o hero: palestras, workshops e mentorias com o mesmo peso,
 público/foco/descrição/preço sob consulta e CTAs com `?assunto=...#contato`. Menu “Serviços”, metadata/copy PT/EN/ES, logos locais
-de Microsoft/Itaú/Zup identificados como experiência profissional **somente em Serviços** (retirados da Home após correção da Glaucia).
+de Microsoft/Zup/Packt/Pagar.me e iniciais de GlobalLogic LATAM identificados como experiência profissional **somente em Serviços** (retirados da Home após correção da Glaucia).
+Decisão de escopo (31/10/2026): Itaú aparece somente no contexto profissional/de carreira em Sobre e na trajetória da Home.
+Não aparece em Serviços nem nos demais textos da Home ou de Projetos; a entrada da faixa e o logo público foram removidos.
 Cenas, segredos, formulário e controlador do portal intactos; Sobre não foi alterada.
 Componentes em `src/components/credibility/`, referências em `src/data/prova-social.ts`, copy em `src/i18n/commercial.ts`, CSS
 restrito por `.commercial-page`. **Fotografias ainda aguardam escolha explícita da Glaucia**: candidatas e fontes em

@@ -7,6 +7,9 @@ import { getDictionary } from '@/i18n/dictionaries';
 vi.mock('next/navigation', () => ({ usePathname: () => '/pt/servicos', useSearchParams: () => new URLSearchParams(), useRouter: () => ({ replace: vi.fn() }), notFound: () => { throw new Error('not found'); } }));
 afterEach(() => { vi.restoreAllMocks(); vi.unstubAllEnvs(); });
 const page = async (lang = 'pt', interesse: string | string[] = '') => renderToStaticMarkup(await Services({ params: Promise.resolve({ lang }), searchParams: Promise.resolve({ interesse }) }));
+it.each(['pt', 'en', 'es'] as const)('keeps Itaú out of rendered Services HTML (%s)', async lang => {
+  expect(await page(lang)).not.toMatch(/ita[uú]/i);
+});
 it.each(['pt', 'en', 'es'] as const)('keeps empty testimonials absent and chapter codes unchanged (%s)', async lang => {
   const html = await page(lang);
   expect(html).not.toContain('id="depoimentos"');

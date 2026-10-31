@@ -16,6 +16,8 @@ import { StickyCta } from "./StickyCta";
 import { DeepNight } from "./eggs/ExtraEggs";
 import { whenBootDone } from "@/lib/boot";
 
+export type ChromeDictionary = Pick<Dictionary, "accessibility" | "comlink" | "easterEgg" | "footer" | "holonet" | "motion" | "nav">;
+
 const SOUND_INVITE_KEY = "sound-invite-seen";
 
 // Secret star map: the stars draw "GL" and, beside it, Prince's paw.
@@ -31,7 +33,7 @@ function StarMap() {
 // Reading order: who I am, what I built, where I spoke, how to hire me; content (mostly external links) last.
 export const routes = [["home", ""], ["about", "sobre"], ["projects", "projetos"], ["events", "eventos"], ["services", "servicos"], ["content", "conteudo"]] as const;
 
-export function SiteChrome({ lang, dictionary, children }: Readonly<{ lang: Locale; dictionary: Dictionary; children: ReactNode }>) {
+export function SiteChrome({ lang, dictionary, children }: Readonly<{ lang: Locale; dictionary: ChromeDictionary; children: ReactNode }>) {
   const pathname = usePathname(); const router = useRouter();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const menuRef = useRef<HTMLButtonElement>(null);

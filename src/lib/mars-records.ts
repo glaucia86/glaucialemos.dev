@@ -58,7 +58,7 @@ export const CARD_2018: CardLine[] = [
 ];
 export const CARD_NOW: CardLine[] = [
   { value: "Glaucia Lemos / glaucia_lemos86" }, { value: "" },
-  { label: "Work", value: "Principal Software Engineer · AI Transformation Lead @ Itaú", color: "#ff4040" },
+  { label: "Work", value: "Principal Software Engineer · AI Transformation Lead", color: "#ff4040" },
   { label: "Badges", value: "Microsoft MVP · OpenAI Codex Ambassador · Devin Ambassador", color: "#80ff80" },
   { label: "Book", value: "Packt co-author", color: "#ff884d" },
   { label: "YouTube", value: "https://www.youtube.com/@GlauciaLemos", color: "#ff1919" },

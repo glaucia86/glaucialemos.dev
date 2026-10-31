@@ -38,7 +38,7 @@ describe('apresentação comercial e fontes', () => {
   });
 
   it('só apresenta vínculos presentes no histórico, separados de eventos', () => {
-    expect(experience.map(item => item.company)).toEqual(['Microsoft', 'Itaú Unibanco', 'Zup Innovation', 'Packt', 'Pagar.me', 'GlobalLogic LATAM']);
+    expect(experience.map(item => item.company)).toEqual(['Microsoft', 'Zup Innovation', 'Packt', 'Pagar.me', 'GlobalLogic LATAM']);
     for (const item of experience) {
       expect(getCargos()).toContainEqual(expect.objectContaining({ empresa: item.company, fonte: item.source }));
       expect(item.kind).toBe('employment');
