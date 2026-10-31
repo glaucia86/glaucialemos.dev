@@ -9,7 +9,7 @@ import { emitEgg } from "@/lib/eggs";
 import { useDiscoveries } from "@/lib/use-discoveries";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
-import { gsap, ScrollTrigger, SplitText, useGSAP, HERO_OVERLAY } from "@/lib/gsap";
+import { gsap, ScrollTrigger, SplitText, useGSAP, WIDE_MOTION } from "@/lib/gsap";
 import { play, uiSound } from "@/lib/sfx";
 import { fill } from "@/lib/journey-constellation";
 import { VOYAGE_WORLDS, paletteAt, worldReport } from "@/lib/voyage";
@@ -25,7 +25,7 @@ export function EpilogueVoyage({ copy, lang }: { copy: BeyondOrbitCopy; lang: Lo
   const found = useDiscoveries();
   const revealed = found.includes("last-light");
   const enabled = useMotionEnabled();
-  const overlay = useMediaQuery(HERO_OVERLAY);
+  const overlay = useMediaQuery(WIDE_MOTION);
   const root = useRef<HTMLDivElement>(null);
   const eggs = comlink[lang].eggs;
 

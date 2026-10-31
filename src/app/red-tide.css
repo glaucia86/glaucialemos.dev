@@ -2,10 +2,10 @@
 .red-tide-page { --rt-night: #0d0612; --rt-crimson: #9b2e48; --rt-coral: #f07072; --rt-rose: #f6a0a5; --rt-gold: #ffbc78; --rt-cyan: #00e5ff;
   background: var(--rt-night); color: #ffe6de; overflow: clip; }
 .red-tide-page [hidden] { display: none !important; }
-.red-tide { position: relative; min-height: calc(100svh - var(--header-height)); display: grid; align-items: center; isolation: isolate; overflow: hidden; }
-.red-tide__frame { position: absolute; inset: 0; z-index: 0; container-type: size; --scene-x: 76%; --scene-y: 100%; }
+.red-tide { position: relative; min-height: calc(100vh - var(--header-height)); min-height: calc(100svh - var(--header-height)); display: grid; align-items: start; isolation: isolate; overflow: hidden; }
+.red-tide__frame { position: absolute; inset: 0; z-index: 0; overflow: hidden; background-color: #482435; container-type: size; --scene-x: 76%; --scene-y: 100%; }
 .red-tide__plane { position: absolute; width: max(100cqw,177.777778cqh); height: max(100cqh,56.25cqw); left: var(--scene-x); top: var(--scene-y); translate: calc(-1 * var(--scene-x)) calc(-1 * var(--scene-y));
-  background: url(/galaxia/scenes/red-tide/poster.webp) 0 0 / 100% 100% no-repeat; }
+ }
 .red-tide__plane > * { position: absolute; }
 .red-tide__video,.red-tide__plasma { inset: 0; width: 100%; height: 100%; object-fit: fill; }
 .red-tide__plasma { z-index: 1; pointer-events: none; image-rendering: pixelated; mix-blend-mode: screen; }
@@ -85,10 +85,27 @@ html:has(.red-tide-episode[open]) :is(.fx-cursor,.fx-trail) { visibility: hidden
 @media (prefers-reduced-motion:reduce) { .red-tide__video,.red-tide__plasma { display: none; } .red-tide * { animation: none !important; transition: none !important; } }
 html.reduce-motion .red-tide__video,html.reduce-motion .red-tide__plasma { display: none; }
 html.reduce-motion .red-tide * { animation: none !important; transition: none !important; }
-@media (max-width:900px) {
-  .red-tide { align-items: start; }
-  .red-tide__frame { --scene-x: 74%; }
-  .red-tide__shade { background: linear-gradient(180deg,#0d0612f5 0,#0d0612d9 45%,#0d061266 70%,transparent 88%); }
-  .red-tide__copy { margin: 0 auto; padding-block: 2.5rem 42svh; }
-  .red-tide__hud { display: none; }
+/* Poster and video/effects use the same cover crop, including without JS. */
+.red-tide__image { object-fit: cover; object-position: var(--scene-x) var(--scene-y); }
+.red-tide__copy { width: min(48%, 35rem); gap: .75rem; }
+@media (orientation: portrait) {
+  .red-tide__frame { --scene-x: 78%; }
+  .red-tide__shade { background: linear-gradient(180deg, #0d0612e6, #0d061299 30%, transparent 55%, #0d0612cc), linear-gradient(90deg, #0d0612dd, transparent 75%); }
+  .red-tide__copy { width: auto; margin: 0; padding: 2.75rem max(1rem, env(safe-area-inset-left)) max(2rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-right)); }
+  .red-tide__code { font-size: clamp(2rem, min(12vw, 8svh), 5rem); }
+  .red-tide h1 { font-size: clamp(1.6rem, min(7vw, 5svh), 3rem); }
+  .red-tide__body { max-width: 56%; font-size: .875rem; line-height: 1.5; }
+  .red-tide__hud { inset: .75rem; }
+  .red-tide__route, .red-tide__hud .hud-corner { display: none; }
+}
+@media (max-height: 680px) and (orientation: landscape) {
+  .red-tide__copy { padding-block: 2.5rem 2rem; gap: .375rem; }
+  .red-tide__code { font-size: clamp(1.75rem, 7svh, 3rem); }
+  .red-tide h1 { font-size: clamp(1.5rem, 6svh, 2.5rem); }
+}
+@media (orientation: portrait), (max-height: 680px) {
+  .red-tide__copy { display: flex; flex-direction: column; align-items: flex-start; }
+  .red-tide__copy > :is(.red-tide__world, .red-tide__code, h1) { order: 0; }
+  .red-tide__copy > .actions { order: 1; }
+  .red-tide__copy > :is(.red-tide__body, .red-tide__episode, .red-tide__worlds, .red-tide__touch, .red-tide__panel) { order: 2; }
 }

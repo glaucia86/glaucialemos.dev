@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY, FINE_POINTER } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY, FINE_POINTER } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
@@ -18,7 +18,7 @@ import { FREEZE_EVENT, STORM_END_EVENT } from "./FrozenCards";
 
 const ABOUT_EGGS: EggId[] = ["paw-tracks", "memory-capsule", "whiteout", "aurora-prism", "snowdrift"];
 const HERO_EGGS: EggId[] = ["paw-tracks", "memory-capsule", "whiteout", "aurora-prism"];
-// Same breakpoint as niveora.css: the copy sits over the plate only on wide and tall screens; elsewhere it stacks.
+// Full-bleed composition and scroll camera on every viewport.
 const OVERLAY = HERO_OVERLAY;
 const PRISM_MS = 6500;
 const WHITEOUT_MS = 8000;
@@ -409,7 +409,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
     addEventListener("keydown", typed);
     const stopEggs = onEgg(HERO_EGGS, (id) => void (id === "whiteout" ? Promise.resolve() : bringIntoView(section)).then(() => { if (!disposed) replays[id]?.(); }));
 
-    // Wide screens: push into the snowfield, then a blizzard of snow and aurora into the next chapter while pinned.
+    // Scroll camera: push into the snowfield, then a blizzard of snow and aurora into the next chapter while pinned.
     let jump: ReturnType<typeof createBlizzardJump> | null = null;
     if (overlay) {
       jump = createBlizzardJump(jumpCanvas.current!);
@@ -417,7 +417,7 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
       const zoom = [q(".page-hero__image"), ...sceneLayers];
       gsap.timeline({
         defaults: { ease: "none" },
-        scrollTrigger: { trigger: section, start: "top top", end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 },
+        scrollTrigger: { trigger: section, start: () => heroScrollStart(section), end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 },
       })
         .to(zoom, { scale: 1.28, transformOrigin: "80% 66%", duration: .6 }, 0)
         .fromTo(".niveora-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -18, autoAlpha: 0, duration: .32 }, 0)
@@ -428,9 +428,8 @@ export function NiveoraMotion({ children, labels, labelledBy }: { children: Reac
         .to(".hero-jump__label", { autoAlpha: 1, letterSpacing: ".6em", duration: .2 }, .55)
         .to(".hero-jump__flash", { autoAlpha: 1, duration: .06 }, .9)
         .to(".hero-jump__flash", { autoAlpha: 0, duration: .04 }, .96);
-    } else {
-      gsap.fromTo(".niveora-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: .2, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true } });
     }
+    // Tall copy stays readable before the camera starts (heroScrollStart).
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 

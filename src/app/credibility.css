@@ -1,10 +1,9 @@
 /* Static, server-rendered commercial content. Only Home and Services opt in. */
 .commercial-page .commercial-intro {
   display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.75rem);
-  max-width: min(46%, 560px); margin-top: 1rem;
+  max-width: min(46%, 35rem); margin-top: 1rem;
 }
 .commercial-page .commercial-intro > h1 { min-width: 0; max-width: none; }
-.commercial-page .home-hero-v2 .commercial-intro .hero-name { font-size: clamp(2.6rem, 4vw, 4rem); }
 .commercial-page .credibility-portrait { position: relative; flex: 0 0 120px; margin: 0; }
 .commercial-page .credibility-portrait img {
   display: block; width: 100%; height: auto; aspect-ratio: 631 / 649; object-fit: cover;
@@ -16,7 +15,7 @@
   display: grid; place-items: center; width: 44px; height: 44px; border-radius: .3rem;
   background: var(--color-space-0); color: var(--text-inverse); text-decoration: none;
 }
-.commercial-page .credibility-experience { max-width: min(46%, 560px); margin-top: 1.5rem; }
+.commercial-page .credibility-experience { max-width: min(46%, 35rem); margin-top: 1.5rem; }
 .commercial-page .credibility-kicker { margin: 0 0 .65rem; font: .7rem/1.6 var(--font-pixel); letter-spacing: .08em; color: var(--text-inverse-muted); }
 .commercial-page .credibility-experience ul { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; padding: 0; margin: 0; list-style: none; }
 .commercial-page .credibility-experience a { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; color: var(--text-inverse); font-size: .8rem; text-decoration: none; }
@@ -25,32 +24,20 @@
 .commercial-page :is(.commercial-intro, .credibility-experience, .credibility-formats, .credibility-gallery) a:focus-visible { outline: 3px solid var(--focus-inverse); outline-offset: 4px; }
 .commercial-page :is(.credibility-formats, .credibility-gallery) { padding-block: clamp(2.5rem, 6vw, 5rem); color: var(--text-inverse); background: var(--color-space-0); }
 .commercial-page #formatos { scroll-margin-top: calc(var(--header-height) + 1rem); }
-.commercial-page .credibility-formats__heading { max-width: 780px; margin-bottom: 2rem; }
+.commercial-page .credibility-formats__heading { max-width: 48.75rem; margin-bottom: 2rem; }
 .commercial-page :is(.credibility-formats, .credibility-gallery) h2 { margin: 0 0 1rem; font-size: clamp(1.65rem, 3vw, 2.7rem); line-height: 1.2; color: var(--text-inverse); }
 .commercial-page :is(.credibility-formats__heading, .credibility-gallery) > p { color: var(--text-inverse-muted); line-height: 1.7; }
 .commercial-page .credibility-offers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
 .commercial-page .credibility-gallery__photos { display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 2rem; }
-.commercial-page .credibility-gallery figure { flex: 1 1 300px; max-width: 640px; margin: 0; }
+.commercial-page .credibility-gallery figure { flex: 1 1 300px; max-width: 40rem; margin: 0; }
 .commercial-page .credibility-gallery img { display: block; width: 100%; height: auto; image-rendering: auto; border-radius: .5rem; }
 .commercial-page .credibility-gallery figcaption { margin-top: 1rem; font-size: .9rem; line-height: 1.7; color: var(--text-inverse-muted); }
 .commercial-page .credibility-gallery figcaption a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text-inverse); }
-.commercial-page.services-page .commercial-intro { max-width: min(44%, 580px); }
-.commercial-page.services-page .commercial-intro h1 { font-size: clamp(1.65rem, 2.6vw, 2.6rem); }
 
-/* Same split between overlay and full-width plate as the existing motion controllers. */
-@media (width < 1200px), (height < 680px), (hover: none), (pointer: coarse) {
-  html body .commercial-page .page-hero .commercial-intro,
-  .commercial-page .credibility-experience { max-width: min(100%, 720px); }
-  html body .commercial-page .page-hero .commercial-intro h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
-  html body .commercial-page .page-hero .commercial-intro .hero-name { font-size: clamp(2.3rem, 6vw, 4rem); }
-}
 @media (max-width: 900px) {
   .commercial-page .credibility-offers { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
-  .commercial-page .credibility-portrait { flex-basis: 84px; }
-  html body .commercial-page .page-hero .commercial-intro h1 { font-size: 1.6rem; }
-  html body .commercial-page .page-hero .commercial-intro .hero-name { font-size: clamp(1.6rem, 7.5vw, 2.5rem); }
   .commercial-page .credibility-experience { margin-top: 1rem; }
   .commercial-page .credibility-experience ul { column-gap: .8rem; }
   .commercial-page .credibility-experience img { width: 24px; height: 24px; }
@@ -80,7 +67,7 @@
 .commercial-page .credibility-testimonials blockquote p { margin: 0; color: var(--text-inverse); line-height: 1.7; }
 .commercial-page .credibility-testimonials__who { display: grid; gap: .2rem; margin: 0; font-weight: 700; color: var(--text-inverse); }
 .commercial-page .credibility-testimonials__who span { color: var(--text-inverse-muted); font-weight: 400; font-size: .85rem; }
-.commercial-page .testimonial-form { max-width: 720px; margin-top: 2rem; }
+.commercial-page .testimonial-form { max-width: 45rem; margin-top: 2rem; }
 .commercial-page .testimonial-form h3 { margin: 0 0 .5rem; color: var(--text-inverse); }
 .commercial-page .testimonial-form form { display: grid; gap: 1rem; }
 .commercial-page .testimonial-form label { display: grid; gap: .4rem; color: var(--text-inverse); }

@@ -18,10 +18,9 @@
 .reading-progress__leaf { position: absolute; width: 16px; height: 16px; bottom: 0; left: 50%; translate: -50% 0; image-rendering: pixelated; }
 .aurelia-hero-wrap { background: var(--color-space-0); }
 .aurelia-hero { --scene-x: 80%; --scene-y: 100%; }
-.services-page .aurelia-hero { min-height: min(calc(100svh - var(--header-height)),56.25vw); }
+.services-page .aurelia-hero { min-height: calc(100vh - var(--header-height)); min-height: calc(100svh - var(--header-height)); }
 .aurelia-hero .page-hero__image { object-position: var(--scene-x) var(--scene-y); }
-.services-page .aurelia-hero .page-hero__content { padding-block: clamp(3rem,7vh,5rem) clamp(2rem,5vh,3.5rem); }
-.aurelia-copy > :is(.chapter-tag,.aurelia-world,h1,.page-hero__subtitle,.page-hero__extra,.actions) { max-width: min(44%,580px); }
+.aurelia-copy > :is(.chapter-tag,.aurelia-world,h1,.page-hero__subtitle,.page-hero__extra,.actions) { max-width: min(44%,36.25rem); }
 .services-page .aurelia-hero h1 { font-size: clamp(2.1rem,3.3vw,3.5rem); line-height: 1.08; letter-spacing: -.04em; text-wrap: balance; }
 .aurelia-world { margin: .9rem 0; color: var(--scene-glow); font: .75rem/1.5 var(--font-pixel); letter-spacing: .2em; text-transform: uppercase; }
 .aurelia-hero .page-hero__subtitle { margin-top: 1.1rem; font-size: clamp(1rem,1.25vw,1.12rem); }
@@ -84,7 +83,7 @@
 .service-garden__stem i:nth-child(3) { width: 12px; height: 12px; left: calc(50% - 5px); top: 0; background: var(--scene-glow); transform: rotate(45deg); }
 [data-lit] .service-garden__stem { opacity: 1; }
 .service-garden__status { min-height: 1.8em; color: var(--scene-accent); margin-top: 1.5rem; }
-.seed-vault { max-width: 720px; margin: 3rem auto 0; border: 1px solid var(--aurelia-line); background: var(--color-space-1); }
+.seed-vault { max-width: 45rem; margin: 3rem auto 0; border: 1px solid var(--aurelia-line); background: var(--color-space-1); }
 .seed-vault summary { padding: 1.3rem 1.5rem; cursor: pointer; color: var(--scene-glow); }
 .seed-vault summary span { color: var(--scene-accent); margin-right: .5rem; }
 .seed-vault__body { padding: 0 1.5rem 1.5rem; display: grid; gap: 1rem; }
@@ -97,10 +96,9 @@
 .aurelia-relay span { color: var(--scene-glow); }.aurelia-channel-status:empty { display: none; }
 .aurelia-channel-status { color: var(--scene-accent); }
 .services-page .aurelia-independent { display: flex; align-items: baseline; gap: .65rem; max-width: 62ch; margin: 1.25rem 0; color: var(--aurelia-cream); font-size: .9rem; line-height: 1.6; }
-.services-page .aurelia-copy > .aurelia-independent { max-width: min(44%,580px); }
 .aurelia-independent > span { flex: 0 0 auto; color: var(--scene-accent); }
 .chapter--waitlist { scroll-margin-top: 6rem; background: radial-gradient(ellipse at 20% 30%,var(--scene-bg),transparent 60%),var(--color-space-0); }
-.chapter--waitlist .chapter__inner { max-width: 920px; }
+.chapter--waitlist .chapter__inner { max-width: 57.5rem; }
 .services-page .waitlist-panel { background: linear-gradient(135deg,#183b3d40,transparent 45%),var(--surface-soft); }
 .waitlist-success { padding: 1rem; border-inline-start: 2px solid var(--scene-accent); color: var(--scene-accent); background: #87e4c10c; }
 .waitlist-success p { margin-bottom: 0; }
@@ -114,7 +112,7 @@
 .services-page .contact-panel[data-relay] { border-color: var(--scene-accent); box-shadow: 0 0 28px #87e4c122; }
 .services-page .contact-panel h2 { font-size: clamp(1.4rem,3vw,2rem); }
 /* Contact is always readable. Only decorative layers enter the finite cinema. */
-.contact-cinema { position: relative; max-width: 920px; margin: clamp(3rem,6vw,5rem) auto 0; }
+.contact-cinema { position: relative; max-width: 57.5rem; margin: clamp(3rem,6vw,5rem) auto 0; }
 .contact-cinema__invitation { margin: 0 0 1.5rem; min-height: 3.2em; max-width: 36em; color: var(--aurelia-cream); font-size: clamp(1rem,2vw,1.25rem); font-weight: 400; line-height: 1.6; letter-spacing: .015em; }
 .contact-cinema__stage { position: relative; display: grid; isolation: isolate; }
 .services-page .contact-cinema .contact-panel { position: relative; z-index: 1; width: 100% !important; margin: 0 !important; padding-bottom: 5rem; background: linear-gradient(135deg,#183b3d40,transparent 45%),var(--surface-soft); }
@@ -148,16 +146,7 @@
 }
 @keyframes aurelia-breathe { 50% { scale: 1 1.003; } }
 .hero-scene-layer--aurelia[data-paused="true"] * { animation-play-state: paused !important; }
-@media (width < 1200px),(height < 680px),(hover:none),(pointer:coarse) {
-  .services-page .aurelia-hero { display: block; min-height: 0; padding-bottom: 56.25%; }
-  .services-page .aurelia-hero .page-hero__content { padding-block: 4.5rem 2rem; }
-  .aurelia-copy > :is(.chapter-tag,.aurelia-world,h1,.page-hero__subtitle,.page-hero__extra,.actions) { max-width: min(100%,720px); }
-  .services-page .aurelia-copy > .aurelia-independent { max-width: min(100%,62ch); }
-  .services-page .aurelia-hero h1 { font-size: clamp(2rem,6vw,3.2rem); }
-  .aurelia-hero :is(.page-hero__image,.hero-scene-layer--aurelia,.aurelia-layer,.page-hero__shade) { top: auto !important; bottom: 0; left: 0; right: 0; width: 100% !important; height: auto !important; aspect-ratio: 16 / 9; }
-  .aurelia-hero .page-hero__shade { background: var(--hero-overlay-scene); }
-  .aurelia-hero .hud-hint { display: none; }
-}
+/* Hero composition and focal points are shared in responsive.css. */
 @media (max-width:900px) {
   .services-page .aurelia-cards { grid-template-columns: 1fr; }
 

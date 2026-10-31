@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY, FINE_POINTER, SCRAMBLE_CHARS } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY, FINE_POINTER, SCRAMBLE_CHARS } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
@@ -331,7 +331,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
     addEventListener("keydown", typed);
     const stopEggs = onEgg(HOME_EGGS, (id) => void bringIntoView(section).then(() => replays[id]?.()));
 
-    // Desktop camera: push into the terrace, then streak into the next chapter while pinned.
+    // Scroll camera: push into the terrace, then streak into the next chapter while pinned.
     let jump: ReturnType<typeof createHyperspace> | null = null;
     if (desktop) {
       jump = createHyperspace(jumpCanvas.current!);
@@ -339,7 +339,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
       const zoom = [q(".page-hero__image"), ...sceneLayers];
       gsap.timeline({
         defaults: { ease: "none" },
-        scrollTrigger: { trigger: section, start: "top top", end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 },
+        scrollTrigger: { trigger: section, start: () => heroScrollStart(section), end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 },
       })
         .to(zoom, { scale: 1.3, transformOrigin: "78% 62%", duration: .6 }, 0)
         .fromTo(".hero-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -18, autoAlpha: 0, duration: .32 }, 0)
@@ -350,9 +350,8 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
         .to(".hero-jump__label", { autoAlpha: 1, letterSpacing: ".6em", duration: .2 }, .55)
         .to(".hero-jump__flash", { autoAlpha: 1, duration: .06 }, .9)
         .to(".hero-jump__flash", { autoAlpha: 0, duration: .04 }, .96);
-    } else {
-      gsap.fromTo(".hero-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: .2, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true } });
     }
+    // The cover plane supplies pointer coordinates on touch and desktop alike.
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 

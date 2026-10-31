@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type ReactNode } from "react";
-import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
 import { whenBootDone } from "@/lib/boot";
@@ -17,7 +17,7 @@ import { articleAnchor, findArticle } from "./lumina-events";
 type Reading = { kind: "whisper" | "first"; article: Artigo };
 
 const HERO_EGGS: EggId[] = ["crystal-whisper", "first-page"];
-// Same breakpoint as lumina.css: the copy sits over the plate only on wide and tall screens; elsewhere it stacks.
+// Full-bleed composition and scroll camera on every viewport.
 const OVERLAY = HERO_OVERLAY;
 const pct = (spot: { u: number; v: number }): UV => ({ u: spot.u / 100, v: spot.v / 100 });
 
@@ -172,7 +172,7 @@ export function LuminaMotion({ children, labelledBy, locale, copy, whispers, fir
       const zoom = [q(".page-hero__image"), layer, q(".lumina-layer")];
       gsap.timeline({
         defaults: { ease: "none" },
-        scrollTrigger: { trigger: section, start: "top top", end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 },
+        scrollTrigger: { trigger: section, start: () => heroScrollStart(section), end: "+=120%", pin: true, scrub: .8, anticipatePin: 1, refreshPriority: 1 },
       })
         .to(zoom, { scale: 1.25, transformOrigin: "80% 70%", duration: .6 }, 0)
         .fromTo(".lumina-copy", { xPercent: 0, autoAlpha: 1 }, { xPercent: -12, autoAlpha: 0, duration: .32 }, 0)
@@ -190,9 +190,8 @@ export function LuminaMotion({ children, labelledBy, locale, copy, whispers, fir
         .to(".hero-jump__label", { autoAlpha: 1, letterSpacing: ".6em", duration: .2 }, .78)
         .to(".hero-jump__flash", { autoAlpha: 1, duration: .06 }, .9)
         .to(".hero-jump__flash", { autoAlpha: 0, duration: .04 }, .96);
-    } else {
-      gsap.fromTo(".lumina-copy", { yPercent: 0, autoAlpha: 1 }, { yPercent: -10, autoAlpha: .2, ease: "none", scrollTrigger: { trigger: section, start: "top top", end: "bottom top", scrub: true } });
     }
+    // Tall copy stays readable before the camera starts (heroScrollStart).
     ScrollTrigger.sort();
     ScrollTrigger.refresh();
 

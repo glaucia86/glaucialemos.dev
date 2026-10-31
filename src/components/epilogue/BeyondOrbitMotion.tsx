@@ -6,7 +6,7 @@ import { journey } from "@/lib/journey-constellation";
 import { useDiscoveries } from "@/lib/use-discoveries";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
-import { gsap, ScrollTrigger, useGSAP, HERO_OVERLAY, FINE_POINTER } from "@/lib/gsap";
+import { gsap, ScrollTrigger, useGSAP, WIDE_MOTION, FINE_POINTER } from "@/lib/gsap";
 import { play } from "@/lib/sfx";
 import { blockMusic } from "@/lib/music";
 import { BEATS, CORE, CUES, DEPTH, STAR, cablePath, floatingFrame, poseStyle, starDelays, starNote, STATIC_FRAME, type DepthLayer, type OrbitActor, type OrbitPose } from "@/lib/beyond-orbit";
@@ -22,7 +22,7 @@ const ACTOR_IDS = ["glaucia", "prince"] as const;
 // visitor can skip at any time (button, Esc, wheel or touch); it always lands on the same static final state.
 export function BeyondOrbitMotion({ children, finale: ending, ambient, overlays, skip, hint }: Readonly<{ children: ReactNode; finale: ReactNode; ambient: ReactNode; overlays: ReactNode; skip: string; hint: string }>) {
   const enabled = useMotionEnabled();
-  const overlay = useMediaQuery(HERO_OVERLAY);
+  const overlay = useMediaQuery(WIDE_MOTION);
   const fine = useMediaQuery(FINE_POINTER);
   const revealed = useDiscoveries().includes("last-light");
   const root = useRef<HTMLDivElement>(null);
