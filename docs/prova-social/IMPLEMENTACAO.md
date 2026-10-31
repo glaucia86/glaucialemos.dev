@@ -5,8 +5,10 @@ Plano e decisões: mensagem da Glaucia nesta sessão, 27/10/2026.
 
 Correção posterior da Glaucia: as logos devem ficar em Sobre ou Serviços. Mantidas somente em Serviços e retiradas da Home; Sobre não foi alterada. O retrato pessoal continua preparado para a abertura da Home e de Serviços, ainda pendente de escolha explícita.
 
+Decisão de escopo (31/10/2026): Itaú aparece somente no contexto profissional/de carreira em Sobre e na trajetória da Home. Não aparece em Serviços nem nos demais textos da Home ou de Projetos; a entrada da faixa e o logo público foram removidos.
+
 - [x] Git conferido; branch criada da main; dois prompts não rastreados preservados.
-- [x] Histórico confirma Microsoft, Itaú Unibanco e Zup Innovation em `experiencia.json`.
+- [x] Histórico confirma Microsoft, Zup Innovation, Packt, Pagar.me e GlobalLogic LATAM em `experiencia.json`, empresas exibidas na faixa de Serviços.
 - [ ] Seleção final das fotos pela Glaucia; candidatos em `SELECAO.md`.
 - [x] Copy e ofertas PT/EN/ES; componentes de servidor; CSS restrito às duas páginas.
 - [x] 496 testes unitários passaram (45 arquivos), incluindo 8 novos testes comerciais e regressões do contato.
@@ -20,7 +22,7 @@ Decisão: fotos só entram na renderização depois da escolha explícita. Enqua
 Contratos: os links de ofertas preservam `?assunto=palestra|workshop|mentoria#contato`; `ContactForm`, portal, cenas, segredos e seus controladores não serão alterados.
 Sem commit, push, merge, servidor, build ou execução de navegador nesta sessão.
 
-Cobertura: ofertas renderizadas sem JS nos três idiomas, preço e assuntos dos CTAs, menu/metadata/apresentação, vínculo das três empresas com o histórico, assets locais e bloqueio de publicação de candidatos pendentes. A suíte nova falhou antes da implementação; a primeira execução também encontrou a copy PT antiga, corrigida na origem.
+Cobertura: ofertas renderizadas sem JS nos três idiomas, preço e assuntos dos CTAs, menu/metadata/apresentação, vínculo das empresas exibidas com o histórico, assets locais e bloqueio de publicação de candidatos pendentes. A suíte nova falhou antes da implementação; a primeira execução também encontrou a copy PT antiga, corrigida na origem.
 
 Revisão final: avaliar o diff não commitado e os arquivos novos em `src/components/credibility/`, `src/data/prova-social.ts`, `src/i18n/commercial.ts`, `src/app/credibility.css`, `tests/commercial*` e `docs/prova-social/`. O intervalo de commits é vazio porque a usuária reservou commits/integração para depois da avaliação visual.
 

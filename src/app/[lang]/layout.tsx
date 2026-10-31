@@ -6,7 +6,7 @@ import "../comlink.css";
 import "../site-guides.css";
 import "../responsive.css";
 import "../mobile-eggs.css";
-import { getDictionary } from "@/i18n/dictionaries";
+import { chromeDictionary, getDictionary } from "@/i18n/dictionaries";
 import { isLocale, locales } from "@/i18n/config";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -37,7 +37,7 @@ export default async function LangLayout({ children, params }: Props) {
 
   return (
     <html lang={lang === "pt" ? "pt-BR" : lang} className={`${geist.variable} ${geistMono.variable} ${departure.variable}`} suppressHydrationWarning>
-      <body suppressHydrationWarning><SiteChrome lang={lang} dictionary={getDictionary(lang)}>{children}</SiteChrome></body>
+      <body suppressHydrationWarning><SiteChrome lang={lang} dictionary={chromeDictionary(lang)}>{children}</SiteChrome></body>
     </html>
   );
 }
