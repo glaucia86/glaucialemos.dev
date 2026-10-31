@@ -221,14 +221,19 @@ Copy-Item .env.example .env.local
 | --- | --- |
 | `RESEND_API_KEY` | Sending-only Resend key restricted to the verified domain |
 | `CONTACT_FROM` | Sender on the verified domain (e.g. `Site <contato@mail.glaucialemos.dev>`) |
-| `CONTACT_TO` | Inbox that receives contact and testimonial messages |
+| `CONTACT_TO` | Inbox that receives contact, testimonial and confirmed waitlist messages |
 | `TURNSTILE_SECRET_KEY` | Server-side credential for challenge verification |
 | `TURNSTILE_SITE_KEY` | Public widget key, read by the server and passed to the widget |
+| `WAITLIST_SIGNING_SECRET` | Required only for waitlist confirmation; at least 32 characters after trimming. Generate with `openssl rand -base64 48` |
+| `SITE_URL` | Optional HTTPS origin for confirmation links; default `https://glaucialemos.dev`. Invalid values use the default; request headers are never used |
+| `TURNSTILE_ALLOWED_HOSTNAMES` | Optional comma-separated additional verification hostnames; also authorize them in Turnstile |
 | `GITHUB_TOKEN` | Optional server-side token to raise the GitHub API rate limit; add it to `.env.local` if needed |
 
 Keep server credentials out of `NEXT_PUBLIC_*` variables. Restart the local server after changing the environment. Without the contact keys, form inputs and submission are disabled and LinkedIn stays available.
 
 Authorize your hostname in Turnstile and verify the sending domain in Resend (DNS on Vercel: "Auto configure"). Until it is verified, use `onboarding@resend.dev` as the sender: it only delivers to your Resend account email.
+
+Waitlist submission sends only a confirmation email to the subscriber via Resend. The signed link expires in 48 hours: GET shows a confirmation button, and POST notifies `CONTACT_TO` with the confirmed address as reply-to. Without `WAITLIST_SIGNING_SECRET`, only the waitlist is disabled. Recipient throttling permits one confirmation per 10 minutes and three per 24 hours, with the same success response when throttled. Limits are in memory per instance; tokens contain personal data, so exclude confirmation URLs/tokens from access and analytics logs. No database or permanent replay record is used; duplicate notification protection uses Resend's content-derived idempotency within the provider's retention window.
 
 <a id="verification"></a>
 

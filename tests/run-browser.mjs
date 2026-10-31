@@ -3,7 +3,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 
 // Run after npm run build. A supplied BASE_URL reuses an existing server.
 const suites = process.argv.slice(2);
-const files = suites.length ? suites : ["hero-ctas", "hero-scenes", "scene-lifecycle", "events-page", "niveora", "marte", "lumina", "atlas", "aurelia", "responsiveness", "home-hero-responsive", "mobile-eggs"];
+const files = suites.length ? suites : ["security-headers", "hero-ctas", "hero-scenes", "scene-lifecycle", "events-page", "niveora", "marte", "lumina", "atlas", "aurelia", "responsiveness", "home-hero-responsive", "mobile-eggs"];
 const port = process.env.BROWSER_PORT || "3100";
 let server;
 let output = "";

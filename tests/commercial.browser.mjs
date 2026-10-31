@@ -27,6 +27,11 @@ const copy = {
   en: { headline: 'Talks, workshops and mentoring', offers: ['Talks', 'Workshops', 'Mentoring'] },
   es: { headline: 'Charlas, talleres y mentorías', offers: ['Charlas', 'Talleres', 'Mentorías'] },
 };
+const waitlistSuccess = {
+  pt: 'Confira sua caixa de entrada e a pasta de spam. Abra o link do e-mail e confirme sua inscrição na lista de espera.',
+  en: 'Check your inbox and spam folder. Open the email link and confirm your waitlist registration.',
+  es: 'Revisa tu bandeja de entrada y la carpeta de spam. Abre el enlace del correo y confirma tu inscripción en la lista de espera.',
+};
 const subjects = ['palestra', 'workshop', 'mentoria'];
 const serviceIds = ['palestras', 'workshop-sdlc-agentes-ia', 'mentoria-consultoria-lideranca-tecnica'];
 
@@ -58,6 +63,25 @@ async function firstScreen(page, url, file, javaScriptEnabled) {
 }
 
 try {
+  // Requires the five contact variables plus WAITLIST_SIGNING_SECRET (32+ chars).
+  // The shared mock intercepts the action itself; no confirmation mail is sent.
+  for (const lang of ['pt', 'en', 'es']) await check(`${lang}: lista de espera pede confirmação por e-mail`, async () => {
+    const { context, page, contact } = await open(viewports[0], modes[1]);
+    try {
+      await page.goto(`${base}/${lang}/servicos#lista-de-espera`);
+      const form = page.locator('#lista-de-espera form');
+      await expect(form.locator('[name=name]')).toBeEnabled();
+      await form.locator('[name=name]').fill('Ana');
+      await form.locator('[name=email]').fill('ana@example.com');
+      await form.locator('[name=interest][value=curso-gravado]').check();
+      await form.locator('[name=consent]').check();
+      await expect(form.locator('[name="cf-turnstile-response"]')).toHaveValue('browser-mock-token:waitlist');
+      await form.locator('button[type=submit]').click();
+      await expect(page.locator('#lista-de-espera [role=status]')).toHaveText(waitlistSuccess[lang]);
+      assert.equal(contact.posts.length, 1);
+      assert.deepEqual(contact.providers, []);
+    } finally { await context.close(); }
+  });
   for (const lang of ['pt', 'en', 'es']) for (const viewport of viewports) for (const mode of modes) {
     await check(`${lang} ${viewport.width} ${mode.name}: apresentação, formatos e fontes`, async () => {
       const { context, page, contact, errors } = await open(viewport, mode);

@@ -1,3 +1,4 @@
+import './zod-config';
 import { z } from "zod";
 import snapshot from "@/data/youtube.json";
 

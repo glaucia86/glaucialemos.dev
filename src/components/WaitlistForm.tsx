@@ -80,7 +80,7 @@ function WaitlistFields({ lang, enabled, siteKey = '', interest }: Props) {
       <p id="waitlist-purpose">{copy.purpose}</p>
       <label htmlFor="waitlist-consent" className="contact-consent"><input {...attributes('consent')} type="checkbox" checked={values.consent} onChange={e => setValues(previous => ({ ...previous, consent: e.target.checked }))} /><span>{copy.consent}</span></label>
       {error('consent')}
-      {!unavailable && <ContactTurnstile siteKey={siteKey} lang={lang} result={state} />}
+      {!unavailable && <ContactTurnstile action="waitlist" siteKey={siteKey} lang={lang} result={state} />}
       <button className="button primary" type="submit" disabled={unavailable || pending}>{pending ? copy.sending : copy.submit}</button>
       {Object.keys(errors).length > 0 && <p role="alert">{contact.invalid}</p>}
       {(captchaError || state?.status === 'captcha') && <p role="alert">{contact.captcha}</p>}
@@ -88,6 +88,7 @@ function WaitlistFields({ lang, enabled, siteKey = '', interest }: Props) {
         <ol className="contact-seeds" aria-hidden="true"><li data-state="bloom"><i /></li><li data-state="bloom"><i /></li><li data-state="bloom"><i /></li></ol>
         <p>{copy.success}</p>
       </div>}
+      {state?.status === 'rate-limited' && <p role="alert">{copy.rateLimited}</p>}
       {state?.status === 'error' && <p role="alert">{copy.error}</p>}
     </form>
     <a className="button secondary" href="https://www.linkedin.com/in/glaucialemos" target="_blank" rel="noopener">{contact.linkedin}</a>

@@ -132,7 +132,7 @@ function ContactFields({ copy, lang, enabled, siteKey, subject }: {
         <p id="contact-purpose">{c.purpose}</p>
         <label htmlFor="contact-consent" className="contact-consent"><input {...attributes('consent')} type="checkbox" checked={values.consent} onChange={e => setValues(previous => ({ ...previous, consent: e.target.checked }))} /><span>{c.consent}</span></label>
         {error('consent')}
-        {!unavailable && (!stepped || reachedLast) && <ContactTurnstile siteKey={siteKey} lang={lang} result={state} />}
+        {!unavailable && (!stepped || reachedLast) && <ContactTurnstile action="contact" siteKey={siteKey} lang={lang} result={state} />}
         <div className="contact-step__nav">
           {stepped && <button type="button" className="button secondary contact-step__back" onClick={back} disabled={pending}>{c.back}</button>}
           <button className="button primary" type="submit" disabled={unavailable || pending}>{pending ? copy.sending : copy.send}</button>
@@ -141,6 +141,7 @@ function ContactFields({ copy, lang, enabled, siteKey, subject }: {
       {Object.keys(errors).length > 0 && <p role="alert">{c.invalid}</p>}
       {(captchaError || state?.status === 'captcha') && <p role="alert">{c.captcha}</p>}
       {state?.status === 'ok' && <p role="status">{copy.success}</p>}
+      {state?.status === 'rate-limited' && <p role="alert">{c.rateLimited}</p>}
       {state?.status === 'error' && <p role="alert">{copy.error}</p>}
     </form>
     <a className="button secondary" href="https://www.linkedin.com/in/glaucialemos" target="_blank" rel="noopener">{c.linkedin}</a>
