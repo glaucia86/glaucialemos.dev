@@ -1,11 +1,12 @@
 "use client";
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Locale } from "@/i18n/config";
 import { discover, emitEgg, matchTail, normalizePhrase, onEgg, type EggId } from "@/lib/eggs";
 import { play } from "@/lib/sfx";
-import { motionAllowed } from "@/lib/use-motion";
+import { motionAllowed, useMediaQuery } from "@/lib/use-motion";
 
 // The five secrets that close the catalogue at 50. Triggers only emit the id (typing, Comlink, gestures); each
 // component here plays its effect and marks the discovery. All of them work by touch and respect reduced motion.
@@ -23,6 +24,7 @@ function useEgg(id: EggId, run: () => void) {
 
 // Home · "chuva": three clicks (or taps) on the events map title rain the real encounters as meteors.
 export function MeteorShower({ lang, events }: { lang: Locale; events: { nome: string; cidade?: string; ano: number }[] }) {
+  const mobile = useMediaQuery(MOBILE_EGG_QUERY);
   const [active, setActive] = useState(false);
   useEgg("meteor-shower", () => { play("comet"); setActive(true); setTimeout(() => setActive(false), motionAllowed() ? 7000 : 5000); });
   useEffect(() => {
@@ -39,7 +41,7 @@ export function MeteorShower({ lang, events }: { lang: Locale; events: { nome: s
   return <div className="egg-meteors" role="status" aria-label={COPY[lang].meteors}>
     <p className="egg-meteors__title">{COPY[lang].meteors}</p>
     {picks.map((event, index) => <span key={`${event.nome}-${index}`} className="egg-meteors__meteor" style={{ "--i": index, "--x": `${(index * 37) % 90 + 5}%` } as CSSProperties}>
-      <i aria-hidden="true" />{event.cidade} · {event.ano}
+      <i aria-hidden="true" />{event.cidade}{!mobile && <> · {event.ano}</>}
     </span>)}
   </div>;
 }
@@ -71,6 +73,7 @@ export function OrbitalSelfie({ lang, events, countries, glaucia, prince }: { la
     // Listen on the window: the hero has layered canvases and hotspots above the image.
     let timer: ReturnType<typeof setTimeout> | undefined;
     const down = (event: PointerEvent) => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       const hero = document.querySelector<HTMLElement>("main .page-hero")?.getBoundingClientRect();
       if (!hero || event.clientY < hero.top || event.clientY > hero.bottom || (event.target as Element).closest("a, button, input, textarea, select")) return;
       timer = setTimeout(() => emitEgg("orbital-selfie"), 2000);
@@ -135,9 +138,21 @@ export function DeepNight({ lang }: { lang: Locale }) {
     if (!on) return;
     const root = document.documentElement;
     const move = (event: PointerEvent) => { root.style.setProperty("--night-x", `${event.clientX}px`); root.style.setProperty("--night-y", `${event.clientY}px`); };
+    const touch = (event: TouchEvent) => {
+      if (!matchMedia(MOBILE_EGG_QUERY).matches || (event.target as Element).closest("button, a, input, textarea, select, dialog")) return;
+      const finger = event.touches[0];
+      if (!finger) return;
+      if (event.cancelable) event.preventDefault();
+      root.style.setProperty("--night-x", `${finger.clientX}px`); root.style.setProperty("--night-y", `${finger.clientY}px`);
+    };
     root.dataset.deepNight = "on";
     addEventListener("pointermove", move);
-    return () => { delete root.dataset.deepNight; removeEventListener("pointermove", move); };
+    addEventListener("pointerdown", move);
+    addEventListener("touchmove", touch, { passive: false });
+    return () => {
+      delete root.dataset.deepNight; removeEventListener("pointermove", move); removeEventListener("pointerdown", move); removeEventListener("touchmove", touch);
+      root.style.removeProperty("--night-x"); root.style.removeProperty("--night-y");
+    };
   }, [on]);
   if (!on) return null;
   return <div className="egg-night" role="status">

@@ -1,3 +1,4 @@
+import { MobileEggLayer } from "@/components/mobile/MobileEggLayer";
 import type { CSSProperties } from "react";
 import { SCENES, boxStyle, poseBox, propBox, type Box } from "@/lib/scenes";
 
@@ -59,7 +60,7 @@ const pose = (actor: "glaucia" | "prince", name: string, box: Box): CSSPropertie
 };
 
 export function LuminaScene() {
-  return <div className="hero-scene-layer hero-scene-layer--lumina" data-paused="true" aria-hidden="true">
+  return <><MobileEggLayer world="content" projection="cover" /><div className="hero-scene-layer hero-scene-layer--lumina" data-paused="true" aria-hidden="true">
     <div className="lumina-plane">
       <canvas className="lumina-sky lumina-sky--back" />
       <span className="lumina-books" data-books="closed">
@@ -81,7 +82,7 @@ export function LuminaScene() {
       </span>
       <canvas className="lumina-sky lumina-sky--front" />
     </div>
-  </div>;
+  </div></>;
 }
 
 type HotLabels = Record<keyof typeof HOTSPOTS, string>;

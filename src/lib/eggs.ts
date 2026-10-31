@@ -2,6 +2,7 @@
 // the component that owns the effect listens, plays it and marks it as discovered.
 import { EGGS, type EggId, type EggPage } from "./egg-catalog";
 import { epilogueRemaining } from "./epilogue";
+import { MOBILE_EGG_QUERY } from "./mobile-eggs";
 export { EGGS, type EggId, type EggPage } from "./egg-catalog";
 
 export function remainingDiscoveries(id: EggId, found: readonly string[]): number {
@@ -139,6 +140,11 @@ export function buzz(pattern: number | number[]) {
 export function bringIntoView(element: Element | null) {
   return new Promise<void>((resolve) => {
     if (!element) return resolve();
+    // Mobile hero copy extends below the art. Centering the entire section hides
+    // its scene and pauses the owner before it can play the requested effect.
+    if (matchMedia(MOBILE_EGG_QUERY).matches && element.matches(".page-hero")) {
+      element = element.querySelector(".mobile-eggs") ?? element;
+    }
     const box = element.getBoundingClientRect();
     if (box.top >= 0 && box.bottom <= innerHeight) return resolve();
     const lenis = window.__lenis;

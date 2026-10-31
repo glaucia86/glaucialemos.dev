@@ -12,6 +12,7 @@ import { blockMusic } from "@/lib/music";
 import { BEATS, CORE, CUES, DEPTH, STAR, cablePath, floatingFrame, poseStyle, starDelays, starNote, STATIC_FRAME, type DepthLayer, type OrbitActor, type OrbitPose } from "@/lib/beyond-orbit";
 import { createVeil, type Veil } from "./veil-engine";
 import { createVeilJump } from "./veil-jump";
+import { MobileEggLayer } from "@/components/mobile/MobileEggLayer";
 import { createStardust } from "./stardust-text";
 
 const COORDINATE_CHARS = "0123456789°′″+-.";
@@ -385,7 +386,8 @@ export function BeyondOrbitMotion({ children, finale: ending, ambient, overlays,
   return <div ref={root} className="beyond-orbit__experience" data-revealed={revealed || undefined}>
     {ambient}
     <span className="beyond-orbit__curtain" aria-hidden="true" />
-    <div className="beyond-orbit__frame">
+    <div className="beyond-orbit__frame" data-mobile-egg-host>
+      <MobileEggLayer world="epilogue" projection="beyond-orbit" />
       <div className="beyond-orbit__scene">{children}</div>
       {overlays}
       {!revealed && <p className="beyond-orbit__hint"><b aria-hidden="true" />{hint}</p>}

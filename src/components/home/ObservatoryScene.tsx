@@ -1,3 +1,4 @@
+import { MobileEggLayer } from "@/components/mobile/MobileEggLayer";
 import type { CSSProperties } from "react";
 import { SCENES, boxStyle, poseBox, propBox, type Box } from "@/lib/scenes";
 
@@ -36,7 +37,7 @@ const art = (src: string): CSSProperties => ({ backgroundImage: `url(${src})` })
 const FIREFLIES = [[52, 86], [56, 80], [60, 90], [66, 84], [97, 86], [54, 93]];
 
 export function ObservatoryScene() {
-  return <div className="hero-scene-layer hero-scene-layer--observatory" data-paused="true" aria-hidden="true">
+  return <><MobileEggLayer world="home" projection="cover" /><div className="hero-scene-layer hero-scene-layer--observatory" data-paused="true" aria-hidden="true">
     <div className="scene-image-plane observatory-plane">
       <canvas className="observatory-sky observatory-sky--back" />
       <span className="observatory-hangar" style={at(SPOTS.hangarMouth.u, 39.2)}><i /><i /><i /></span>
@@ -65,7 +66,7 @@ export function ObservatoryScene() {
       <canvas className="observatory-sky observatory-sky--front" />
       <span className="observatory-flash" />
     </div>
-  </div>;
+  </div></>;
 }
 
 type HotLabels = { glaucia: string; prince: string; hangar: string; console: string; lantern: string };

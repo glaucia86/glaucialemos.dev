@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useRef, type CSSProperties } from "react";
 import type { BeyondOrbitCopy } from "@/i18n/beyond-orbit";
 import type { Locale } from "@/i18n/config";
+import { mobileEggs } from "@/i18n/mobile-eggs";
+import { MOBILE_HOTSPOTS } from "@/lib/mobile-eggs";
 import { comlink } from "@/i18n/comlink";
 import { emitEgg } from "@/lib/eggs";
 import { useDiscoveries } from "@/lib/use-discoveries";
@@ -192,9 +194,13 @@ export function EpilogueVoyage({ copy, lang }: { copy: BeyondOrbitCopy; lang: Lo
                 <ul className="beyond-orbit__moon-list">{report.found.map((id) => <li key={id}>{eggs[id].name}</li>)}</ul>
               </>}
               {report.missing.length > 0 && <details className="beyond-orbit__hints">
-                <summary>{copy.seeHint} · {copy.missing} ({report.missing.length})</summary>
-                <ul>{report.missing.map((id) => <li key={id}>{eggs[id].hint}</li>)}</ul>
+                <summary>{copy.seeHint}<span className="beyond-orbit__missing-count"> · {copy.missing} ({report.missing.length})</span></summary>
+                <ul className="beyond-orbit__desktop-hints">{report.missing.map((id) => <li key={id}>{eggs[id].hint}</li>)}</ul>
               </details>}
+              <details className="beyond-orbit__mobile-hints">
+                <summary>{copy.seeHint}</summary>
+                <ul>{MOBILE_HOTSPOTS[world.page].map(({ id }) => <li key={id}>{mobileEggs[lang].hints[id]}</li>)}</ul>
+              </details>
               {world.path !== null && report.charted && <Link className="beyond-orbit__revisit" href={`/${lang}${world.path}`}>{fill(copy.revisitWorld, { world: name })}</Link>}
             </div>
           </li>;

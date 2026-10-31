@@ -1,5 +1,9 @@
 "use client";
 
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
+import { useMediaQuery } from "@/lib/use-motion";
+import { mobileEggs } from "@/i18n/mobile-eggs";
+import { isLocale, defaultLocale } from "@/i18n/config";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { createPortal } from "react-dom";
@@ -8,6 +12,7 @@ import { EGGS, FOUND_EVENT, discover, emitEgg, eggsFor, forget, getFoundSnapshot
 import { useDiscoveries } from "@/lib/use-discoveries";
 import { epilogueRemaining } from "@/lib/epilogue";
 import { play } from "@/lib/sfx";
+import { MobileComlinkSheet } from "./mobile/MobileComlinkSheet";
 
 
 // The secret channel: every Easter egg is reachable from here on any device, by typing or by tapping replay.
@@ -21,6 +26,7 @@ const markHintSeen = () => { try { localStorage.setItem(HINT_KEY, "1"); } catch 
 
 // `hintReady`: the chrome says when nothing else is asking for attention (intro and sound invitation are over).
 export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: ComlinkCopy; pathname: string; slot: HTMLElement | null; hintReady?: boolean }) {
+  const mobile = useMediaQuery(MOBILE_EGG_QUERY);
   const page = pageOf(pathname);
   const list = eggsFor(page);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -37,6 +43,7 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
   const [feedback, setFeedback] = useState("");
   const [confirming, setConfirming] = useState(false);
   const [hint, setHint] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   // First visit only: the radio blinks once with a one-line explanation, so nobody misses that the site has secrets.
   useEffect(() => {
     if (!hintReady) return;
@@ -80,7 +87,7 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
       return () => { observer.disconnect(); viewport.removeEventListener("scroll", update); };
     });
     return () => cleanups.forEach(cleanup => cleanup?.());
-  }, []);
+  }, [mobile]);
   useEffect(() => {
     if (remainingDiscoveries("curious-letter", found) > 0) letter.current?.close();
   }, [found]);
@@ -89,6 +96,8 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
     const openLetter = () => {
       const missing = remainingDiscoveries("curious-letter", getFoundSnapshot().split(","));
       if (missing) {
+        // Mobile hotspots own their soft locked hint; never open the desktop terminal here.
+        if (matchMedia(MOBILE_EGG_QUERY).matches) return;
         setFeedback(copy.letter.locked.replace("{n}", String(missing)));
         if (!dialog.current?.open) dialog.current?.showModal();
         return;
@@ -121,12 +130,14 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout> | undefined;
     const onFound = () => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) { play("success"); return; }
       setFresh(true); play("success");
       clearTimeout(timer); timer = setTimeout(() => setFresh(false), 2600);
     };
     const onKey = (event: KeyboardEvent) => {
       if (event.key !== "`" || (event.target as Element | null)?.closest("input, textarea, select, [contenteditable='true']")) return;
       event.preventDefault();
+      if (matchMedia(MOBILE_EGG_QUERY).matches) { setSheetOpen(value => !value); return; }
       if (dialog.current?.open) dialog.current.close(); else open();
     };
     const onOpen = () => open();
@@ -136,9 +147,14 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
     return () => { clearTimeout(timer); removeEventListener(FOUND_EVENT, onFound); removeEventListener("keydown", onKey); removeEventListener(COMLINK_OPEN_EVENT, onOpen); };
   }, []);
 
-  useEffect(() => { if (dialog.current?.open) dialog.current.close(); }, [pathname]);
+  useEffect(() => { dialog.current?.close(); setSheetOpen(false); }, [pathname, mobile]);
 
-  function open() { setHint(false); markHintSeen(); setFeedback(""); setConfirming(false); dialog.current?.showModal(); input.current?.focus({ preventScroll: true }); play("blip"); }
+  function open() {
+    setHint(false); markHintSeen(); setFeedback(""); setConfirming(false);
+    if (matchMedia(MOBILE_EGG_QUERY).matches) setSheetOpen(true);
+    else { dialog.current?.showModal(); input.current?.focus({ preventScroll: true }); }
+    play("blip");
+  }
   const wipe = () => {
     if (!confirming) { setConfirming(true); play("error"); return; }
     forget(); setConfirming(false); setFeedback(copy.resetDone); play("push");
@@ -167,7 +183,9 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
   const lostFound = EGGS.some(egg => egg.page === "notfound" && found.includes(egg.id));
 
   return <>
-    {slot && createPortal(<button type="button" className="comlink-toggle" aria-label={copy.open} aria-haspopup="dialog" title={`${copy.open} (\`)`} data-fresh={fresh || undefined} onClick={open}>
+    {mobile && <MobileComlinkSheet key={pathname} world={page === "global" ? "home" : page}
+      copy={mobileEggs[isLocale(lang) ? lang : defaultLocale]} open={sheetOpen} onDismiss={() => setSheetOpen(false)} />}
+    {slot && createPortal(<button type="button" className="comlink-toggle" aria-label={copy.open} aria-haspopup="dialog" title={`${copy.open} (\`)`} data-fresh={!mobile && fresh || undefined} onClick={open}>
       <svg viewBox="0 0 12 20" shapeRendering="crispEdges" aria-hidden="true" focusable="false">
         <path fill="#5b6478" d="M8 0h1v6H8z" /><path className="comlink-toggle__tip" fill="#ff4d5e" d="M8 0h1v1H8z" />
         <path fill="#2b3142" d="M2 6h8v13H2z" /><path fill="#8d96ab" d="M3 7h6v4H3z" /><path className="comlink-toggle__screen" fill="#7cf29a" d="M4 8h4v2H4z" />
@@ -176,8 +194,8 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
       <span className="comlink-toggle__count" aria-hidden="true">{count}/{total}</span>
     </button>, slot)}
     {slot && hint && createPortal(<p className="comlink-hint" role="status">{copy.guide.hint} <button type="button" onClick={dismissHint}>{copy.guide.hintClose}</button></p>, slot)}
-    <p className="comlink-fresh" role="status" aria-live="polite" data-show={fresh || undefined}>{fresh ? copy.fresh : ""}</p>
-    <dialog ref={dialog} className="comlink" data-lenis-prevent="" aria-labelledby="comlink-title" onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
+    {!mobile && <p className="comlink-fresh" role="status" aria-live="polite" data-show={fresh || undefined}>{fresh ? copy.fresh : ""}</p>}
+    {!mobile && <dialog ref={dialog} className="comlink" data-lenis-prevent="" aria-labelledby="comlink-title" onClick={(event) => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="comlink__panel">
         <header className="comlink__head">
           <p className="comlink__channel" aria-hidden="true"><span className="comlink__rec" />{copy.channel}</p>
@@ -218,10 +236,10 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
                 <span aria-hidden="true">{confirming ? "!" : "⟲"}</span>{confirming ? copy.resetConfirm.replace("{n}", String(count)) : copy.reset}
               </button>}
               <ul className="comlink__list">{list.map(({ id }) => {
-                const known = found.includes(id);
+                const known = !mobile && found.includes(id);
                 return <li key={id} data-found={known || undefined}>
                   <span className="comlink__icon" aria-hidden="true">{known ? "✦" : "?"}</span>
-                  <span className="comlink__text"><b>{known ? copy.eggs[id].name : copy.hidden}</b><small>{copy.eggs[id].hint}</small></span>
+                  <span className="comlink__text"><b>{known ? copy.eggs[id].name : copy.hidden}</b><small>{mobile ? mobileEggs[isLocale(lang) ? lang : defaultLocale].hints[id] : copy.eggs[id].hint}</small></span>
                   {known && <button type="button" onClick={() => run(id)}>{copy.play}<span className="sr-only">: {copy.eggs[id].name}</span></button>}
                 </li>;
               })}</ul>
@@ -230,7 +248,7 @@ export function Comlink({ copy, pathname, slot, hintReady = false }: { copy: Com
           <div className="comlink__mini-bar" aria-hidden="true" hidden><i /></div>
         </div>
       </div>
-    </dialog>
+    </dialog>}
     <dialog ref={letter} className="curious-letter" data-lenis-prevent="" aria-labelledby="curious-letter-title" onClose={() => { if (letterOpener.current?.isConnected) letterOpener.current.focus({ preventScroll: true }); }}>
       <div className="comlink__scroll-frame curious-letter__scroll-frame">
         <div ref={letterScroll} className="comlink__scroll" data-lenis-prevent="" tabIndex={0} role="region" aria-labelledby="curious-letter-title">

@@ -1,6 +1,9 @@
 "use client";
 
-import { useRef, type ReactNode } from "react";
+import { MOBILE_EGG_QUERY } from "@/lib/mobile-eggs";
+import { useRef, useState, type ReactNode } from "react";
+import { defaultLocale, isLocale } from "@/i18n/config";
+import { mobileEggOutcomes } from "@/i18n/mobile-eggs";
 import { gsap, ScrollTrigger, useGSAP, heroScrollStart, HERO_OVERLAY, FINE_POINTER, SCRAMBLE_CHARS } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
 import { observeMotionActivity } from "@/lib/motion";
@@ -53,10 +56,33 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
   const motion = useMotionEnabled();
   const desktop = useMediaQuery(HERO_OVERLAY);
   const fine = useMediaQuery(FINE_POINTER);
+  const mobile = useMediaQuery(MOBILE_EGG_QUERY);
+  const [narrative, setNarrative] = useState("");
 
   useGSAP(() => {
     const section = hero.current;
-    if (!section || !motion) return;
+    if (!section) return;
+    if (!motion) {
+      if (!mobile) return;
+      let timer = 0;
+      const rest = () => {
+        setNarrative(""); delete section.dataset.sky;
+        section.querySelectorAll<HTMLElement>(".observatory-lantern").forEach(lamp => { delete lamp.dataset.off; });
+      };
+      const stop = onEgg(HOME_EGGS, id => {
+        clearTimeout(timer); rest(); discover(id);
+        const lang = document.documentElement.lang.split("-")[0];
+        const copy = mobileEggOutcomes[isLocale(lang) ? lang : defaultLocale];
+        if (id in copy) setNarrative(copy[id as keyof typeof copy]);
+        if (id === "focus-lens") dispatchEvent(new Event(TELESCOPE_OPEN));
+        if (id === "dark-sky") {
+          section.dataset.sky = "dark";
+          section.querySelectorAll<HTMLElement>(".observatory-lantern").forEach(lamp => { lamp.dataset.off = "true"; });
+        }
+        timer = window.setTimeout(rest, 4000);
+      });
+      return () => { stop(); clearTimeout(timer); rest(); };
+    }
     const q = <T extends Element = HTMLElement>(selector: string) => section.querySelector<T>(selector)!;
     const layer = q(".hero-scene-layer");
     const sceneLayers = [layer, q(".observatory-layer")];
@@ -151,7 +177,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
 
     // Pointer: the aurora leans towards it, and on a mouse, touching a meteor catches it.
     const move = (event: PointerEvent) => {
-      if (!fine) return;
+      if (!fine || matchMedia(MOBILE_EGG_QUERY).matches) return;
       const uv = toUV(event.clientX, event.clientY);
       sky.pointer(uv);
       if (sky.catchAt(uv, 36)) caught();
@@ -280,6 +306,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
       setStage("idle");
     };
     const down = (event: PointerEvent) => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       if ((event.target as Element).closest(INTERACTIVE) || event.button !== 0) return;
       if (sky.catchAt(toUV(event.clientX, event.clientY), 48)) { caught(); return; }
       if (busy()) return;
@@ -290,10 +317,11 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
     };
     const drag = (event: PointerEvent) => { if (press && Math.hypot(event.clientX - press.x, event.clientY - press.y) > 10) cancelPress(); };
     const up = (event: PointerEvent) => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       if (press) { cancelPress(); sky.burst(toUV(event.clientX, event.clientY), 18); play("twinkle"); return; }
       if (stage === "countdown") { play("error"); settle(); }
     };
-    const abort = () => { cancelPress(); if (stage === "countdown") settle(); };
+    const abort = () => { if (matchMedia(MOBILE_EGG_QUERY).matches) return; cancelPress(); if (stage === "countdown") settle(); };
     const noMenu = (event: Event) => { if (stage === "charging" || stage === "countdown") event.preventDefault(); };
 
     // Replays from the star radio, and the same phrases typed straight onto the page.
@@ -313,6 +341,7 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
 
     const actions: Record<string, () => void> = { glaucia: focusLens, prince: dogSignal, hangar: hangarCheck, console: hangarCheck };
     const onHot = (event: Event) => {
+      if (matchMedia(MOBILE_EGG_QUERY).matches) return;
       const key = (event.currentTarget as HTMLElement).dataset.hot!;
       if (key.startsWith("lantern-")) lantern(Number(key.slice(8))); else actions[key]?.();
     };
@@ -373,10 +402,11 @@ export function ObservatoryMotion({ children, labels, labelledBy }: { children: 
       removeEventListener(TELESCOPE_CLOSED, telescopeClosed); removeEventListener("keydown", typed);
       leave();
     };
-  }, { scope: hero, dependencies: [motion, desktop, fine], revertOnUpdate: true });
+  }, { scope: hero, dependencies: [motion, desktop, fine, mobile], revertOnUpdate: true });
 
   return <section ref={hero} className="page-hero home-hero-v2 observatory-hero" aria-labelledby={labelledBy} data-motion={motion}>
     {children}
+    {narrative && <p className="mobile-egg-narrative" role="status">{narrative}</p>}
     <span className="sky-vignette" aria-hidden="true" />
     <div className="sky-counters" aria-live="polite"><p className="sky-counter sky-counter--wish" /><p className="sky-counter sky-counter--lights" /></div>
     <p className="ignition-meter" aria-hidden="true">{labels.ignition}<span className="ignition-meter__bar"><i /></span></p>

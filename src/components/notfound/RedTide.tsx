@@ -14,6 +14,8 @@ import { redTide } from '@/i18n/red-tide';
 import { nearestRoute, ROUTES, type RouteKey } from '@/lib/red-tide-routes';
 import scene from '@/data/galaxia/red-tide.json';
 import { createPlasma, drawWarp } from './plasma-engine';
+import { MOBILE_EGG_QUERY } from '@/lib/mobile-eggs';
+import { MobileEggLayer } from '@/components/mobile/MobileEggLayer';
 import { RedTideEpisode } from './RedTideEpisode';
 
 export const AMBIENCE_VOLUME = .35;
@@ -100,7 +102,11 @@ export function RedTide({ forcedLang }: { forcedLang?: Locale }) {
   useEffect(() => {
     const section = root.current;
     if (!section) return;
+    let restTimer = 0;
     const run = (id: EggId) => {
+      clearTimeout(restTimer);
+      delete section.dataset.mobileRest;
+      if (matchMedia(MOBILE_EGG_QUERY).matches) restTimer = window.setTimeout(() => { section.dataset.mobileRest = 'true'; }, motionAllowed() ? 4200 : 0);
       discover(id);
       if (id === 'signal-recovered') {
         play('scan');
@@ -129,7 +135,7 @@ export function RedTide({ forcedLang }: { forcedLang?: Locale }) {
       if (id) { buffer = ''; emitEgg(id); }
     };
     addEventListener('keydown', key);
-    return () => { stop(); removeEventListener('keydown', key); };
+    return () => { clearTimeout(restTimer); stop(); removeEventListener('keydown', key); };
   }, [pathname]);
 
   useEffect(() => { if (signal !== undefined || rescued) panel.current?.focus({ preventScroll: true }); }, [signal, rescued]);
@@ -149,7 +155,8 @@ export function RedTide({ forcedLang }: { forcedLang?: Locale }) {
   const hot = (name: keyof typeof RED_TIDE_HOTSPOTS, id: EggId) => <button type="button" className={`red-tide__hot red-tide__hot--${name}`} style={box(RED_TIDE_HOTSPOTS[name])}
     aria-label={copy.hot[name]} title={copy.hot[name]} hidden={!ready} onClick={() => emitEgg(id)} />;
   return <main id="main" className="red-tide-page" tabIndex={-1}>
-    <section ref={root} className="red-tide" aria-labelledby="red-tide-title" data-paused="true" data-motion={motion || undefined}>
+    <section ref={root} className="red-tide" data-mobile-egg-host aria-labelledby="red-tide-title" data-paused="true" data-motion={motion || undefined}>
+      <MobileEggLayer world="notfound" projection="red-tide" />
       <div className="red-tide__frame">
         <Image className="red-tide__image" src="/galaxia/scenes/red-tide/poster.webp" alt="" fill priority fetchPriority="high" sizes="100vw" />
         <div className="red-tide__plane">

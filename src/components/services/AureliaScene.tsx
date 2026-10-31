@@ -1,3 +1,4 @@
+import { MobileEggLayer } from "@/components/mobile/MobileEggLayer";
 import type { CSSProperties } from 'react';
 import { SCENES, boxStyle, poseBox, propBox, type Box } from '@/lib/scenes';
 export const aureliaScene=SCENES.aurelia;
@@ -24,7 +25,7 @@ const actorStyle=(actor:'glaucia'|'prince',name:string)=>{
     transform:flip?'scaleX(-1)':undefined,transformOrigin:flip?'50% 100%':`${art.feetX/art.w*100}% 100%`};
 };
 export function AureliaScene(){
-  return <div className="hero-scene-layer hero-scene-layer--aurelia" data-paused="true" aria-hidden="true">
+  return <><MobileEggLayer world="services" projection="cover" /><div className="hero-scene-layer hero-scene-layer--aurelia" data-paused="true" aria-hidden="true">
     <div className="aurelia-plane">
       <canvas className="aurelia-sky aurelia-sky--back"/>
       <span className="aurelia-garden" style={boxStyle(garden)}>
@@ -39,7 +40,7 @@ export function AureliaScene(){
       <span className="aurelia-crew">{GLAUCIA_POSES.map(pose=><i key={pose} data-actor-pose={pose} style={actorStyle('glaucia',pose)}/>)}<i className="aurelia-blink" style={actorStyle('glaucia','blink')}/></span>
       <canvas className="aurelia-sky aurelia-sky--front"/>
     </div>
-  </div>;
+  </div></>;
 }
 /** The finale stands on the hero's own terrace, at night: same plate, same stage marks, Glaucia seen from behind. */
 export function FinaleTerrace(){

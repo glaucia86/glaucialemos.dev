@@ -8,6 +8,8 @@ import { EGGS, type EggPage } from '@/lib/egg-catalog';
 import { discoveredWorldCount, epilogueRemaining } from '@/lib/epilogue';
 import { useDiscoveries } from '@/lib/use-discoveries';
 import { EpilogueSignal } from '@/components/epilogue/EpilogueSignal';
+import { MOBILE_EGG_QUERY } from '@/lib/mobile-eggs';
+import { useMediaQuery } from '@/lib/use-motion';
 
 export const TRANSMISSION_WORLDS = [['home', ''], ['about', '/sobre'], ['projects', '/projetos'], ['content', '/conteudo'], ['events', '/eventos']] as const satisfies readonly (readonly [EggPage, string])[];
 export const NEEDED_WORLDS = 3;
@@ -19,6 +21,7 @@ export const worldsWithSignal = (found: readonly string[]) => new Set(EGGS.filte
  * Faint (with three lights and the worlds still silent) until three worlds have answered; then the real signal takes over.
  */
 export function EpilogueTransmission({ lang, copy, epilogue }: { lang: Locale; copy: AureliaStoryCopy['transmission']; epilogue: BeyondOrbitCopy }) {
+  const mobile = useMediaQuery(MOBILE_EGG_QUERY);
   const found = useDiscoveries();
   const remaining = epilogueRemaining(found), count = Math.min(NEEDED_WORLDS, discoveredWorldCount(found));
   const answered = worldsWithSignal(found);
@@ -33,7 +36,7 @@ export function EpilogueTransmission({ lang, copy, epilogue }: { lang: Locale; c
         <span aria-hidden="true">{Array.from({ length: NEEDED_WORLDS }, (_, i) => <i key={i} data-on={i < count || undefined} />)}</span>
         <span>{copy.progress.replace('{n}', String(count))}</span>
       </div>
-      <ul className="transmission__worlds">{TRANSMISSION_WORLDS.map(([page, path]) => <li key={page} data-found={answered.has(page) || undefined}>
+      <ul className="transmission__worlds">{TRANSMISSION_WORLDS.map(([page, path]) => <li key={page} data-found={!mobile && answered.has(page) || undefined}>
         <Link href={`/${lang}${path}`}>{copy.worlds[page]}</Link> <span>{answered.has(page) ? copy.found : copy.silent}</span>
       </li>)}</ul>
       <p className="transmission__hint">{copy.hint}</p>

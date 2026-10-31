@@ -1,3 +1,4 @@
+import { MobileEggLayer } from "@/components/mobile/MobileEggLayer";
 import type { CSSProperties } from "react";
 import { SCENES, boxStyle, poseBox, propBox, type Box } from "@/lib/scenes";
 import { GLAUCIA_POSES as POSES, PRINCE_POSES } from "./niveora-acting";
@@ -52,7 +53,7 @@ export const SPOTS = {
 const art = (src: string): CSSProperties => ({ backgroundImage: `url(${src})` });
 
 export function NiveoraScene() {
-  return <div className="hero-scene-layer hero-scene-layer--niveora" data-paused="true" aria-hidden="true">
+  return <><MobileEggLayer world="about" projection="cover" /><div className="hero-scene-layer hero-scene-layer--niveora" data-paused="true" aria-hidden="true">
     <div className="scene-image-plane niveora-plane">
       <canvas className="niveora-sky niveora-sky--back" />
       <span className="niveora-crystal" style={boxStyle(crystal)}><i className="niveora-crystal__art" style={art(props["prismatic-ice-specimen"].src)} /></span>
@@ -76,7 +77,7 @@ export function NiveoraScene() {
       </span>
       <canvas className="niveora-sky niveora-sky--front" />
     </div>
-  </div>;
+  </div></>;
 }
 
 type HotLabels = Record<"glaucia" | "prince" | "crystal" | "station" | "capsule", string>;

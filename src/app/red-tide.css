@@ -109,3 +109,35 @@ html.reduce-motion .red-tide * { animation: none !important; transition: none !i
   .red-tide__copy > .actions { order: 1; }
   .red-tide__copy > :is(.red-tide__body, .red-tide__episode, .red-tide__worlds, .red-tide__touch, .red-tide__panel) { order: 2; }
 }
+
+/* MOBILE_EGG_QUERY: (orientation: portrait) and (max-width: 820px), (pointer: coarse) and (max-width: 820px), (pointer: coarse) and (orientation: landscape) and (max-height: 520px) */
+@media (orientation: portrait) and (max-width: 820px), (pointer: coarse) and (max-width: 820px), (pointer: coarse) and (orientation: landscape) and (max-height: 520px) {
+  html body .red-tide {
+    --hero-frame-height: calc(100svh - var(--header-height, 0px));
+    --hero-copy-top: clamp(1rem, 6svh, 3.5rem);
+    --red-tide-x: 76%; touch-action: pan-y;
+  }
+  html body .red-tide__frame { --scene-x: var(--red-tide-x); --scene-y: 100%; inset: 0 0 auto; height: var(--hero-frame-height); }
+  html body .red-tide__shade { inset: 0 0 auto; height: var(--hero-frame-height); background: linear-gradient(180deg, #0d0612d9, transparent 40%, transparent 85%, var(--rt-night)); }
+  html body .red-tide__copy {
+    display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: max-content max-content minmax(0, 1fr);
+    width: 100%; margin: 0; gap: .75rem; justify-items: stretch;
+    padding: var(--hero-copy-top) max(1rem, env(safe-area-inset-right)) 2rem max(1rem, env(safe-area-inset-left));
+    pointer-events: none;
+  }
+  html body .red-tide__copy :is(a, button) { pointer-events: auto; }
+  html body .red-tide__copy::before { content: ""; grid-column: 1; grid-row: 1 / 4; min-height: calc(var(--hero-frame-height) - var(--hero-copy-top)); pointer-events: none; }
+  html body .red-tide__copy > *, html body .red-tide .actions > * { grid-column: 1; grid-row: auto; order: 0; min-width: 0; max-width: 100%; width: 100%; }
+  html body .red-tide__copy > .red-tide__world { grid-row: 1; padding-right: 72px; }
+  html body .red-tide__copy > .red-tide__code { grid-row: 2; padding-right: 72px; font-size: clamp(2rem, min(12vw, 8svh), 4rem); }
+  html body .red-tide .actions { display: contents; }
+  html body .red-tide__copy > :not(.red-tide__world, .red-tide__code, .actions, dialog), html body .red-tide .actions > * {
+    grid-row: auto; padding: 1rem; border: 1px solid #f0707255; border-radius: var(--radius-lg);
+    background: #1a0b12; font-size: 1rem; line-height: 1.55;
+  }
+  html body .red-tide__copy h1 { font-size: 1.5rem; }
+  html body :is(.red-tide__hud, .red-tide__touch, .red-tide__hot) { display: none !important; pointer-events: none !important; }
+  /* Retain navigation in the cards; the art returns to its untouched state. */
+  html body .red-tide[data-mobile-rest] :is(.red-tide__beacon, .red-tide__portal, .red-tide__console) { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+  @media (orientation: portrait) { html body .red-tide { --red-tide-x: 78%; } }
+}
