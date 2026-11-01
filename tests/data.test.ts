@@ -13,7 +13,7 @@ import { eventoSchema } from "@/lib/types";
 
 describe("dados", () => {
   it("carrega e valida todas as coleções", () => {
-    expect(getEventos()).toHaveLength(135);
+    expect(getEventos()).toHaveLength(136);
     expect(getCargos().length).toBeGreaterThan(0);
     expect(getProjetos().length).toBeGreaterThan(0);
     expect(getArtigos().length).toBeGreaterThan(0);
@@ -39,15 +39,15 @@ describe("dados", () => {
       idiomas,
     });
     expect(getEventStats()).toEqual({
-      eventos: 135,
+      eventos: 136,
       paises: 9,
-      idiomas: { "pt-BR": 104, en: 26, es: 5 },
+      idiomas: { "pt-BR": 105, en: 26, es: 5 },
     });
   });
 
   it("inclui os eventos de 2024 a 2026 com fonte pública e sem duplicatas", () => {
     const recentes = getEventos().filter((evento) => evento.ano > 2023);
-    expect(recentes).toHaveLength(20);
+    expect(recentes).toHaveLength(21);
     expect(recentes.every((evento) => evento.fonte.startsWith("https://"))).toBe(true);
     const desde2023 = getEventos().filter((evento) => evento.ano >= 2023);
     expect(new Set(desde2023.map((evento) => `${evento.ano}|${evento.nome}`)).size).toBe(desde2023.length);

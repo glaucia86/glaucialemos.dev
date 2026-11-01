@@ -193,7 +193,7 @@
 - Eventos (Atlas das Conexões, órbita da Terra): `src/app/[lang]/eventos/page.tsx` + `src/app/atlas.css` (`className="home-page events-page"`,
   `data-sound-world="atlas"`; o antigo `events.css` saiu do `globals.css`). Textos em `src/i18n/atlas.ts` (`d.atlas`). **Regra factual**: formato
   derivado de `cidade === "Online"` (remoto, nunca tem lat/lon) em `src/lib/atlas-records.ts`; presencial = luz de cidade (ouro), remoto =
-  anel de sinal (ciano), nunca ponto no mapa; sem arcos cidade→cidade. 134 eventos: 79 presenciais / 55 remotos, 20 cidades, 7 países com
+  anel de sinal (ciano), nunca ponto no mapa; sem arcos cidade→cidade. 136 eventos: 81 presenciais / 55 remotos, 20 cidades, 7 países com
   presença, 9 "representados" (África do Sul e França só por remoto). CloudOuest Virtual e Reactor Brasil Webinar (2020) foram corrigidos
   para remotos a pedido da Glaucia. Diário = formulário GET (`?ano=&formato=&tipo=&idioma=&q=`, `src/lib/atlas-filters.ts`), a página lê
   `searchParams` (é `ƒ`) e filtra sem JS; com JS filtra na hora e faz `replaceState`. Cena: `src/components/events/AtlasScene.tsx` (composição A

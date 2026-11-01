@@ -30,7 +30,7 @@ describe("registros do Atlas — regra factual", () => {
   });
 
   it("conta presença sem transformar participação remota em país visitado", () => {
-    expect(presenceStats()).toEqual({ eventos: 135, presenciais: 80, remotos: 55, cidades: 20, paisesPresenca: 7, paisesRepresentados: 9, idiomas: 3 });
+    expect(presenceStats()).toEqual({ eventos: 136, presenciais: 81, remotos: 55, cidades: 20, paisesPresenca: 7, paisesRepresentados: 9, idiomas: 3 });
     const { present, remoteOnly } = countriesSplit();
     expect(remoteOnly).toEqual(["África do Sul", "França"]);
     expect(present).not.toContain("França");
@@ -49,7 +49,7 @@ describe("registros do Atlas — regra factual", () => {
 
   it("soma cada evento uma vez por ano, inclusive anos só remotos", () => {
     const rows = byYear();
-    expect(rows.reduce((sum, row) => sum + row.presencial + row.remoto, 0)).toBe(135);
+    expect(rows.reduce((sum, row) => sum + row.presencial + row.remoto, 0)).toBe(136);
     expect(rows.find((row) => row.year === 2021)).toEqual({ year: 2021, presencial: 0, remoto: 9 });
     expect(rows.find((row) => row.year === 2020)).toEqual({ year: 2020, presencial: 12, remoto: 12 });
   });
@@ -101,7 +101,7 @@ describe("filtros do diário de bordo", () => {
 
   it("filtra por formato, ano, tipo, idioma e busca sem acento", () => {
     expect(filterEvents(events, { ...NO_FILTERS, format: "remoto" })).toHaveLength(55);
-    expect(filterEvents(events, { ...NO_FILTERS, year: 2026 })).toHaveLength(7);
+    expect(filterEvents(events, { ...NO_FILTERS, year: 2026 })).toHaveLength(8);
     expect(filterEvents(events, { ...NO_FILTERS, query: "sao paulo" }).every((event) => event.cidade === "São Paulo")).toBe(true);
     expect(filterEvents(events, { ...NO_FILTERS, query: "no-such-event-zz" })).toEqual([]);
   });
