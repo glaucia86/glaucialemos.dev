@@ -110,7 +110,7 @@ técnicos no `AGENTS.md` (seção Eventos).
   folhas extras 05B; globo "nos dois" (holograma no hero + globo grande no capítulo 2); salto "Mergulho noturno"; `orbital-trail` = uma
   volta por ano; `constellation-route` = Glaucia traça no holograma; `dog-navigation` = um evento por vez; separar presencial/remoto;
   filtro por URL sem JS; Eventos conta no epílogo; composição A aprovada.
-- Números (sempre de `eventos.json`): 134 eventos, 79 presenciais, 55 remotos, 20 cidades, 7 países com presença, 9 representados.
+- Números (sempre de `eventos.json`): 136 eventos, 81 presenciais, 55 remotos, 20 cidades, 7 países com presença, 9 representados.
 
 **Pendências**
 1. **Folhas 05B** (a GE-GL-05 é folha de personagem, sem piscar nem pose de ação). Prompts para o Grok (anexar GE-MASTER-GL/DOG,

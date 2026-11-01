@@ -1,5 +1,17 @@
 [
   {
+    "nome": "IA na Prática — WoMakersCode",
+    "ano": 2026,
+    "cidade": "São Paulo",
+    "pais": "Brasil",
+    "lat": -23.5505,
+    "lon": -46.6333,
+    "idioma": "pt-BR",
+    "tipo": "workshop",
+    "publico": "Não informado",
+    "fonte": "https://luma.com/sdyoch4x"
+  },
+  {
     "nome": "DevDay Exchange Community: Rio de Janeiro — destaques do OpenAI DevDay 2026 com Codex",
     "ano": 2026,
     "cidade": "Rio de Janeiro",

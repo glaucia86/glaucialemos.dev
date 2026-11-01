@@ -13,8 +13,8 @@ try {
   await page.goto(`${baseURL}/pt/eventos`);
   // The counters roll up when they enter the viewport.
   await page.locator('.atlas-stats').scrollIntoViewIfNeeded();
-  await expect(page.locator('.atlas-stats dd').nth(0)).toHaveText('135');
-  await expect(page.locator('.atlas-stats dd').nth(1)).toHaveText('80');
+  await expect(page.locator('.atlas-stats dd').nth(0)).toHaveText('136');
+  await expect(page.locator('.atlas-stats dd').nth(1)).toHaveText('81');
   await expect(page.locator('.atlas-stats dd').nth(2)).toHaveText('55');
   await expect(page.locator('.atlas-stats dd').nth(5)).toHaveText('9');
   await expect(page.locator('.atlas-countries li[data-kind="city"]')).toHaveCount(7);
@@ -54,7 +54,7 @@ try {
    await expect(page.locator('.log__entry[data-format="presencial"]')).toHaveCount(0);
    await page.locator('select[name="formato"]').selectOption('');
    await page.locator('select[name="ano"]').selectOption('2026');
-   await expect(page.locator('.log__entry')).toHaveCount(7);
+   await expect(page.locator('.log__entry')).toHaveCount(8);
    await page.locator('select[name="ano"]').selectOption('');
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -81,14 +81,14 @@ try {
  const staticPage = await browser.newPage({ javaScriptEnabled: false });
  await staticPage.goto(`${baseURL}/pt/eventos`);
  await expect(staticPage.locator('.atlas-stats dd').nth(5)).toHaveText('9');
- await expect(staticPage.locator('.log__entry')).toHaveCount(135);
+ await expect(staticPage.locator('.log__entry')).toHaveCount(136);
  await staticPage.locator('select[name="formato"]').selectOption('presencial');
  await staticPage.locator('.log__apply').click();
  await expect(staticPage).toHaveURL(/formato=presencial/);
- await expect(staticPage.locator('.log__entry')).toHaveCount(80);
+ await expect(staticPage.locator('.log__entry')).toHaveCount(81);
  await staticPage.goto(`${baseURL}/pt/eventos?ano=2021&formato=presencial#diario`);
  await expect(staticPage.locator('.log__empty')).toBeVisible();
  await staticPage.close();
  expect(errors).toEqual([]);
- console.log('PASS: globe drag/keys/touch, 135 records (80 in person, 55 remote), 7 + 2 countries, logbook filters with and without JavaScript.');
+ console.log('PASS: globe drag/keys/touch, 136 records (81 in person, 55 remote), 7 + 2 countries, logbook filters with and without JavaScript.');
 } finally { await browser.close(); }
