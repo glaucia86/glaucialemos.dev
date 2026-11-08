@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buildCareer, careerStats, eraOf, groupEras, parsePeriod } from '@/lib/career';
 import { getCargos } from '@/lib/data';
 
-const NOW = 2026 * 12 + 9;
+const NOW = 2026 * 12 + 10;
 
 describe('career', () => {
   it('parses source periods, including the current role', () => {

@@ -70,6 +70,7 @@ export const WHISPERS = [
 
 // prism-align: the same idea written in two languages (pairs checked by hand, title by title).
 export const TRANSLATIONS = [
+  ["https://glaucialemos.hashnode.dev/from-voice-to-a-support-board-building-a-triage-application-with-gpt-live-the-decisions-api-and-typescript", "https://glaucialemos.hashnode.dev/da-voz-ao-quadro-de-suporte-construindo-uma-aplica-o-de-triagem-com-gpt-live-decisions-api-e-typescript"],
   ["https://dev.to/glaucia86/repo-doctor-ai-powered-github-repository-health-analyzer-136n", "https://dev.to/glaucia86/github-copilot-sdk-construindo-aplicacoes-agenticas-com-ia-na-pratica-com-repo-doctor-25a6"],
   ["https://dev.to/glaucia86/from-zero-to-mcp-building-a-model-context-protocol-server-with-typescript-and-the-star-wars-api-1kdi", "https://dev.to/glaucia86/do-zero-ao-mcp-criando-um-servidor-model-context-protocol-com-typescript-e-a-api-do-star-wars-26n0"],
   ["https://dev.to/glaucia86/building-a-production-ready-weather-mcp-server-with-clean-architecture-redis-cache-and-solid-32cp", "https://dev.to/glaucia86/criando-mcp-server-de-clima-production-ready-com-clean-architecture-cache-redis-e-principios-solid-58i3"],

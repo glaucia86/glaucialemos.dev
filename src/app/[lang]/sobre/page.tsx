@@ -50,10 +50,10 @@ function splitTitle(title: string) {
 
 const code = (index: number) => `✦ ${String(index + 1).padStart(2, "0")}`;
 
-// The memory capsule's records: first role, first documented event, the Microsoft years and today, all from the data.
+// The memory capsule's records: first role, first documented event, the Microsoft years and the latest role, all from the data.
 function capsuleRecords(roles: CareerRole[], microsoftYears: number, copy: NiveoraCopy["capsule"], locale: string): CapsuleRecord[] {
   const first = roles[roles.length - 1];
-  const now = roles[0];
+  const latest = roles[0];
   const microsoft = roles.filter((role) => role.empresa === "Microsoft");
   const event = getEventos().reduce((oldest, item) => item.ano < oldest.ano ? item : oldest);
   const records: CapsuleRecord[] = [
@@ -61,7 +61,7 @@ function capsuleRecords(roles: CareerRole[], microsoftYears: number, copy: Niveo
     { label: copy.labels.event, title: event.nome, detail: [event.cidade, event.pais, event.ano].filter(Boolean).join(" · "), source: event.fonte },
   ];
   if (microsoft.length) records.push({ label: copy.labels.microsoft, title: copy.microsoftYears.replace("{n}", String(microsoftYears)), detail: [...new Set(microsoft.map((role) => role.cargo))].reverse().join(" → "), source: microsoft[0].fonte });
-  records.push({ label: copy.labels.now, title: now.cargo, detail: `${now.empresa} · ${formatExperiencePeriod(now.periodo, locale)}`, source: now.fonte });
+  records.push({ label: copy.labels.latest, title: latest.cargo, detail: `${latest.empresa} · ${formatExperiencePeriod(latest.periodo, locale)}`, source: latest.fonte });
   return records;
 }
 

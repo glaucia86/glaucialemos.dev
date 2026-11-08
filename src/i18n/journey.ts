@@ -13,8 +13,8 @@ export type JourneyCopy = {
 
 export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
   pt: {
-    intro: 'Comecei como desenvolvedora e levei o que aprendia para as comunidades. Na Microsoft, foram mais de seis anos em Developer Advocacy, levando JavaScript, TypeScript e IA a devs do mundo todo. Hoje, como AI Transformation Lead, lidero a adoção de IA generativa e agêntica em squads de engenharia, com código, prática e contexto.',
-    milestones: ['Primeiros passos no desenvolvimento', 'Conexões pela América Latina', 'Developer Advocacy global com IA', 'Transformação com IA no Itaú'],
+    intro: 'Comecei como desenvolvedora e levei o que aprendia para as comunidades. Na Microsoft, foram mais de seis anos em Developer Advocacy, levando JavaScript, TypeScript e IA a devs do mundo todo. Como Principal Software Engineer, construo soluções de IA e compartilho conhecimento prático com desenvolvedores, com base na engenharia de software.',
+    milestones: ['Primeiros passos no desenvolvimento', 'Conexões pela América Latina', 'Developer Advocacy global com IA', 'Soluções de IA e desenvolvimento de negócios'],
     demo: {
       title: 'IA com contexto, não com achismo.',
       note: 'Exemplo didático com estados predefinidos. Trecho real de packages/api/src/functions/chats-post.ts, do projeto oficial da Microsoft em que sou coautora. O código não roda no navegador.',
@@ -43,8 +43,8 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
     closing: { title: 'O próximo encontro pode ser com o seu time.', intro: 'Conte o que seu time precisa aprender ou decidir. Vamos escolher o formato a partir desse desafio.', actions: ['Planeje um workshop', 'Converse sobre mentoria', 'Convide para palestrar'] },
   },
   en: {
-    intro: 'I started as a developer and shared what I learned with communities. At Microsoft, I spent more than six years in Developer Advocacy, bringing JavaScript, TypeScript and AI to developers worldwide. Today, as AI Transformation Lead, I lead the adoption of generative and agentic AI across engineering squads through code, practice and context.',
-    milestones: ['First steps in software development', 'Connecting Latin America', 'Global Developer Advocacy with AI', 'Leading AI transformation at Itaú'],
+    intro: 'I started as a developer and shared what I learned with communities. At Microsoft, I spent more than six years in Developer Advocacy, bringing JavaScript, TypeScript and AI to developers worldwide. As a Principal Software Engineer, I build AI solutions and share practical knowledge with developers, grounded in software engineering.',
+    milestones: ['First steps in software development', 'Connecting Latin America', 'Global Developer Advocacy with AI', 'AI solutions and business development'],
     demo: {
       title: 'AI grounded in context, not guesswork.',
       note: 'Teaching example with predefined states. Real excerpt from packages/api/src/functions/chats-post.ts, part of the official Microsoft project I co-authored. Code does not run in your browser.',
@@ -73,8 +73,8 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
     closing: { title: 'Your team could be the next stop.', intro: 'Tell me what your team needs to learn or decide. We will choose a format around that challenge.', actions: ['Plan a workshop', 'Discuss mentoring', 'Invite me to speak'] },
   },
   es: {
-    intro: 'Empecé como desarrolladora y compartí lo que aprendía con las comunidades. En Microsoft pasé más de seis años en Developer Advocacy, llevando JavaScript, TypeScript e IA a desarrolladores de todo el mundo. Hoy, como AI Transformation Lead, lidero la adopción de IA generativa y agéntica en squads de ingeniería, con código, práctica y contexto.',
-    milestones: ['Primeros pasos en desarrollo', 'Conexiones por América Latina', 'Developer Advocacy global con IA', 'Transformación con IA en Itaú'],
+    intro: 'Empecé como desarrolladora y compartí lo que aprendía con las comunidades. En Microsoft pasé más de seis años en Developer Advocacy, llevando JavaScript, TypeScript e IA a desarrolladores de todo el mundo. Como Principal Software Engineer, construyo soluciones de IA y comparto conocimientos prácticos con desarrolladores, con una base de ingeniería de software.',
+    milestones: ['Primeros pasos en desarrollo', 'Conexiones por América Latina', 'Developer Advocacy global con IA', 'Soluciones de IA y desarrollo de negocios'],
     demo: {
       title: 'IA con contexto, no con suposiciones.',
       note: 'Ejemplo didáctico con estados predefinidos. Fragmento real de packages/api/src/functions/chats-post.ts, del proyecto oficial de Microsoft del que soy coautora. El código no se ejecuta en el navegador.',
