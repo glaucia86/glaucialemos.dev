@@ -85,6 +85,14 @@
 .ops-era:not([hidden]) .ops-era__summary { opacity: 1; }
 .ops[data-view="list"] .ops-role__brief { overflow-wrap: anywhere; }
 
+.ops-role-details { margin-top: 1.25rem; border: 1px solid var(--hud-line); background: var(--color-space-1); }
+.ops-role-details[hidden] { display: none; }
+.ops-role-details summary { min-height: 44px; padding: 1rem; color: var(--text-heading); line-height: 1.5; cursor: pointer; }
+.ops-role-details summary:focus-visible { outline: 3px solid var(--niv-snow); outline-offset: 3px; }
+.ops-role-details__body { display: grid; gap: .85rem; max-width: 75ch; padding: 0 1rem 1rem; overflow-wrap: anywhere; }
+.ops-role-details__body p { margin: 0; font-size: .95rem; line-height: 1.6; }
+.ops-role-details__body a { display: inline-flex; align-items: center; min-height: 44px; color: var(--color-primary-200); text-decoration: underline; text-underline-offset: 3px; }
+
 /* Home: the detailed map in a modal over the short timeline. Close sits on the left, like the contact portal. */
 .career-dialog__open { margin-top: 1.5rem; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; }
 .career-dialog { width: min(1180px, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); margin: auto; padding: 0; border: 1px solid var(--hud-line); background: var(--color-space-0); color: var(--text-inverse); overflow: auto; overscroll-behavior: contain; }

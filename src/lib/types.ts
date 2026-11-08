@@ -14,11 +14,26 @@ export const eventoSchema = z.object({
   fonte: z.url(),
 });
 
+const cargoDetailsCopySchema = z.object({
+  vinculo: z.string(),
+  local: z.string(),
+  descricao: z.string(),
+  perspectivas: z.string(),
+  empresa: z.string(),
+  siteLabel: z.string(),
+});
+
 export const cargoSchema = z.object({
   empresa: z.string(),
   cargo: z.string(),
   periodo: z.string(),
   fonte: z.url(),
+  detalhes: z.object({
+    site: z.url(),
+    pt: cargoDetailsCopySchema,
+    en: cargoDetailsCopySchema,
+    es: cargoDetailsCopySchema,
+  }).optional(),
 });
 
 export const projetoSchema = z.object({

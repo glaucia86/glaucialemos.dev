@@ -14,7 +14,7 @@ export type JourneyCopy = {
 export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
   pt: {
     intro: 'Comecei como desenvolvedora e levei o que aprendia para as comunidades. Na Microsoft, foram mais de seis anos em Developer Advocacy, levando JavaScript, TypeScript e IA a devs do mundo todo. Como Principal Software Engineer, conecto IA, engenharia e educação para desenvolvedores, com código, prática e contexto.',
-    milestones: ['Primeiros passos no desenvolvimento', 'Conexões pela América Latina', 'Developer Advocacy global com IA', 'Transformação com IA no Itaú'],
+    milestones: ['Primeiros passos no desenvolvimento', 'Conexões pela América Latina', 'Developer Advocacy global com IA', 'Soluções de IA e desenvolvimento de negócios'],
     demo: {
       title: 'IA com contexto, não com achismo.',
       note: 'Exemplo didático com estados predefinidos. Trecho real de packages/api/src/functions/chats-post.ts, do projeto oficial da Microsoft em que sou coautora. O código não roda no navegador.',
@@ -44,7 +44,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
   },
   en: {
     intro: 'I started as a developer and shared what I learned with communities. At Microsoft, I spent more than six years in Developer Advocacy, bringing JavaScript, TypeScript and AI to developers worldwide. As a Principal Software Engineer, I connect AI, engineering and developer education through code, practice and context.',
-    milestones: ['First steps in software development', 'Connecting Latin America', 'Global Developer Advocacy with AI', 'AI transformation at Itaú'],
+    milestones: ['First steps in software development', 'Connecting Latin America', 'Global Developer Advocacy with AI', 'AI solutions and business development'],
     demo: {
       title: 'AI grounded in context, not guesswork.',
       note: 'Teaching example with predefined states. Real excerpt from packages/api/src/functions/chats-post.ts, part of the official Microsoft project I co-authored. Code does not run in your browser.',
@@ -74,7 +74,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
   },
   es: {
     intro: 'Empecé como desarrolladora y compartí lo que aprendía con las comunidades. En Microsoft pasé más de seis años en Developer Advocacy, llevando JavaScript, TypeScript e IA a desarrolladores de todo el mundo. Como Principal Software Engineer, conecto IA, ingeniería y educación para desarrolladores, con código, práctica y contexto.',
-    milestones: ['Primeros pasos en desarrollo', 'Conexiones por América Latina', 'Developer Advocacy global con IA', 'Transformación con IA en Itaú'],
+    milestones: ['Primeros pasos en desarrollo', 'Conexiones por América Latina', 'Developer Advocacy global con IA', 'Soluciones de IA y desarrollo de negocios'],
     demo: {
       title: 'IA con contexto, no con suposiciones.',
       note: 'Ejemplo didáctico con estados predefinidos. Fragmento real de packages/api/src/functions/chats-post.ts, del proyecto oficial de Microsoft del que soy coautora. El código no se ejecuta en el navegador.',

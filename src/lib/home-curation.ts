@@ -12,7 +12,7 @@ export const homeServiceSubjects: Record<string, 'workshop' | 'mentoria' | 'pale
 };
 
 export function curateMilestones(cargos: Cargo[]) {
-  return ['TopDown Sistemas', 'Regional Cloud Advocate', 'Developer Advocate II', 'Itaú Unibanco'].flatMap(name => {
+  return ['TopDown Sistemas', 'Regional Cloud Advocate', 'Developer Advocate II', 'Qwantyco'].flatMap(name => {
     const cargo = cargos.find(item => item.empresa === name || item.cargo.startsWith(name));
     return cargo ? [cargo] : [];
   });

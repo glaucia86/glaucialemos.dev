@@ -1,5 +1,38 @@
 [
   {
+    "empresa": "Qwantyco",
+    "cargo": "AI Solutions Engineer | Business Development",
+    "periodo": "nov 2026 – atual",
+    "fonte": "https://www.linkedin.com/in/glaucialemos",
+    "detalhes": {
+      "site": "https://qwantyco.com/",
+      "pt": {
+        "vinculo": "Parceria temporária",
+        "local": "Rio de Janeiro, Brasil · Híbrido",
+        "descricao": "Atuo em parceria com a Qwantyco para ajudar empresas a explorar e adotar soluções de IA adequadas às suas necessidades. Meu papel combina desenvolvimento de negócios e conversas técnicas com potenciais clientes, tornando conceitos complexos de IA acessíveis a públicos técnicos e não técnicos.",
+        "perspectivas": "À medida que a parceria evoluir, meu trabalho também poderá incluir desenvolvimento de software e iniciativas voltadas a testes e segurança de IA.",
+        "empresa": "A Qwantyco atua com IA personalizada, cibersegurança, infraestrutura digital e automação. Sua solução Olív-IA é desenvolvida em torno do conhecimento, dos processos e dos sistemas de cada empresa, com uma instância dedicada e controles de acesso.",
+        "siteLabel": "Conheça a Qwantyco"
+      },
+      "en": {
+        "vinculo": "Temporary partnership",
+        "local": "Rio de Janeiro, Brazil · Hybrid",
+        "descricao": "I partner with Qwantyco to help businesses explore and adopt AI solutions that fit their needs. My role combines business development and technical conversations with potential clients, making complex AI concepts accessible to both technical and non-technical audiences.",
+        "perspectivas": "As the partnership evolves, my work may also involve software development and initiatives focused on AI testing and security.",
+        "empresa": "Qwantyco works with customized AI, cybersecurity, digital infrastructure, and automation. Its Olív-IA solution is designed around each company’s knowledge, processes, and systems, with a dedicated instance and access controls.",
+        "siteLabel": "Learn more about Qwantyco"
+      },
+      "es": {
+        "vinculo": "Colaboración temporal",
+        "local": "Rio de Janeiro, Brasil · Híbrido",
+        "descricao": "Colaboro con Qwantyco para ayudar a las empresas a explorar y adoptar soluciones de IA adecuadas a sus necesidades. Mi función combina desarrollo de negocios y conversaciones técnicas con clientes potenciales, haciendo que los conceptos complejos de IA sean accesibles tanto para públicos técnicos como no técnicos.",
+        "perspectivas": "A medida que evolucione la colaboración, mi trabajo también podrá incluir desarrollo de software e iniciativas centradas en pruebas y seguridad de IA.",
+        "empresa": "Qwantyco trabaja con IA personalizada, ciberseguridad, infraestructura digital y automatización. Su solución Olív-IA está diseñada en torno al conocimiento, los procesos y los sistemas de cada empresa, con una instancia dedicada y controles de acceso.",
+        "siteLabel": "Conoce Qwantyco"
+      }
+    }
+  },
+  {
     "empresa": "Itaú Unibanco",
     "cargo": "AI Transformation Lead · Engineering Specialist II (Itaú Agro Varejo)",
     "periodo": "mai 2026 – nov 2026",

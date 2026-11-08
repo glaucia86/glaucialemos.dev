@@ -12,7 +12,7 @@ describe('home curation', () => {
     expect(formatExperiencePeriod('mai 2026 – atual', 'pt')).toBe('mai 2026 – atual');
   });
   it('preserves the latest AI role in the career history', () => {
-    expect(curateMilestones(getCargos()).map(cargo => cargo.empresa)).toEqual(['TopDown Sistemas', 'Microsoft', 'Microsoft', 'Itaú Unibanco']);
+    expect(curateMilestones(getCargos()).map(cargo => cargo.empresa)).toEqual(['TopDown Sistemas', 'Microsoft', 'Microsoft', 'Qwantyco']);
   });
   it('keeps a fallback snapshot large enough for the home archive', () => {
     expect(getProjetos().length).toBeGreaterThanOrEqual(HOME_ARCHIVE_SIZE);

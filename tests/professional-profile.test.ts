@@ -36,15 +36,15 @@ describe('company-independent professional profile', () => {
       periodo: 'mai 2026 – nov 2026', current: false, end: 2026 * 12 + 10,
     });
     expect(roles.find(item => item.empresa === 'Packt')?.current).toBe(true);
-    expect(curateMilestones(getCargos()).at(-1)?.periodo).toBe('mai 2026 – nov 2026');
+    expect(curateMilestones(getCargos()).at(-1)?.periodo).toBe('nov 2026 – atual');
   });
 
-  it.each(locales)('labels the latest capsule record as history rather than today in %s', async lang => {
+  it.each(locales)('labels the latest capsule record without tying the profile to an employer in %s', async lang => {
     const html = renderToStaticMarkup(await About({ params: Promise.resolve({ lang }) }));
     const capsule = html.match(/<ol class="capsule__records">([\s\S]*?)<\/ol>/)?.[1];
     expect(capsule).toBeDefined();
     expect(capsule).toContain(latestLabels[lang]);
-    expect(capsule).toContain(`Itaú Unibanco · ${formatExperiencePeriod('mai 2026 – nov 2026', lang)}`);
+    expect(capsule).toContain(`Qwantyco · ${formatExperiencePeriod('nov 2026 – atual', lang)}`);
     expect(capsule).not.toMatch(/capsule__label">(?:Hoje|Today|Hoy)</);
   });
 });

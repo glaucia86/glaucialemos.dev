@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { NiveoraCopy } from "@/i18n/niveora";
+import { isLocale } from "@/i18n/config";
 import { groupEras, normalizeEra, yearOf, type CareerRole, type Era } from "@/lib/career";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useMediaQuery, useMotionEnabled } from "@/lib/use-motion";
@@ -96,5 +97,21 @@ export function CareerMap({ roles, copy, locale, source, ship, embedded = false 
         </li>)}</ol>
       </section>)}
     </div>
+    {/* Keep longer experience descriptions outside the clipped desktop chart and its hover cards. */}
+    {roles.filter(role => role.detalhes).map(role => {
+      const details = role.detalhes!;
+      const text = details[isLocale(locale) ? locale : "pt"];
+      return <details className="ops-role-details" key={`${role.empresa}-${role.periodo}`} hidden={era !== "all" && era !== role.era}>
+        <summary>{role.empresa} · {role.cargo}</summary>
+        <div className="ops-role-details__body">
+          <p>{formatExperiencePeriod(role.periodo, locale)} · {text.vinculo}</p>
+          <p>{text.local}</p>
+          <p>{text.descricao}</p>
+          <p>{text.perspectivas}</p>
+          <p>{text.empresa}</p>
+          <a href={details.site} target="_blank" rel="noopener noreferrer">{text.siteLabel}<span aria-hidden="true"> ↗</span></a>
+        </div>
+      </details>;
+    })}
   </div>;
 }
