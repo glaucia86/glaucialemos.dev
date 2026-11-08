@@ -13,7 +13,7 @@ export type JourneyCopy = {
 
 export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
   pt: {
-    intro: 'Comecei como desenvolvedora e levei o que aprendia para as comunidades. Na Microsoft, foram mais de seis anos em Developer Advocacy, levando JavaScript, TypeScript e IA a devs do mundo todo. Como Principal Software Engineer, conecto IA, engenharia e educação para desenvolvedores, com código, prática e contexto.',
+    intro: 'Comecei como desenvolvedora e levei o que aprendia para as comunidades. Na Microsoft, foram mais de seis anos em Developer Advocacy, levando JavaScript, TypeScript e IA a devs do mundo todo. Como Principal Software Engineer, construo soluções de IA e compartilho conhecimento prático com desenvolvedores, com base na engenharia de software.',
     milestones: ['Primeiros passos no desenvolvimento', 'Conexões pela América Latina', 'Developer Advocacy global com IA', 'Soluções de IA e desenvolvimento de negócios'],
     demo: {
       title: 'IA com contexto, não com achismo.',
@@ -43,7 +43,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
     closing: { title: 'O próximo encontro pode ser com o seu time.', intro: 'Conte o que seu time precisa aprender ou decidir. Vamos escolher o formato a partir desse desafio.', actions: ['Planeje um workshop', 'Converse sobre mentoria', 'Convide para palestrar'] },
   },
   en: {
-    intro: 'I started as a developer and shared what I learned with communities. At Microsoft, I spent more than six years in Developer Advocacy, bringing JavaScript, TypeScript and AI to developers worldwide. As a Principal Software Engineer, I connect AI, engineering and developer education through code, practice and context.',
+    intro: 'I started as a developer and shared what I learned with communities. At Microsoft, I spent more than six years in Developer Advocacy, bringing JavaScript, TypeScript and AI to developers worldwide. As a Principal Software Engineer, I build AI solutions and share practical knowledge with developers, grounded in software engineering.',
     milestones: ['First steps in software development', 'Connecting Latin America', 'Global Developer Advocacy with AI', 'AI solutions and business development'],
     demo: {
       title: 'AI grounded in context, not guesswork.',
@@ -73,7 +73,7 @@ export const journey: Record<'pt' | 'en' | 'es', JourneyCopy> = {
     closing: { title: 'Your team could be the next stop.', intro: 'Tell me what your team needs to learn or decide. We will choose a format around that challenge.', actions: ['Plan a workshop', 'Discuss mentoring', 'Invite me to speak'] },
   },
   es: {
-    intro: 'Empecé como desarrolladora y compartí lo que aprendía con las comunidades. En Microsoft pasé más de seis años en Developer Advocacy, llevando JavaScript, TypeScript e IA a desarrolladores de todo el mundo. Como Principal Software Engineer, conecto IA, ingeniería y educación para desarrolladores, con código, práctica y contexto.',
+    intro: 'Empecé como desarrolladora y compartí lo que aprendía con las comunidades. En Microsoft pasé más de seis años en Developer Advocacy, llevando JavaScript, TypeScript e IA a desarrolladores de todo el mundo. Como Principal Software Engineer, construyo soluciones de IA y comparto conocimientos prácticos con desarrolladores, con una base de ingeniería de software.',
     milestones: ['Primeros pasos en desarrollo', 'Conexiones por América Latina', 'Developer Advocacy global con IA', 'Soluciones de IA y desarrollo de negocios'],
     demo: {
       title: 'IA con contexto, no con suposiciones.',

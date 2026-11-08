@@ -123,7 +123,7 @@ await check("segredos do conteúdo: terminal, broto, carcaça, bug e poeira", as
   assert.match(await page.locator("dialog.crt").innerText(), /2013/);
   await page.locator(".crt__controls button").first().click();
   await page.waitForTimeout(1500);
-  assert.match(await page.locator(".crt__card").innerText(), /Principal Software Engineer \| AI & Developer Education/);
+  assert.match(await page.locator(".crt__card").innerText(), /Principal Software Engineer \| AI Engineering/);
   await page.keyboard.press("Escape");
 
   await page.locator(".colony__sprout").click();

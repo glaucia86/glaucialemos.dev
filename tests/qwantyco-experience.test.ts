@@ -54,7 +54,7 @@ describe('Qwantyco partnership', () => {
 
   it.each(locales)('keeps the personal identity independent of Qwantyco in %s', lang => {
     const d = getDictionary(lang);
-    expect(d.home.eyebrow).toBe('Principal Software Engineer | AI & Developer Education');
+    expect(d.home.eyebrow).toBe('Principal Software Engineer | AI Engineering');
     expect(JSON.stringify({ home: d.home, about: d.about, intro: d.journey.intro, crew: d.holonet.crew, log: d.niveora.log })).not.toContain('Qwantyco');
   });
 });

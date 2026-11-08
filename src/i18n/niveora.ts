@@ -50,7 +50,7 @@ export const niveora: Record<"pt" | "en" | "es", NiveoraCopy> = {
     log: {
       title: "Minha trajetória em números.", intro: "Mais de uma década levando código, comunidade e IA para mais gente: atuação, especialidades, reconhecimentos e alcance.",
       card: "Exploradora", id: "GE-ID · GL-0001 · NIVÉORA · ESTAÇÃO POLAR", imageAlt: "Glaucia Lemos em pixel art, com parca térmica, na neve de Nivéora sob a aurora", sheetLabel: "Ficha da expedição",
-      sheet: [["Cargo", "Principal Software Engineer | AI & Developer Education"], ["Atuação", "IA e educação para desenvolvedores"], ["Especialidade", "IA generativa e agêntica · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Equipamento", "TypeScript · JavaScript · Node.js · Agentes de IA"]],
+      sheet: [["Cargo", "Principal Software Engineer | AI Engineering"], ["Atuação", "Soluções de IA · Engenharia de software"], ["Especialidade", "IA generativa e agêntica · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Equipamento", "TypeScript · JavaScript · Node.js · Agentes de IA"]],
       statsLabel: "Registro de campo", stats: ["anos de carreira", "eventos", "países", "devs alcançados", "anos na Microsoft"],
       badgesTitle: "Insígnias de cristal", badgesIntro: "Reconhecimentos reais, lapidados no gelo. Use o botão para virar cada insígnia.", flip: "Virar insígnia",
       back: "Voltar",
@@ -90,7 +90,7 @@ export const niveora: Record<"pt" | "en" | "es", NiveoraCopy> = {
     log: {
       title: "My career by the numbers.", intro: "More than a decade bringing code, community and AI to more people: professional focus, specialties, recognitions and reach.",
       card: "Explorer", id: "GE-ID · GL-0001 · NIVÉORA · POLAR STATION", imageAlt: "Glaucia Lemos in pixel art, wearing a thermal parka, in Nivéora's snow under the aurora", sheetLabel: "Expedition record",
-      sheet: [["Role", "Principal Software Engineer | AI & Developer Education"], ["Focus", "AI and developer education"], ["Specialty", "Generative and agentic AI · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Gear", "TypeScript · JavaScript · Node.js · AI agents"]],
+      sheet: [["Role", "Principal Software Engineer | AI Engineering"], ["Focus", "AI solutions · Software engineering"], ["Specialty", "Generative and agentic AI · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Gear", "TypeScript · JavaScript · Node.js · AI agents"]],
       statsLabel: "Field log", stats: ["years of career", "events", "countries", "developers reached", "years at Microsoft"],
       badgesTitle: "Crystal badges", badgesIntro: "Real recognitions, cut from the ice. Use the button to flip each badge.", flip: "Flip badge",
       back: "Back",
@@ -130,7 +130,7 @@ export const niveora: Record<"pt" | "en" | "es", NiveoraCopy> = {
     log: {
       title: "Mi trayectoria en números.", intro: "Más de una década acercando código, comunidad e IA a más personas: enfoque profesional, especialidades, reconocimientos y alcance.",
       card: "Exploradora", id: "GE-ID · GL-0001 · NIVÉORA · ESTACIÓN POLAR", imageAlt: "Glaucia Lemos en pixel art, con parka térmica, en la nieve de Nivéora bajo la aurora", sheetLabel: "Ficha de la expedición",
-      sheet: [["Cargo", "Principal Software Engineer | AI & Developer Education"], ["Enfoque", "IA y educación para desarrolladores"], ["Especialidad", "IA generativa y agéntica · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Equipo", "TypeScript · JavaScript · Node.js · Agentes de IA"]],
+      sheet: [["Cargo", "Principal Software Engineer | AI Engineering"], ["Enfoque", "Soluciones de IA · Ingeniería de software"], ["Especialidad", "IA generativa y agéntica · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Equipo", "TypeScript · JavaScript · Node.js · Agentes de IA"]],
       statsLabel: "Registro de campo", stats: ["años de carrera", "eventos", "países", "devs alcanzados", "años en Microsoft"],
       badgesTitle: "Insignias de cristal", badgesIntro: "Reconocimientos reales, tallados en el hielo. Usa el botón para girar cada insignia.", flip: "Girar insignia",
       back: "Volver",
