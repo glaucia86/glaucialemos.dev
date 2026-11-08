@@ -32,9 +32,8 @@ describe('apresentação comercial e fontes', () => {
     expect(d.services.title).toBe(commercial[lang].headline);
     expect(d.services.metadata.title).toContain(offers[0].copy[lang].title);
     expect(d.services.metadata.description).toContain(commercial[lang].metadataDescription);
-    expect(d.home.value).toBe(commercial[lang].intro);
-    // Glaucia's choice (28/10/2026): leadership first, then AI and engineering.
-    expect(d.home.eyebrow).toBe({ pt: 'Liderança • IA • Engenharia', en: 'Leadership • AI • Engineering', es: 'Liderazgo • IA • Ingeniería' }[lang]);
+    // The Home introduces Glaucia independently; service details stay in the offers.
+    expect(d.home.servicesBody).toBe(commercial[lang].formatsIntro);
   });
 
   it('só apresenta vínculos presentes no histórico, separados de eventos', () => {

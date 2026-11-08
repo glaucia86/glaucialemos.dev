@@ -20,7 +20,7 @@ export type NiveoraCopy = {
   chapters: [string, string, string, string];
   hero: { caption: string; scroll: string };
   status: { tracks: string; found: string; capsule: string; whiteout: string; calm: string; prism: string; drift: string };
-  capsule: { title: string; intro: string; close: string; source: string; labels: { first: string; event: string; microsoft: string; now: string }; microsoftYears: string };
+  capsule: { title: string; intro: string; close: string; source: string; labels: { first: string; event: string; microsoft: string; latest: string }; microsoftYears: string };
   log: {
     title: string; intro: string; card: string; id: string; imageAlt: string; sheetLabel: string; sheet: [Pair, Pair, Pair, Pair];
     statsLabel: string; stats: [string, string, string, string, string];
@@ -46,11 +46,11 @@ export const niveora: Record<"pt" | "en" | "es", NiveoraCopy> = {
     chapters: ["Quem sou", "Em números", "Trajetória profissional", "Vamos conversar"],
     hero: { caption: "Mundo nevado das auroras", scroll: "Role para o diário" },
     status: { tracks: "O Prince farejou uma pista…", found: "Uma cápsula de memória!", capsule: "Cápsula aberta", whiteout: "Alerta: nevasca", calm: "O vento acalmou", prism: "Aurora intensificada", drift: "A neve se acumula…" },
-    capsule: { title: "Cápsula de memória", intro: "Registros da trajetória preservados no gelo de Nivéora. Cada um traz a sua fonte.", close: "Fechar a cápsula", source: "Fonte", labels: { first: "Primeiro registro", event: "Primeiro evento documentado", microsoft: "Microsoft", now: "Hoje" }, microsoftYears: "{n} anos na Microsoft" },
+    capsule: { title: "Cápsula de memória", intro: "Registros da trajetória preservados no gelo de Nivéora. Cada um traz a sua fonte.", close: "Fechar a cápsula", source: "Fonte", labels: { first: "Primeiro registro", event: "Primeiro evento documentado", microsoft: "Microsoft", latest: "Experiência mais recente" }, microsoftYears: "{n} anos na Microsoft" },
     log: {
-      title: "Minha trajetória em números.", intro: "Mais de uma década levando código, comunidade e IA para mais gente: cargo atual, especialidades, reconhecimentos e alcance.",
+      title: "Minha trajetória em números.", intro: "Mais de uma década levando código, comunidade e IA para mais gente: atuação, especialidades, reconhecimentos e alcance.",
       card: "Exploradora", id: "GE-ID · GL-0001 · NIVÉORA · ESTAÇÃO POLAR", imageAlt: "Glaucia Lemos em pixel art, com parca térmica, na neve de Nivéora sob a aurora", sheetLabel: "Ficha da expedição",
-      sheet: [["Cargo", "Principal Software Engineer · AI Transformation Lead"], ["Base atual", "Itaú Unibanco"], ["Especialidade", "IA generativa e agêntica · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Equipamento", "TypeScript · JavaScript · Node.js · Agentes de IA"]],
+      sheet: [["Cargo", "Principal Software Engineer | AI & Developer Education"], ["Atuação", "IA e educação para desenvolvedores"], ["Especialidade", "IA generativa e agêntica · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Equipamento", "TypeScript · JavaScript · Node.js · Agentes de IA"]],
       statsLabel: "Registro de campo", stats: ["anos de carreira", "eventos", "países", "devs alcançados", "anos na Microsoft"],
       badgesTitle: "Insígnias de cristal", badgesIntro: "Reconhecimentos reais, lapidados no gelo. Use o botão para virar cada insígnia.", flip: "Virar insígnia",
       back: "Voltar",
@@ -86,11 +86,11 @@ export const niveora: Record<"pt" | "en" | "es", NiveoraCopy> = {
     chapters: ["Who I am", "By the numbers", "Career path", "Let's talk"],
     hero: { caption: "Snow world of the auroras", scroll: "Scroll to the log" },
     status: { tracks: "Prince picked up a scent…", found: "A memory capsule!", capsule: "Capsule open", whiteout: "Alert: blizzard", calm: "The wind has calmed", prism: "Aurora flaring", drift: "Snow is piling up…" },
-    capsule: { title: "Memory capsule", intro: "Career records preserved in Nivéora's ice. Each one comes with its source.", close: "Close the capsule", source: "Source", labels: { first: "First record", event: "First documented event", microsoft: "Microsoft", now: "Today" }, microsoftYears: "{n} years at Microsoft" },
+    capsule: { title: "Memory capsule", intro: "Career records preserved in Nivéora's ice. Each one comes with its source.", close: "Close the capsule", source: "Source", labels: { first: "First record", event: "First documented event", microsoft: "Microsoft", latest: "Most recent experience" }, microsoftYears: "{n} years at Microsoft" },
     log: {
-      title: "My career by the numbers.", intro: "More than a decade bringing code, community and AI to more people: current role, specialties, recognitions and reach.",
+      title: "My career by the numbers.", intro: "More than a decade bringing code, community and AI to more people: professional focus, specialties, recognitions and reach.",
       card: "Explorer", id: "GE-ID · GL-0001 · NIVÉORA · POLAR STATION", imageAlt: "Glaucia Lemos in pixel art, wearing a thermal parka, in Nivéora's snow under the aurora", sheetLabel: "Expedition record",
-      sheet: [["Role", "Principal Software Engineer · AI Transformation Lead"], ["Current base", "Itaú Unibanco"], ["Specialty", "Generative and agentic AI · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Gear", "TypeScript · JavaScript · Node.js · AI agents"]],
+      sheet: [["Role", "Principal Software Engineer | AI & Developer Education"], ["Focus", "AI and developer education"], ["Specialty", "Generative and agentic AI · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Gear", "TypeScript · JavaScript · Node.js · AI agents"]],
       statsLabel: "Field log", stats: ["years of career", "events", "countries", "developers reached", "years at Microsoft"],
       badgesTitle: "Crystal badges", badgesIntro: "Real recognitions, cut from the ice. Use the button to flip each badge.", flip: "Flip badge",
       back: "Back",
@@ -126,11 +126,11 @@ export const niveora: Record<"pt" | "en" | "es", NiveoraCopy> = {
     chapters: ["Quién soy", "En números", "Trayectoria profesional", "Conversemos"],
     hero: { caption: "Mundo nevado de las auroras", scroll: "Desplázate al diario" },
     status: { tracks: "Prince olfateó una pista…", found: "¡Una cápsula de memoria!", capsule: "Cápsula abierta", whiteout: "Alerta: ventisca", calm: "El viento se calmó", prism: "Aurora intensificada", drift: "La nieve se acumula…" },
-    capsule: { title: "Cápsula de memoria", intro: "Registros de la trayectoria conservados en el hielo de Nivéora. Cada uno trae su fuente.", close: "Cerrar la cápsula", source: "Fuente", labels: { first: "Primer registro", event: "Primer evento documentado", microsoft: "Microsoft", now: "Hoy" }, microsoftYears: "{n} años en Microsoft" },
+    capsule: { title: "Cápsula de memoria", intro: "Registros de la trayectoria conservados en el hielo de Nivéora. Cada uno trae su fuente.", close: "Cerrar la cápsula", source: "Fuente", labels: { first: "Primer registro", event: "Primer evento documentado", microsoft: "Microsoft", latest: "Experiencia más reciente" }, microsoftYears: "{n} años en Microsoft" },
     log: {
-      title: "Mi trayectoria en números.", intro: "Más de una década acercando código, comunidad e IA a más personas: cargo actual, especialidades, reconocimientos y alcance.",
+      title: "Mi trayectoria en números.", intro: "Más de una década acercando código, comunidad e IA a más personas: enfoque profesional, especialidades, reconocimientos y alcance.",
       card: "Exploradora", id: "GE-ID · GL-0001 · NIVÉORA · ESTACIÓN POLAR", imageAlt: "Glaucia Lemos en pixel art, con parka térmica, en la nieve de Nivéora bajo la aurora", sheetLabel: "Ficha de la expedición",
-      sheet: [["Cargo", "Principal Software Engineer · AI Transformation Lead"], ["Base actual", "Itaú Unibanco"], ["Especialidad", "IA generativa y agéntica · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Equipo", "TypeScript · JavaScript · Node.js · Agentes de IA"]],
+      sheet: [["Cargo", "Principal Software Engineer | AI & Developer Education"], ["Enfoque", "IA y educación para desarrolladores"], ["Especialidad", "IA generativa y agéntica · RAG · Spec-Driven Development · Context Engineering · Harness Engineering"], ["Equipo", "TypeScript · JavaScript · Node.js · Agentes de IA"]],
       statsLabel: "Registro de campo", stats: ["años de carrera", "eventos", "países", "devs alcanzados", "años en Microsoft"],
       badgesTitle: "Insignias de cristal", badgesIntro: "Reconocimientos reales, tallados en el hielo. Usa el botón para girar cada insignia.", flip: "Girar insignia",
       back: "Volver",

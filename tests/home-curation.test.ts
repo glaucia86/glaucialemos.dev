@@ -11,7 +11,7 @@ describe('home curation', () => {
     expect(formatExperiencePeriod('mai 2026 – atual', 'es')).toBe('may 2026 – actualidad');
     expect(formatExperiencePeriod('mai 2026 – atual', 'pt')).toBe('mai 2026 – atual');
   });
-  it('traces the career route up to the current AI role', () => {
+  it('preserves the latest AI role in the career history', () => {
     expect(curateMilestones(getCargos()).map(cargo => cargo.empresa)).toEqual(['TopDown Sistemas', 'Microsoft', 'Microsoft', 'Itaú Unibanco']);
   });
   it('keeps a fallback snapshot large enough for the home archive', () => {
